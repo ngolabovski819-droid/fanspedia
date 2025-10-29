@@ -239,7 +239,9 @@
     if (searchInput.value.trim()) {
       performSearch(true);
     } else {
-      statusDiv.textContent = "Enter a search term to find creators";
+      // Load popular models on initial page load (no search query = sorted by favorites)
+      statusDiv.textContent = "Loading popular creators...";
+      performSearch(true);
     }
   </script>
 </body>
