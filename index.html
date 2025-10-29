@@ -31,6 +31,12 @@
       height: 200px;
       object-fit: cover;
       width: 100%;
+      min-height: 200px;
+      min-width: 100px;
+      background-color: #333;
+    }
+    .card img[src*="1x1"], .card img[width="1"], .card img[height="1"] {
+      display: none;
     }
     .error {
       color: red;
@@ -115,9 +121,12 @@
         }
 
         if (data.length === 0) {
-          resultsDiv.innerHTML = `<p class='text-muted'>No results found.</p>`;
+          console.warn('API returned 0 results for query:', { q, verified, price });
+          resultsDiv.innerHTML = `<p class='text-muted'>No results found. Try adjusting filters or search term.</p>`;
           return;
         }
+
+        console.log('Rendering', data.length, 'results');
 
         // Render cards
         data.forEach(item => {
@@ -137,7 +146,9 @@
           col.className = "col-sm-6 col-md-4 col-lg-3";
           col.innerHTML = `
             <div class="card h-100">
-              <img src="${img}" alt="${name}" loading="lazy" referrerpolicy="no-referrer" onerror="if(this.src!='/static/no-image.png'){this.src='/static/no-image.png';}">
+              <img src="${img}" alt="${name}" loading="lazy" referrerpolicy="no-referrer" 
+                   onerror="if(this.src!='/static/no-image.png'){this.src='/static/no-image.png';}"
+                   onload="if(this.naturalWidth<=1||this.naturalHeight<=1){this.src='/static/no-image.png';}">
               <div class="card-body text-start">
                 <h5>${name} ${verifiedIcon}</h5>
                 <p class="mb-1">@${username}</p>

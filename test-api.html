@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>API Test</title>
+</head>
+<body>
+  <h1>Direct API Test</h1>
+  <button onclick="testSearch()">Test Search API</button>
+  <pre id="output"></pre>
+  <script>
+    async function testSearch() {
+      const output = document.getElementById('output');
+      output.textContent = 'Loading...';
+      
+      try {
+        const url = '/api/search?q=skylar&verified=false&price=100';
+        console.log('Fetching:', url);
+        
+        const response = await fetch(url);
+        console.log('Status:', response.status);
+        console.log('Headers:', [...response.headers.entries()]);
+        
+        const text = await response.text();
+        console.log('Raw response:', text);
+        
+        const data = JSON.parse(text);
+        output.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        output.textContent = 'ERROR: ' + err.message + '\n\n' + err.stack;
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+</html>
