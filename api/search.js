@@ -58,6 +58,9 @@ export default async function handler(req, res) {
     const cacheKey = url;
     const cached = cache.get(cacheKey);
     if (cached && (Date.now() - cached.ts) < CACHE_TTL_MS) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
       return res.status(200).json(cached.data);
     }
     const headers = {
@@ -75,6 +78,14 @@ export default async function handler(req, res) {
     }
 
     const data = await r.json();
+
+    // Store in cache
+    cache.set(cacheKey, { data, ts: Date.now() });
+
+    // Add cache-control headers to prevent stale responses
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
 
     // Normalize field names to what the frontend expects (camelCase)
     const mapped = (Array.isArray(data) ? data : []).map(item => ({
