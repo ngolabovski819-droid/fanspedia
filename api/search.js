@@ -25,7 +25,7 @@ export default async function handler(req, res) {
     const verified = (req.query.verified || "").toString().trim().toLowerCase();
     const max_price = (req.query.price || "").toString().trim();
     const page = parseInt(req.query.page || "1", 10) || 1;
-    const page_size = Math.max(1, Math.min(parseInt(req.query.page_size || "24", 10) || 24, 100));
+    const page_size = Math.max(1, Math.min(parseInt(req.query.page_size || "50", 10) || 50, 1000)); // Allow up to 1000 per request
 
     const selectCols = [
       "id","username","name","location","avatar",

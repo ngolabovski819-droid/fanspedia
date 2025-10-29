@@ -94,24 +94,33 @@
     const pageInfo = document.getElementById("pageInfo");
     
     let currentPage = 1;
-    const pageSize = 24;
+    const pageSize = 50;
+    let isLoading = false;
+    let hasMore = true;
 
     // Perform the API search
-    async function performSearch(resetPage = true) {
-      if (resetPage) currentPage = 1;
+    async function performSearch(resetPage = true, append = false) {
+      if (isLoading || (!hasMore && !resetPage)) return;
+      isLoading = true;
+      
+      if (resetPage) {
+        currentPage = 1;
+        hasMore = true;
+        resultsDiv.innerHTML = "";
+      }
       
       const q = searchInput.value.trim();
       const verified = verifiedToggle.checked;
       const price = priceRange.value;
 
-      resultsDiv.innerHTML = "";
+      if (!append) resultsDiv.innerHTML = "";
       errorDiv.textContent = "";
-      statusDiv.textContent = "Searching...";
+      statusDiv.textContent = append ? "Loading more..." : "Searching...";
 
       try {
         const apiUrl = `/api/search?q=${encodeURIComponent(q)}&verified=${verified}&price=${price}&page=${currentPage}&page_size=${pageSize}`;
         console.log('Fetching:', apiUrl);
-        statusDiv.textContent = `Fetching page ${currentPage}...`;
+        statusDiv.textContent = `Loading page ${currentPage}...`;
         
         const response = await fetch(apiUrl);
         console.log('Response status:', response.status);
@@ -186,26 +195,35 @@
           resultsDiv.appendChild(col);
         });
         
-        statusDiv.textContent = `Showing ${data.length} results (Page ${currentPage})`;
+        statusDiv.textContent = `Showing ${resultsDiv.children.length} results`;
+        hasMore = data.length === pageSize;
         
-        // Show/hide pagination
-        if (data.length === pageSize) {
-          paginationDiv.style.display = 'flex';
-          pageInfo.textContent = `Page ${currentPage}`;
-          prevPageBtn.disabled = currentPage === 1;
-        } else {
-          paginationDiv.style.display = data.length > 0 ? 'flex' : 'none';
-          pageInfo.textContent = `Page ${currentPage} (Last page)`;
-          prevPageBtn.disabled = currentPage === 1;
-          nextPageBtn.disabled = true;
-        }
+        // Hide pagination buttons (using infinite scroll now)
+        paginationDiv.style.display = 'none';
+        
+        isLoading = false;
       } catch (err) {
         console.error("Frontend error:", err);
         errorDiv.textContent = "Error loading results.";
         statusDiv.textContent = `Error: ${err.message}`;
         paginationDiv.style.display = 'none';
+        isLoading = false;
       }
     }
+    
+    // Infinite scroll: load more when near bottom
+    window.addEventListener('scroll', () => {
+      if (isLoading || !hasMore) return;
+      
+      const scrollPosition = window.innerHeight + window.scrollY;
+      const pageHeight = document.documentElement.scrollHeight;
+      
+      // Load more when within 500px of bottom
+      if (scrollPosition >= pageHeight - 500) {
+        currentPage++;
+        performSearch(false, true);
+      }
+    });
 
     // Debounced search
     let searchTimeout;
@@ -219,30 +237,10 @@
       priceValue.textContent = priceRange.value;
       performSearch(true);
     });
-    
-    // Pagination controls
-    prevPageBtn.addEventListener("click", () => {
-      if (currentPage > 1) {
-        currentPage--;
-        performSearch(false);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    });
-    
-    nextPageBtn.addEventListener("click", () => {
-      currentPage++;
-      performSearch(false);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
 
-    // Initial load - only if there's a search query
-    if (searchInput.value.trim()) {
-      performSearch(true);
-    } else {
-      // Load popular models on initial page load (no search query = sorted by favorites)
-      statusDiv.textContent = "Loading popular creators...";
-      performSearch(true);
-    }
+    // Initial load - load popular models
+    statusDiv.textContent = "Loading popular creators...";
+    performSearch(true);
   </script>
 </body>
 </html>
