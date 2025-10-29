@@ -141,10 +141,10 @@
 
         // Render cards
         data.forEach(item => {
-          // Prefer larger thumbnail (c144) over tiny (c50), fall back to full avatar
-          const thumb = item.avatar_c144 || item.avatar || item.avatar_c50 || "";
-          // Try direct URL first with no-referrer policy; proxy only if that fails
-          const img = thumb && thumb.startsWith("http") ? thumb : "/static/no-image.png";
+          // Use full avatar for best quality, fallback to c144 if needed
+          const img = item.avatar || item.avatar_c144 || "";
+          const imgSrc = img && img.startsWith("http") ? img : "/static/no-image.png";
+          
           const name = item.name || "Unknown";
           const username = item.username || "—";
           const priceText = (item.subscribePrice && !isNaN(item.subscribePrice))
@@ -157,9 +157,9 @@
           col.className = "col-sm-6 col-md-4 col-lg-3";
           col.innerHTML = `
             <div class="card h-100">
-              <img src="${img}" alt="${name}" loading="lazy" referrerpolicy="no-referrer" 
+              <img src="${imgSrc}" alt="${name}" loading="lazy" referrerpolicy="no-referrer" 
                    onerror="if(this.src!='/static/no-image.png'){this.src='/static/no-image.png';}"
-                   onload="if(this.naturalWidth<=1||this.naturalHeight<=1){this.src='/static/no-image.png';}">
+                   onload="if(this.naturalWidth<=10||this.naturalHeight<=10){this.parentElement.parentElement.remove();}">
               <div class="card-body text-start">
                 <h5>${name} ${verifiedIcon}</h5>
                 <p class="mb-1">@${username}</p>
@@ -191,8 +191,12 @@
       performSearch();
     });
 
-    // Initial load
-    performSearch();
+    // Initial load - only if there's a search query
+    if (searchInput.value.trim()) {
+      performSearch();
+    } else {
+      statusDiv.textContent = "Enter a search term to find creators";
+    }
   </script>
 </body>
 </html>
