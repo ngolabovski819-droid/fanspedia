@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Creator Finder</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #111;
+      color: #eee;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .container {
+      max-width: 1200px;
+      margin-top: 40px;
+    }
+    .card {
+      background: #222;
+      color: #ddd;
+      border: none;
+      border-radius: 12px;
+      transition: 0.2s;
+    }
+    .card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 15px rgba(255,255,255,0.1);
+    }
+    .card img {
+      border-radius: 12px 12px 0 0;
+      height: 200px;
+      object-fit: cover;
+      width: 100%;
+    }
+    .error {
+      color: red;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container text-center">
+    <h1 class="mb-4">Creator Finder</h1>
+
+    <!-- Search bar -->
+    <div class="mb-3">
+      <input id="search" type="text" class="form-control" placeholder="Search creators..." />
+    </div>
+
+    <!-- Filters -->
+    <div class="d-flex justify-content-center align-items-center mb-4 flex-wrap gap-3">
+      <div class="form-check form-switch">
+        <input id="verified" type="checkbox" class="form-check-input me-2">
+        <label for="verified" class="form-check-label me-4">Verified only</label>
+      </div>
+
+      <div>
+        <label for="price" class="form-label me-2">Max price ($)</label>
+        <input id="price" type="range" class="form-range w-100" min="0" max="100" value="100" step="1">
+      </div>
+      <span id="price-value" class="ms-2">100</span>
+    </div>
+
+    <!-- Results -->
+    <div id="results" class="row g-3 justify-content-center"></div>
+    <p id="error" class="error"></p>
+  </div>
+
+  <script>
+    const searchInput = document.getElementById("search");
+    const verifiedToggle = document.getElementById("verified");
+    const priceRange = document.getElementById("price");
+    const priceValue = document.getElementById("price-value");
+    const resultsDiv = document.getElementById("results");
+    const errorDiv = document.getElementById("error");
+
+    // Perform the API search
+    async function performSearch() {
+      const q = searchInput.value.trim();
+      const verified = verifiedToggle.checked;
+      const price = priceRange.value;
+
+      resultsDiv.innerHTML = "";
+      errorDiv.textContent = "";
+
+      try {
+        const response = await fetch(`/api/search?q=${encodeURIComponent(q)}&verified=${verified}&price=${price}`);
+        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+        // Safely parse response
+        const text = await response.text();
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (err) {
+          console.error("Invalid JSON from backend:", text);
+          throw new Error("Invalid JSON from server");
+        }
+
+        if (!Array.isArray(data)) {
+          console.error("Unexpected API data:", data);
+          errorDiv.textContent = "Invalid data format.";
+          return;
+        }
+
+        if (data.length === 0) {
+          resultsDiv.innerHTML = `<p class='text-muted'>No results found.</p>`;
+          return;
+        }
+
+        // Render cards
+        data.forEach(item => {
+          const img = item.avatar && item.avatar.startsWith("http") ? item.avatar : "static/no-image.png";
+          const name = item.name || "Unknown";
+          const username = item.username || "—";
+          const priceText = (item.subscribePrice && !isNaN(item.subscribePrice))
+            ? `$${parseFloat(item.subscribePrice).toFixed(2)}`
+            : "Free";
+          const verifiedIcon = item.isVerified ? "✅" : "";
+          const location = item.location || "";
+
+          const col = document.createElement("div");
+          col.className = "col-sm-6 col-md-4 col-lg-3";
+          col.innerHTML = `
+            <div class="card h-100">
+              <img src="${img}" alt="${name}">
+              <div class="card-body text-start">
+                <h5>${name} ${verifiedIcon}</h5>
+                <p class="mb-1">@${username}</p>
+                <p class="mb-1">${location}</p>
+                <p class="mb-1"><strong>${priceText}</strong></p>
+              </div>
+            </div>`;
+          resultsDiv.appendChild(col);
+        });
+      } catch (err) {
+        console.error("Frontend error:", err);
+        errorDiv.textContent = "Error loading results.";
+      }
+    }
+
+    // Debounced search
+    let searchTimeout;
+    searchInput.addEventListener("input", () => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => performSearch(), 400);
+    });
+
+    verifiedToggle.addEventListener("change", performSearch);
+    priceRange.addEventListener("input", () => {
+      priceValue.textContent = priceRange.value;
+      performSearch();
+    });
+
+    // Initial load
+    performSearch();
+  </script>
+</body>
+</html>

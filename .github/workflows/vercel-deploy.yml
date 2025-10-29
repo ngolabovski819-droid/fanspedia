@@ -1,0 +1,32 @@
+name: Deploy to Vercel
+
+on:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  vercel-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install deps (for local build if needed)
+        run: npm ci || npm install
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }} # required
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }} # optional but recommended
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }} # optional but recommended
+          working-directory: ./
+          prod: true
+
+      - name: Show deployed URL
+        run: echo "Deployed to Vercel (see action output above)"
