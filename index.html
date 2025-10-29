@@ -112,7 +112,10 @@
         data.forEach(item => {
           // Prefer thumbnail-sized images if available; fall back to full avatar
           const thumb = item.avatar_c144 || item.avatar_c50 || item.avatar || "";
-          const img = thumb && thumb.startsWith("http") ? thumb : "/static/no-image.png";
+          // Use image proxy to avoid hotlink blocking
+          const img = thumb && thumb.startsWith("http") 
+            ? `/api/img?url=${encodeURIComponent(thumb)}`
+            : "/static/no-image.png";
           const name = item.name || "Unknown";
           const username = item.username || "—";
           const priceText = (item.subscribePrice && !isNaN(item.subscribePrice))
