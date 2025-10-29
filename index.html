@@ -70,6 +70,7 @@
     <!-- Results -->
     <div id="results" class="row g-3 justify-content-center"></div>
     <p id="error" class="error"></p>
+    <p id="status" style="color: #888; margin-top: 10px; font-size: 14px;"></p>
   </div>
 
   <script>
@@ -79,6 +80,7 @@
     const priceValue = document.getElementById("price-value");
     const resultsDiv = document.getElementById("results");
     const errorDiv = document.getElementById("error");
+    const statusDiv = document.getElementById("status");
 
     // Perform the API search
     async function performSearch() {
@@ -88,17 +90,21 @@
 
       resultsDiv.innerHTML = "";
       errorDiv.textContent = "";
+      statusDiv.textContent = "Searching...";
 
       try {
         const apiUrl = `/api/search?q=${encodeURIComponent(q)}&verified=${verified}&price=${price}`;
         console.log('Fetching:', apiUrl);
+        statusDiv.textContent = `Fetching: ${apiUrl}`;
         
         const response = await fetch(apiUrl);
         console.log('Response status:', response.status);
+        statusDiv.textContent = `Response: ${response.status}`;
         
         if (!response.ok) {
           const errorText = await response.text();
           console.error('API error response:', errorText);
+          statusDiv.textContent = `API Error: ${response.status}`;
           throw new Error(`HTTP error: ${response.status} - ${errorText}`);
         }
 
@@ -109,24 +115,29 @@
         try {
           data = JSON.parse(text);
           console.log('Parsed data:', data.length, 'results');
+          statusDiv.textContent = `Got ${data.length} results from API`;
         } catch (err) {
           console.error("Invalid JSON from backend:", text);
+          statusDiv.textContent = "Invalid JSON from server";
           throw new Error("Invalid JSON from server");
         }
 
         if (!Array.isArray(data)) {
           console.error("Unexpected API data:", data);
           errorDiv.textContent = "Invalid data format.";
+          statusDiv.textContent = "Data is not an array";
           return;
         }
 
         if (data.length === 0) {
           console.warn('API returned 0 results for query:', { q, verified, price });
           resultsDiv.innerHTML = `<p class='text-muted'>No results found. Try adjusting filters or search term.</p>`;
+          statusDiv.textContent = "0 results - try different search";
           return;
         }
 
         console.log('Rendering', data.length, 'results');
+        statusDiv.textContent = `Rendering ${data.length} results...`;
 
         // Render cards
         data.forEach(item => {
@@ -158,9 +169,12 @@
             </div>`;
           resultsDiv.appendChild(col);
         });
+        
+        statusDiv.textContent = `Showing ${data.length} results`;
       } catch (err) {
         console.error("Frontend error:", err);
         errorDiv.textContent = "Error loading results.";
+        statusDiv.textContent = `Error: ${err.message}`;
       }
     }
 
