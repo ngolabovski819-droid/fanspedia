@@ -71,6 +71,13 @@
     <div id="results" class="row g-3 justify-content-center"></div>
     <p id="error" class="error"></p>
     <p id="status" style="color: #888; margin-top: 10px; font-size: 14px;"></p>
+    
+    <!-- Pagination -->
+    <div id="pagination" class="mt-4 d-flex justify-content-center gap-2" style="display: none !important;">
+      <button id="prevPage" class="btn btn-secondary">Previous</button>
+      <span id="pageInfo" class="align-self-center" style="color: #aaa;"></span>
+      <button id="nextPage" class="btn btn-secondary">Next</button>
+    </div>
   </div>
 
   <script>
@@ -81,9 +88,18 @@
     const resultsDiv = document.getElementById("results");
     const errorDiv = document.getElementById("error");
     const statusDiv = document.getElementById("status");
+    const paginationDiv = document.getElementById("pagination");
+    const prevPageBtn = document.getElementById("prevPage");
+    const nextPageBtn = document.getElementById("nextPage");
+    const pageInfo = document.getElementById("pageInfo");
+    
+    let currentPage = 1;
+    const pageSize = 24;
 
     // Perform the API search
-    async function performSearch() {
+    async function performSearch(resetPage = true) {
+      if (resetPage) currentPage = 1;
+      
       const q = searchInput.value.trim();
       const verified = verifiedToggle.checked;
       const price = priceRange.value;
@@ -93,9 +109,9 @@
       statusDiv.textContent = "Searching...";
 
       try {
-        const apiUrl = `/api/search?q=${encodeURIComponent(q)}&verified=${verified}&price=${price}`;
+        const apiUrl = `/api/search?q=${encodeURIComponent(q)}&verified=${verified}&price=${price}&page=${currentPage}&page_size=${pageSize}`;
         console.log('Fetching:', apiUrl);
-        statusDiv.textContent = `Fetching: ${apiUrl}`;
+        statusDiv.textContent = `Fetching page ${currentPage}...`;
         
         const response = await fetch(apiUrl);
         console.log('Response status:', response.status);
@@ -170,11 +186,24 @@
           resultsDiv.appendChild(col);
         });
         
-        statusDiv.textContent = `Showing ${data.length} results`;
+        statusDiv.textContent = `Showing ${data.length} results (Page ${currentPage})`;
+        
+        // Show/hide pagination
+        if (data.length === pageSize) {
+          paginationDiv.style.display = 'flex';
+          pageInfo.textContent = `Page ${currentPage}`;
+          prevPageBtn.disabled = currentPage === 1;
+        } else {
+          paginationDiv.style.display = data.length > 0 ? 'flex' : 'none';
+          pageInfo.textContent = `Page ${currentPage} (Last page)`;
+          prevPageBtn.disabled = currentPage === 1;
+          nextPageBtn.disabled = true;
+        }
       } catch (err) {
         console.error("Frontend error:", err);
         errorDiv.textContent = "Error loading results.";
         statusDiv.textContent = `Error: ${err.message}`;
+        paginationDiv.style.display = 'none';
       }
     }
 
@@ -182,18 +211,33 @@
     let searchTimeout;
     searchInput.addEventListener("input", () => {
       clearTimeout(searchTimeout);
-      searchTimeout = setTimeout(() => performSearch(), 400);
+      searchTimeout = setTimeout(() => performSearch(true), 400);
     });
 
-    verifiedToggle.addEventListener("change", performSearch);
+    verifiedToggle.addEventListener("change", () => performSearch(true));
     priceRange.addEventListener("input", () => {
       priceValue.textContent = priceRange.value;
-      performSearch();
+      performSearch(true);
+    });
+    
+    // Pagination controls
+    prevPageBtn.addEventListener("click", () => {
+      if (currentPage > 1) {
+        currentPage--;
+        performSearch(false);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+    
+    nextPageBtn.addEventListener("click", () => {
+      currentPage++;
+      performSearch(false);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
     // Initial load - only if there's a search query
     if (searchInput.value.trim()) {
-      performSearch();
+      performSearch(true);
     } else {
       statusDiv.textContent = "Enter a search term to find creators";
     }
