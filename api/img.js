@@ -23,6 +23,13 @@ export default async function handler(req, res) {
     // Get content type and buffer
     const contentType = response.headers.get('content-type') || 'image/jpeg';
     const buffer = await response.arrayBuffer();
+    
+    // Reject suspiciously small images (likely 1x1 tracking pixels or errors)
+    // Most real avatar thumbnails are at least 500 bytes
+    if (buffer.byteLength < 500) {
+      console.warn(`Image too small (${buffer.byteLength} bytes), likely 1x1 pixel: ${url}`);
+      return res.status(404).send('Invalid image');
+    }
 
     // Set caching headers (24 hours)
     res.setHeader('Content-Type', contentType);
