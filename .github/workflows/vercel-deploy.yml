@@ -26,7 +26,7 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }} # optional but recommended
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }} # optional but recommended
           working-directory: ./
-          prod: true
+          vercel-args: '--prod'
 
       - name: Show deployed URL
         run: echo "Deployed to Vercel (see action output above)"
