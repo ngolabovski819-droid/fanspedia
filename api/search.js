@@ -8,9 +8,17 @@ const cache = new Map();
 export default async function handler(req, res) {
   try {
     const SUPABASE_URL = (process.env.SUPABASE_URL || "").replace(/\/+$/, "");
-    const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || "";
+    // Support both SUPABASE_ANON_KEY (public) and SUPABASE_KEY (service role) for flexibility
+    const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY || "";
     if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-      return res.status(500).json({ error: 'Missing SUPABASE_URL or SUPABASE_ANON_KEY env vars' });
+      return res.status(500).json({ 
+        error: 'Missing SUPABASE_URL or SUPABASE_ANON_KEY env vars',
+        debug: {
+          hasUrl: !!process.env.SUPABASE_URL,
+          hasAnonKey: !!process.env.SUPABASE_ANON_KEY,
+          hasKey: !!process.env.SUPABASE_KEY
+        }
+      });
     }
 
     const q = (req.query.q || "").trim();

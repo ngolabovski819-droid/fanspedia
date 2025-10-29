@@ -84,14 +84,25 @@
       errorDiv.textContent = "";
 
       try {
-        const response = await fetch(`/api/search?q=${encodeURIComponent(q)}&verified=${verified}&price=${price}`);
-        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+        const apiUrl = `/api/search?q=${encodeURIComponent(q)}&verified=${verified}&price=${price}`;
+        console.log('Fetching:', apiUrl);
+        
+        const response = await fetch(apiUrl);
+        console.log('Response status:', response.status);
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('API error response:', errorText);
+          throw new Error(`HTTP error: ${response.status} - ${errorText}`);
+        }
 
         // Safely parse response
         const text = await response.text();
+        console.log('Response text length:', text.length);
         let data;
         try {
           data = JSON.parse(text);
+          console.log('Parsed data:', data.length, 'results');
         } catch (err) {
           console.error("Invalid JSON from backend:", text);
           throw new Error("Invalid JSON from server");
@@ -110,12 +121,10 @@
 
         // Render cards
         data.forEach(item => {
-          // Prefer thumbnail-sized images if available; fall back to full avatar
-          const thumb = item.avatar_c144 || item.avatar_c50 || item.avatar || "";
-          // Use image proxy to avoid hotlink blocking
-          const img = thumb && thumb.startsWith("http") 
-            ? `/api/img?url=${encodeURIComponent(thumb)}`
-            : "/static/no-image.png";
+          // Prefer larger thumbnail (c144) over tiny (c50), fall back to full avatar
+          const thumb = item.avatar_c144 || item.avatar || item.avatar_c50 || "";
+          // Try direct URL first with no-referrer policy; proxy only if that fails
+          const img = thumb && thumb.startsWith("http") ? thumb : "/static/no-image.png";
           const name = item.name || "Unknown";
           const username = item.username || "—";
           const priceText = (item.subscribePrice && !isNaN(item.subscribePrice))
@@ -128,7 +137,7 @@
           col.className = "col-sm-6 col-md-4 col-lg-3";
           col.innerHTML = `
             <div class="card h-100">
-              <img src="${img}" alt="${name}" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='/static/no-image.png';">
+              <img src="${img}" alt="${name}" loading="lazy" referrerpolicy="no-referrer" onerror="if(this.src!='/static/no-image.png'){this.src='/static/no-image.png';}">
               <div class="card-body text-start">
                 <h5>${name} ${verifiedIcon}</h5>
                 <p class="mb-1">@${username}</p>
