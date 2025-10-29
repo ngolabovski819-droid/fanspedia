@@ -110,7 +110,7 @@
 
         // Render cards
         data.forEach(item => {
-          const img = item.avatar && item.avatar.startsWith("http") ? item.avatar : "static/no-image.png";
+          const img = item.avatar && item.avatar.startsWith("http") ? item.avatar : "/static/no-image.png";
           const name = item.name || "Unknown";
           const username = item.username || "—";
           const priceText = (item.subscribePrice && !isNaN(item.subscribePrice))
