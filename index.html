@@ -110,7 +110,9 @@
 
         // Render cards
         data.forEach(item => {
-          const img = item.avatar && item.avatar.startsWith("http") ? item.avatar : "/static/no-image.png";
+          // Prefer thumbnail-sized images if available; fall back to full avatar
+          const thumb = item.avatar_c144 || item.avatar_c50 || item.avatar || "";
+          const img = thumb && thumb.startsWith("http") ? thumb : "/static/no-image.png";
           const name = item.name || "Unknown";
           const username = item.username || "—";
           const priceText = (item.subscribePrice && !isNaN(item.subscribePrice))
@@ -123,7 +125,7 @@
           col.className = "col-sm-6 col-md-4 col-lg-3";
           col.innerHTML = `
             <div class="card h-100">
-              <img src="${img}" alt="${name}">
+              <img src="${img}" alt="${name}" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='/static/no-image.png';">
               <div class="card-body text-start">
                 <h5>${name} ${verifiedIcon}</h5>
                 <p class="mb-1">@${username}</p>
