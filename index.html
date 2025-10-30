@@ -168,7 +168,7 @@
         data.forEach(item => {
           // Use full avatar for best quality, fallback to c144 if needed
           const img = item.avatar || item.avatar_c144 || "";
-          const imgSrc = img && img.startsWith("http") ? img : "/public/no-image.png";
+          const imgSrc = img && img.startsWith("http") ? img : "/static/no-image.png";
           
           const name = item.name || "Unknown";
           const username = item.username || "—";
@@ -183,7 +183,7 @@
           col.innerHTML = `
             <div class="card h-100">
               <img src="${imgSrc}" alt="${name}" loading="lazy" referrerpolicy="no-referrer" 
-                   onerror="if(this.src!='/public/no-image.png'){this.src='/public/no-image.png';}"
+                   onerror="if(this.src!='/static/no-image.png'){this.src='/static/no-image.png';}"
                    onload="if(this.naturalWidth<=10||this.naturalHeight<=10){this.parentElement.parentElement.remove();}">
               <div class="card-body text-start">
                 <h5>${name} ${verifiedIcon}</h5>
