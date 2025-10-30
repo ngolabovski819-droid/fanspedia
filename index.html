@@ -118,7 +118,11 @@
       statusDiv.textContent = append ? "Loading more..." : "Searching...";
 
       try {
-        const apiUrl = `/api/search?q=${encodeURIComponent(q)}&verified=${verified}&price=${price}&page=${currentPage}&page_size=${pageSize}`;
+        // Build API URL - only include verified param if checkbox is checked
+        let apiUrl = `/api/search?q=${encodeURIComponent(q)}&price=${price}&page=${currentPage}&page_size=${pageSize}`;
+        if (verified) {
+          apiUrl += '&verified=true';
+        }
         console.log('Fetching:', apiUrl);
         statusDiv.textContent = `Loading page ${currentPage}...`;
         
