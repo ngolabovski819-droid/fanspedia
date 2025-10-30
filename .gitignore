@@ -7,3 +7,26 @@ __pycache__/
 *.pyo
 .DS_Store
 npm-debug.log
+
+# Python virtual environment
+venv/
+env/
+.venv/
+
+# Sensitive data files
+cookies.json
+*.csv
+*.log
+failed_batch.json
+progress_urls.json
+onlyfans_urls.txt
+
+# Temporary files
+temp.csv
+one_row.log
+upload.log
+
+# Build outputs
+dist/
+build/
+.vercel/
