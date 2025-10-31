@@ -299,16 +299,9 @@ const optimizedUrl = `/cdn-cgi/image/width=270,height=360,format=auto,quality=85
 
         // Render cards
         data.forEach(item => {
-          // Use Cloudflare Image Resizing (free tier: 100k/month)
-          // Optimizes on-the-fly: WebP conversion, resize to 270x360, quality=85
-          // Reduces file size by 40-60% while keeping crisp quality
+          // Use full avatar for best quality
           const img = item.avatar || item.avatar_c144 || "";
-          let imgSrc = img && img.startsWith("http") ? img : "/static/no-image.png";
-          
-          // Apply Cloudflare optimization to OnlyFans images
-          if (imgSrc.startsWith("http") && imgSrc !== "/static/no-image.png") {
-            imgSrc = `/cdn-cgi/image/width=270,height=360,format=auto,quality=85,fit=cover/${imgSrc}`;
-          }
+          const imgSrc = img && img.startsWith("http") ? img : "/static/no-image.png";
           
           const name = item.name || "Unknown";
           const username = item.username || "—";
