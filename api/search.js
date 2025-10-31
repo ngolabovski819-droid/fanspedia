@@ -22,7 +22,6 @@ export default async function handler(req, res) {
     const q = (req.query.q || "").trim();
     const verified = (req.query.verified || "").toString().trim().toLowerCase();
     const bundles = (req.query.bundles || "").toString().trim().toLowerCase();
-    const gender = (req.query.gender || "").toString().trim().toLowerCase();
     const max_price = (req.query.price || "").toString().trim();
     const page = parseInt(req.query.page || "1", 10) || 1;
     const page_size = Math.max(1, Math.min(parseInt(req.query.page_size || "50", 10) || 50, 1000)); // Allow up to 1000 per request
@@ -50,15 +49,6 @@ export default async function handler(req, res) {
 
     if (bundles === 'true') {
       params.set('bundle1_price', 'gt.0');
-    }
-
-    if (gender) {
-      // gender comes as comma-separated: 'f,m,t'
-      const genders = gender.split(',').filter(g => ['f', 'm', 't'].includes(g));
-      if (genders.length > 0 && genders.length < 3) {
-        // Only filter if not all selected (otherwise show all)
-        params.set('gender', `in.(${genders.join(',')})`);
-      }
     }
 
     if (max_price) {
