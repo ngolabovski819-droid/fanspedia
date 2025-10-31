@@ -298,9 +298,9 @@
 
         // Render cards
         data.forEach(item => {
-          // Use c144 thumbnail first (144x144, ~10KB) instead of full avatar (~100KB)
-          // This gives 60-70% file size reduction with acceptable quality for cards
-          const img = item.avatar_c144 || item.avatar || "";
+          // Use full avatar for best quality - crisp images worth the extra bandwidth
+          // Full avatar (~100-200KB) vs c144 (~10KB) but much better visual quality
+          const img = item.avatar || item.avatar_c144 || "";
           const imgSrc = img && img.startsWith("http") ? img : "/static/no-image.png";
           
           const name = item.name || "Unknown";
