@@ -305,6 +305,29 @@
     @media (max-width: 400px) {
       .card img { height: 320px; min-height: 320px; }
     }
+    /* Gender filter checkboxes */
+    .gender-filters {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    .gender-filters label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      color: #555;
+    }
+    .gender-filters input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: #007aff;
+    }
+    @media (max-width: 768px) {
+      .gender-filters { gap: 12px; flex-wrap: wrap; justify-content: center; }
+    }
   </style>
 </head>
 <body>
@@ -326,6 +349,23 @@
     <!-- Filters (sticky) -->
     <div class="filters-container">
       <div class="d-flex justify-content-center align-items-center flex-wrap gap-3 filters">
+        <!-- Gender filters -->
+        <div class="gender-filters">
+          <span style="font-weight: 600; color: #555; margin-right: 4px;">Gender:</span>
+          <label>
+            <input id="genderFemale" type="checkbox" checked />
+            Female
+          </label>
+          <label>
+            <input id="genderMale" type="checkbox" />
+            Male
+          </label>
+          <label>
+            <input id="genderTrans" type="checkbox" />
+            Trans
+          </label>
+        </div>
+
         <div class="form-check form-switch">
           <input id="verified" type="checkbox" class="form-check-input me-2">
           <label for="verified" class="form-check-label me-4">Verified only</label>
@@ -355,6 +395,9 @@
 
   <script>
     const searchInput = document.getElementById("search");
+    const genderFemale = document.getElementById("genderFemale");
+    const genderMale = document.getElementById("genderMale");
+    const genderTrans = document.getElementById("genderTrans");
     const verifiedToggle = document.getElementById("verified");
     const bundlesToggle = document.getElementById("bundles");
     const priceRange = document.getElementById("price");
@@ -386,6 +429,12 @@
       const verified = verifiedToggle.checked;
       const bundles = bundlesToggle.checked;
       const price = priceRange.value;
+      
+      // Collect selected genders
+      const genders = [];
+      if (genderFemale.checked) genders.push('f');
+      if (genderMale.checked) genders.push('m');
+      if (genderTrans.checked) genders.push('t');
 
       // Save search to recent if not empty
       if (resetPage && q) saveRecentSearch(q);
@@ -402,6 +451,9 @@
         }
         if (bundles) {
           apiUrl += '&bundles=true';
+        }
+        if (genders.length > 0) {
+          apiUrl += `&gender=${genders.join(',')}`;
         }
         console.log('Fetching:', apiUrl);
         statusDiv.textContent = `Loading page ${currentPage}...`;
@@ -602,6 +654,9 @@
 
     verifiedToggle.addEventListener("change", () => performSearch(true));
     bundlesToggle.addEventListener("change", () => performSearch(true));
+    genderFemale.addEventListener("change", () => performSearch(true));
+    genderMale.addEventListener("change", () => performSearch(true));
+    genderTrans.addEventListener("change", () => performSearch(true));
     if (searchBtn) {
       searchBtn.addEventListener("click", () => performSearch(true));
     }
