@@ -196,6 +196,17 @@
     @media (min-width: 992px) { .price-range { width: 300px; } }
     @media (max-width: 576px) {
       h1 { font-size: 28px; line-height: 1.15; }
+      /* Stack label above slider on small screens */
+      .price-group { flex-direction: column; align-items: stretch; }
+      .price-group .form-label { margin-bottom: 6px; }
+      .price-range { width: 100%; }
+      .price-value { align-self: flex-end; margin-top: 6px; }
+    }
+    /* Very small screens: make Search button full width */
+    @media (max-width: 400px) {
+      .search-group .input-group { flex-wrap: wrap; }
+      .search-group .form-control { border-radius: 9999px; }
+      .search-group .btn-search { width: 100%; margin-top: 8px; border-radius: 9999px; }
     }
   </style>
 </head>
@@ -207,7 +218,7 @@
     <!-- Search bar -->
     <div class="mb-3 search-group">
       <div class="input-group input-group-lg">
-        <input id="search" type="text" class="form-control" placeholder='Type: "milf" "Texas" "piercings"' aria-label="Search creators" />
+        <input id="search" type="text" class="form-control" placeholder='Type: "milf" "Texas" "piercings"' aria-label="Search creators" inputmode="search" enterkeyhint="search" autocomplete="off" autocapitalize="none" spellcheck="false" />
         <button id="searchBtn" class="btn btn-search" type="button">Search</button>
       </div>
     </div>
@@ -394,6 +405,13 @@
     searchInput.addEventListener("input", () => {
       clearTimeout(searchTimeout);
       searchTimeout = setTimeout(() => performSearch(true), 400);
+    });
+    // Trigger search on Enter key
+    searchInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        performSearch(true);
+      }
     });
 
     verifiedToggle.addEventListener("change", () => performSearch(true));
