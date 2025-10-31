@@ -186,6 +186,17 @@
       border-color: #0062d9;
       box-shadow: 0 8px 22px rgba(0,122,255,0.45);
     }
+    /* Filters layout */
+    .filters { gap: 12px; }
+    .price-group { display: flex; align-items: center; flex-wrap: nowrap; }
+    .price-group .form-label { margin-bottom: 0; }
+    .price-range { width: 180px; }
+    .price-value { display: inline-block; min-width: 44px; text-align: center; padding: 4px 10px; border-radius: 9999px; background: #e9f5ff; color: #007aff; font-weight: 700; }
+    @media (min-width: 576px) { .price-range { width: 240px; } }
+    @media (min-width: 992px) { .price-range { width: 300px; } }
+    @media (max-width: 576px) {
+      h1 { font-size: 28px; line-height: 1.15; }
+    }
   </style>
 </head>
 <body>
@@ -202,17 +213,17 @@
     </div>
 
     <!-- Filters -->
-    <div class="d-flex justify-content-center align-items-center mb-4 flex-wrap gap-3">
+    <div class="d-flex justify-content-center align-items-center mb-4 flex-wrap gap-3 filters">
       <div class="form-check form-switch">
         <input id="verified" type="checkbox" class="form-check-input me-2">
         <label for="verified" class="form-check-label me-4">Verified only</label>
       </div>
 
-      <div>
+      <div class="price-group">
         <label for="price" class="form-label me-2">Max price ($)</label>
-        <input id="price" type="range" class="form-range w-100" min="0" max="100" value="100" step="1">
+        <input id="price" type="range" class="form-range price-range" min="0" max="100" value="100" step="1">
+        <span id="price-value" class="ms-2 price-value">100</span>
       </div>
-      <span id="price-value" class="ms-2">100</span>
     </div>
 
     <!-- Results -->
