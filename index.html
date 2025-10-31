@@ -334,15 +334,11 @@
         statusDiv.textContent = `Showing ${resultsDiv.children.length} results`;
         hasMore = data.length === pageSize;
         
-        // Hide pagination buttons (using infinite scroll now)
-        paginationDiv.style.display = 'none';
-        
         isLoading = false;
       } catch (err) {
         console.error("Frontend error:", err);
         errorDiv.textContent = "Error loading results.";
         statusDiv.textContent = `Error: ${err.message}`;
-        paginationDiv.style.display = 'none';
         isLoading = false;
       }
     }
