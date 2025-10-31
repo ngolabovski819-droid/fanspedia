@@ -37,20 +37,20 @@
       background: #222;
       color: #ddd;
       border: none;
-      border-radius: 12px;
+      border-radius: 16px;
       transition: 0.2s;
+      overflow: hidden;
     }
     .card:hover {
       transform: scale(1.02);
-      box-shadow: 0 0 15px rgba(255,255,255,0.1);
+      box-shadow: 0 0 20px rgba(0,122,255,0.3);
     }
     .card img {
-      border-radius: 12px 12px 0 0;
-      height: 200px;
+      border-radius: 0;
+      height: 360px;
       object-fit: cover;
       width: 100%;
-      min-height: 200px;
-      min-width: 100px;
+      min-height: 360px;
       background: linear-gradient(90deg, #2a2a2a 25%, #333 50%, #2a2a2a 75%);
       background-size: 200% 100%;
       animation: shimmer 1.5s infinite;
@@ -59,8 +59,35 @@
       0% { background-position: 200% 0; }
       100% { background-position: -200% 0; }
     }
-    .card img[src*="1x1"], .card img[width="1"], .card img[height="1"] {
-      display: none;
+    .view-profile-btn {
+      background: #007aff;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      width: 100%;
+      text-align: center;
+      margin-top: 12px;
+    }
+    .view-profile-btn:hover {
+      background: #0066dd;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,122,255,0.4);
+      color: white;
+    }
+    .card-body {
+      padding: 16px;
+    }
+    .card h5 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
     }
     .error {
       color: red;
@@ -207,6 +234,7 @@
             : "Free";
           const verifiedIcon = item.isVerified ? "✅" : "";
           const location = item.location || "";
+          const profileUrl = username !== "—" ? `https://onlyfans.com/${username}` : "#";
 
           const col = document.createElement("div");
           col.className = "col-sm-6 col-md-4 col-lg-3";
@@ -214,17 +242,20 @@
             <div class="card h-100">
               <img src="${imgSrc}" 
                    alt="${name}" 
-                   width="200" 
-                   height="200"
+                   width="270" 
+                   height="360"
                    loading="lazy" 
                    referrerpolicy="no-referrer" 
                    onerror="if(this.src!='/static/no-image.png'){this.src='/static/no-image.png';}"
                    onload="if(this.naturalWidth<=10||this.naturalHeight<=10){this.parentElement.parentElement.remove();}">
               <div class="card-body text-start">
-                <h5>${name} ${verifiedIcon}</h5>
-                <p class="mb-1">@${username}</p>
-                <p class="mb-1">${location}</p>
-                <p class="mb-1"><strong>${priceText}</strong></p>
+                <h5 class="mb-2">${name} ${verifiedIcon}</h5>
+                <p class="mb-1 text-muted">@${username}</p>
+                <p class="mb-2 text-muted small">${location}</p>
+                <p class="mb-3"><strong style="color: #4caf50; font-size: 18px;">${priceText}</strong></p>
+                <a href="${profileUrl}" target="_blank" rel="noopener noreferrer" class="view-profile-btn">
+                  View Profile
+                </a>
               </div>
             </div>`;
           resultsDiv.appendChild(col);
