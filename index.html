@@ -212,6 +212,48 @@
     #backToTop:hover { background: #0062d9; }
     /* Filters layout */
     .filters { gap: 12px; }
+    /* Sticky filters bar */
+    .filters-container {
+      position: sticky;
+      top: 0;
+      background: #f5f5f7;
+      z-index: 100;
+      padding: 16px 0;
+      margin-bottom: 20px;
+    }
+    /* Recent searches chips */
+    .recent-searches {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 12px;
+      margin-bottom: 8px;
+    }
+    .search-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 9999px;
+      font-size: 13px;
+      color: #555;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .search-chip:hover {
+      background: #007aff;
+      color: white;
+      border-color: #007aff;
+    }
+    .search-chip .remove {
+      font-size: 16px;
+      opacity: 0.6;
+      margin-left: 2px;
+    }
+    .search-chip:hover .remove { opacity: 1; }
     .price-group { display: flex; align-items: center; flex-wrap: nowrap; }
     .price-group .form-label { margin-bottom: 0; }
     .price-range { width: 180px; }
@@ -251,17 +293,27 @@
       </div>
     </div>
 
-    <!-- Filters -->
-    <div class="d-flex justify-content-center align-items-center mb-4 flex-wrap gap-3 filters">
-      <div class="form-check form-switch">
-        <input id="verified" type="checkbox" class="form-check-input me-2">
-        <label for="verified" class="form-check-label me-4">Verified only</label>
-      </div>
+    <!-- Recent searches -->
+    <div id="recentSearches" class="recent-searches"></div>
 
-      <div class="price-group">
-        <label for="price" class="form-label me-2">Max price ($)</label>
-        <input id="price" type="range" class="form-range price-range" min="0" max="100" value="100" step="1">
-        <span id="price-value" class="ms-2 price-value">100</span>
+    <!-- Filters (sticky) -->
+    <div class="filters-container">
+      <div class="d-flex justify-content-center align-items-center flex-wrap gap-3 filters">
+        <div class="form-check form-switch">
+          <input id="verified" type="checkbox" class="form-check-input me-2">
+          <label for="verified" class="form-check-label me-4">Verified only</label>
+        </div>
+
+        <div class="form-check form-switch">
+          <input id="bundles" type="checkbox" class="form-check-input me-2">
+          <label for="bundles" class="form-check-label me-4">Bundle subscriptions</label>
+        </div>
+
+        <div class="price-group">
+          <label for="price" class="form-label me-2">Max price ($)</label>
+          <input id="price" type="range" class="form-range price-range" min="0" max="100" value="100" step="1">
+          <span id="price-value" class="ms-2 price-value">100</span>
+        </div>
       </div>
     </div>
 
@@ -277,13 +329,15 @@
   <script>
     const searchInput = document.getElementById("search");
     const verifiedToggle = document.getElementById("verified");
+    const bundlesToggle = document.getElementById("bundles");
     const priceRange = document.getElementById("price");
     const priceValue = document.getElementById("price-value");
-  const resultsDiv = document.getElementById("results");
+    const resultsDiv = document.getElementById("results");
     const errorDiv = document.getElementById("error");
     const statusDiv = document.getElementById("status");
-  const searchBtn = document.getElementById("searchBtn");
-  const backToTopBtn = document.getElementById("backToTop");
+    const searchBtn = document.getElementById("searchBtn");
+    const backToTopBtn = document.getElementById("backToTop");
+    const recentSearchesDiv = document.getElementById("recentSearches");
     
     let currentPage = 1;
     const pageSize = 50;
@@ -303,7 +357,11 @@
       
       const q = searchInput.value.trim();
       const verified = verifiedToggle.checked;
+      const bundles = bundlesToggle.checked;
       const price = priceRange.value;
+
+      // Save search to recent if not empty
+      if (resetPage && q) saveRecentSearch(q);
 
       if (!append) resultsDiv.innerHTML = "";
       errorDiv.textContent = "";
@@ -314,6 +372,9 @@
         let apiUrl = `/api/search?q=${encodeURIComponent(q)}&price=${price}&page=${currentPage}&page_size=${pageSize}`;
         if (verified) {
           apiUrl += '&verified=true';
+        }
+        if (bundles) {
+          apiUrl += '&bundles=true';
         }
         console.log('Fetching:', apiUrl);
         statusDiv.textContent = `Loading page ${currentPage}...`;
@@ -418,6 +479,50 @@
       }
     }
     
+    // Recent searches management
+    const MAX_RECENT = 5;
+    function getRecentSearches() {
+      try {
+        return JSON.parse(localStorage.getItem('recentSearches') || '[]');
+      } catch {
+        return [];
+      }
+    }
+    function saveRecentSearch(query) {
+      if (!query || query.trim().length === 0) return;
+      let recent = getRecentSearches();
+      recent = recent.filter(s => s !== query); // remove duplicates
+      recent.unshift(query); // add to front
+      recent = recent.slice(0, MAX_RECENT); // keep max 5
+      localStorage.setItem('recentSearches', JSON.stringify(recent));
+      renderRecentSearches();
+    }
+    function removeRecentSearch(query) {
+      let recent = getRecentSearches();
+      recent = recent.filter(s => s !== query);
+      localStorage.setItem('recentSearches', JSON.stringify(recent));
+      renderRecentSearches();
+    }
+    function renderRecentSearches() {
+      const recent = getRecentSearches();
+      if (recent.length === 0) {
+        recentSearchesDiv.innerHTML = '';
+        return;
+      }
+      recentSearchesDiv.innerHTML = recent.map(q => 
+        `<div class="search-chip" onclick="applyRecentSearch('${q.replace(/'/g, "\\'")}')">
+          <span>${q}</span>
+          <span class="remove" onclick="event.stopPropagation(); removeRecentSearch('${q.replace(/'/g, "\\'")}')">&times;</span>
+        </div>`
+      ).join('');
+    }
+    function applyRecentSearch(query) {
+      searchInput.value = query;
+      performSearch(true);
+    }
+    // Render on load
+    renderRecentSearches();
+
     // Infinite scroll: load more when near bottom
     window.addEventListener('scroll', () => {
       if (isLoading || !hasMore) return;
@@ -459,6 +564,7 @@
     });
 
     verifiedToggle.addEventListener("change", () => performSearch(true));
+    bundlesToggle.addEventListener("change", () => performSearch(true));
     if (searchBtn) {
       searchBtn.addEventListener("click", () => performSearch(true));
     }

@@ -21,13 +21,14 @@ export default async function handler(req, res) {
 
     const q = (req.query.q || "").trim();
     const verified = (req.query.verified || "").toString().trim().toLowerCase();
+    const bundles = (req.query.bundles || "").toString().trim().toLowerCase();
     const max_price = (req.query.price || "").toString().trim();
     const page = parseInt(req.query.page || "1", 10) || 1;
     const page_size = Math.max(1, Math.min(parseInt(req.query.page_size || "50", 10) || 50, 1000)); // Allow up to 1000 per request
 
     const selectCols = [
       "id","username","name","location","avatar",
-      "isverified","subscribeprice","header","avatar_c50","avatar_c144"
+      "isverified","subscribeprice","header","avatar_c50","avatar_c144","bundle1_price"
     ].join(',');
 
     const base = `${SUPABASE_URL}/rest/v1/onlyfans_profiles`;
@@ -44,6 +45,10 @@ export default async function handler(req, res) {
 
     if (verified === 'true' || verified === 'false') {
       params.set('isverified', `eq.${verified === 'true' ? 'true' : 'false'}`);
+    }
+
+    if (bundles === 'true') {
+      params.set('bundle1_price', 'gt.0');
     }
 
     if (max_price) {
