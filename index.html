@@ -169,6 +169,23 @@
       margin-top: 20px;
       font-size: 14px;
     }
+    /* Search bar tweaks */
+    .search-group { max-width: 860px; margin: 0 auto; }
+    @media (min-width: 1200px) { .search-group { max-width: 780px; } }
+    .search-group .form-control { border-radius: 9999px 0 0 9999px; }
+    .search-group .btn-search { border-radius: 0 9999px 9999px 0; }
+    .btn-search {
+      background-color: #007aff;
+      border-color: #007aff;
+      color: #fff;
+      font-weight: 700;
+      box-shadow: 0 6px 18px rgba(0,122,255,0.35);
+    }
+    .btn-search:hover {
+      background-color: #0062d9;
+      border-color: #0062d9;
+      box-shadow: 0 8px 22px rgba(0,122,255,0.45);
+    }
   </style>
 </head>
 <body>
@@ -177,8 +194,11 @@
     <p class="text-muted mb-4">Search and discover top OnlyFans creators by category, location, social account usernames (tiktok, ig), interests, and more. Bookmark your favorites.</p>
 
     <!-- Search bar -->
-    <div class="mb-3">
-      <input id="search" type="text" class="form-control" placeholder="Search creators..." />
+    <div class="mb-3 search-group">
+      <div class="input-group input-group-lg">
+        <input id="search" type="text" class="form-control" placeholder='Type: "milf" "Texas" "piercings"' aria-label="Search creators" />
+        <button id="searchBtn" class="btn btn-search" type="button">Search</button>
+      </div>
     </div>
 
     <!-- Filters -->
@@ -206,9 +226,10 @@
     const verifiedToggle = document.getElementById("verified");
     const priceRange = document.getElementById("price");
     const priceValue = document.getElementById("price-value");
-    const resultsDiv = document.getElementById("results");
+  const resultsDiv = document.getElementById("results");
     const errorDiv = document.getElementById("error");
     const statusDiv = document.getElementById("status");
+  const searchBtn = document.getElementById("searchBtn");
     
     let currentPage = 1;
     const pageSize = 50;
@@ -365,6 +386,9 @@
     });
 
     verifiedToggle.addEventListener("change", () => performSearch(true));
+    if (searchBtn) {
+      searchBtn.addEventListener("click", () => performSearch(true));
+    }
     priceRange.addEventListener("input", () => {
       priceValue.textContent = priceRange.value;
       performSearch(true);
