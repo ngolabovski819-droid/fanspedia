@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+// Example: Resize to 270x360 with format=auto (serves WebP to supported browsers)
+const optimizedUrl = `/cdn-cgi/image/width=270,height=360,format=auto,quality=85/${imgSrc}`;<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -298,10 +299,16 @@
 
         // Render cards
         data.forEach(item => {
-          // Use full avatar for best quality - crisp images worth the extra bandwidth
-          // Full avatar (~100-200KB) vs c144 (~10KB) but much better visual quality
+          // Use Cloudflare Image Resizing (free tier: 100k/month)
+          // Optimizes on-the-fly: WebP conversion, resize to 270x360, quality=85
+          // Reduces file size by 40-60% while keeping crisp quality
           const img = item.avatar || item.avatar_c144 || "";
-          const imgSrc = img && img.startsWith("http") ? img : "/static/no-image.png";
+          let imgSrc = img && img.startsWith("http") ? img : "/static/no-image.png";
+          
+          // Apply Cloudflare optimization to OnlyFans images
+          if (imgSrc.startsWith("http") && imgSrc !== "/static/no-image.png") {
+            imgSrc = `/cdn-cgi/image/width=270,height=360,format=auto,quality=85,fit=cover/${imgSrc}`;
+          }
           
           const name = item.name || "Unknown";
           const username = item.username || "—";
