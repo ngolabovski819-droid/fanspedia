@@ -1,0 +1,18 @@
+Lines to remove from performSearch function around line 388-395:
+
+REMOVE:
+      // Collect selected genders
+      const genders = [];
+      if (genderFemale.checked) genders.push('f');
+      if (genderMale.checked) genders.push('m');
+      if (genderTrans.checked) genders.push('t');
+
+REMOVE from API URL building (around line 412-414):
+        if (genders.length > 0) {
+          apiUrl += `&gender=${genders.join(',')}`;
+        }
+
+REMOVE event listeners (around line 620-622):
+    genderFemale.addEventListener("change", () => performSearch(true));
+    genderMale.addEventListener("change", () => performSearch(true));
+    genderTrans.addEventListener("change", () => performSearch(true));

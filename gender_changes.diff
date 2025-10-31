@@ -1,0 +1,37 @@
+﻿diff --git a/index.html b/index.html
+index 0bf80db..c9b2a5a 100644
+--- a/index.html
++++ b/index.html
+@@ -386,6 +386,12 @@
+       const verified = verifiedToggle.checked;
+       const bundles = bundlesToggle.checked;
+       const price = priceRange.value;
++      
++      // Collect selected genders
++      const genders = [];
++      if (genderFemale.checked) genders.push('f');
++      if (genderMale.checked) genders.push('m');
++      if (genderTrans.checked) genders.push('t');
+ 
+       // Save search to recent if not empty
+       if (resetPage && q) saveRecentSearch(q);
+@@ -403,6 +409,9 @@
+         if (bundles) {
+           apiUrl += '&bundles=true';
+         }
++        if (genders.length > 0) {
++          apiUrl += `&gender=${genders.join(',')}`;
++        }
+         console.log('Fetching:', apiUrl);
+         statusDiv.textContent = `Loading page ${currentPage}...`;
+         
+@@ -602,6 +611,9 @@
+ 
+     verifiedToggle.addEventListener("change", () => performSearch(true));
+     bundlesToggle.addEventListener("change", () => performSearch(true));
++    genderFemale.addEventListener("change", () => performSearch(true));
++    genderMale.addEventListener("change", () => performSearch(true));
++    genderTrans.addEventListener("change", () => performSearch(true));
+     if (searchBtn) {
+       searchBtn.addEventListener("click", () => performSearch(true));
+     }

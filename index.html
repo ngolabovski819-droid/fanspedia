@@ -3,24 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Best OnlyFans Girls - Find Top Creators</title>
-  <meta name="description" content="Discover the best Onlyfans creators using our fast and easy OF search engine. Filter through thousands of verified models.">
   
-  <!-- SEO Meta Tags -->
-  <meta name="keywords" content="onlyfans, creators, models, best onlyfans, verified creators, onlyfans girls">
+  <!-- Primary Meta Tags -->
+  <title>Best OnlyFans Search Engine - Find OF Creators Fast | BestOnlyFansGirls</title>
+  <meta name="title" content="Best OnlyFans Search Engine - Find OF Creators Fast | BestOnlyFansGirls">
+  <meta name="description" content="Search 9,500+ OnlyFans creators instantly. Filter by verified models, price, location & more. Find the best OF girls free and fast.">
+  <meta name="keywords" content="onlyfans search, onlyfans finder, best onlyfans, onlyfans girls, verified creators, onlyfans models, OF search engine">
   <meta name="author" content="BestOnlyFansGirls.net">
+  <link rel="canonical" href="https://bestonlyfansgirls.net/">
   
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://bestonlyfansgirls.net/">
-  <meta property="og:title" content="Best OnlyFans Girls - Find Top Creators">
-  <meta property="og:description" content="Discover the best OnlyFans creators. Search and filter thousands of verified models.">
+  <meta property="og:title" content="Best OnlyFans Search Engine - Find OF Creators Fast">
+  <meta property="og:description" content="Search 9,500+ OnlyFans creators instantly. Filter by verified models, price, location & more.">
+  <meta property="og:site_name" content="BestOnlyFansGirls">
   
   <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://bestonlyfansgirls.net/">
-  <meta property="twitter:title" content="Best OnlyFans Girls - Find Top Creators">
-  <meta property="twitter:description" content="Discover the best OnlyFans creators. Search and filter thousands of verified models.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://bestonlyfansgirls.net/">
+  <meta name="twitter:title" content="Best OnlyFans Search Engine - Find OF Creators Fast">
+  <meta name="twitter:description" content="Search 9,500+ OnlyFans creators instantly. Filter by verified models, price, location & more.">
+  
+  <!-- Robots & Indexing -->
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="googlebot" content="index, follow">
   
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
@@ -138,6 +145,7 @@
       margin-top: 8px;
       display: -webkit-box;
       -webkit-line-clamp: 2;
+      line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
@@ -212,6 +220,10 @@
     #backToTop:hover { background: #0062d9; }
     /* Filters layout */
     .filters { gap: 12px; }
+    /* Prevent focus scroll on filter controls */
+    .form-check-input, .form-range {
+      scroll-margin: 0;
+    }
     /* Sticky filters bar */
     .filters-container {
       position: sticky;
@@ -221,6 +233,10 @@
       padding: 16px 0;
       margin-bottom: 20px;
       transition: padding 0.2s ease;
+      /* Prevent scroll chaining when interacting with controls */
+      overscroll-behavior: contain;
+      /* Isolate painting to reduce sticky-related scroll jitters */
+      contain: paint;
     }
     .filters-container.scrolled {
       padding: 8px 0 6px;
@@ -283,7 +299,7 @@
     .search-chip:hover .remove { opacity: 1; }
     .price-group { display: flex; align-items: center; flex-wrap: nowrap; }
     .price-group .form-label { margin-bottom: 0; }
-    .price-range { width: 180px; }
+  .price-range { width: 180px; touch-action: pan-x; -ms-touch-action: pan-x; -webkit-user-select: none; user-select: none; }
     .price-value { display: inline-block; min-width: 44px; text-align: center; padding: 4px 10px; border-radius: 9999px; background: #e9f5ff; color: #007aff; font-weight: 700; }
     @media (min-width: 576px) { .price-range { width: 240px; } }
     @media (min-width: 992px) { .price-range { width: 300px; } }
@@ -370,6 +386,25 @@
     const pageSize = 50;
     let isLoading = false;
     let hasMore = true;
+    // Preserve scroll when interacting with sticky filters
+    let savedScrollY = 0;
+    
+    function lockScroll() {
+      savedScrollY = window.scrollY || window.pageYOffset || 0;
+      console.log('Locked scroll at:', savedScrollY);
+    }
+    
+    function restoreScroll() {
+      if (savedScrollY > 0) {
+        console.log('Restoring scroll to:', savedScrollY);
+        // Use requestAnimationFrame to ensure DOM updates have completed
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            window.scrollTo({ top: savedScrollY, left: 0, behavior: 'instant' });
+          });
+        });
+      }
+    }
 
     // Perform the API search
     async function performSearch(resetPage = true, append = false) {
@@ -379,6 +414,8 @@
       if (resetPage) {
         currentPage = 1;
         hasMore = true;
+        // Preserve current results height to prevent layout jump while loading
+        resultsDiv.style.minHeight = resultsDiv.offsetHeight + 'px';
         resultsDiv.innerHTML = "";
       }
       
@@ -435,6 +472,7 @@
           console.error("Unexpected API data:", data);
           errorDiv.textContent = "Invalid data format.";
           statusDiv.textContent = "Data is not an array";
+          restoreScroll();
           return;
         }
 
@@ -442,6 +480,8 @@
           console.warn('API returned 0 results for query:', { q, verified, price });
           resultsDiv.innerHTML = `<p class='text-muted'>No results found. Try adjusting filters or search term.</p>`;
           statusDiv.textContent = "0 results - try different search";
+          resultsDiv.style.minHeight = '';
+          restoreScroll();
           return;
         }
 
@@ -498,11 +538,15 @@
         hasMore = data.length === pageSize;
         
         isLoading = false;
+        resultsDiv.style.minHeight = '';
+        restoreScroll();
       } catch (err) {
         console.error("Frontend error:", err);
         errorDiv.textContent = "Error loading results.";
         statusDiv.textContent = `Error: ${err.message}`;
         isLoading = false;
+        resultsDiv.style.minHeight = '';
+        restoreScroll();
       }
     }
     
@@ -600,15 +644,25 @@
       }
     });
 
-    verifiedToggle.addEventListener("change", () => performSearch(true));
-    bundlesToggle.addEventListener("change", () => performSearch(true));
+    // Mark interaction early to preserve scroll
+    verifiedToggle.addEventListener("pointerdown", lockScroll);
+    verifiedToggle.addEventListener("touchstart", lockScroll, { passive: true });
+    verifiedToggle.addEventListener("change", () => { lockScroll(); performSearch(true); });
+
+    bundlesToggle.addEventListener("pointerdown", lockScroll);
+    bundlesToggle.addEventListener("touchstart", lockScroll, { passive: true });
+    bundlesToggle.addEventListener("change", () => { lockScroll(); performSearch(true); });
     if (searchBtn) {
+      // Search button does not alter scroll intentionally
       searchBtn.addEventListener("click", () => performSearch(true));
     }
+    // Update value live while dragging, but search only on release to avoid jank
+    priceRange.addEventListener("pointerdown", lockScroll);
+    priceRange.addEventListener("touchstart", lockScroll, { passive: true });
     priceRange.addEventListener("input", () => {
       priceValue.textContent = priceRange.value;
-      performSearch(true);
     });
+    priceRange.addEventListener("change", () => { lockScroll(); performSearch(true); });
 
     // Initial load - load popular models
     statusDiv.textContent = "Loading popular creators...";
