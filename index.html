@@ -492,6 +492,7 @@
     <!-- Results -->
     <div id="results" class="row g-3 justify-content-center"></div>
     <p id="error" class="error"></p>
+    <p id="status" style="color: #888; margin-top: 10px; font-size: 14px;"></p>
     
     <!-- Load More Button -->
     <div id="loadMoreContainer" class="text-center my-4" style="display: none;">
@@ -719,7 +720,7 @@
         resultsDiv.style.minHeight = '';
         restoreScroll();
         
-        // Update Load More button state
+        // Update Load More button state (this will hide statusDiv if needed)
         updateLoadMoreButton();
       } catch (err) {
         console.error("Frontend error:", err);
@@ -800,7 +801,7 @@
       if (hasMore && totalLoaded > 0) {
         loadMoreContainer.style.display = 'block';
         loadedCountEl.textContent = `Showing ${totalLoaded} creators`;
-        // Hide the duplicate status text when Load More button is visible
+        // Hide the status text only after results are loaded
         if (statusDiv) statusDiv.style.display = 'none';
         
         // After 200 results, add motivational message
@@ -812,11 +813,11 @@
         loadMoreBtn.disabled = true;
         loadMoreBtn.querySelector('.btn-text').textContent = 'All Results Loaded';
         loadedCountEl.textContent = `You've seen all ${totalLoaded} matching creators`;
-        // Hide the duplicate status text
+        // Hide the status text
         if (statusDiv) statusDiv.style.display = 'none';
       } else {
         loadMoreContainer.style.display = 'none';
-        // Show status text when no results or loading
+        // Show status text when no Load More button (loading/error states)
         if (statusDiv) statusDiv.style.display = 'block';
       }
     }
