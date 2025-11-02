@@ -651,6 +651,8 @@
           console.error("Unexpected API data:", data);
           errorDiv.textContent = "Invalid data format.";
           statusDiv.textContent = "Data is not an array";
+          isLoading = false;
+          resultsDiv.style.minHeight = '';
           restoreScroll();
           return;
         }
@@ -659,7 +661,10 @@
           console.warn('API returned 0 results for query:', { q, verified, price });
           resultsDiv.innerHTML = `<p class='text-muted'>No results found. Try adjusting filters or search term.</p>`;
           statusDiv.textContent = "0 results - try different search";
+          isLoading = false;
+          hasMore = false;
           resultsDiv.style.minHeight = '';
+          updateLoadMoreButton(); // Hide Load More button when no results
           restoreScroll();
           return;
         }
