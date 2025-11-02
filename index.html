@@ -282,6 +282,16 @@
       border-color: #0062d9;
       box-shadow: 0 8px 22px rgba(0,122,255,0.45);
     }
+    .btn-search:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: 0 2px 8px rgba(0,122,255,0.2);
+    }
+    .btn-search:disabled:hover {
+      background-color: #007aff;
+      border-color: #007aff;
+      box-shadow: 0 2px 8px rgba(0,122,255,0.2);
+    }
     /* Search button spinner */
     #searchBtn { position: relative; display: inline-flex; align-items: center; gap: 10px; }
     #searchBtn .spinner {
@@ -938,10 +948,16 @@
     // Search only on explicit action (Enter key or Search button)
     // Input event only toggles the clear button visibility; no auto-search while typing
     searchInput.addEventListener("input", () => {
-      if (searchInput.value.trim()) {
+      const hasValue = searchInput.value.trim().length > 0;
+      // Toggle clear button
+      if (hasValue) {
         clearSearchBtn.classList.add("visible");
       } else {
         clearSearchBtn.classList.remove("visible");
+      }
+      // Enable/disable search button
+      if (searchBtn) {
+        searchBtn.disabled = !hasValue;
       }
     });
     // Trigger search on Enter key
@@ -1047,7 +1063,11 @@
         if (type === 'max') { priceRange.value = '100'; priceValue.textContent = '100'; }
         performSearch(true);
       });
+    }    // Set initial search button state
+    if (searchBtn) {
+      searchBtn.disabled = !searchInput.value.trim();
     }
+
 
 
     // Initial load - load popular models

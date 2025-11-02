@@ -1,0 +1,1 @@
+Adding disabled state CSS and enabling/disabling search button based on input
