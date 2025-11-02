@@ -935,17 +935,14 @@
       });
     }
 
-    // Debounced search + clear button visibility
-    let searchTimeout;
+    // Search only on explicit action (Enter key or Search button)
+    // Input event only toggles the clear button visibility; no auto-search while typing
     searchInput.addEventListener("input", () => {
-      // Toggle clear button
       if (searchInput.value.trim()) {
         clearSearchBtn.classList.add("visible");
       } else {
         clearSearchBtn.classList.remove("visible");
       }
-      clearTimeout(searchTimeout);
-      searchTimeout = setTimeout(() => performSearch(true), 400);
     });
     // Trigger search on Enter key
     searchInput.addEventListener("keydown", (e) => {
