@@ -1,0 +1,10 @@
+# robots.txt for bestonlyfansgirls.net
+
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://bestonlyfansgirls.net/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1
