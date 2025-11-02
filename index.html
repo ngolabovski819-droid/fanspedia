@@ -282,6 +282,29 @@
       border-color: #0062d9;
       box-shadow: 0 8px 22px rgba(0,122,255,0.45);
     }
+    /* Search button spinner */
+    #searchBtn { position: relative; display: inline-flex; align-items: center; gap: 10px; }
+    #searchBtn .spinner {
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.5);
+      border-top-color: #fff;
+      animation: spin 0.8s linear infinite;
+      display: none;
+    }
+    #searchBtn.loading .spinner { display: inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    
+    /* Reset filters button */
+    .btn-reset {
+      border-radius: 9999px;
+      border: 1px solid #ddd;
+      background: #f7f7f7;
+      color: #444;
+      padding: 8px 14px;
+      font-weight: 600;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .btn-reset:hover { background: #efefef; border-color: #ccc; }
     /* Back to top button */
     #backToTop {
       position: fixed;
@@ -482,7 +505,10 @@
       <div class="input-group input-group-lg">
         <input id="search" type="text" class="form-control" placeholder='Type: "milf" "Texas" "piercings"' aria-label="Search creators" inputmode="search" enterkeyhint="search" autocomplete="off" autocapitalize="none" spellcheck="false" />
   <button class="clear-search" id="clearSearch" type="button" aria-label="Clear search">×</button>
-        <button id="searchBtn" class="btn btn-search" type="button">Search</button>
+        <button id="searchBtn" class="btn btn-search" type="button">
+          <span class="spinner" aria-hidden="true"></span>
+          <span class="btn-label">Search</span>
+        </button>
       </div>
     </div>
 
@@ -507,6 +533,8 @@
           <input id="price" type="range" class="form-range price-range" min="0" max="100" value="100" step="1">
           <span id="price-value" class="ms-2 price-value">100</span>
         </div>
+
+        <button id="resetFilters" type="button" class="btn-reset">Reset filters</button>
       </div>
     </div>
 
@@ -572,11 +600,12 @@
     const bundlesToggle = document.getElementById("bundles");
     const priceRange = document.getElementById("price");
     const priceValue = document.getElementById("price-value");
+  const searchBtn = document.getElementById("searchBtn");
+  const resetFiltersBtn = document.getElementById("resetFilters");
     const resultsDiv = document.getElementById("results");
     const errorDiv = document.getElementById("error");
     const statusDiv = document.getElementById("status");
   const activeFiltersDiv = document.getElementById("activeFilters");
-    const searchBtn = document.getElementById("searchBtn");
     const backToTopBtn = document.getElementById("backToTop");
     const recentSearchesDiv = document.getElementById("recentSearches");
     
@@ -604,10 +633,26 @@
       }
     }
 
+    // Search button loading state helper
+    function setSearchButtonLoading(loading) {
+      if (!searchBtn) return;
+      const label = searchBtn.querySelector('.btn-label');
+      if (loading) {
+        searchBtn.classList.add('loading');
+        searchBtn.disabled = true;
+        if (label) label.textContent = 'Searching…';
+      } else {
+        searchBtn.classList.remove('loading');
+        searchBtn.disabled = false;
+        if (label) label.textContent = 'Search';
+      }
+    }
+
     // Perform the API search
     async function performSearch(resetPage = true, append = false) {
       if (isLoading || (!hasMore && !resetPage)) return;
       isLoading = true;
+      setSearchButtonLoading(true);
       
       if (resetPage) {
         // Avoid stale scroll restoration from prior filter interactions
@@ -691,6 +736,7 @@
           errorDiv.textContent = "Invalid data format.";
           statusDiv.textContent = "Data is not an array";
           isLoading = false;
+          setSearchButtonLoading(false);
           resultsDiv.style.minHeight = '';
           restoreScroll();
           return;
@@ -701,6 +747,7 @@
           resultsDiv.innerHTML = `<p class='text-muted'>No results found. Try adjusting filters or search term.</p>`;
           statusDiv.textContent = "0 results - try different search";
           isLoading = false;
+          setSearchButtonLoading(false);
           hasMore = false;
           resultsDiv.style.minHeight = '';
           updateLoadMoreButton(); // Hide Load More button when no results
@@ -760,7 +807,8 @@
         statusDiv.textContent = `Showing ${resultsDiv.children.length} results`;
         hasMore = data.length === pageSize;
         
-        isLoading = false;
+  isLoading = false;
+  setSearchButtonLoading(false);
         resultsDiv.style.minHeight = '';
         restoreScroll();
         
@@ -770,7 +818,8 @@
         console.error("Frontend error:", err);
         errorDiv.textContent = "Error loading results.";
         statusDiv.textContent = `Error: ${err.message}`;
-        isLoading = false;
+  isLoading = false;
+  setSearchButtonLoading(false);
         resultsDiv.style.minHeight = '';
         restoreScroll();
         
@@ -917,6 +966,18 @@
     if (searchBtn) {
       // Search button does not alter scroll intentionally
       searchBtn.addEventListener("click", () => performSearch(true));
+    }
+    if (resetFiltersBtn) {
+      resetFiltersBtn.addEventListener('click', () => {
+        lockScroll();
+        searchInput.value = '';
+        clearSearchBtn.classList.remove('visible');
+        verifiedToggle.checked = false;
+        bundlesToggle.checked = false;
+        priceRange.value = '100';
+        priceValue.textContent = '100';
+        performSearch(true);
+      });
     }
     // Clear search functionality
     clearSearchBtn.addEventListener("click", () => {
