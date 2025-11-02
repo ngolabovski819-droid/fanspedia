@@ -249,7 +249,26 @@
     /* Search bar tweaks */
     .search-group { max-width: 860px; margin: 0 auto; }
     @media (min-width: 1200px) { .search-group { max-width: 780px; } }
-    .search-group .form-control { border-radius: 9999px 0 0 9999px; }
+    .search-group { position: relative; }
+    .search-group .form-control { border-radius: 9999px 0 0 9999px; padding-right: 45px; }
+    .clear-search {
+      position: absolute;
+      right: 140px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #999;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 8px 12px;
+      display: none;
+      z-index: 10;
+      line-height: 1;
+      transition: color 0.2s;
+    }
+    .clear-search:hover { color: #333; }
+    .clear-search.visible { display: block; }
     .search-group .btn-search { border-radius: 0 9999px 9999px 0; }
     .btn-search {
       background-color: #007aff;
@@ -382,9 +401,10 @@
     }
     /* Very small screens: make Search button full width */
     @media (max-width: 400px) {
-      .search-group .input-group { flex-wrap: wrap; }
-      .search-group .form-control { border-radius: 9999px; }
-      .search-group .btn-search { width: 100%; margin-top: 8px; border-radius: 9999px; }
+  .search-group .input-group { flex-wrap: wrap; }
+  .search-group .form-control { border-radius: 9999px; padding-right: 45px; }
+  .search-group .btn-search { width: 100%; margin-top: 8px; border-radius: 9999px; }
+  .clear-search { right: 15px; top: 14px; transform: none; }
     }
     /* Smaller card image on tiny devices */
     @media (max-width: 400px) {
@@ -461,6 +481,7 @@
     <div class="mb-3 search-group">
       <div class="input-group input-group-lg">
         <input id="search" type="text" class="form-control" placeholder='Type: "milf" "Texas" "piercings"' aria-label="Search creators" inputmode="search" enterkeyhint="search" autocomplete="off" autocapitalize="none" spellcheck="false" />
+  <button class="clear-search" id="clearSearch" type="button" aria-label="Clear search">×</button>
         <button id="searchBtn" class="btn btn-search" type="button">Search</button>
       </div>
     </div>
@@ -488,6 +509,9 @@
         </div>
       </div>
     </div>
+
+    <!-- Active filters chips -->
+    <div id="activeFilters" class="recent-searches" aria-live="polite"></div>
 
     <!-- Results -->
     <div id="results" class="row g-3 justify-content-center"></div>
@@ -543,6 +567,7 @@
 
   <script>
     const searchInput = document.getElementById("search");
+  const clearSearchBtn = document.getElementById("clearSearch");
     const verifiedToggle = document.getElementById("verified");
     const bundlesToggle = document.getElementById("bundles");
     const priceRange = document.getElementById("price");
@@ -550,6 +575,7 @@
     const resultsDiv = document.getElementById("results");
     const errorDiv = document.getElementById("error");
     const statusDiv = document.getElementById("status");
+  const activeFiltersDiv = document.getElementById("activeFilters");
     const searchBtn = document.getElementById("searchBtn");
     const backToTopBtn = document.getElementById("backToTop");
     const recentSearchesDiv = document.getElementById("recentSearches");
@@ -598,7 +624,10 @@
         if (loadMoreContainer) loadMoreContainer.style.display = 'none';
       }
       
-      const q = searchInput.value.trim();
+  // Update URL and active filter chips to reflect current search state
+  updateURL();
+  updateActiveFilters();
+  const q = searchInput.value.trim();
       const verified = verifiedToggle.checked;
       const bundles = bundlesToggle.checked;
       const price = priceRange.value;
@@ -847,9 +876,15 @@
       });
     }
 
-    // Debounced search
+    // Debounced search + clear button visibility
     let searchTimeout;
     searchInput.addEventListener("input", () => {
+      // Toggle clear button
+      if (searchInput.value.trim()) {
+        clearSearchBtn.classList.add("visible");
+      } else {
+        clearSearchBtn.classList.remove("visible");
+      }
       clearTimeout(searchTimeout);
       searchTimeout = setTimeout(() => performSearch(true), 400);
     });
@@ -873,6 +908,13 @@
       // Search button does not alter scroll intentionally
       searchBtn.addEventListener("click", () => performSearch(true));
     }
+    // Clear search functionality
+    clearSearchBtn.addEventListener("click", () => {
+      searchInput.value = "";
+      clearSearchBtn.classList.remove("visible");
+      searchInput.focus();
+      performSearch(true);
+    });
     // Update value live while dragging, but search only on release to avoid jank
     priceRange.addEventListener("pointerdown", lockScroll);
     priceRange.addEventListener("touchstart", lockScroll, { passive: true });
@@ -880,9 +922,69 @@
       priceValue.textContent = priceRange.value;
     });
     priceRange.addEventListener("change", () => { lockScroll(); performSearch(true); });
+    // URL query parameter management for shareable searches
+    function updateURL() {
+      const params = new URLSearchParams();
+      const query = searchInput.value.trim();
+      if (query) params.set('q', query);
+      if (verifiedToggle.checked) params.set('verified', 'true');
+      if (bundlesToggle.checked) params.set('bundles', 'true');
+      if (priceRange.value !== '100') params.set('max', priceRange.value);
+      
+      const newURL = params.toString() ? `${window.location.pathname}?${params.toString()}` : window.location.pathname;
+      window.history.replaceState({}, '', newURL);
+    }
+
+    function loadFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('q')) {
+        searchInput.value = params.get('q');
+        if (searchInput.value.trim()) clearSearchBtn.classList.add('visible');
+      }
+      if (params.has('verified')) verifiedToggle.checked = params.get('verified') === 'true';
+      if (params.has('bundles')) bundlesToggle.checked = params.get('bundles') === 'true';
+      if (params.has('max')) {
+        priceRange.value = params.get('max');
+        priceValue.textContent = params.get('max');
+      }
+      // Render initial active filters from URL
+      updateActiveFilters();
+    }
+
+    // Render active filter chips and attach remove actions
+    function updateActiveFilters() {
+      if (!activeFiltersDiv) return;
+      const chips = [];
+      if (verifiedToggle.checked) {
+        chips.push(`<div class="search-chip" data-filter="verified">Verified only <span class="remove" aria-label="Remove">×</span></div>`);
+      }
+      if (bundlesToggle.checked) {
+        chips.push(`<div class="search-chip" data-filter="bundles">Bundles <span class="remove" aria-label="Remove">×</span></div>`);
+      }
+      if (priceRange.value !== '100') {
+        chips.push(`<div class="search-chip" data-filter="max">Max $${priceRange.value} <span class="remove" aria-label="Remove">×</span></div>`);
+      }
+      activeFiltersDiv.innerHTML = chips.join('');
+      activeFiltersDiv.style.display = chips.length ? 'flex' : 'none';
+    }
+
+    // Remove chip via event delegation
+    if (activeFiltersDiv) {
+      activeFiltersDiv.addEventListener('click', (e) => {
+        const chip = e.target.closest('.search-chip');
+        if (!chip) return;
+        const type = chip.getAttribute('data-filter');
+        if (type === 'verified') verifiedToggle.checked = false;
+        if (type === 'bundles') bundlesToggle.checked = false;
+        if (type === 'max') { priceRange.value = '100'; priceValue.textContent = '100'; }
+        performSearch(true);
+      });
+    }
+
 
     // Initial load - load popular models
     statusDiv.textContent = "Loading popular creators...";
+  loadFromURL(); // Load search state from URL
     performSearch(true);
   </script>
 
