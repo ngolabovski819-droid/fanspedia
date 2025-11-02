@@ -345,46 +345,13 @@
     .form-check-input, .form-range {
       scroll-margin: 0;
     }
-    /* Sticky filters bar */
+    /* Filters bar */
     .filters-container {
-      position: sticky;
-      top: 0;
       background: #f5f5f7;
-      z-index: 100;
       padding: 16px 0;
       margin-bottom: 20px;
-      transition: padding 0.2s ease;
-      /* Prevent scroll chaining when interacting with controls */
-      overscroll-behavior: contain;
-      /* Isolate painting to reduce sticky-related scroll jitters */
-      contain: paint;
     }
-    .filters-container.scrolled {
-      padding: 8px 0 6px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-    /* Mobile: compact filters when scrolled */
-    @media (max-width: 768px) {
-      .filters-container.scrolled .filters { 
-        flex-direction: column; 
-        gap: 6px; 
-        align-items: stretch !important;
-      }
-      .filters-container.scrolled .filters > div { width: 100%; justify-content: space-between; }
-      .filters-container.scrolled .price-group { 
-        flex-direction: row !important; 
-        align-items: center !important;
-        gap: 8px;
-      }
-      .filters-container.scrolled .price-group .form-label { margin-bottom: 0 !important; flex-shrink: 0; font-size: 14px; }
-      .filters-container.scrolled .price-range { flex: 1; min-width: 100px; }
-      .filters-container.scrolled .price-value { 
-        flex-shrink: 0; 
-        margin-left: 8px !important; 
-        margin-top: 0 !important;
-        align-self: center !important;
-      }
-    }
+
     /* Recent searches chips */
     .recent-searches {
       display: flex;
@@ -881,16 +848,6 @@
     }
     // Render on load
     renderRecentSearches();
-
-    // Compact filters on scroll (mobile)
-    const filtersContainer = document.querySelector('.filters-container');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 100) {
-        filtersContainer?.classList.add('scrolled');
-      } else {
-        filtersContainer?.classList.remove('scrolled');
-      }
-    });
 
     // Load More Button functionality (replaces infinite scroll)
     const loadMoreContainer = document.getElementById('loadMoreContainer');
