@@ -390,6 +390,66 @@
     @media (max-width: 400px) {
       .card img { height: 320px; min-height: 320px; }
     }
+    /* Load More Button */
+    .load-more-btn {
+      background: linear-gradient(135deg, #007aff 0%, #00aff0 100%);
+      color: white;
+      border: none;
+      padding: 18px 48px;
+      font-size: 18px;
+      font-weight: 700;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 24px rgba(0, 122, 255, 0.35);
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    .load-more-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s ease;
+    }
+    .load-more-btn:hover::before {
+      left: 100%;
+    }
+    .load-more-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(0, 122, 255, 0.45);
+    }
+    .load-more-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 6px 20px rgba(0, 122, 255, 0.3);
+    }
+    .load-more-btn .btn-icon {
+      font-size: 24px;
+      transition: transform 0.3s ease;
+    }
+    .load-more-btn:hover .btn-icon {
+      transform: translateY(3px);
+    }
+    .load-more-btn:disabled {
+      background: linear-gradient(135deg, #ccc 0%, #999 100%);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    .load-more-btn:disabled:hover {
+      transform: none;
+    }
+    @media (max-width: 576px) {
+      .load-more-btn {
+        padding: 16px 40px;
+        font-size: 16px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -433,6 +493,15 @@
     <div id="results" class="row g-3 justify-content-center"></div>
     <p id="error" class="error"></p>
     <p id="status" style="color: #888; margin-top: 10px; font-size: 14px;"></p>
+    
+    <!-- Load More Button -->
+    <div id="loadMoreContainer" class="text-center my-5" style="display: none;">
+      <button id="loadMoreBtn" class="load-more-btn">
+        <span class="btn-text">Load More Creators</span>
+        <span class="btn-icon">↓</span>
+      </button>
+      <p id="loadedCount" class="mt-3" style="color: #888; font-size: 14px;"></p>
+    </div>
     
     <!-- SEO Content Section -->
     <section class="mt-5 pt-5" style="max-width: 900px; margin-left: auto; margin-right: auto; text-align: left; border-top: 1px solid #e0e0e0;">
@@ -520,6 +589,13 @@
         // Preserve current results height to prevent layout jump while loading
         resultsDiv.style.minHeight = resultsDiv.offsetHeight + 'px';
         resultsDiv.innerHTML = "";
+        
+        // Reset Load More button state on new search
+        if (loadMoreBtn) {
+          loadMoreBtn.disabled = false;
+          loadMoreBtn.querySelector('.btn-text').textContent = 'Load More Creators';
+        }
+        if (loadMoreContainer) loadMoreContainer.style.display = 'none';
       }
       
       const q = searchInput.value.trim();
@@ -643,6 +719,9 @@
         isLoading = false;
         resultsDiv.style.minHeight = '';
         restoreScroll();
+        
+        // Update Load More button state
+        updateLoadMoreButton();
       } catch (err) {
         console.error("Frontend error:", err);
         errorDiv.textContent = "Error loading results.";
@@ -650,6 +729,9 @@
         isLoading = false;
         resultsDiv.style.minHeight = '';
         restoreScroll();
+        
+        // Hide Load More on error
+        if (loadMoreContainer) loadMoreContainer.style.display = 'none';
       }
     }
     
@@ -707,19 +789,39 @@
       }
     });
 
-    // Infinite scroll: load more when near bottom
-    window.addEventListener('scroll', () => {
-      if (isLoading || !hasMore) return;
+    // Load More Button functionality (replaces infinite scroll)
+    const loadMoreContainer = document.getElementById('loadMoreContainer');
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    const loadedCountEl = document.getElementById('loadedCount');
+    
+    function updateLoadMoreButton() {
+      const totalLoaded = resultsDiv.children.length;
       
-      const scrollPosition = window.innerHeight + window.scrollY;
-      const pageHeight = document.documentElement.scrollHeight;
-      
-      // Load more when within 500px of bottom
-      if (scrollPosition >= pageHeight - 500) {
+      if (hasMore && totalLoaded > 0) {
+        loadMoreContainer.style.display = 'block';
+        loadedCountEl.textContent = `Showing ${totalLoaded} creators`;
+        
+        // After 200 results, add motivational message
+        if (totalLoaded >= 200) {
+          loadedCountEl.textContent = `You've explored ${totalLoaded} creators! 🔥`;
+        }
+      } else if (totalLoaded > 0 && !hasMore) {
+        loadMoreContainer.style.display = 'block';
+        loadMoreBtn.disabled = true;
+        loadMoreBtn.querySelector('.btn-text').textContent = 'All Results Loaded';
+        loadedCountEl.textContent = `You've seen all ${totalLoaded} matching creators`;
+      } else {
+        loadMoreContainer.style.display = 'none';
+      }
+    }
+    
+    if (loadMoreBtn) {
+      loadMoreBtn.addEventListener('click', () => {
+        if (isLoading || !hasMore) return;
         currentPage++;
         performSearch(false, true);
-      }
-    });
+      });
+    }
 
     // Back to top toggle
     window.addEventListener('scroll', () => {
