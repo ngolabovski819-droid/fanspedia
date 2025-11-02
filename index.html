@@ -492,15 +492,14 @@
     <!-- Results -->
     <div id="results" class="row g-3 justify-content-center"></div>
     <p id="error" class="error"></p>
-    <p id="status" style="color: #888; margin-top: 10px; font-size: 14px;"></p>
     
     <!-- Load More Button -->
-    <div id="loadMoreContainer" class="text-center my-5" style="display: none;">
+    <div id="loadMoreContainer" class="text-center my-4" style="display: none;">
       <button id="loadMoreBtn" class="load-more-btn">
         <span class="btn-text">Load More Creators</span>
         <span class="btn-icon">↓</span>
       </button>
-      <p id="loadedCount" class="mt-3" style="color: #888; font-size: 14px;"></p>
+      <p id="loadedCount" class="mt-2" style="color: #888; font-size: 14px; margin-bottom: 0;"></p>
     </div>
     
     <!-- SEO Content Section -->
@@ -796,10 +795,13 @@
     
     function updateLoadMoreButton() {
       const totalLoaded = resultsDiv.children.length;
+      const statusDiv = document.getElementById('status');
       
       if (hasMore && totalLoaded > 0) {
         loadMoreContainer.style.display = 'block';
         loadedCountEl.textContent = `Showing ${totalLoaded} creators`;
+        // Hide the duplicate status text when Load More button is visible
+        if (statusDiv) statusDiv.style.display = 'none';
         
         // After 200 results, add motivational message
         if (totalLoaded >= 200) {
@@ -810,8 +812,12 @@
         loadMoreBtn.disabled = true;
         loadMoreBtn.querySelector('.btn-text').textContent = 'All Results Loaded';
         loadedCountEl.textContent = `You've seen all ${totalLoaded} matching creators`;
+        // Hide the duplicate status text
+        if (statusDiv) statusDiv.style.display = 'none';
       } else {
         loadMoreContainer.style.display = 'none';
+        // Show status text when no results or loading
+        if (statusDiv) statusDiv.style.display = 'block';
       }
     }
     
