@@ -610,6 +610,16 @@
       isLoading = true;
       
       if (resetPage) {
+        // Avoid stale scroll restoration from prior filter interactions
+        savedScrollY = 0;
+        // If the user is scrolled below the results area, bring the results back to the top
+        try {
+          const resultsTop = resultsDiv.getBoundingClientRect().top + window.scrollY;
+          const targetTop = Math.max(0, resultsTop - 80); // account for sticky filters/header
+          if (window.scrollY > targetTop) {
+            window.scrollTo({ top: targetTop, left: 0, behavior: 'instant' });
+          }
+        } catch {}
         currentPage = 1;
         hasMore = true;
         // Preserve current results height to prevent layout jump while loading
