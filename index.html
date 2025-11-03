@@ -240,6 +240,13 @@
       border-color: #00bcd4;
       box-shadow: 0 0 0 3px rgba(0,188,212,0.1);
     }
+    /* Reserve space on initial load to prevent CLS when cards render */
+    #results {
+      min-height: 1600px;
+    }
+    #results.loaded {
+      min-height: 0;
+    }
     .error {
       color: #ff3b30;
       margin-top: 20px;
@@ -828,6 +835,8 @@
         });
         
         statusDiv.textContent = `Showing ${resultsDiv.children.length} results`;
+        // Mark results as loaded to remove min-height and prevent CLS
+        resultsDiv.classList.add('loaded');
         // Ensure the actual above-the-fold image is prioritized (covers layout differences)
         if (!lcpBoostApplied && currentPage === 1) {
           try {
