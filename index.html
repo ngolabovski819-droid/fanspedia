@@ -594,6 +594,7 @@
     let hasMore = true;
     // Preserve scroll when interacting with sticky filters
     let savedScrollY = 0;
+  let lcpBoostApplied = false;
     
     function lockScroll() {
       savedScrollY = window.scrollY || window.pageYOffset || 0;
@@ -827,6 +828,34 @@
         });
         
         statusDiv.textContent = `Showing ${resultsDiv.children.length} results`;
+        // Ensure the actual above-the-fold image is prioritized (covers layout differences)
+        if (!lcpBoostApplied && currentPage === 1) {
+          try {
+            const imgs = Array.from(resultsDiv.querySelectorAll('img'));
+            const viewportH = window.innerHeight || 800;
+            let best = null;
+            let bestScore = -1;
+            imgs.forEach(img => {
+              const rect = img.getBoundingClientRect();
+              if (rect.top < viewportH * 0.9 && rect.bottom > 0) {
+                const visibleH = Math.min(rect.bottom, viewportH) - Math.max(0, rect.top);
+                const area = Math.max(0, visibleH) * Math.max(1, rect.width);
+                if (area > bestScore) { bestScore = area; best = img; }
+              }
+            });
+            if (best) {
+              best.setAttribute('loading', 'eager');
+              best.setAttribute('fetchpriority', 'high');
+              const href = best.currentSrc || best.src;
+              if (href) {
+                const link = document.createElement('link');
+                link.rel = 'preload'; link.as = 'image'; link.href = href;
+                document.head.appendChild(link);
+              }
+              lcpBoostApplied = true;
+            }
+          } catch {}
+        }
         hasMore = data.length === pageSize;
         
   isLoading = false;
