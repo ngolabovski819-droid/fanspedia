@@ -617,8 +617,8 @@
       try {
         if (!url || url.startsWith('/static/')) return url; // keep local placeholder as-is
         const noScheme = url.replace(/^https?:\/\//, '');
-        // we = serve WebP when supported, il = progressive/interlaced, fit=cover to preserve crop
-        return `https://images.weserv.nl/?url=${encodeURIComponent(noScheme)}&w=${w}&h=${h}&fit=cover&we&il`;
+        // Force modern format for Chrome/Safari (broad support). If a very old browser hits this, weserv will 415 and our onerror fallback kicks in.
+        return `https://images.weserv.nl/?url=${encodeURIComponent(noScheme)}&w=${w}&h=${h}&fit=cover&output=webp`;
       } catch {
         return url;
       }
