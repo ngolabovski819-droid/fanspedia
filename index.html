@@ -7,6 +7,7 @@
   <!-- Preconnect to external domains for faster loading -->
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+  <link rel="preconnect" href="https://images.weserv.nl" crossorigin>
   <link rel="dns-prefetch" href="https://public.onlyfans.com">
   
   <!-- Google tag (gtag.js) -->
@@ -609,6 +610,31 @@
       }
     }
 
+    // --- Image optimization helpers (responsive + proxy cache) ---
+    // We proxy OnlyFans images through images.weserv.nl to get cached, resized, and WebP-when-supported variants.
+    // This keeps origin bandwidth low and fixes "short cache lifetime" warnings.
+    function proxyImg(url, w, h) {
+      try {
+        if (!url || url.startsWith('/static/')) return url; // keep local placeholder as-is
+        const noScheme = url.replace(/^https?:\/\//, '');
+        // we = serve WebP when supported, il = progressive/interlaced, fit=cover to preserve crop
+        return `https://images.weserv.nl/?url=${encodeURIComponent(noScheme)}&w=${w}&h=${h}&fit=cover&we&il`;
+      } catch {
+        return url;
+      }
+    }
+
+    function buildResponsiveSources(originalUrl) {
+      // Maintain the 3:4 aspect ratio used in the card (width:height)
+      const widths = [144, 240, 320, 480, 720];
+      const srcset = widths
+        .map(w => `${proxyImg(originalUrl, w, Math.round(w * 4 / 3))} ${w}w`)
+        .join(', ');
+      const src = proxyImg(originalUrl, 320, Math.round(320 * 4 / 3));
+      const sizes = ' (max-width: 480px) 144px, (max-width: 768px) 240px, (max-width: 1200px) 320px, 360px ';
+      return { src, srcset, sizes };
+    }
+
     // Search button loading state helper
     function setSearchButtonLoading(loading) {
       if (!searchBtn) return;
@@ -739,6 +765,7 @@
           // Use full avatar for best quality
           const img = item.avatar || item.avatar_c144 || "";
           const imgSrc = img && img.startsWith("http") ? img : "/static/no-image.png";
+          const responsive = buildResponsiveSources(imgSrc);
           
           const name = item.name || "Unknown";
           const username = item.username || "—";
@@ -757,13 +784,16 @@
               <button class="favorite-btn" onclick="event.preventDefault();">
                 <span style="color: #ccc;">♡</span>
               </button>
-              <img src="${imgSrc}" 
+              <img src="${responsive.src}" 
+                   srcset="${responsive.srcset}"
+                   sizes="${responsive.sizes}"
                    alt="${name}" 
                    width="270" 
                    height="360"
-                   loading="lazy" 
+                   style="aspect-ratio: 3 / 4;"
+                   loading="lazy" decoding="async" fetchpriority="low"
                    referrerpolicy="no-referrer" 
-                   onerror="if(this.src!='/static/no-image.png'){this.src='/static/no-image.png';}"
+                   onerror="if(this.src!='/static/no-image.png'){this.removeAttribute('srcset'); this.removeAttribute('sizes'); this.src='${imgSrc}';}"
                    onload="if(this.naturalWidth<=10||this.naturalHeight<=10){this.parentElement.parentElement.remove();}">
               <div class="card-body">
                 <h5>${verifiedIcon}${name}</h5>
