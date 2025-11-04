@@ -454,8 +454,10 @@
     }
     .favorite-btn:hover {
       transform: scale(1.1);
-      background: #fff;
+      background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
+      box-shadow: 0 6px 16px rgba(0,175,240,0.35);
     }
+    .favorite-btn:hover span { color: #fff !important; }
     .view-profile-btn {
       background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
       color: white;
@@ -608,14 +610,19 @@
     /* Reset filters button */
     .btn-reset {
       border-radius: 9999px;
-      border: 1px solid #ddd;
-      background: #f7f7f7;
-      color: #444;
-      padding: 8px 14px;
-      font-weight: 600;
-      transition: background 0.2s, border-color 0.2s;
+      border: none;
+      background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
+      color: #fff;
+      padding: 10px 16px;
+      font-weight: 800;
+      box-shadow: 0 4px 12px rgba(0,175,240,0.3);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
     }
-    .btn-reset:hover { background: #efefef; border-color: #ccc; }
+    .btn-reset:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(0,175,240,0.4);
+      background: linear-gradient(135deg, #0099D6 0%, #0088C0 100%);
+    }
     /* Back to top button */
     #backToTop {
       position: fixed;
