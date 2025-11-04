@@ -1653,6 +1653,21 @@
     
     // Sync header search with main search
     if (headerSearch) {
+      // Clear both inputs on first focus to give a clean slate
+      let inputsClearedOnce = false;
+      function clearBothInputsOnFirstFocus() {
+        if (inputsClearedOnce) return;
+        inputsClearedOnce = true;
+        try {
+          if (searchInput) searchInput.value = '';
+          headerSearch.value = '';
+          if (clearSearchBtn) clearSearchBtn.classList.remove('visible');
+          if (searchBtn) searchBtn.disabled = true;
+        } catch {}
+      }
+      headerSearch.addEventListener('focus', clearBothInputsOnFirstFocus, { passive: true });
+      if (searchInput) searchInput.addEventListener('focus', clearBothInputsOnFirstFocus, { passive: true });
+
       // Sync input values both ways
       headerSearch.addEventListener('input', () => {
         searchInput.value = headerSearch.value;
