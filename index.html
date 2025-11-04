@@ -109,11 +109,11 @@
       background-color: #f5f5f7;
       color: #1d1d1f;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-      padding-top: 140px; /* Space for fixed header */
+      padding-top: 85px; /* Space for fixed header */
     }
     
     /* ============================================
-       SUPERIOR STICKY HEADER
+       SUPERIOR STICKY HEADER - OnlyFans Theme
        ============================================ */
     .superior-header {
       position: fixed;
@@ -121,55 +121,18 @@
       left: 0;
       right: 0;
       z-index: 9999;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      box-shadow: 0 4px 24px rgba(102, 126, 234, 0.25);
+      background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
+      box-shadow: 0 4px 24px rgba(0, 175, 240, 0.25);
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .superior-header.scrolled {
-      box-shadow: 0 8px 32px rgba(102, 126, 234, 0.35);
-    }
-
-    /* Top announcement bar */
-    .top-announcement {
-      background: rgba(255, 255, 255, 0.15);
-      color: white;
-      text-align: center;
-      padding: 8px 16px;
-      font-size: 13px;
-      font-weight: 500;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      position: relative;
-    }
-
-    .top-announcement .close-announcement {
-      position: absolute;
-      right: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
-      opacity: 0.8;
-      transition: opacity 0.2s;
-      font-size: 20px;
-      line-height: 1;
-      padding: 4px 8px;
-    }
-
-    .top-announcement .close-announcement:hover {
-      opacity: 1;
-    }
-
-    .top-announcement strong {
-      color: #ffd700;
-      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+      box-shadow: 0 8px 32px rgba(0, 175, 240, 0.35);
     }
 
     /* Main header container */
     .header-main {
-      padding: 12px 0;
+      padding: 16px 0;
       backdrop-filter: blur(10px);
     }
 
@@ -179,7 +142,8 @@
       padding: 0 20px;
       display: flex;
       align-items: center;
-      gap: 20px;
+      justify-content: space-between;
+      gap: 24px;
     }
 
     /* Logo section */
@@ -206,6 +170,10 @@
 
     .logo-icon:hover {
       transform: scale(1.05) rotate(5deg);
+    }
+
+    .logo-icon i {
+      color: #00AFF0;
     }
 
     .logo-text {
@@ -271,7 +239,7 @@
     .header-search-icon {
       position: absolute;
       left: 18px;
-      color: #667eea;
+      color: #00AFF0;
       font-size: 18px;
       pointer-events: none;
     }
@@ -279,7 +247,7 @@
     .header-search-btn {
       position: absolute;
       right: 4px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
       color: white;
       border: none;
       padding: 10px 24px;
@@ -288,12 +256,13 @@
       font-size: 14px;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      box-shadow: 0 4px 12px rgba(0, 175, 240, 0.4);
     }
 
     .header-search-btn:hover {
       transform: scale(1.05);
-      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+      box-shadow: 0 6px 16px rgba(0, 175, 240, 0.5);
+      background: linear-gradient(135deg, #0099D6 0%, #0088C0 100%);
     }
 
     .header-search-btn:active {
@@ -322,7 +291,7 @@
 
     .header-filter-chip:hover, .header-filter-chip.active {
       background: white;
-      color: #667eea;
+      color: #00AFF0;
       transform: translateY(-1px);
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     }
@@ -345,42 +314,41 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 8px 16px;
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
       backdrop-filter: blur(10px);
     }
 
     .db-count .number {
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 800;
-      color: #ffd700;
+      color: white;
       line-height: 1;
-      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
     }
 
     .db-count .label {
-      font-size: 10px;
-      color: rgba(255, 255, 255, 0.9);
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.95);
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      margin-top: 2px;
+      margin-top: 3px;
     }
 
     /* Header CTA Button */
     .header-cta-btn {
-      padding: 12px 28px;
-      background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-      color: #1d1d1f;
+      padding: 14px 32px;
+      background: white;
+      color: #00AFF0;
       border: none;
       border-radius: 50px;
       font-weight: 800;
-      font-size: 14px;
+      font-size: 15px;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 16px rgba(255, 215, 0, 0.4);
+      box-shadow: 0 4px 16px rgba(255, 255, 255, 0.3);
       text-transform: uppercase;
       letter-spacing: 0.5px;
       white-space: nowrap;
@@ -388,7 +356,8 @@
 
     .header-cta-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(255, 215, 0, 0.6);
+      box-shadow: 0 8px 24px rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.95);
     }
 
     .header-cta-btn:active {
@@ -437,22 +406,24 @@
     }
 
     @media (max-width: 768px) {
-      body { padding-top: 120px; }
+      body { padding-top: 85px; }
       .header-container { flex-wrap: wrap; gap: 12px; }
       .logo-text .tagline { display: none; }
       .header-search-section { order: 3; width: 100%; max-width: 100%; }
       .db-count { display: none; }
       .mobile-menu-toggle { display: flex; }
+      .header-main { padding: 12px 0; }
     }
 
     @media (max-width: 480px) {
-      body { padding-top: 110px; }
+      body { padding-top: 80px; }
       .logo-icon { width: 40px; height: 40px; font-size: 20px; }
       .logo-text .brand { font-size: 16px; }
       .header-search-input { padding: 12px 100px 12px 40px; font-size: 14px; }
       .header-search-btn { padding: 10px 20px; font-size: 13px; }
       .header-cta-btn span { display: none; }
       .header-cta-btn { padding: 12px 16px; }
+      .header-main { padding: 10px 0; }
     }
     .container {
       max-width: 1400px;
@@ -831,19 +802,13 @@
 <body>
   <!-- SUPERIOR STICKY HEADER -->
   <header class="superior-header" id="mainHeader">
-    <!-- Top announcement bar -->
-    <div class="top-announcement" id="announcement">
-      🔥 <strong>10,000+</strong> verified creators • Updated daily • Search faster than ever
-      <button class="close-announcement" onclick="closeAnnouncement()" aria-label="Close announcement">×</button>
-    </div>
-
     <!-- Main header -->
     <div class="header-main">
       <div class="header-container">
         <!-- Logo -->
         <a href="/" class="logo-section">
           <div class="logo-icon">
-            <i class="fas fa-fire" style="color: #667eea;"></i>
+            <i class="fas fa-fire"></i>
           </div>
           <div class="logo-text">
             <div class="brand">BestOFGirls</div>
@@ -888,7 +853,7 @@
         <div class="header-actions">
           <!-- Database count badge -->
           <div class="db-count" id="dbCount">
-            <div class="number">10,547</div>
+            <div class="number">10,013</div>
             <div class="label">Creators</div>
           </div>
 
@@ -1007,21 +972,12 @@
     // ============================================
     // HEADER FUNCTIONALITY
     // ============================================
-    
-    // Close announcement bar
-    function closeAnnouncement() {
-      const announcement = document.getElementById('announcement');
-      if (announcement) {
-        announcement.style.display = 'none';
-        document.body.style.paddingTop = (parseInt(document.body.style.paddingTop) - 37) + 'px';
-      }
-    }
 
     // Scroll to results
     function scrollToResults() {
       const results = document.getElementById('results');
       if (results) {
-        const offset = 120; // Account for fixed header
+        const offset = 100; // Account for fixed header
         const y = results.getBoundingClientRect().top + window.pageYOffset - offset;
         window.scrollTo({ top: y, behavior: 'smooth' });
       }
