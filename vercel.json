@@ -1,8 +1,17 @@
 {
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
-    { "source": "/category", "destination": "/category.html" },
-    { "source": "/categories", "destination": "/category.html" }
+    { "source": "/categories", "destination": "/categories.html" },
+    { "source": "/categories/", "destination": "/categories.html" },
+    { "source": "/categories/:slug", "destination": "/index.html?q=:slug" },
+    { "source": "/categories/:slug/", "destination": "/index.html?q=:slug" },
+    { "source": "/categories/:slug/page/:page", "destination": "/index.html?q=:slug&page=:page" }
+  ],
+  "redirects": [
+    { "source": "/category", "destination": "/categories", "permanent": true },
+    { "source": "/category/", "destination": "/categories/", "permanent": true },
+    { "source": "/categories/big-butt", "destination": "/categories/big-ass", "permanent": true },
+    { "source": "/categories/booty", "destination": "/categories/big-ass", "permanent": true }
   ],
   "headers": [
     {
