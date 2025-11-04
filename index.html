@@ -452,12 +452,19 @@
       z-index: 10;
       font-size: 20px;
     }
+    .favorite-btn span { color: #ccc; }
     .favorite-btn:hover {
       transform: scale(1.1);
       background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
       box-shadow: 0 6px 16px rgba(0,175,240,0.35);
     }
     .favorite-btn:hover span { color: #fff !important; }
+    .favorite-btn.active {
+      background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
+      box-shadow: 0 6px 16px rgba(0,175,240,0.35);
+      transform: none;
+    }
+    .favorite-btn.active span { color: #fff !important; }
     .view-profile-btn {
       background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
       color: white;
@@ -571,9 +578,10 @@
       display: none;
       z-index: 10;
       line-height: 1;
-      transition: color 0.2s;
+      transition: color 0.2s, background 0.2s, box-shadow 0.2s;
+      border-radius: 9999px;
     }
-    .clear-search:hover { color: #333; }
+    .clear-search:hover { color: #fff; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); box-shadow: 0 6px 16px rgba(0,175,240,0.35); }
     .clear-search.visible { display: block; }
     .search-group .btn-search { border-radius: 0 9999px 9999px 0; }
     .btn-search {
@@ -631,13 +639,13 @@
       width: 48px;
       height: 48px;
       border-radius: 9999px;
-      background: #007aff;
+      background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
       color: #fff;
       border: none;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 6px 18px rgba(0,122,255,0.35);
+      box-shadow: 0 6px 18px rgba(0,175,240,0.35);
       cursor: pointer;
       opacity: 0;
       pointer-events: none;
@@ -646,7 +654,7 @@
       z-index: 1000;
     }
     #backToTop.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
-    #backToTop:hover { background: #0062d9; }
+    #backToTop:hover { background: linear-gradient(135deg, #0099D6 0%, #0088C0 100%); box-shadow: 0 10px 26px rgba(0,175,240,0.5); }
     /* Filters layout */
     .filters { gap: 12px; }
     /* Prevent focus scroll on filter controls */
@@ -1261,10 +1269,14 @@
 
           const col = document.createElement("div");
           col.className = "col-sm-6 col-md-4 col-lg-3 mb-4";
+          const safeUsername = String(username).replace(/'/g, "\\'");
+          const favSet = getFavoritesSet();
+          const favActive = username !== "—" && favSet.has(username);
+          const favChar = favActive ? '♥' : '♡';
           col.innerHTML = `
             <div class="card h-100">
-              <button class="favorite-btn" onclick="event.preventDefault();">
-                <span style="color: #ccc;">♡</span>
+              <button class="favorite-btn ${favActive ? 'active' : ''}" onclick="event.preventDefault(); toggleFavorite('${safeUsername}', this);">
+                <span>${favChar}</span>
               </button>
               <img src="${responsive.src}" 
                    srcset="${responsive.srcset}"
@@ -1389,6 +1401,32 @@
     }
     // Render on load
     renderRecentSearches();
+
+    // Favorites management (persist in localStorage)
+    function getFavoritesSet() {
+      try {
+        const raw = localStorage.getItem('favorites') || '[]';
+        const arr = JSON.parse(raw);
+        return new Set(Array.isArray(arr) ? arr : []);
+      } catch { return new Set(); }
+    }
+    function saveFavoritesSet(set) {
+      try { localStorage.setItem('favorites', JSON.stringify(Array.from(set))); } catch {}
+    }
+    function toggleFavorite(username, btnEl) {
+      if (!username) return;
+      const set = getFavoritesSet();
+      let active;
+      if (set.has(username)) { set.delete(username); active = false; }
+      else { set.add(username); active = true; }
+      saveFavoritesSet(set);
+      // reflect state in UI
+      if (btnEl) {
+        btnEl.classList.toggle('active', active);
+        const s = btnEl.querySelector('span');
+        if (s) s.textContent = active ? '♥' : '♡';
+      }
+    }
 
     // Load More Button functionality (replaces infinite scroll)
     const loadMoreContainer = document.getElementById('loadMoreContainer');
