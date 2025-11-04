@@ -1653,8 +1653,12 @@
     
     // Header search integration (no live sync; independent inputs)
     if (headerSearch) {
-      // Clear only the focused input on focus so user starts fresh
+      // Clear only on first focus, not every focus (so edits preserve content)
+      let headerCleared = false;
+      let mainCleared = false;
       headerSearch.addEventListener('focus', () => {
+        if (headerCleared) return;
+        headerCleared = true;
         try {
           headerSearch.value = '';
           if (clearSearchBtn) clearSearchBtn.classList.remove('visible');
@@ -1663,6 +1667,8 @@
       }, { passive: true });
       if (searchInput) {
         searchInput.addEventListener('focus', () => {
+          if (mainCleared) return;
+          mainCleared = true;
           try {
             searchInput.value = '';
             if (clearSearchBtn) clearSearchBtn.classList.remove('visible');
