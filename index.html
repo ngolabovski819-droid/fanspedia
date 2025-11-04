@@ -753,6 +753,37 @@
     }
     #activeFilters .search-chip .remove { color: #ffffff; opacity: 0.85; }
     #activeFilters .search-chip .remove:hover { opacity: 1; }
+    /* Favorites bar */
+    .favorites-bar {
+      display: none;
+      gap: 8px;
+      align-items: center;
+      overflow-x: auto;
+      white-space: nowrap;
+      padding: 8px 0;
+      margin-top: 6px;
+    }
+    .favorite-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      background: #fff;
+      border: 1px solid #d6ecfa;
+      border-radius: 9999px;
+      color: #0099D6;
+      font-weight: 700;
+      box-shadow: 0 2px 6px rgba(0,175,240,0.12);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .favorite-chip:hover { transform: translateY(-1px); box-shadow: 0 6px 14px rgba(0,175,240,0.2); }
+    .favorite-chip .heart { color: #00AFF0; font-size: 14px; }
+    .favorite-chip .open { color: inherit; text-decoration: none; }
+    .favorite-chip .remove {
+      background: none; border: none; color: #888; cursor: pointer; font-size: 16px; line-height: 1; padding: 0 2px; margin-left: 4px; border-radius: 6px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .favorite-chip .remove:hover { color: #fff; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); }
     .price-group { display: flex; align-items: center; flex-wrap: nowrap; }
     .price-group .form-label { margin-bottom: 0; }
   .price-range { width: 180px; touch-action: pan-x; -ms-touch-action: pan-x; -webkit-user-select: none; user-select: none; }
@@ -931,8 +962,11 @@
       </div>
     </div>
 
-    <!-- Recent searches -->
-    <div id="recentSearches" class="recent-searches"></div>
+  <!-- Recent searches -->
+  <div id="recentSearches" class="recent-searches"></div>
+
+  <!-- Favorites bar -->
+  <div id="favoritesBar" class="favorites-bar" aria-label="Favorites" aria-live="polite"></div>
 
     <!-- Filters (sticky) -->
     <div class="filters-container">
@@ -1060,6 +1094,7 @@
   const activeFiltersDiv = document.getElementById("activeFilters");
     const backToTopBtn = document.getElementById("backToTop");
     const recentSearchesDiv = document.getElementById("recentSearches");
+    const favoritesBar = document.getElementById('favoritesBar');
     
     let currentPage = 1;
     const pageSize = 50;
@@ -1275,7 +1310,7 @@
           const favChar = favActive ? '♥' : '♡';
           col.innerHTML = `
             <div class="card h-100">
-              <button class="favorite-btn ${favActive ? 'active' : ''}" onclick="event.preventDefault(); toggleFavorite('${safeUsername}', this);">
+              <button class="favorite-btn ${favActive ? 'active' : ''}" data-username="${safeUsername}" onclick="event.preventDefault(); toggleFavorite('${safeUsername}', this);">
                 <span>${favChar}</span>
               </button>
               <img src="${responsive.src}" 
@@ -1399,8 +1434,9 @@
       searchInput.value = query;
       performSearch(true);
     }
-    // Render on load
-    renderRecentSearches();
+  // Render on load
+  renderRecentSearches();
+  renderFavoritesBar();
 
     // Favorites management (persist in localStorage)
     function getFavoritesSet() {
@@ -1426,6 +1462,40 @@
         const s = btnEl.querySelector('span');
         if (s) s.textContent = active ? '♥' : '♡';
       }
+      updateFavoriteButtons(username, active);
+      renderFavoritesBar();
+    }
+
+    function updateFavoriteButtons(username, active) {
+      try {
+        const buttons = document.querySelectorAll(`.favorite-btn[data-username="${CSS.escape(username)}"]`);
+        buttons.forEach(b => {
+          b.classList.toggle('active', active);
+          const s = b.querySelector('span');
+          if (s) s.textContent = active ? '♥' : '♡';
+        });
+      } catch {}
+    }
+
+    function renderFavoritesBar() {
+      if (!favoritesBar) return;
+      const set = getFavoritesSet();
+      const list = Array.from(set);
+      if (list.length === 0) {
+        favoritesBar.style.display = 'none';
+        favoritesBar.innerHTML = '';
+        return;
+      }
+      favoritesBar.style.display = 'flex';
+      favoritesBar.innerHTML = list.map(u => {
+        const safe = String(u).replace(/'/g, "\\'");
+        const url = `https://onlyfans.com/${encodeURIComponent(u)}`;
+        return `<div class="favorite-chip" data-username="${safe}" onclick="window.open('${url}','_blank')">
+          <span class=\"heart\">♥</span>
+          <a class=\"open\" href=\"${url}\" target=\"_blank\" rel=\"noopener\">@${u}</a>
+          <button class=\"remove\" aria-label=\"Remove\" onclick=\"event.stopPropagation(); toggleFavorite('${safe}');\">&times;</button>
+        </div>`;
+      }).join('');
     }
 
     // Load More Button functionality (replaces infinite scroll)
