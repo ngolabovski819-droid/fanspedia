@@ -109,7 +109,7 @@
       background-color: #f5f5f7;
       color: #1d1d1f;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-      padding-top: 85px; /* Space for fixed header */
+      padding-top: 68px; /* Space for fixed header - slimmer */
     }
     
     /* ============================================
@@ -132,18 +132,18 @@
 
     /* Main header container */
     .header-main {
-      padding: 16px 0;
+      padding: 10px 0;
       backdrop-filter: blur(10px);
     }
 
     .header-container {
       max-width: 1400px;
       margin: 0 auto;
-      padding: 0 20px;
+      padding: 0 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 24px;
+      gap: 16px;
     }
 
     /* Logo section */
@@ -156,14 +156,14 @@
     }
 
     .logo-icon {
-      width: 48px;
-      height: 48px;
+      width: 40px;
+      height: 40px;
       background: white;
       border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
+      font-size: 20px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       transition: transform 0.3s ease;
     }
@@ -201,7 +201,7 @@
     /* Header search section */
     .header-search-section {
       flex: 1;
-      max-width: 600px;
+      max-width: 560px;
       position: relative;
     }
 
@@ -213,7 +213,7 @@
 
     .header-search-input {
       width: 100%;
-      padding: 14px 120px 14px 48px;
+      padding: 10px 110px 10px 44px;
       border: 2px solid rgba(255, 255, 255, 0.3);
       border-radius: 50px;
       background: rgba(255, 255, 255, 0.95);
@@ -238,7 +238,7 @@
 
     .header-search-icon {
       position: absolute;
-      left: 18px;
+      left: 16px;
       color: #00AFF0;
       font-size: 18px;
       pointer-events: none;
@@ -250,7 +250,7 @@
       background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
       color: white;
       border: none;
-      padding: 10px 24px;
+      padding: 8px 18px;
       border-radius: 50px;
       font-weight: 700;
       font-size: 14px;
@@ -406,24 +406,23 @@
     }
 
     @media (max-width: 768px) {
-      body { padding-top: 85px; }
+      body { padding-top: 66px; }
       .header-container { flex-wrap: wrap; gap: 12px; }
       .logo-text .tagline { display: none; }
       .header-search-section { order: 3; width: 100%; max-width: 100%; }
-      .db-count { display: none; }
       .mobile-menu-toggle { display: flex; }
-      .header-main { padding: 12px 0; }
+      .header-main { padding: 8px 0; }
     }
 
     @media (max-width: 480px) {
-      body { padding-top: 80px; }
+      body { padding-top: 62px; }
       .logo-icon { width: 40px; height: 40px; font-size: 20px; }
       .logo-text .brand { font-size: 16px; }
-      .header-search-input { padding: 12px 100px 12px 40px; font-size: 14px; }
-      .header-search-btn { padding: 10px 20px; font-size: 13px; }
+      .header-search-input { padding: 10px 96px 10px 40px; font-size: 14px; }
+      .header-search-btn { padding: 8px 16px; font-size: 13px; }
       .header-cta-btn span { display: none; }
-      .header-cta-btn { padding: 12px 16px; }
-      .header-main { padding: 10px 0; }
+      .header-cta-btn { padding: 10px 14px; }
+      .header-main { padding: 6px 0; }
     }
     .container {
       max-width: 1400px;
@@ -835,36 +834,12 @@
             </button>
           </div>
           
-          <!-- Quick filters -->
-          <div class="header-quick-filters">
-            <div class="header-filter-chip" id="headerVerifiedFilter">
-              <i class="fas fa-check-circle"></i> Verified
-            </div>
-            <div class="header-filter-chip" id="headerFreeFilter">
-              <i class="fas fa-gift"></i> Free
-            </div>
-            <div class="header-filter-chip" id="headerBundlesFilter">
-              <i class="fas fa-tags"></i> Bundles
-            </div>
-          </div>
         </div>
 
         <!-- Actions -->
         <div class="header-actions">
-          <!-- Database count badge -->
-          <div class="db-count" id="dbCount">
-            <div class="number">10,013</div>
-            <div class="label">Creators</div>
-          </div>
-
-          <!-- CTA Button -->
-          <button class="header-cta-btn" onclick="scrollToResults()">
-            <span>Explore</span>
-            <i class="fas fa-arrow-down"></i>
-          </button>
-
-          <!-- Mobile menu toggle -->
-          <button class="mobile-menu-toggle" id="mobileMenuToggle">
+          <!-- Mobile menu toggle only -->
+          <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
             <i class="fas fa-bars"></i>
           </button>
         </div>
@@ -873,7 +848,7 @@
   </header>
 
   <div class="container text-center">
-    <h1 class="mb-4" style="color:#00aff0; font-weight:800; display:none;">The Best Onlyfans Search Engine - Find OF Accounts FAST</h1>
+  <h1 class="mb-4" style="color:#00aff0; font-weight:800;">The Best Onlyfans Search Engine - Find OF Accounts FAST</h1>
 
     <!-- Search bar -->
     <div class="mb-3 search-group">
@@ -996,13 +971,8 @@
     });
 
     // Connect header search to main search
-    const headerSearch = document.getElementById('headerSearch');
-    const headerSearchBtn = document.getElementById('headerSearchBtn');
-    
-    // Header quick filter chips
-    const headerVerifiedFilter = document.getElementById('headerVerifiedFilter');
-    const headerFreeFilter = document.getElementById('headerFreeFilter');
-    const headerBundlesFilter = document.getElementById('headerBundlesFilter');
+  const headerSearch = document.getElementById('headerSearch');
+  const headerSearchBtn = document.getElementById('headerSearchBtn');
 
     // ============================================
     // MAIN SEARCH VARIABLES
@@ -1517,67 +1487,11 @@
       });
     }
 
-    // Header quick filter chips
-    if (headerVerifiedFilter) {
-      headerVerifiedFilter.addEventListener('click', () => {
-        verifiedToggle.checked = !verifiedToggle.checked;
-        headerVerifiedFilter.classList.toggle('active');
-        performSearch(true);
-      });
-    }
+    // Header quick filter chips removed per design change
 
-    if (headerFreeFilter) {
-      headerFreeFilter.addEventListener('click', () => {
-        priceRange.value = '0';
-        priceValue.textContent = '0';
-        headerFreeFilter.classList.toggle('active');
-        performSearch(true);
-      });
-    }
+    // Sync with header chips not needed anymore
 
-    if (headerBundlesFilter) {
-      headerBundlesFilter.addEventListener('click', () => {
-        bundlesToggle.checked = !bundlesToggle.checked;
-        headerBundlesFilter.classList.toggle('active');
-        performSearch(true);
-      });
-    }
-
-    // Sync filter states with header chips
-    verifiedToggle.addEventListener('change', () => {
-      if (headerVerifiedFilter) {
-        if (verifiedToggle.checked) {
-          headerVerifiedFilter.classList.add('active');
-        } else {
-          headerVerifiedFilter.classList.remove('active');
-        }
-      }
-    });
-
-    bundlesToggle.addEventListener('change', () => {
-      if (headerBundlesFilter) {
-        if (bundlesToggle.checked) {
-          headerBundlesFilter.classList.add('active');
-        } else {
-          headerBundlesFilter.classList.remove('active');
-        }
-      }
-    });
-
-    // Update database count periodically (every 30 seconds)
-    function updateDbCount() {
-      const dbCountEl = document.getElementById('dbCount');
-      if (dbCountEl && resultsDiv) {
-        const count = resultsDiv.children.length;
-        if (count > 0) {
-          const number = dbCountEl.querySelector('.number');
-          if (number) {
-            number.textContent = (10000 + count).toLocaleString();
-          }
-        }
-      }
-    }
-    setInterval(updateDbCount, 30000);
+    // DB count badge removed; no periodic updates required
 
     // ============================================
     // URL query parameter management for shareable searches
