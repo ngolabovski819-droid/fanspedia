@@ -387,7 +387,10 @@
       .header-container { flex-wrap: wrap; gap: 12px; }
       .logo-text .tagline { display: none; }
       .header-search-section { order: 3; width: 100%; max-width: 100%; }
-      .mobile-menu-toggle { display: flex; }
+      /* Hide the mobile menu toggle to give the search full width */
+      .mobile-menu-toggle { display: none; }
+      /* Also hide the actions wrapper since it's empty now */
+      .header-actions { display: none; }
       .header-main { padding: 8px 0; }
     }
 
