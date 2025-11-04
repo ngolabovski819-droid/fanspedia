@@ -213,7 +213,7 @@
 
     .header-search-input {
       width: 100%;
-      padding: 10px 110px 10px 44px;
+      padding: 10px 16px 10px 44px; /* no header button, reduce right padding */
       border: 2px solid rgba(255, 255, 255, 0.3);
       border-radius: 50px;
       background: rgba(255, 255, 255, 0.95);
@@ -244,30 +244,7 @@
       pointer-events: none;
     }
 
-    .header-search-btn {
-      position: absolute;
-      right: 4px;
-      background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
-      color: white;
-      border: none;
-      padding: 8px 18px;
-      border-radius: 50px;
-      font-weight: 700;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(0, 175, 240, 0.4);
-    }
-
-    .header-search-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 16px rgba(0, 175, 240, 0.5);
-      background: linear-gradient(135deg, #0099D6 0%, #0088C0 100%);
-    }
-
-    .header-search-btn:active {
-      transform: scale(0.98);
-    }
+    /* header button removed; styles kept here for reference if needed in future */
 
     /* Quick filters in header */
     .header-quick-filters {
@@ -418,7 +395,7 @@
       body { padding-top: 62px; }
       .logo-icon { width: 40px; height: 40px; font-size: 20px; }
       .logo-text .brand { font-size: 16px; }
-      .header-search-input { padding: 10px 96px 10px 40px; font-size: 14px; }
+      .header-search-input { padding: 10px 16px 10px 40px; font-size: 14px; }
       .header-search-btn { padding: 8px 16px; font-size: 13px; }
       .header-cta-btn span { display: none; }
       .header-cta-btn { padding: 10px 14px; }
@@ -597,26 +574,23 @@
     .clear-search.visible { display: block; }
     .search-group .btn-search { border-radius: 0 9999px 9999px 0; }
     .btn-search {
-      background-color: #007aff;
-      border-color: #007aff;
+      background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
+      border: none;
       color: #fff;
-      font-weight: 700;
-      box-shadow: 0 6px 18px rgba(0,122,255,0.35);
+      font-weight: 800;
+      box-shadow: 0 4px 12px rgba(0,175,240,0.4);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
     }
     .btn-search:hover {
-      background-color: #0062d9;
-      border-color: #0062d9;
-      box-shadow: 0 8px 22px rgba(0,122,255,0.45);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(0,175,240,0.5);
+      background: linear-gradient(135deg, #0099D6 0%, #0088C0 100%);
     }
+    .btn-search:active { transform: translateY(0); }
     .btn-search:disabled {
-      opacity: 0.5;
+      opacity: 0.6;
       cursor: not-allowed;
-      box-shadow: 0 2px 8px rgba(0,122,255,0.2);
-    }
-    .btn-search:disabled:hover {
-      background-color: #007aff;
-      border-color: #007aff;
-      box-shadow: 0 2px 8px rgba(0,122,255,0.2);
+      box-shadow: 0 2px 8px rgba(0,175,240,0.25);
     }
     /* Search button spinner */
     #searchBtn { position: relative; display: inline-flex; align-items: center; gap: 10px; }
@@ -828,10 +802,6 @@
               autocapitalize="none"
               spellcheck="false"
             >
-            <button class="header-search-btn" id="headerSearchBtn">
-              <i class="fas fa-bolt"></i>
-              <span>Search</span>
-            </button>
           </div>
           
         </div>
