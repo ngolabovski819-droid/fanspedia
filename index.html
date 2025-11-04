@@ -102,11 +102,357 @@
   <!-- Preload Bootstrap CSS and swap rel on load for faster first paint -->
   <link rel="preload" as="style" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"></noscript>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     body {
       background-color: #f5f5f7;
       color: #1d1d1f;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      padding-top: 140px; /* Space for fixed header */
+    }
+    
+    /* ============================================
+       SUPERIOR STICKY HEADER
+       ============================================ */
+    .superior-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      box-shadow: 0 4px 24px rgba(102, 126, 234, 0.25);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .superior-header.scrolled {
+      box-shadow: 0 8px 32px rgba(102, 126, 234, 0.35);
+    }
+
+    /* Top announcement bar */
+    .top-announcement {
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      text-align: center;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+    }
+
+    .top-announcement .close-announcement {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+      font-size: 20px;
+      line-height: 1;
+      padding: 4px 8px;
+    }
+
+    .top-announcement .close-announcement:hover {
+      opacity: 1;
+    }
+
+    .top-announcement strong {
+      color: #ffd700;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+
+    /* Main header container */
+    .header-main {
+      padding: 12px 0;
+      backdrop-filter: blur(10px);
+    }
+
+    .header-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    /* Logo section */
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 48px;
+      height: 48px;
+      background: white;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s ease;
+    }
+
+    .logo-icon:hover {
+      transform: scale(1.05) rotate(5deg);
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo-text .brand {
+      font-size: 20px;
+      font-weight: 800;
+      color: white;
+      letter-spacing: -0.5px;
+      line-height: 1;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .logo-text .tagline {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+
+    /* Header search section */
+    .header-search-section {
+      flex: 1;
+      max-width: 600px;
+      position: relative;
+    }
+
+    .header-search-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .header-search-input {
+      width: 100%;
+      padding: 14px 120px 14px 48px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.95);
+      font-size: 15px;
+      font-weight: 500;
+      color: #1d1d1f;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-search-input:focus {
+      outline: none;
+      border-color: white;
+      background: white;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      transform: translateY(-1px);
+    }
+
+    .header-search-input::placeholder {
+      color: #999;
+    }
+
+    .header-search-icon {
+      position: absolute;
+      left: 18px;
+      color: #667eea;
+      font-size: 18px;
+      pointer-events: none;
+    }
+
+    .header-search-btn {
+      position: absolute;
+      right: 4px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .header-search-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+    }
+
+    .header-search-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* Quick filters in header */
+    .header-quick-filters {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .header-filter-chip {
+      padding: 6px 14px;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 20px;
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .header-filter-chip:hover, .header-filter-chip.active {
+      background: white;
+      color: #667eea;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .header-filter-chip i {
+      margin-right: 4px;
+      font-size: 11px;
+    }
+
+    /* Header actions */
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    /* Database count badge */
+    .db-count {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .db-count .number {
+      font-size: 18px;
+      font-weight: 800;
+      color: #ffd700;
+      line-height: 1;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+
+    .db-count .label {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+
+    /* Header CTA Button */
+    .header-cta-btn {
+      padding: 12px 28px;
+      background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+      color: #1d1d1f;
+      border: none;
+      border-radius: 50px;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 16px rgba(255, 215, 0, 0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .header-cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(255, 215, 0, 0.6);
+    }
+
+    .header-cta-btn:active {
+      transform: translateY(0);
+    }
+
+    .header-cta-btn i {
+      margin-left: 6px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    /* Mobile menu toggle */
+    .mobile-menu-toggle {
+      display: none;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .mobile-menu-toggle:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Header responsive breakpoints */
+    @media (max-width: 1200px) {
+      .db-count .number { font-size: 16px; }
+      .db-count .label { font-size: 9px; }
+    }
+
+    @media (max-width: 992px) {
+      .header-quick-filters { display: none; }
+      .header-actions { gap: 8px; }
+      .header-cta-btn { padding: 10px 20px; font-size: 13px; }
+    }
+
+    @media (max-width: 768px) {
+      body { padding-top: 120px; }
+      .header-container { flex-wrap: wrap; gap: 12px; }
+      .logo-text .tagline { display: none; }
+      .header-search-section { order: 3; width: 100%; max-width: 100%; }
+      .db-count { display: none; }
+      .mobile-menu-toggle { display: flex; }
+    }
+
+    @media (max-width: 480px) {
+      body { padding-top: 110px; }
+      .logo-icon { width: 40px; height: 40px; font-size: 20px; }
+      .logo-text .brand { font-size: 16px; }
+      .header-search-input { padding: 12px 100px 12px 40px; font-size: 14px; }
+      .header-search-btn { padding: 10px 20px; font-size: 13px; }
+      .header-cta-btn span { display: none; }
+      .header-cta-btn { padding: 12px 16px; }
     }
     .container {
       max-width: 1400px;
@@ -483,8 +829,86 @@
   </style>
 </head>
 <body>
+  <!-- SUPERIOR STICKY HEADER -->
+  <header class="superior-header" id="mainHeader">
+    <!-- Top announcement bar -->
+    <div class="top-announcement" id="announcement">
+      🔥 <strong>10,000+</strong> verified creators • Updated daily • Search faster than ever
+      <button class="close-announcement" onclick="closeAnnouncement()" aria-label="Close announcement">×</button>
+    </div>
+
+    <!-- Main header -->
+    <div class="header-main">
+      <div class="header-container">
+        <!-- Logo -->
+        <a href="/" class="logo-section">
+          <div class="logo-icon">
+            <i class="fas fa-fire" style="color: #667eea;"></i>
+          </div>
+          <div class="logo-text">
+            <div class="brand">BestOFGirls</div>
+            <div class="tagline">10k+ TOP Creators</div>
+          </div>
+        </a>
+
+        <!-- Search - THE CENTERPIECE -->
+        <div class="header-search-section">
+          <div class="header-search-wrapper">
+            <i class="fas fa-search header-search-icon"></i>
+            <input 
+              type="text" 
+              class="header-search-input" 
+              placeholder="Search by name, location, category..."
+              id="headerSearch"
+              autocomplete="off"
+              autocapitalize="none"
+              spellcheck="false"
+            >
+            <button class="header-search-btn" id="headerSearchBtn">
+              <i class="fas fa-bolt"></i>
+              <span>Search</span>
+            </button>
+          </div>
+          
+          <!-- Quick filters -->
+          <div class="header-quick-filters">
+            <div class="header-filter-chip" id="headerVerifiedFilter">
+              <i class="fas fa-check-circle"></i> Verified
+            </div>
+            <div class="header-filter-chip" id="headerFreeFilter">
+              <i class="fas fa-gift"></i> Free
+            </div>
+            <div class="header-filter-chip" id="headerBundlesFilter">
+              <i class="fas fa-tags"></i> Bundles
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="header-actions">
+          <!-- Database count badge -->
+          <div class="db-count" id="dbCount">
+            <div class="number">10,547</div>
+            <div class="label">Creators</div>
+          </div>
+
+          <!-- CTA Button -->
+          <button class="header-cta-btn" onclick="scrollToResults()">
+            <span>Explore</span>
+            <i class="fas fa-arrow-down"></i>
+          </button>
+
+          <!-- Mobile menu toggle -->
+          <button class="mobile-menu-toggle" id="mobileMenuToggle">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
   <div class="container text-center">
-    <h1 class="mb-4" style="color:#00aff0; font-weight:800;">The Best Onlyfans Search Engine - Find OF Accounts FAST</h1>
+    <h1 class="mb-4" style="color:#00aff0; font-weight:800; display:none;">The Best Onlyfans Search Engine - Find OF Accounts FAST</h1>
 
     <!-- Search bar -->
     <div class="mb-3 search-group">
@@ -580,6 +1004,53 @@
   </div>
 
   <script>
+    // ============================================
+    // HEADER FUNCTIONALITY
+    // ============================================
+    
+    // Close announcement bar
+    function closeAnnouncement() {
+      const announcement = document.getElementById('announcement');
+      if (announcement) {
+        announcement.style.display = 'none';
+        document.body.style.paddingTop = (parseInt(document.body.style.paddingTop) - 37) + 'px';
+      }
+    }
+
+    // Scroll to results
+    function scrollToResults() {
+      const results = document.getElementById('results');
+      if (results) {
+        const offset = 120; // Account for fixed header
+        const y = results.getBoundingClientRect().top + window.pageYOffset - offset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    }
+
+    // Add scrolled class to header
+    window.addEventListener('scroll', () => {
+      const header = document.getElementById('mainHeader');
+      if (header) {
+        if (window.pageYOffset > 50) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+      }
+    });
+
+    // Connect header search to main search
+    const headerSearch = document.getElementById('headerSearch');
+    const headerSearchBtn = document.getElementById('headerSearchBtn');
+    
+    // Header quick filter chips
+    const headerVerifiedFilter = document.getElementById('headerVerifiedFilter');
+    const headerFreeFilter = document.getElementById('headerFreeFilter');
+    const headerBundlesFilter = document.getElementById('headerBundlesFilter');
+
+    // ============================================
+    // MAIN SEARCH VARIABLES
+    // ============================================
     const searchInput = document.getElementById("search");
   const clearSearchBtn = document.getElementById("clearSearch");
     const verifiedToggle = document.getElementById("verified");
@@ -1046,7 +1517,115 @@
       priceValue.textContent = priceRange.value;
     });
     priceRange.addEventListener("change", () => { lockScroll(); performSearch(true); });
+    
+    // ============================================
+    // HEADER SEARCH INTEGRATION
+    // ============================================
+    
+    // Sync header search with main search
+    if (headerSearch) {
+      // Sync input values both ways
+      headerSearch.addEventListener('input', () => {
+        searchInput.value = headerSearch.value;
+        const hasValue = headerSearch.value.trim().length > 0;
+        if (hasValue) {
+          clearSearchBtn.classList.add("visible");
+        } else {
+          clearSearchBtn.classList.remove("visible");
+        }
+        if (searchBtn) {
+          searchBtn.disabled = !hasValue;
+        }
+      });
+
+      // Sync back from main search to header
+      searchInput.addEventListener('input', () => {
+        headerSearch.value = searchInput.value;
+      });
+
+      // Header search button click
+      if (headerSearchBtn) {
+        headerSearchBtn.addEventListener('click', () => {
+          searchInput.value = headerSearch.value;
+          performSearch(true);
+        });
+      }
+
+      // Header search Enter key
+      headerSearch.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          searchInput.value = headerSearch.value;
+          performSearch(true);
+        }
+      });
+    }
+
+    // Header quick filter chips
+    if (headerVerifiedFilter) {
+      headerVerifiedFilter.addEventListener('click', () => {
+        verifiedToggle.checked = !verifiedToggle.checked;
+        headerVerifiedFilter.classList.toggle('active');
+        performSearch(true);
+      });
+    }
+
+    if (headerFreeFilter) {
+      headerFreeFilter.addEventListener('click', () => {
+        priceRange.value = '0';
+        priceValue.textContent = '0';
+        headerFreeFilter.classList.toggle('active');
+        performSearch(true);
+      });
+    }
+
+    if (headerBundlesFilter) {
+      headerBundlesFilter.addEventListener('click', () => {
+        bundlesToggle.checked = !bundlesToggle.checked;
+        headerBundlesFilter.classList.toggle('active');
+        performSearch(true);
+      });
+    }
+
+    // Sync filter states with header chips
+    verifiedToggle.addEventListener('change', () => {
+      if (headerVerifiedFilter) {
+        if (verifiedToggle.checked) {
+          headerVerifiedFilter.classList.add('active');
+        } else {
+          headerVerifiedFilter.classList.remove('active');
+        }
+      }
+    });
+
+    bundlesToggle.addEventListener('change', () => {
+      if (headerBundlesFilter) {
+        if (bundlesToggle.checked) {
+          headerBundlesFilter.classList.add('active');
+        } else {
+          headerBundlesFilter.classList.remove('active');
+        }
+      }
+    });
+
+    // Update database count periodically (every 30 seconds)
+    function updateDbCount() {
+      const dbCountEl = document.getElementById('dbCount');
+      if (dbCountEl && resultsDiv) {
+        const count = resultsDiv.children.length;
+        if (count > 0) {
+          const number = dbCountEl.querySelector('.number');
+          if (number) {
+            number.textContent = (10000 + count).toLocaleString();
+          }
+        }
+      }
+    }
+    setInterval(updateDbCount, 30000);
+
+    // ============================================
     // URL query parameter management for shareable searches
+    // ============================================
     function updateURL() {
       const params = new URLSearchParams();
       const query = searchInput.value.trim();
