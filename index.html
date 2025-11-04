@@ -1651,43 +1651,27 @@
     // HEADER SEARCH INTEGRATION
     // ============================================
     
-    // Sync header search with main search
+    // Header search integration (no live sync; independent inputs)
     if (headerSearch) {
-      // Clear both inputs on first focus to give a clean slate
-      let inputsClearedOnce = false;
-      function clearBothInputsOnFirstFocus() {
-        if (inputsClearedOnce) return;
-        inputsClearedOnce = true;
+      // Clear only the focused input on focus so user starts fresh
+      headerSearch.addEventListener('focus', () => {
         try {
-          if (searchInput) searchInput.value = '';
           headerSearch.value = '';
           if (clearSearchBtn) clearSearchBtn.classList.remove('visible');
           if (searchBtn) searchBtn.disabled = true;
         } catch {}
+      }, { passive: true });
+      if (searchInput) {
+        searchInput.addEventListener('focus', () => {
+          try {
+            searchInput.value = '';
+            if (clearSearchBtn) clearSearchBtn.classList.remove('visible');
+            if (searchBtn) searchBtn.disabled = true;
+          } catch {}
+        }, { passive: true });
       }
-      headerSearch.addEventListener('focus', clearBothInputsOnFirstFocus, { passive: true });
-      if (searchInput) searchInput.addEventListener('focus', clearBothInputsOnFirstFocus, { passive: true });
 
-      // Sync input values both ways
-      headerSearch.addEventListener('input', () => {
-        searchInput.value = headerSearch.value;
-        const hasValue = headerSearch.value.trim().length > 0;
-        if (hasValue) {
-          clearSearchBtn.classList.add("visible");
-        } else {
-          clearSearchBtn.classList.remove("visible");
-        }
-        if (searchBtn) {
-          searchBtn.disabled = !hasValue;
-        }
-      });
-
-      // Sync back from main search to header
-      searchInput.addEventListener('input', () => {
-        headerSearch.value = searchInput.value;
-      });
-
-      // Header search button click
+      // Header search button click (if present)
       if (headerSearchBtn) {
         headerSearchBtn.addEventListener('click', () => {
           searchInput.value = headerSearch.value;
