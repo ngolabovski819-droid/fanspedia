@@ -1,6 +1,8 @@
 {
   "rewrites": [
-    { "source": "/", "destination": "/index.html" }
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/category", "destination": "/category.html" },
+    { "source": "/categories", "destination": "/category.html" }
   ],
   "headers": [
     {
