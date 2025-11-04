@@ -762,6 +762,9 @@
       white-space: nowrap;
       padding: 8px 0;
       margin-top: 6px;
+      scroll-snap-type: x proximity;
+      overscroll-behavior-x: contain;
+      -webkit-overflow-scrolling: touch;
     }
     .favorite-chip {
       display: inline-flex;
@@ -775,6 +778,7 @@
       font-weight: 700;
       box-shadow: 0 2px 6px rgba(0,175,240,0.12);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+      scroll-snap-align: start;
     }
     .favorite-chip:hover { transform: translateY(-1px); box-shadow: 0 6px 14px rgba(0,175,240,0.2); }
     .favorite-chip .heart { color: #00AFF0; font-size: 14px; }
@@ -783,6 +787,9 @@
       background: none; border: none; color: #888; cursor: pointer; font-size: 16px; line-height: 1; padding: 0 2px; margin-left: 4px; border-radius: 6px;
       transition: color 0.2s, background 0.2s;
     }
+    /* Hide scrollbars for horizontal chip scrollers */
+    .favorites-bar::-webkit-scrollbar { display: none; }
+    .favorites-bar { scrollbar-width: none; }
     .favorite-chip .remove:hover { color: #fff; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); }
     .price-group { display: flex; align-items: center; flex-wrap: nowrap; }
     .price-group .form-label { margin-bottom: 0; }
@@ -818,6 +825,30 @@
     .price-range:focus { outline: none; }
     .price-range:focus-visible { outline: 2px solid #00AFF0; outline-offset: 2px; }
     .price-value { display: inline-block; min-width: 44px; text-align: center; padding: 4px 10px; border-radius: 9999px; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); color: #ffffff; font-weight: 800; box-shadow: 0 4px 12px rgba(0,175,240,0.25); }
+
+    /* Mobile tuning: make chips compact and horizontally scrollable */
+    @media (max-width: 576px) {
+      /* Recent + Active chips containers */
+      .recent-searches {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        white-space: nowrap;
+        justify-content: flex-start;
+        gap: 6px;
+        padding-bottom: 2px;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x proximity;
+      }
+      .recent-searches::-webkit-scrollbar { display: none; }
+      .recent-searches { scrollbar-width: none; }
+      .search-chip { padding: 6px 12px; font-size: 12.5px; scroll-snap-align: start; }
+
+      /* Favorites bar */
+      .favorites-bar { gap: 6px; padding: 6px 0; margin-top: 4px; }
+      .favorite-chip { padding: 6px 10px; font-size: 12.5px; min-height: 32px; }
+      .favorite-chip .remove { padding: 2px 6px; margin-left: 2px; }
+    }
     @media (min-width: 576px) { .price-range { width: 240px; } }
     @media (min-width: 992px) { .price-range { width: 300px; } }
     @media (max-width: 576px) {
