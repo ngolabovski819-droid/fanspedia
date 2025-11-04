@@ -93,19 +93,7 @@
   </header>
 
   <main>
-    <div class="container text-center">
-      <!-- EXACT homepage search bar placement -->
-      <div class="mb-3 search-group" style="margin-top: 22px;">
-        <div class="input-group input-group-lg">
-          <input id="search" type="text" class="form-control" placeholder='Type: "milf" "Texas" "piercings"' aria-label="Search creators" inputmode="search" enterkeyhint="search" autocomplete="off" autocapitalize="none" spellcheck="false" />
-          <button class="clear-search" id="clearSearch" type="button" aria-label="Clear search">×</button>
-          <button id="searchBtn" class="btn btn-search" type="button">
-            <span class="spinner" aria-hidden="true"></span>
-            <span class="btn-label">Search</span>
-          </button>
-        </div>
-      </div>
-    </div>
+    <!-- No hero search bar on categories page; use header search only like homepage header -->
 
     <section class="categories-hero container">
       <h1>Search OnlyFans accounts by Category</h1>
@@ -128,18 +116,7 @@
     const headerSearch = document.getElementById('headerSearch');
     if (headerSearch){ let cleared=false; headerSearch.addEventListener('focus',()=>{ if(!cleared){headerSearch.value=''; cleared=true;} },{passive:true}); headerSearch.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); const q=headerSearch.value.trim(); location.href = q? '/?q='+encodeURIComponent(q) : '/'; }}); }
 
-    // Main search bar behavior on this page: redirect to homepage and run search
-    const searchInput = document.getElementById('search');
-    const clearBtn = document.getElementById('clearSearch');
-    const searchBtn = document.getElementById('searchBtn');
-    if (searchInput && clearBtn && searchBtn){
-      let first = false;
-      searchInput.addEventListener('focus',()=>{ if(!first){ first=true; searchInput.value=''; clearBtn.classList.remove('visible'); searchBtn.disabled=true; }});
-      searchInput.addEventListener('input',()=>{ const has=searchInput.value.trim().length>0; clearBtn.classList.toggle('visible', has); searchBtn.disabled=!has; });
-      searchInput.addEventListener('keydown',(e)=>{ if(e.key==='Enter'){ e.preventDefault(); const q=searchInput.value.trim(); if(q){ location.href='/?q='+encodeURIComponent(q); } }});
-      searchBtn.addEventListener('click',()=>{ const q=searchInput.value.trim(); if(q){ location.href='/?q='+encodeURIComponent(q);} });
-      clearBtn.addEventListener('click',()=>{ searchInput.value=''; clearBtn.classList.remove('visible'); searchInput.focus(); });
-    }
+    // No hero search UI here; header search handles queries and redirects to homepage
 
     // Category chips
     const tags = [
