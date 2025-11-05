@@ -154,8 +154,8 @@
   </main>
 
   <script type="module">
-    // Import shared categories config
-    import { categories, popularCategories, categoryToSlug } from './config/categories.js';
+    // Import shared categories config (absolute path so it works under /categories/)
+    import { categories, popularCategories, categoryToSlug } from '/config/categories.js';
 
     // ============================================
     // DYNAMIC CATEGORY NAVIGATION
