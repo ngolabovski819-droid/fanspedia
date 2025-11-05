@@ -36,8 +36,11 @@
     .header-search-input { width: 100%; padding: 10px 16px 10px 44px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50px; background: rgba(255,255,255,0.95); font-size: 15px; font-weight: 500; color: #1d1d1f; transition: all 0.3s ease; box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
     .header-search-input:focus { outline: none; border-color: #fff; background: #fff; box-shadow: 0 8px 32px rgba(0,0,0,0.15); transform: translateY(-1px); }
     .header-search-icon { position: absolute; left: 16px; color: #00AFF0; font-size: 18px; pointer-events: none; }
-    .header-actions { display: none; }
-    @media (max-width: 768px) { body { padding-top: 66px; } .header-container { flex-wrap: wrap; gap: 12px; } .logo-text .tagline { display: none; } .header-search-section { order: 3; width: 100%; max-width: 100%; } }
+  /* Header actions (match homepage) */
+  .header-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+  .mobile-menu-toggle { display: none; background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.3); color: white; width: 44px; height: 44px; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; justify-content: center; align-items: center; }
+  .mobile-menu-toggle:hover { background: rgba(255, 255, 255, 0.3); }
+  @media (max-width: 768px) { body { padding-top: 66px; } .header-container { flex-wrap: wrap; gap: 12px; } .logo-text .tagline { display: none; } .header-search-section { order: 3; width: 100%; max-width: 100%; } .header-actions{ display:none; } }
     @media (max-width: 480px) { body { padding-top: 62px; } .logo-text .brand { font-size: 16px; } .header-search-input { padding: 10px 16px 10px 40px; font-size: 14px; } .header-main { padding: 6px 0; } }
 
     /* Homepage search bar styles (exact copy so it looks identical) */
@@ -87,7 +90,11 @@
             <input id="headerSearch" type="text" class="header-search-input" placeholder="Search by name, location, category..." autocomplete="off" autocapitalize="none" spellcheck="false" />
           </div>
         </div>
-        <div class="header-actions"></div>
+        <div class="header-actions">
+          <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
       </div>
     </div>
   </header>
