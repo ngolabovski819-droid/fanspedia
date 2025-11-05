@@ -47,13 +47,38 @@
     h1 { color: #00aff0; font-weight: 800; letter-spacing: -0.4px; }
     .subtitle { color: #5a5a5a; max-width: 900px; margin: 10px auto 20px; }
 
-    /* Filters */
-    .filters-container { background: #f5f5f7; padding: 16px 0; margin: 8px 0 20px; }
-    .filters { gap: 12px; }
-    .form-control, .form-range { border-radius: 12px; border: 1px solid #e0e0e0; background: white; }
-    .btn-reset { border-radius: 9999px; border: none; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); color: #fff; padding: 10px 16px; font-weight: 800; box-shadow: 0 4px 12px rgba(0,175,240,0.3); }
+  /* Filters (match homepage) */
+  .filters-container { background: #f5f5f7; padding: 16px 0; margin: 8px 0 20px; }
+  .filters { gap: 12px; }
+  .form-control, .form-range { border-radius: 12px; border: 1px solid #e0e0e0; background: white; }
+  .btn-reset { border-radius: 9999px; border: none; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); color: #fff; padding: 10px 16px; font-weight: 800; box-shadow: 0 4px 12px rgba(0,175,240,0.3); transition: transform .2s ease, box-shadow .2s ease, background .2s ease; }
+  .btn-reset:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(0,175,240,0.4); background: linear-gradient(135deg, #0099D6 0%, #0088C0 100%); }
+  .price-group { display: flex; align-items: center; flex-wrap: nowrap; }
+  .price-group .form-label { margin-bottom: 0; }
+  .price-range { width: 180px; touch-action: pan-x; -ms-touch-action: pan-x; -webkit-user-select: none; user-select: none; }
+  .price-range::-webkit-slider-runnable-track { height: 6px; border-radius: 9999px; background: #eaf7ff; }
+  .price-range::-moz-range-track { height: 6px; border-radius: 9999px; background: #eaf7ff; }
+  .price-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; border-radius: 50%; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); border: 2px solid #fff; box-shadow: 0 4px 10px rgba(0,175,240,0.35); margin-top: -7px; cursor: pointer; }
+  .price-range::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); border: 2px solid #fff; box-shadow: 0 4px 10px rgba(0,175,240,0.35); cursor: pointer; }
+  .price-range:focus { outline: none; }
+  .price-range:focus-visible { outline: 2px solid #00AFF0; outline-offset: 2px; }
+  .price-value { display: inline-block; min-width: 44px; text-align: center; padding: 4px 10px; border-radius: 9999px; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); color: #ffffff; font-weight: 800; box-shadow: 0 4px 12px rgba(0,175,240,0.25); }
+  /* Switches */
+  .form-switch .form-check-input { width: 44px; height: 24px; background: #eef7ff; border: 1px solid #d6ecfa; border-radius: 9999px; position: relative; cursor: pointer; -webkit-appearance: none; -moz-appearance: none; appearance: none; transition: background-color .2s ease, border-color .2s ease, box-shadow .2s ease; }
+  .form-switch .form-check-input::before { content: ''; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #ffffff; box-shadow: 0 2px 6px rgba(0,0,0,0.15); transition: transform .2s ease, background .2s ease; }
+  .form-switch .form-check-input:checked { background: rgba(0,175,240,0.20); border-color: #00AFF0; }
+  .form-switch .form-check-input:checked::before { transform: translateX(20px); background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); box-shadow: 0 4px 10px rgba(0,175,240,0.35); }
+  .form-switch .form-check-input:focus { box-shadow: 0 0 0 0.2rem rgba(0,175,240,0.25); }
 
-    /* Card styles (copied from index for consistency) */
+  /* Active filter chips */
+  .recent-searches { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 12px; margin-bottom: 8px; }
+  .search-chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: white; border: 1px solid #ddd; border-radius: 9999px; font-size: 13px; color: #555; cursor: pointer; transition: all 0.2s ease; }
+  .search-chip:hover { background: #007aff; color: white; border-color: #007aff; }
+  .search-chip .remove { font-size: 16px; opacity: 0.6; margin-left: 2px; }
+  #activeFilters .search-chip { background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); color: #ffffff; border-color: transparent; font-weight: 700; box-shadow: 0 4px 12px rgba(0,175,240,0.35); }
+  #activeFilters .search-chip .remove { color: #ffffff; opacity: 0.85; }
+
+  /* Card styles (match homepage) */
     .card { background:white; color:#1d1d1f; border:none; border-radius:20px; transition:all .3s ease; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.08); position:relative; }
     .card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
     .card img { border-radius: 20px 20px 0 0; height: 360px; object-fit: cover; width: 100%; min-height: 360px; background: linear-gradient(90deg, #e8e8e8 25%, #f0f0f0 50%, #e8e8e8 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
@@ -116,14 +141,17 @@
             <input id="bundles" type="checkbox" class="form-check-input me-2">
             <label for="bundles" class="form-check-label me-4">Bundle subscriptions</label>
           </div>
-          <div class="price-group" style="display:flex; align-items:center; flex-wrap:nowrap;">
+          <div class="price-group">
             <label for="price" class="form-label me-2">Max price ($)</label>
-            <input id="price" type="range" class="form-range" min="0" max="100" value="100" step="1" style="width:240px;">
-            <span id="price-value" class="ms-2" style="display:inline-block; min-width:44px; text-align:center; padding:4px 10px; border-radius:9999px; background:linear-gradient(135deg,#00AFF0 0%,#0099D6 100%); color:#fff; font-weight:800;">100</span>
+            <input id="price" type="range" class="form-range price-range" min="0" max="100" value="100" step="1">
+            <span id="price-value" class="ms-2 price-value">100</span>
           </div>
           <button id="resetFilters" type="button" class="btn-reset">Reset filters</button>
         </div>
       </div>
+
+      <!-- Active filters chips -->
+      <div id="activeFilters" class="recent-searches" aria-live="polite"></div>
 
       <!-- Results -->
       <div id="results" class="row g-3 justify-content-center"></div>
@@ -152,6 +180,10 @@
   </main>
 
   <script>
+    // Scroll preservation like homepage
+    let savedScrollY = 0;
+    function lockScroll(){ savedScrollY = window.scrollY || window.pageYOffset || 0; }
+    function restoreScroll(){ if(savedScrollY>0){ requestAnimationFrame(()=>{ requestAnimationFrame(()=>{ window.scrollTo({ top: savedScrollY, left: 0, behavior: 'instant' }); }); }); } }
     // ----- Utilities -----
     function titleCase(str){ return str.replace(/\b\w/g, c => c.toUpperCase()); }
     function slugToLabel(slug){ return titleCase(decodeURIComponent(slug.replace(/-/g,' '))); }
@@ -258,19 +290,44 @@
     }
 
     // Filters
+    // Match homepage interaction patterns
+    verifiedToggle.addEventListener('pointerdown', lockScroll);
+    verifiedToggle.addEventListener('touchstart', lockScroll, { passive: true });
+    verifiedToggle.addEventListener('change', () => { lockScroll(); performSearch(true); });
+
+    bundlesToggle.addEventListener('pointerdown', lockScroll);
+    bundlesToggle.addEventListener('touchstart', lockScroll, { passive: true });
+    bundlesToggle.addEventListener('change', () => { lockScroll(); performSearch(true); });
+
+    priceRange.addEventListener('pointerdown', lockScroll);
+    priceRange.addEventListener('touchstart', lockScroll, { passive: true });
     priceRange.addEventListener('input', () => { priceValue.textContent = priceRange.value; });
-    verifiedToggle.addEventListener('change', () => performSearch(true));
-    bundlesToggle.addEventListener('change', () => performSearch(true));
-    priceRange.addEventListener('change', () => performSearch(true));
+    priceRange.addEventListener('change', () => { lockScroll(); performSearch(true); });
+
     document.getElementById('resetFilters').addEventListener('click', () => {
+      lockScroll();
       verifiedToggle.checked = false; bundlesToggle.checked = false; priceRange.value = '100'; priceValue.textContent = '100'; performSearch(true);
     });
 
     function updateURL(){
       const params = new URLSearchParams();
       if (currentPage > 1) params.set('page', String(currentPage));
+      if (verifiedToggle.checked) params.set('verified', 'true');
+      if (bundlesToggle.checked) params.set('bundles', 'true');
+      if (priceRange.value !== '100') params.set('max', priceRange.value);
       const newURL = params.toString() ? `${location.pathname}?${params.toString()}` : location.pathname;
       history.replaceState({}, '', newURL);
+    }
+
+    function updateActiveFilters(){
+      const wrap = document.getElementById('activeFilters');
+      if (!wrap) return;
+      const chips = [];
+      if (verifiedToggle.checked) chips.push(`<div class="search-chip" data-filter="verified">Verified only <span class="remove" aria-label="Remove">×</span></div>`);
+      if (bundlesToggle.checked) chips.push(`<div class="search-chip" data-filter="bundles">Bundles <span class="remove" aria-label="Remove">×</span></div>`);
+      if (priceRange.value !== '100') chips.push(`<div class="search-chip" data-filter="max">Max $${priceRange.value} <span class="remove" aria-label="Remove">×</span></div>`);
+      wrap.innerHTML = chips.join('');
+      wrap.style.display = chips.length ? 'flex' : 'none';
     }
 
     async function performSearch(resetPage = true, append = false){
@@ -281,7 +338,8 @@
         if (resetPage) {
           currentPage = 1; hasMore = true; resultsDiv.innerHTML = ''; if (loadMoreBtn){ loadMoreBtn.disabled = false; loadMoreBtn.querySelector('.btn-text').textContent = 'Load More Creators'; } if (loadMoreContainer) loadMoreContainer.style.display = 'none';
         }
-        updateURL();
+  updateURL();
+  updateActiveFilters();
         const q = label;
         const verified = verifiedToggle.checked;
         const bundles = bundlesToggle.checked;
@@ -295,7 +353,7 @@
         const text = await response.text();
         let data; try { data = JSON.parse(text); } catch { throw new Error('Invalid JSON from server'); }
         if (!Array.isArray(data)) { throw new Error('Invalid data format'); }
-        if (data.length === 0) { resultsDiv.innerHTML = `<p class='text-muted'>No results found for <strong>${label}</strong>.</p>`; statusDiv.textContent = '0 results'; hasMore = false; updateLoadMoreButton(); isLoading = false; return; }
+  if (data.length === 0) { resultsDiv.innerHTML = `<p class='text-muted'>No results found for <strong>${label}</strong>.</p>`; statusDiv.textContent = '0 results'; hasMore = false; updateLoadMoreButton(); isLoading = false; restoreScroll(); return; }
         data.forEach((item) => {
           const img = item.avatar || item.avatar_c144 || '';
           const imgSrc = img && img.startsWith('http') ? img : '/static/no-image.png';
@@ -329,15 +387,17 @@
           resultsDiv.appendChild(col);
         });
         statusDiv.textContent = `Showing ${resultsDiv.children.length} results`;
-        hasMore = data.length === pageSize;
-        isLoading = false;
-        updateLoadMoreButton();
+  hasMore = data.length === pageSize;
+  isLoading = false;
+  updateLoadMoreButton();
+  restoreScroll();
       } catch(err){
         console.error(err);
         errorDiv.textContent = 'Error loading results.';
         statusDiv.textContent = err.message;
         isLoading = false;
-        if (loadMoreContainer) loadMoreContainer.style.display = 'none';
+    if (loadMoreContainer) loadMoreContainer.style.display = 'none';
+    restoreScroll();
       }
     }
 
