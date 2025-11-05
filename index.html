@@ -370,8 +370,8 @@
       background: rgba(255, 255, 255, 0.3);
     }
 
-    /* Desktop header nav (Categories dropdown) */
-    .desktop-nav { position: relative; }
+  /* Desktop header nav (Categories dropdown) */
+  .desktop-nav { position: relative; flex-shrink: 0; }
     .desktop-nav .nav-btn {
       display: inline-flex;
       align-items: center;
@@ -1007,6 +1007,16 @@
           </div>
         </a>
 
+        <!-- Desktop categories (moved next to logo) -->
+        <div class="desktop-nav">
+          <button id="categoriesToggle" class="nav-btn" aria-haspopup="true" aria-expanded="false">
+            Categories <i class="fas fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div id="categoriesMenu" class="dropdown-menu" role="menu" aria-hidden="true">
+            <!-- Populated dynamically from config/categories.js -->
+          </div>
+        </div>
+
         <!-- Search - THE CENTERPIECE -->
         <div class="header-search-section">
           <div class="header-search-wrapper">
@@ -1026,14 +1036,6 @@
 
         <!-- Actions -->
         <div class="header-actions">
-          <div class="desktop-nav">
-            <button id="categoriesToggle" class="nav-btn" aria-haspopup="true" aria-expanded="false">
-              Categories <i class="fas fa-chevron-down" aria-hidden="true"></i>
-            </button>
-            <div id="categoriesMenu" class="dropdown-menu" role="menu" aria-hidden="true">
-              <!-- Populated dynamically from config/categories.js -->
-            </div>
-          </div>
           <!-- Mobile menu toggle only -->
           <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
             <i class="fas fa-bars"></i>
