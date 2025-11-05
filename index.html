@@ -370,6 +370,60 @@
       background: rgba(255, 255, 255, 0.3);
     }
 
+    /* Desktop header nav (Categories dropdown) */
+    .desktop-nav { position: relative; }
+    .desktop-nav .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 9999px;
+      padding: 10px 14px;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+    .desktop-nav .nav-btn:hover { background: rgba(255,255,255,0.3); }
+    .desktop-nav .nav-btn i { font-size: 12px; opacity: 0.9; }
+    .desktop-nav .dropdown-menu {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 8px);
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+      padding: 8px;
+      min-width: 240px;
+      display: none;
+      z-index: 10000;
+    }
+    .desktop-nav .dropdown-menu.open { display: block; }
+    .desktop-nav .dropdown-menu a {
+      display: block;
+      padding: 10px 12px;
+      color: #1d1d1f;
+      font-weight: 700;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background .15s ease, color .15s ease;
+    }
+    .desktop-nav .dropdown-menu a:hover { background: #f5f5f7; color: #00AFF0; }
+    .desktop-nav .dropdown-menu .divider { height: 1px; background: #eee; margin: 6px 6px; }
+    .desktop-nav .dropdown-menu a.view-all { color: #00AFF0; }
+
+    /* Mobile drawer */
+    .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 10000; opacity: 0; pointer-events: none; transition: opacity .3s ease; }
+    .drawer-overlay.open { opacity: 1; pointer-events: auto; }
+    .mobile-drawer { position: fixed; top: 0; right: -100%; width: 82%; max-width: 340px; height: 100%; background: #fff; box-shadow: -8px 0 24px rgba(0,0,0,0.2); z-index: 10001; padding: 16px; display: flex; flex-direction: column; gap: 6px; transition: right .3s ease; }
+    .mobile-drawer.open { right: 0; }
+    .mobile-drawer .drawer-close { align-self: flex-end; background: none; border: none; font-size: 28px; line-height: 1; color: #1d1d1f; margin-bottom: 4px; cursor: pointer; }
+    .mobile-drawer a { padding: 12px 10px; border-radius: 8px; color: #1d1d1f; font-weight: 700; text-decoration: none; }
+    .mobile-drawer a:hover { background: #f5f5f7; color: #00AFF0; }
+    .mobile-drawer .drawer-section { margin-top: 8px; color: #666; font-size: 12px; text-transform: uppercase; letter-spacing: .6px; padding: 8px 10px; }
+
     /* Header responsive breakpoints */
     @media (max-width: 1200px) {
       .db-count .number { font-size: 16px; }
@@ -387,10 +441,10 @@
       .header-container { flex-wrap: wrap; gap: 12px; }
       .logo-text .tagline { display: none; }
       .header-search-section { order: 3; width: 100%; max-width: 100%; }
-      /* Hide the mobile menu toggle to give the search full width */
-      .mobile-menu-toggle { display: none; }
-      /* Also hide the actions wrapper since it's empty now */
-      .header-actions { display: none; }
+      /* Show burger on mobile; hide desktop nav */
+      .desktop-nav { display: none; }
+      .mobile-menu-toggle { display: inline-flex; }
+      .header-actions { display: flex; }
       .header-main { padding: 8px 0; }
     }
 
@@ -972,6 +1026,25 @@
 
         <!-- Actions -->
         <div class="header-actions">
+          <div class="desktop-nav">
+            <button id="categoriesToggle" class="nav-btn" aria-haspopup="true" aria-expanded="false">
+              Categories <i class="fas fa-chevron-down" aria-hidden="true"></i>
+            </button>
+            <div id="categoriesMenu" class="dropdown-menu" role="menu" aria-hidden="true">
+              <a role="menuitem" href="/categories/milf/">MILF</a>
+              <a role="menuitem" href="/categories/big-ass/">Big Ass</a>
+              <a role="menuitem" href="/categories/ebony/">Ebony</a>
+              <a role="menuitem" href="/categories/asian/">Asian</a>
+              <a role="menuitem" href="/categories/cosplay/">Cosplay</a>
+              <a role="menuitem" href="/categories/big-tits/">Big Tits</a>
+              <a role="menuitem" href="/categories/redhead/">Redhead</a>
+              <a role="menuitem" href="/categories/lesbian/">Lesbian</a>
+              <a role="menuitem" href="/categories/bbw/">BBW</a>
+              <a role="menuitem" href="/categories/pawg/">PAWG</a>
+              <div class="divider"></div>
+              <a class="view-all" role="menuitem" href="/categories/">Browse all categories →</a>
+            </div>
+          </div>
           <!-- Mobile menu toggle only -->
           <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
             <i class="fas fa-bars"></i>
@@ -980,6 +1053,25 @@
       </div>
     </div>
   </header>
+
+  <!-- Mobile Drawer -->
+  <div id="drawerOverlay" class="drawer-overlay" tabindex="-1" aria-hidden="true"></div>
+  <nav id="mobileDrawer" class="mobile-drawer" aria-hidden="true" aria-labelledby="mobileMenuToggle">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">×</button>
+    <a href="/">Home</a>
+    <a href="/categories/">Categories</a>
+    <div class="drawer-section">Popular</div>
+    <a href="/categories/milf/">MILF</a>
+    <a href="/categories/big-ass/">Big Ass</a>
+    <a href="/categories/ebony/">Ebony</a>
+    <a href="/categories/asian/">Asian</a>
+    <a href="/categories/cosplay/">Cosplay</a>
+    <a href="/categories/big-tits/">Big Tits</a>
+    <a href="/categories/redhead/">Redhead</a>
+    <a href="/categories/lesbian/">Lesbian</a>
+    <a href="/categories/bbw/">BBW</a>
+    <a href="/categories/pawg/">PAWG</a>
+  </nav>
 
   <div class="container text-center">
   <h1 class="mb-4" style="color:#00aff0; font-weight:800;">The Best Onlyfans Search Engine - Find OF Accounts FAST</h1>
@@ -1106,6 +1198,45 @@
         }
       }
     });
+
+    // Desktop Categories dropdown
+    const catToggle = document.getElementById('categoriesToggle');
+    const catMenu = document.getElementById('categoriesMenu');
+    if (catToggle && catMenu) {
+      catToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = catMenu.classList.toggle('open');
+        catToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        catMenu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+      });
+      document.addEventListener('click', (e) => {
+        if (!catMenu.classList.contains('open')) return;
+        if (!catMenu.contains(e.target) && e.target !== catToggle) {
+          catMenu.classList.remove('open');
+          catToggle.setAttribute('aria-expanded', 'false');
+          catMenu.setAttribute('aria-hidden', 'true');
+        }
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          catMenu.classList.remove('open');
+          catToggle.setAttribute('aria-expanded', 'false');
+          catMenu.setAttribute('aria-hidden', 'true');
+        }
+      });
+    }
+
+    // Mobile drawer
+    const mobileToggle = document.getElementById('mobileMenuToggle');
+    const drawer = document.getElementById('mobileDrawer');
+    const overlay = document.getElementById('drawerOverlay');
+    const drawerClose = document.getElementById('drawerClose');
+    function openDrawer(){ if (!drawer || !overlay) return; drawer.classList.add('open'); overlay.classList.add('open'); drawer.setAttribute('aria-hidden','false'); overlay.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+    function closeDrawer(){ if (!drawer || !overlay) return; drawer.classList.remove('open'); overlay.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); overlay.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+    if (mobileToggle){ mobileToggle.addEventListener('click', (e)=>{ e.preventDefault(); openDrawer(); }); }
+    if (overlay){ overlay.addEventListener('click', closeDrawer); }
+    if (drawerClose){ drawerClose.addEventListener('click', closeDrawer); }
+    document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeDrawer(); });
 
     // Connect header search to main search
   const headerSearch = document.getElementById('headerSearch');
