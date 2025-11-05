@@ -8,7 +8,7 @@ export const categories = [
   'nude', 'reddit', 'models', 'sex', 'gay', 'anal', 'feet', 'twitter', 'asian', 'trans', 'indian',
   'lesbian', 'squirt', 'korean', 'couple', 'milf', 'tiktok', 'girl', 'cosplay', 'big tits', 'blowjobs', 'boobs',
   'sextape', 'creampie', 'joi', 'threesome', 'teen (18+)', 'shemale', 'bbc', 'tits', 'ebony', 'pornhub',
-  'footjob', 'bbw', 'mature', 'teacher', 'pussy', 'scottish', 'cuckold', 'big ass', 'squirting', 'hottest',
+  'footjob', 'foot fetish', 'bbw', 'mature', 'teacher', 'pussy', 'scottish', 'cuckold', 'big ass', 'squirting', 'hottest',
   'amateur', 'blonde', 'japanese', 'instagram', 'pawg', 'gangbang', 'redhead', 'male', 'vip', 'famous',
   'twins', 'ass', 'deepthroat', 'pregnant', 'handjob', 'facial', 'asmr', 'pegging', 'no ppv', 'nurse'
 ];
@@ -24,7 +24,8 @@ export const popularCategories = [
   'redhead',
   'lesbian',
   'bbw',
-  'pawg'
+  'pawg',
+  'foot fetish'
 ];
 
 // Convert category name to URL slug
