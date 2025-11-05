@@ -1031,18 +1031,7 @@
               Categories <i class="fas fa-chevron-down" aria-hidden="true"></i>
             </button>
             <div id="categoriesMenu" class="dropdown-menu" role="menu" aria-hidden="true">
-              <a role="menuitem" href="/categories/milf/">MILF</a>
-              <a role="menuitem" href="/categories/big-ass/">Big Ass</a>
-              <a role="menuitem" href="/categories/ebony/">Ebony</a>
-              <a role="menuitem" href="/categories/asian/">Asian</a>
-              <a role="menuitem" href="/categories/cosplay/">Cosplay</a>
-              <a role="menuitem" href="/categories/big-tits/">Big Tits</a>
-              <a role="menuitem" href="/categories/redhead/">Redhead</a>
-              <a role="menuitem" href="/categories/lesbian/">Lesbian</a>
-              <a role="menuitem" href="/categories/bbw/">BBW</a>
-              <a role="menuitem" href="/categories/pawg/">PAWG</a>
-              <div class="divider"></div>
-              <a class="view-all" role="menuitem" href="/categories/">Browse all categories →</a>
+              <!-- Populated dynamically from config/categories.js -->
             </div>
           </div>
           <!-- Mobile menu toggle only -->
@@ -1061,16 +1050,9 @@
     <a href="/">Home</a>
     <a href="/categories/">Categories</a>
     <div class="drawer-section">Popular</div>
-    <a href="/categories/milf/">MILF</a>
-    <a href="/categories/big-ass/">Big Ass</a>
-    <a href="/categories/ebony/">Ebony</a>
-    <a href="/categories/asian/">Asian</a>
-    <a href="/categories/cosplay/">Cosplay</a>
-    <a href="/categories/big-tits/">Big Tits</a>
-    <a href="/categories/redhead/">Redhead</a>
-    <a href="/categories/lesbian/">Lesbian</a>
-    <a href="/categories/bbw/">BBW</a>
-    <a href="/categories/pawg/">PAWG</a>
+    <div id="drawerCategories">
+      <!-- Populated dynamically from config/categories.js -->
+    </div>
   </nav>
 
   <div class="container text-center">
@@ -1172,6 +1154,35 @@
     <button id="backToTop" aria-label="Back to top" title="Back to top">↑</button>
   </div>
 
+  <script type="module">
+    // ============================================
+    // DYNAMIC CATEGORY NAVIGATION (uses shared config)
+    // ============================================
+    import { popularCategories, categoryToSlug } from './config/categories.js';
+    
+    // Render desktop dropdown menu
+    const catMenu = document.getElementById('categoriesMenu');
+    if (catMenu) {
+      const menuHTML = popularCategories.map(cat => {
+        const slug = categoryToSlug(cat);
+        const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        return `<a role="menuitem" href="/categories/${slug}/">${label}</a>`;
+      }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Browse all categories →</a>';
+      catMenu.innerHTML = menuHTML;
+    }
+    
+    // Render mobile drawer categories
+    const drawerCats = document.getElementById('drawerCategories');
+    if (drawerCats) {
+      const drawerHTML = popularCategories.map(cat => {
+        const slug = categoryToSlug(cat);
+        const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        return `<a href="/categories/${slug}/">${label}</a>`;
+      }).join('');
+      drawerCats.innerHTML = drawerHTML;
+    }
+  </script>
+
   <script>
     // ============================================
     // HEADER FUNCTIONALITY
@@ -1201,27 +1212,27 @@
 
     // Desktop Categories dropdown
     const catToggle = document.getElementById('categoriesToggle');
-    const catMenu = document.getElementById('categoriesMenu');
-    if (catToggle && catMenu) {
+    const catMenuEl = document.getElementById('categoriesMenu');
+    if (catToggle && catMenuEl) {
       catToggle.addEventListener('click', (e) => {
         e.stopPropagation();
-        const isOpen = catMenu.classList.toggle('open');
+        const isOpen = catMenuEl.classList.toggle('open');
         catToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-        catMenu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+        catMenuEl.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
       });
       document.addEventListener('click', (e) => {
-        if (!catMenu.classList.contains('open')) return;
-        if (!catMenu.contains(e.target) && e.target !== catToggle) {
-          catMenu.classList.remove('open');
+        if (!catMenuEl.classList.contains('open')) return;
+        if (!catMenuEl.contains(e.target) && e.target !== catToggle) {
+          catMenuEl.classList.remove('open');
           catToggle.setAttribute('aria-expanded', 'false');
-          catMenu.setAttribute('aria-hidden', 'true');
+          catMenuEl.setAttribute('aria-hidden', 'true');
         }
       });
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-          catMenu.classList.remove('open');
+          catMenuEl.classList.remove('open');
           catToggle.setAttribute('aria-expanded', 'false');
-          catMenu.setAttribute('aria-hidden', 'true');
+          catMenuEl.setAttribute('aria-hidden', 'true');
         }
       });
     }
