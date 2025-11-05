@@ -1111,7 +1111,7 @@
         <div class="header-actions">
           <!-- Dark mode toggle -->
           <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-            <i class="fas fa-sun"></i>
+            <i class="fas fa-moon"></i>
           </button>
           <!-- Mobile menu toggle only -->
           <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
@@ -1282,10 +1282,10 @@
       document.documentElement.setAttribute('data-theme', theme);
       const icon = themeToggle.querySelector('i');
       if (theme === 'dark') {
-        icon.className = 'fas fa-moon';
+        icon.className = 'fas fa-sun';
         themeToggle.setAttribute('aria-label', 'Switch to light mode');
       } else {
-        icon.className = 'fas fa-sun';
+        icon.className = 'fas fa-moon';
         themeToggle.setAttribute('aria-label', 'Switch to dark mode');
       }
     }
