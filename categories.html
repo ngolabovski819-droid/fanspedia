@@ -92,6 +92,17 @@
     .category-section { max-width: 1100px; margin: 0 auto; padding: 0 16px 40px; }
     .section-title { font-size: 20px; font-weight: 800; color: #1d1d1f; margin: 8px 0 6px; text-align: center; }
     .section-subtle { color: #6b7280; font-size: 13px; text-align: center; margin-bottom: 8px; }
+
+    /* Favorites bar (read-only chips of saved models) */
+    .favorites-bar { display:none; gap:8px; align-items:center; overflow-x:auto; white-space:nowrap; padding:8px 0; margin-top:6px; scroll-snap-type:x proximity; overscroll-behavior-x:contain; -webkit-overflow-scrolling:touch; justify-content:center; }
+    .favorite-chip { display:inline-flex; align-items:center; gap:8px; padding:6px 12px; background:#fff; border:1px solid #d6ecfa; border-radius:9999px; color:#0099D6; font-weight:700; box-shadow:0 2px 6px rgba(0,175,240,0.12); transition:transform .2s ease, box-shadow .2s ease; scroll-snap-align:start; }
+    .favorite-chip:hover { transform: translateY(-1px); box-shadow:0 6px 14px rgba(0,175,240,0.2); }
+    .favorite-chip .heart { color:#00AFF0; font-size:14px; }
+    .favorite-chip .open { color: inherit; text-decoration: none; }
+    .favorite-chip .remove { background:none; border:none; color:#888; cursor:pointer; font-size:16px; line-height:1; padding:0 2px; margin-left:4px; border-radius:6px; transition:color .2s, background .2s; }
+    .favorites-bar::-webkit-scrollbar{ display:none; }
+    .favorites-bar{ scrollbar-width:none; }
+    .favorite-chip .remove:hover{ color:#fff; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); }
   </style>
 </head>
 <body>
@@ -148,6 +159,11 @@
     <section class="categories-hero container">
       <h1>Search OnlyFans accounts by Category</h1>
       <p>Find OnlyFans accounts most suited for you. Browse the most extensive list of creators categorized by your preferences. Click a tag to jump right into results.</p>
+    </section>
+
+    <!-- Favorites bar (shows across site) -->
+    <section class="category-section" aria-label="Favorites">
+      <div id="favoritesBar" class="favorites-bar" aria-live="polite"></div>
     </section>
 
     <section class="category-section">
@@ -267,6 +283,14 @@
         return `<a class="category-chip" href="/categories/${slug}/"><i class='fas fa-hashtag' aria-hidden='true'></i><span>${lbl}</span></a>`;
       }).join('');
     }
+
+  // Favorites bar (read from localStorage, removable)
+  const favoritesBar = document.getElementById('favoritesBar');
+  function getFavoritesSet(){ try { const raw = localStorage.getItem('favorites') || '[]'; const arr = JSON.parse(raw); return new Set(Array.isArray(arr)?arr:[]);} catch { return new Set(); } }
+  function saveFavoritesSet(set){ try { localStorage.setItem('favorites', JSON.stringify(Array.from(set))); } catch {} }
+  function toggleFavorite(username){ if(!username) return; const set=getFavoritesSet(); if(set.has(username)){ set.delete(username);} else { set.add(username);} saveFavoritesSet(set); renderFavoritesBar(); }
+  function renderFavoritesBar(){ if(!favoritesBar) return; const list = Array.from(getFavoritesSet()); if(list.length===0){ favoritesBar.style.display='none'; favoritesBar.innerHTML=''; return; } favoritesBar.style.display='flex'; favoritesBar.innerHTML = list.map(u=>{ const safe=String(u).replace(/'/g, "\\'"); const url=`https://onlyfans.com/${encodeURIComponent(u)}`; return `<div class='favorite-chip' data-username='${safe}' onclick=\"window.open('${url}','_blank')\"><span class='heart'>♥</span><a class='open' href='${url}' target='_blank' rel='noopener'>@${u}</a><button class='remove' aria-label='Remove' onclick=\"event.stopPropagation(); toggleFavorite('${safe}');\">&times;</button></div>`; }).join(''); }
+    renderFavoritesBar();
   </script>
 
   <footer class="text-center mt-4 pb-4" style="color:#666;font-size:14px;">

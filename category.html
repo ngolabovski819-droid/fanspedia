@@ -123,6 +123,17 @@
     .load-more-btn:disabled { background: linear-gradient(135deg, #ccc 0%, #999 100%); cursor:not-allowed; box-shadow:none; }
     #backToTop { position: fixed; right: 16px; bottom: 80px; width: 48px; height: 48px; border-radius: 9999px; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); color: #fff; border: none; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 6px 18px rgba(0,175,240,0.35); cursor: pointer; opacity: 0; pointer-events: none; transform: translateY(6px); transition: opacity .25s ease, transform .25s ease; z-index:1000; }
     #backToTop.visible { opacity:1; pointer-events:auto; transform: translateY(0); }
+
+    /* Favorites bar (same as homepage) */
+    .favorites-bar { display:none; gap:8px; align-items:center; overflow-x:auto; white-space:nowrap; padding:8px 0; margin-top:6px; scroll-snap-type:x proximity; overscroll-behavior-x:contain; -webkit-overflow-scrolling:touch; }
+    .favorite-chip { display:inline-flex; align-items:center; gap:8px; padding:6px 12px; background:#fff; border:1px solid #d6ecfa; border-radius:9999px; color:#0099D6; font-weight:700; box-shadow:0 2px 6px rgba(0,175,240,0.12); transition:transform .2s ease, box-shadow .2s ease; scroll-snap-align:start; }
+    .favorite-chip:hover { transform: translateY(-1px); box-shadow:0 6px 14px rgba(0,175,240,0.2); }
+    .favorite-chip .heart { color:#00AFF0; font-size:14px; }
+    .favorite-chip .open { color: inherit; text-decoration: none; }
+    .favorite-chip .remove { background:none; border:none; color:#888; cursor:pointer; font-size:16px; line-height:1; padding:0 2px; margin-left:4px; border-radius:6px; transition:color .2s, background .2s; }
+    .favorites-bar::-webkit-scrollbar{ display:none; }
+    .favorites-bar{ scrollbar-width:none; }
+    .favorite-chip .remove:hover{ color:#fff; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); }
   </style>
 </head>
 <body>
@@ -200,6 +211,9 @@
 
       <!-- Active filters chips -->
       <div id="activeFilters" class="recent-searches" aria-live="polite"></div>
+
+  <!-- Favorites bar -->
+  <div id="favoritesBar" class="favorites-bar" aria-label="Favorites" aria-live="polite"></div>
 
       <!-- Results -->
       <div id="results" class="row g-3 justify-content-center"></div>
@@ -346,9 +360,10 @@
     }
 
     // ----- Results variables -----
-    const resultsDiv = document.getElementById('results');
+  const resultsDiv = document.getElementById('results');
     const errorDiv = document.getElementById('error');
     const statusDiv = document.getElementById('status');
+  const favoritesBar = document.getElementById('favoritesBar');
     const verifiedToggle = document.getElementById('verified');
     const bundlesToggle = document.getElementById('bundles');
     const priceRange = document.getElementById('price');
@@ -378,10 +393,12 @@
       return { src, srcset, sizes };
     }
 
-    // Favorites helpers (copied)
-    function getFavoritesSet() { try { const raw = localStorage.getItem('favorites') || '[]'; const arr = JSON.parse(raw); return new Set(Array.isArray(arr) ? arr : []);} catch { return new Set(); } }
-    function saveFavoritesSet(set){ try { localStorage.setItem('favorites', JSON.stringify(Array.from(set))); } catch {} }
-    function toggleFavorite(username, btnEl){ if(!username) return; const set=getFavoritesSet(); let active; if(set.has(username)){ set.delete(username); active=false;} else { set.add(username); active=true;} saveFavoritesSet(set); if(btnEl){ btnEl.classList.toggle('active', active); const s=btnEl.querySelector('span'); if(s) s.textContent = active ? '♥' : '♡'; } }
+  // Favorites (match homepage behavior)
+  function getFavoritesSet() { try { const raw = localStorage.getItem('favorites') || '[]'; const arr = JSON.parse(raw); return new Set(Array.isArray(arr) ? arr : []);} catch { return new Set(); } }
+  function saveFavoritesSet(set){ try { localStorage.setItem('favorites', JSON.stringify(Array.from(set))); } catch {} }
+  function updateFavoriteButtons(username, active){ try{ const buttons = document.querySelectorAll(`.favorite-btn[data-username="${CSS.escape(username)}"]`); buttons.forEach(b=>{ b.classList.toggle('active', active); const s=b.querySelector('span'); if(s) s.textContent = active ? '♥' : '♡'; }); }catch{} }
+  function renderFavoritesBar(){ if(!favoritesBar) return; const set=getFavoritesSet(); const list=Array.from(set); if(list.length===0){ favoritesBar.style.display='none'; favoritesBar.innerHTML=''; return; } favoritesBar.style.display='flex'; favoritesBar.innerHTML = list.map(u=>{ const safe=String(u).replace(/'/g, "\\'"); const url=`https://onlyfans.com/${encodeURIComponent(u)}`; return `<div class="favorite-chip" data-username="${safe}" onclick="window.open('${url}','_blank')"><span class='heart'>♥</span><a class='open' href='${url}' target='_blank' rel='noopener'>@${u}</a><button class='remove' aria-label='Remove' onclick="event.stopPropagation(); toggleFavorite('${safe}');">&times;</button></div>`; }).join(''); }
+  function toggleFavorite(username, btnEl){ if(!username) return; const set=getFavoritesSet(); let active; if(set.has(username)){ set.delete(username); active=false; } else { set.add(username); active=true; } saveFavoritesSet(set); if(btnEl){ btnEl.classList.toggle('active', active); const s=btnEl.querySelector('span'); if(s) s.textContent = active ? '♥' : '♡'; } updateFavoriteButtons(username, active); renderFavoritesBar(); }
 
     function updateLoadMoreButton(){
       const totalLoaded = resultsDiv.children.length;
@@ -524,8 +541,9 @@
     });
     if (backToTopBtn) backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-    // Initial load
+  // Initial load
     document.getElementById('status').textContent = label ? `Loading ${label} creators...` : 'Loading...';
+  renderFavoritesBar();
     performSearch(true);
   </script>
 
