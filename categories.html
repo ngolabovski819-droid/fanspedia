@@ -170,7 +170,10 @@
     </section>
   </main>
 
-  <script>
+  <script type="module">
+    // Import shared categories config
+    import { categories, categoryToSlug } from './config/categories.js';
+
     // Header shadow
     window.addEventListener('scroll', () => {
       const h = document.getElementById('mainHeader');
@@ -222,20 +225,11 @@
 
     // No hero search UI here; header search handles queries and redirects to homepage
 
-    // Category chips
-    const tags = [
-      'nude','reddit','models','sex','gay','anal','feet','twitter','asian','trans','indian',
-      'lesbian','squirt','korean','couple','milf','tiktok','girl','cosplay','big tits','blowjobs','boobs',
-      'sextape','creampie','joi','threesome','teen (18+)','shemale','bbc','tits','ebony','pornhub',
-      'footjob','bbw','mature','teacher','pussy','scottish','cuckold','big ass','squirting','hottest',
-      'amateur','blonde','japanese','instagram','pawg','gangbang','redhead','male','vip','famous',
-      'twins','ass','deepthroat','pregnant','handjob','facial','asmr','pegging','no ppv','nurse'
-    ];
-    document.getElementById('chipGrid').innerHTML = tags.map(t => {
-      const lbl = t.startsWith('#') ? t : '#' + t; const q = encodeURIComponent(t);
-      // prefer clean category URLs (e.g., /categories/big-ass/)
-      const catSlug = t.toLowerCase().replace(/\s+/g,'-');
-      return `<a class="category-chip" href="/categories/${catSlug}/"><i class='fas fa-hashtag' aria-hidden='true'></i><span>${lbl}</span></a>`;
+    // Category chips - using imported categories
+    document.getElementById('chipGrid').innerHTML = categories.map(cat => {
+      const lbl = cat.startsWith('#') ? cat : '#' + cat;
+      const slug = categoryToSlug(cat);
+      return `<a class="category-chip" href="/categories/${slug}/"><i class='fas fa-hashtag' aria-hidden='true'></i><span>${lbl}</span></a>`;
     }).join('');
   </script>
 
