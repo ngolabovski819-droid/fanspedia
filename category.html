@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OnlyFans Categories | BestOnlyFansGirls</title>
-  <meta name="description" content="Browse OnlyFans categories and jump straight to results. Find creators by tags like MILF, cosplay, lesbian, ebony, big tits, and more." />
-  <link rel="canonical" href="https://bestonlyfansgirls.net/category" />
+  <title>Best OnlyFans Category | BestOnlyFansGirls</title>
+  <meta name="description" content="Discover top OnlyFans creators by category. Filter by verified, bundles, and price.">
+  <link id="canonicalLink" rel="canonical" href="https://bestonlyfansgirls.net/categories/" />
 
   <!-- Preconnects -->
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preconnect" href="https://images.weserv.nl" crossorigin>
 
   <!-- Bootstrap + Font Awesome -->
   <link rel="preload" as="style" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" onload="this.onload=null;this.rel='stylesheet'">
@@ -20,43 +21,60 @@
     body { background-color: #f5f5f7; color: #1d1d1f; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; padding-top: 68px; }
     a { text-decoration: none; }
 
-    /* Superior header (copied from index to keep the same design) */
-    .superior-header { position: fixed; top: 0; left: 0; right: 0; z-index: 9999; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); box-shadow: 0 4px 24px rgba(0, 175, 240, 0.25); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-    .superior-header.scrolled { box-shadow: 0 8px 32px rgba(0, 175, 240, 0.35); }
+    /* Sticky header - match homepage */
+    .superior-header { position: fixed; top: 0; left: 0; right: 0; z-index: 9999; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); box-shadow: 0 4px 24px rgba(0,175,240,0.25); transition: all .3s cubic-bezier(0.4,0,0.2,1); }
+    .superior-header.scrolled { box-shadow: 0 8px 32px rgba(0,175,240,0.35); }
     .header-main { padding: 10px 0; backdrop-filter: blur(10px); }
     .header-container { max-width: 1400px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-    .logo-section { display: flex; align-items: center; gap: 12px; flex-shrink: 0; text-decoration: none; }
-    .logo-icon { width: 40px; height: 40px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .logo-section { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .logo-icon { width: 40px; height: 40px; background: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
     .logo-icon i { color: #00AFF0; }
     .logo-text { display: flex; flex-direction: column; }
     .logo-text .brand { font-size: 20px; font-weight: 800; color: #fff; letter-spacing: -0.5px; line-height: 1; text-shadow: 0 2px 8px rgba(0,0,0,0.2); }
     .logo-text .tagline { font-size: 11px; color: rgba(255,255,255,0.9); font-weight: 500; letter-spacing: 0.5px; margin-top: 2px; }
-
     .header-search-section { flex: 1; max-width: 560px; position: relative; }
     .header-search-wrapper { position: relative; display: flex; align-items: center; }
     .header-search-input { width: 100%; padding: 10px 16px 10px 44px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50px; background: rgba(255,255,255,0.95); font-size: 15px; font-weight: 500; color: #1d1d1f; transition: all 0.3s ease; box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
     .header-search-input:focus { outline: none; border-color: #fff; background: #fff; box-shadow: 0 8px 32px rgba(0,0,0,0.15); transform: translateY(-1px); }
     .header-search-icon { position: absolute; left: 16px; color: #00AFF0; font-size: 18px; pointer-events: none; }
-    .header-actions { display: none; }
+    .header-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .mobile-menu-toggle { display: none; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; width: 44px; height: 44px; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; justify-content: center; align-items: center; }
+    .mobile-menu-toggle:hover { background: rgba(255,255,255,0.3); }
+    @media (max-width: 768px) { body { padding-top: 66px; } .header-container { flex-wrap: wrap; gap: 12px; } .logo-text .tagline { display:none; } .header-search-section { order:3; width:100%; max-width:100%; } .header-actions{ display:none; } }
+    @media (max-width: 480px) { body { padding-top: 62px; } .logo-text .brand { font-size: 16px; } .header-search-input { padding: 10px 16px 10px 40px; font-size: 14px; } .header-main { padding: 6px 0; }
 
-    @media (max-width: 768px) { body { padding-top: 66px; } .header-container { flex-wrap: wrap; gap: 12px; } .logo-text .tagline { display: none; } .header-search-section { order: 3; width: 100%; max-width: 100%; } }
-    @media (max-width: 480px) { body { padding-top: 62px; } .logo-text .brand { font-size: 16px; } .header-search-input { padding: 10px 16px 10px 40px; font-size: 14px; } .header-main { padding: 6px 0; } }
+    .container { max-width: 1400px; margin-top: 32px; padding-bottom: 60px; }
+    h1 { color: #00aff0; font-weight: 800; letter-spacing: -0.4px; }
+    .subtitle { color: #5a5a5a; max-width: 900px; margin: 10px auto 20px; }
 
-    /* Categories layout */
-    .categories-hero { text-align: center; padding: 28px 0 8px; }
-    .categories-hero h1 { color: #00aff0; font-weight: 800; letter-spacing: -0.4px; }
-    .categories-hero p { color: #5a5a5a; max-width: 800px; margin: 8px auto 0; }
+    /* Filters */
+    .filters-container { background: #f5f5f7; padding: 16px 0; margin: 8px 0 20px; }
+    .filters { gap: 12px; }
+    .form-control, .form-range { border-radius: 12px; border: 1px solid #e0e0e0; background: white; }
+    .btn-reset { border-radius: 9999px; border: none; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); color: #fff; padding: 10px 16px; font-weight: 800; box-shadow: 0 4px 12px rgba(0,175,240,0.3); }
 
-    .chip-grid { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 18px auto 10px; }
-    .category-chip { display: inline-flex; align-items: center; padding: 10px 16px; background: #fff; border: 1px solid #e7eef6; border-radius: 9999px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); color: #1d1d1f; font-weight: 700; font-size: 14px; transition: transform .15s ease, box-shadow .15s ease, background .2s ease; }
-    .category-chip:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(0,175,240,0.25); background: #f8fdff; }
-    .category-chip i { margin-right: 8px; color: #00AFF0; }
+    /* Card styles (copied from index for consistency) */
+    .card { background:white; color:#1d1d1f; border:none; border-radius:20px; transition:all .3s ease; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.08); position:relative; }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+    .card img { border-radius: 20px 20px 0 0; height: 360px; object-fit: cover; width: 100%; min-height: 360px; background: linear-gradient(90deg, #e8e8e8 25%, #f0f0f0 50%, #e8e8e8 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+    @keyframes shimmer { 0%{ background-position:200% 0; } 100%{ background-position:-200% 0; } }
+    .favorite-btn { position:absolute; top:12px; right:12px; background:white; border:none; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.15); transition:all .2s ease; z-index:10; font-size:20px; }
+    .favorite-btn span { color:#ccc; }
+    .favorite-btn:hover { transform: scale(1.1); background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); box-shadow: 0 6px 16px rgba(0,175,240,0.35); }
+    .favorite-btn:hover span { color:#fff !important; }
+    .favorite-btn.active { background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); box-shadow: 0 6px 16px rgba(0,175,240,0.35); transform:none; }
+    .favorite-btn.active span { color:#fff !important; }
+    .view-profile-btn { background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); color: white; border: none; padding: 14px 28px; border-radius: 12px; font-weight: 800; font-size: 16px; cursor: pointer; transition: all .25s ease; text-decoration:none; display:block; width:100%; text-align:center; margin-top:16px; box-shadow: 0 6px 18px rgba(0,175,240,0.35); }
 
-    .category-section { max-width: 1100px; margin: 0 auto; padding: 0 16px 40px; }
+    /* Load more */
+    .load-more-btn { background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); color:white; border:none; padding:18px 48px; font-size:18px; font-weight:800; border-radius:50px; cursor:pointer; transition: all .3s ease; box-shadow: 0 8px 24px rgba(0,175,240,0.35); display:inline-flex; align-items:center; gap:12px; position:relative; overflow:hidden; }
+    .load-more-btn:disabled { background: linear-gradient(135deg, #ccc 0%, #999 100%); cursor:not-allowed; box-shadow:none; }
+    #backToTop { position: fixed; right: 16px; bottom: 80px; width: 48px; height: 48px; border-radius: 9999px; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); color: #fff; border: none; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 6px 18px rgba(0,175,240,0.35); cursor: pointer; opacity: 0; pointer-events: none; transform: translateY(6px); transition: opacity .25s ease, transform .25s ease; z-index:1000; }
+    #backToTop.visible { opacity:1; pointer-events:auto; transform: translateY(0); }
   </style>
 </head>
 <body>
-  <!-- Header (same as index header) -->
+  <!-- Header -->
   <header class="superior-header" id="mainHeader">
     <div class="header-main">
       <div class="header-container">
@@ -67,73 +85,277 @@
             <div class="tagline">10k+ TOP Creators</div>
           </div>
         </a>
-
         <div class="header-search-section">
           <div class="header-search-wrapper">
             <i class="fas fa-search header-search-icon"></i>
             <input id="headerSearch" type="text" class="header-search-input" placeholder="Search by name, location, category..." autocomplete="off" autocapitalize="none" spellcheck="false" />
           </div>
         </div>
-
-        <div class="header-actions"></div>
+        <div class="header-actions">
+          <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
       </div>
     </div>
   </header>
 
   <main>
-    <section class="categories-hero container">
-      <h1>Search OnlyFans accounts by Category</h1>
-      <p>Find OnlyFans accounts most suited for you. Browse the most extensive list of creators categorized by your preferences. Click a tag to jump right into results.</p>
-    </section>
+    <div class="container text-center">
+      <h1 id="catH1" class="mb-2">Best OnlyFans Creators</h1>
+      <p id="catSubtitle" class="subtitle">Explore top creators in this category. Use filters below to refine your results.</p>
 
-    <section class="category-section">
-      <div id="chipGrid" class="chip-grid" aria-label="Categories"></div>
-    </section>
+      <!-- Filters (same as index) -->
+      <div class="filters-container">
+        <div class="d-flex justify-content-center align-items-center flex-wrap gap-3 filters">
+          <div class="form-check form-switch">
+            <input id="verified" type="checkbox" class="form-check-input me-2">
+            <label for="verified" class="form-check-label me-4">Verified only</label>
+          </div>
+          <div class="form-check form-switch">
+            <input id="bundles" type="checkbox" class="form-check-input me-2">
+            <label for="bundles" class="form-check-label me-4">Bundle subscriptions</label>
+          </div>
+          <div class="price-group" style="display:flex; align-items:center; flex-wrap:nowrap;">
+            <label for="price" class="form-label me-2">Max price ($)</label>
+            <input id="price" type="range" class="form-range" min="0" max="100" value="100" step="1" style="width:240px;">
+            <span id="price-value" class="ms-2" style="display:inline-block; min-width:44px; text-align:center; padding:4px 10px; border-radius:9999px; background:linear-gradient(135deg,#00AFF0 0%,#0099D6 100%); color:#fff; font-weight:800;">100</span>
+          </div>
+          <button id="resetFilters" type="button" class="btn-reset">Reset filters</button>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div id="results" class="row g-3 justify-content-center"></div>
+      <p id="error" class="error" style="color:#ff3b30; margin-top: 20px;"></p>
+      <p id="status" style="color:#888; margin-top: 10px; font-size: 14px;"></p>
+
+      <!-- Load More Button -->
+      <div id="loadMoreContainer" class="text-center my-4" style="display: none;">
+        <button id="loadMoreBtn" class="load-more-btn">
+          <span class="btn-text">Load More Creators</span>
+          <span class="btn-icon">↓</span>
+        </button>
+        <p id="loadedCount" class="mt-2" style="color: #888; font-size: 14px; margin-bottom: 0;"></p>
+      </div>
+
+      <!-- Back to top button -->
+      <button id="backToTop" aria-label="Back to top" title="Back to top">↑</button>
+
+      <!-- SEO content -->
+      <section id="seoSection" class="mt-5 pt-4" style="max-width:900px; margin:0 auto; text-align:left; border-top:1px solid #e0e0e0;">
+        <h2 id="seoH2" style="color:#1d1d1f; font-weight:700; font-size:26px; margin-bottom:16px;">About this category</h2>
+        <p id="seoP1" style="color:#666; font-size:16px; line-height:1.7; margin-bottom:16px;">Find the best OnlyFans creators related to this category. We aggregate thousands of profiles and let you filter by verified status, bundles, and price.</p>
+        <div id="faq" style="margin-top:20px;"></div>
+      </section>
+    </div>
   </main>
 
   <script>
-    // Header shadow on scroll
-    window.addEventListener('scroll', () => {
-      const header = document.getElementById('mainHeader');
-      if (!header) return;
-      if (window.pageYOffset > 50) header.classList.add('scrolled');
-      else header.classList.remove('scrolled');
-    });
-
-    // Header search: redirect to index with q param
-    const headerSearch = document.getElementById('headerSearch');
-    if (headerSearch) {
-      let cleared = false;
-      headerSearch.addEventListener('focus', () => { if (!cleared) { headerSearch.value=''; cleared = true; } }, { passive: true });
-      headerSearch.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          const q = headerSearch.value.trim();
-          const url = q ? '/?q=' + encodeURIComponent(q) : '/';
-          window.location.href = url;
-        }
-      });
+    // ----- Utilities -----
+    function titleCase(str){ return str.replace(/\b\w/g, c => c.toUpperCase()); }
+    function slugToLabel(slug){ return titleCase(decodeURIComponent(slug.replace(/-/g,' '))); }
+    function getSlug(){
+      const m = location.pathname.match(/\/categories\/([^\/]+)/i);
+      return m ? m[1] : '';
     }
 
-    // Category tags -> render chips linking to /?q=tag
-    const tags = [
-      'nude','reddit','models','sex','gay','anal','feet','twitter','asian','trans','indian',
-      'lesbian','squirt','korean','couple','milf','tiktok','girl','cosplay','big tits','blowjobs','boobs',
-      'sextape','creampie','joi','threesome','teen (18+)','shemale','bbc','tits','ebony','pornhub',
-      'footjob','bbw','mature','teacher','pussy','scottish','cuckold','big ass','squirting','hottest',
-      'amateur','blonde','japanese','instagram','pawg','gangbang','redhead','male','vip','famous',
-      'twins','ass','deepthroat','pregnant','handjob','facial','asmr','pegging','no ppv','nurse'
-    ];
-    const grid = document.getElementById('chipGrid');
-    grid.innerHTML = tags.map(t => {
-      const lbl = t.startsWith('#') ? t : '#' + t;
-      const q = encodeURIComponent(t);
-      return `<a class="category-chip" href="/?q=${q}"><i class='fas fa-hashtag' aria-hidden='true'></i><span>${lbl}</span></a>`;
-    }).join('');
+    // Header shadow
+    window.addEventListener('scroll', () => {
+      const h = document.getElementById('mainHeader');
+      if (!h) return; if (pageYOffset > 50) h.classList.add('scrolled'); else h.classList.remove('scrolled');
+    });
+
+    // Header search submit -> homepage with q
+    const headerSearch = document.getElementById('headerSearch');
+    if (headerSearch){ let cleared=false; headerSearch.addEventListener('focus',()=>{ if(!cleared){headerSearch.value=''; cleared=true;} },{passive:true}); headerSearch.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); const q=headerSearch.value.trim(); location.href = q? '/?q='+encodeURIComponent(q) : '/'; }}); }
+
+    // ----- Category setup -----
+    const slug = getSlug();
+    const label = slugToLabel(slug || '');
+    const canonical = `https://bestonlyfansgirls.net/categories/${slug ? slug + '/' : ''}`;
+
+    document.title = label ? `${label} OnlyFans Creators - Best ${label} Models | BestOnlyFansGirls` : 'OnlyFans Category | BestOnlyFansGirls';
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', label ? `Discover top ${label} OnlyFans creators. Filter by verified status, bundles, and max price. Explore thousands of profiles.` : 'Discover top OnlyFans creators by category.');
+    const canon = document.getElementById('canonicalLink');
+    if (canon) canon.setAttribute('href', canonical);
+
+    // H1 + copy
+    document.getElementById('catH1').textContent = label ? `Best OnlyFans ${label} Creators` : 'Best OnlyFans Creators';
+    document.getElementById('catSubtitle').textContent = label ? `Explore the best ${label} OnlyFans models. Click profiles to view, and use filters to narrow results.` : 'Explore OnlyFans creators. Use filters to refine results.';
+
+    // Basic FAQ
+    const faq = document.getElementById('faq');
+    if (label && faq){
+      faq.innerHTML = `
+        <h3 style=\"font-size:22px; font-weight:700; color:#1d1d1f; margin-top:8px;\">FAQ: ${label} on OnlyFans</h3>
+        <div>
+          <p style=\"color:#666;\">Q: How do I find verified ${label} creators? <br> A: Toggle \"Verified only\" to see creators with the checkmark.</p>
+          <p style=\"color:#666;\">Q: Can I filter for free accounts? <br> A: Set Max price to 0 to surface free subscriptions when available.</p>
+        </div>
+      `;
+    }
+
+    // ----- Results variables -----
+    const resultsDiv = document.getElementById('results');
+    const errorDiv = document.getElementById('error');
+    const statusDiv = document.getElementById('status');
+    const verifiedToggle = document.getElementById('verified');
+    const bundlesToggle = document.getElementById('bundles');
+    const priceRange = document.getElementById('price');
+    const priceValue = document.getElementById('price-value');
+    const loadMoreContainer = document.getElementById('loadMoreContainer');
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    const loadedCountEl = document.getElementById('loadedCount');
+
+    let currentPage = Number(new URLSearchParams(location.search).get('page') || '1');
+    const pageSize = 50;
+    let isLoading = false;
+    let hasMore = true;
+
+    // Image proxy helpers (copied from index)
+    function proxyImg(url, w, h) {
+      try {
+        if (!url || url.startsWith('/static/')) return url; 
+  const noScheme = url.replace(/^https?:\/\//, '');
+        return `https://images.weserv.nl/?url=${encodeURIComponent(noScheme)}&w=${w}&h=${h}&fit=cover&output=webp`;
+      } catch { return url; }
+    }
+    function buildResponsiveSources(originalUrl) {
+      const widths = [144, 240, 320, 480, 720];
+      const srcset = widths.map(w => `${proxyImg(originalUrl, w, Math.round(w * 4 / 3))} ${w}w`).join(', ');
+      const src = proxyImg(originalUrl, 320, Math.round(320 * 4 / 3));
+      const sizes = ' (max-width: 480px) 144px, (max-width: 768px) 240px, (max-width: 1200px) 320px, 360px ';
+      return { src, srcset, sizes };
+    }
+
+    // Favorites helpers (copied)
+    function getFavoritesSet() { try { const raw = localStorage.getItem('favorites') || '[]'; const arr = JSON.parse(raw); return new Set(Array.isArray(arr) ? arr : []);} catch { return new Set(); } }
+    function saveFavoritesSet(set){ try { localStorage.setItem('favorites', JSON.stringify(Array.from(set))); } catch {} }
+    function toggleFavorite(username, btnEl){ if(!username) return; const set=getFavoritesSet(); let active; if(set.has(username)){ set.delete(username); active=false;} else { set.add(username); active=true;} saveFavoritesSet(set); if(btnEl){ btnEl.classList.toggle('active', active); const s=btnEl.querySelector('span'); if(s) s.textContent = active ? '♥' : '♡'; } }
+
+    function updateLoadMoreButton(){
+      const totalLoaded = resultsDiv.children.length;
+      if (hasMore && totalLoaded > 0) {
+        loadMoreContainer.style.display = 'block';
+        loadedCountEl.textContent = `Showing ${totalLoaded} creators`;
+        if (statusDiv) statusDiv.style.display = 'none';
+      } else if (totalLoaded > 0 && !hasMore) {
+        loadMoreContainer.style.display = 'block';
+        loadMoreBtn.disabled = true;
+        loadMoreBtn.querySelector('.btn-text').textContent = 'All Results Loaded';
+        loadedCountEl.textContent = `You've seen all ${totalLoaded} matching creators`;
+        if (statusDiv) statusDiv.style.display = 'none';
+      } else {
+        loadMoreContainer.style.display = 'none';
+        if (statusDiv) statusDiv.style.display = 'block';
+      }
+    }
+
+    if (loadMoreBtn){
+      loadMoreBtn.addEventListener('click', () => { if (isLoading || !hasMore) return; currentPage++; performSearch(false, true); });
+    }
+
+    // Filters
+    priceRange.addEventListener('input', () => { priceValue.textContent = priceRange.value; });
+    verifiedToggle.addEventListener('change', () => performSearch(true));
+    bundlesToggle.addEventListener('change', () => performSearch(true));
+    priceRange.addEventListener('change', () => performSearch(true));
+    document.getElementById('resetFilters').addEventListener('click', () => {
+      verifiedToggle.checked = false; bundlesToggle.checked = false; priceRange.value = '100'; priceValue.textContent = '100'; performSearch(true);
+    });
+
+    function updateURL(){
+      const params = new URLSearchParams();
+      if (currentPage > 1) params.set('page', String(currentPage));
+      const newURL = params.toString() ? `${location.pathname}?${params.toString()}` : location.pathname;
+      history.replaceState({}, '', newURL);
+    }
+
+    async function performSearch(resetPage = true, append = false){
+      if (!label) return;
+      if (isLoading || (!hasMore && !resetPage)) return;
+      isLoading = true;
+      try {
+        if (resetPage) {
+          currentPage = 1; hasMore = true; resultsDiv.innerHTML = ''; if (loadMoreBtn){ loadMoreBtn.disabled = false; loadMoreBtn.querySelector('.btn-text').textContent = 'Load More Creators'; } if (loadMoreContainer) loadMoreContainer.style.display = 'none';
+        }
+        updateURL();
+        const q = label;
+        const verified = verifiedToggle.checked;
+        const bundles = bundlesToggle.checked;
+        const price = priceRange.value;
+        let apiUrl = `/api/search?q=${encodeURIComponent(q)}&price=${price}&page=${currentPage}&page_size=${pageSize}`;
+        if (verified) apiUrl += '&verified=true';
+        if (bundles) apiUrl += '&bundles=true';
+        statusDiv.textContent = `Loading page ${currentPage}...`;
+        const response = await fetch(apiUrl);
+        if (!response.ok) { const errorText = await response.text(); throw new Error(`HTTP ${response.status}: ${errorText}`); }
+        const text = await response.text();
+        let data; try { data = JSON.parse(text); } catch { throw new Error('Invalid JSON from server'); }
+        if (!Array.isArray(data)) { throw new Error('Invalid data format'); }
+        if (data.length === 0) { resultsDiv.innerHTML = `<p class='text-muted'>No results found for <strong>${label}</strong>.</p>`; statusDiv.textContent = '0 results'; hasMore = false; updateLoadMoreButton(); isLoading = false; return; }
+        data.forEach((item) => {
+          const img = item.avatar || item.avatar_c144 || '';
+          const imgSrc = img && img.startsWith('http') ? img : '/static/no-image.png';
+          const responsive = buildResponsiveSources(imgSrc);
+          const name = item.name || 'Unknown';
+          const username = item.username || '—';
+          const priceText = (item.subscribePrice && !isNaN(item.subscribePrice)) ? `$${parseFloat(item.subscribePrice).toFixed(2)}` : 'FREE';
+          const verifiedIcon = item.isVerified ? '✅ ' : '';
+          const bio = item.about || '';
+          const profileUrl = username !== '—' ? `https://onlyfans.com/${username}` : '#';
+          const col = document.createElement('div');
+          col.className = 'col-sm-6 col-md-4 col-lg-3 mb-4';
+          const safeUsername = String(username).replace(/'/g, "\\'");
+          const favSet = getFavoritesSet();
+          const favActive = username !== '—' && favSet.has(username);
+          const favChar = favActive ? '♥' : '♡';
+          col.innerHTML = `
+            <div class=\"card h-100\">
+              <button class=\"favorite-btn ${favActive ? 'active' : ''}\" data-username=\"${safeUsername}\" onclick=\"event.preventDefault(); toggleFavorite('${safeUsername}', this);\">
+                <span>${favChar}</span>
+              </button>
+              <img src=\"${responsive.src}\" srcset=\"${responsive.srcset}\" sizes=\"${responsive.sizes}\" alt=\"${name}\" width=\"270\" height=\"360\" style=\"aspect-ratio:3/4;\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\" onerror=\"if(this.src!='/static/no-image.png'){this.removeAttribute('srcset'); this.removeAttribute('sizes'); this.src='${imgSrc}';}\">
+              <div class=\"card-body\">
+                <h5>${verifiedIcon}${name}</h5>
+                <p class=\"username\">@${username}</p>
+                ${priceText === 'FREE' ? `<p class='price-free' style='color:#34c759;font-weight:700;font-size:16px;text-transform:uppercase;'>${priceText}</p>` : `<p class='price-tag' style='color:#34c759;font-weight:700;font-size:18px;'>${priceText}</p>`}
+                ${bio ? `<p class='bio-snippet' style='color:#666;font-size:13px;line-height:1.4;margin-top:8px;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;'>${bio}</p>` : ''}
+                <a href=\"${profileUrl}\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"view-profile-btn\">View Profile</a>
+              </div>
+            </div>`;
+          resultsDiv.appendChild(col);
+        });
+        statusDiv.textContent = `Showing ${resultsDiv.children.length} results`;
+        hasMore = data.length === pageSize;
+        isLoading = false;
+        updateLoadMoreButton();
+      } catch(err){
+        console.error(err);
+        errorDiv.textContent = 'Error loading results.';
+        statusDiv.textContent = err.message;
+        isLoading = false;
+        if (loadMoreContainer) loadMoreContainer.style.display = 'none';
+      }
+    }
+
+    // Back to top toggle
+    const backToTopBtn = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      if (!backToTopBtn) return; if (window.scrollY > 600) backToTopBtn.classList.add('visible'); else backToTopBtn.classList.remove('visible');
+    });
+    if (backToTopBtn) backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // Initial load
+    document.getElementById('status').textContent = label ? `Loading ${label} creators...` : 'Loading...';
+    performSearch(true);
   </script>
 
-  <footer class="text-center mt-4 pb-4" style="color:#666;font-size:14px;">
-    <p class="mb-2">© 2025 BestOnlyFansGirls.net - Browse categories and find the best OnlyFans creators</p>
+  <footer class="text-center mt-5 pb-4" style="color:#666; font-size: 14px;">
+    <p class="mb-2">© 2025 BestOnlyFansGirls.net - Find the best OnlyFans creators</p>
+    <p class="mb-0">9,500+ verified creators • Updated daily</p>
   </footer>
 </body>
 </html>
