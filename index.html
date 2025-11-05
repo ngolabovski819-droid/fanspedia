@@ -123,6 +123,8 @@
       --chip-hover-bg: #007aff;
       --chip-hover-text: #ffffff;
       --brand-color: #0099D6;
+      --placeholder-color: #999;
+      --heading-color: #1d1d1f;
     }
 
     [data-theme="dark"] {
@@ -140,6 +142,8 @@
       --chip-hover-bg: #0099D6;
       --chip-hover-text: #ffffff;
       --brand-color: #00AFF0;
+      --placeholder-color: #999;
+      --heading-color: #e8e8e8;
     }
 
     body {
@@ -271,7 +275,7 @@
     }
 
     .header-search-input::placeholder {
-      color: #999;
+      color: var(--placeholder-color);
     }
 
     .header-search-icon {
@@ -802,7 +806,7 @@
       width: 44px;
       height: 24px;
       background: #eef7ff;
-      border: 1px solid #d6ecfa;
+      border: 2px solid #d6ecfa;
       border-radius: 9999px;
       position: relative;
       cursor: pointer;
@@ -811,11 +815,23 @@
       appearance: none;
       transition: background-color .2s ease, border-color .2s ease, box-shadow .2s ease;
     }
+    
+    /* Dark mode toggle visibility */
+    [data-theme="dark"] .form-switch .form-check-input {
+      background: #2a2a2a;
+      border: 2px solid #606060;
+    }
+    
+    [data-theme="dark"] .form-switch .form-check-input:checked {
+      background: rgba(0,175,240,0.20);
+      border: 2px solid #00AFF0;
+    }
+    
     .form-switch .form-check-input::before {
       content: '';
       position: absolute;
-      top: 3px;
-      left: 3px;
+      top: 2px;
+      left: 2px;
       width: 18px;
       height: 18px;
       border-radius: 50%;
@@ -1072,7 +1088,7 @@
         <!-- Logo -->
         <a href="/" class="logo-section">
           <div class="logo-icon">
-            <i class="fas fa-fire"></i>
+            <i             localStorage.removeItem('theme');            localStorage.removeItem('theme');            localStorage.removeItem('theme');            localStorage.removeItem('theme');class="fas fa-fire"></i>
           </div>
           <div class="logo-text">
             <div class="brand">BestOFGirls</div>
@@ -1196,10 +1212,10 @@
     </div>
     
     <!-- SEO Content Section -->
-    <section class="mt-5 pt-5" style="max-width: 900px; margin-left: auto; margin-right: auto; text-align: left; border-top: 1px solid #e0e0e0;">
-      <h2 style="color: #1d1d1f; font-weight: 700; font-size: 28px; margin-bottom: 20px;">Find the Best OnlyFans Creators - Free Search Engine</h2>
+    <section class="mt-5 pt-5" style="max-width: 900px; margin-left: auto; margin-right: auto; text-align: left; border-top: 1px solid var(--border-color);">
+      <h2 style="color: var(--heading-color); font-weight: 700; font-size: 28px; margin-bottom: 20px;">Find the Best OnlyFans Creators - Free Search Engine</h2>
       
-      <p style="color: #666; font-size: 16px; line-height: 1.7; margin-bottom: 20px;">
+      <p style="color: var(--text-secondary); font-size: 16px; line-height: 1.7; margin-bottom: 20px;">
         Welcome to <strong>BestOnlyFansGirls.net</strong>, the leading <strong>OnlyFans search engine</strong> with over <strong>10,000 verified creators</strong>. Our platform helps fans discover and connect with their favorite <strong>OnlyFans models</strong> through advanced filtering options including categories, price ranges, verified status, bundle subscriptions, and more.
       </p>
 
