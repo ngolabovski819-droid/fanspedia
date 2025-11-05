@@ -57,7 +57,12 @@
   .mobile-drawer { position:fixed; top:0; right:-100%; width:82%; max-width:340px; height:100%; background:#fff; box-shadow:-8px 0 24px rgba(0,0,0,0.2); z-index:10001; padding:16px; display:flex; flex-direction:column; gap:6px; transition:right .3s ease; }
   .mobile-drawer.open { right:0; }
   .mobile-drawer .drawer-close { align-self:flex-end; background:none; border:none; font-size:28px; line-height:1; color:#1d1d1f; margin-bottom:4px; cursor:pointer; }
+  /* Base drawer links (Home/Categories) */
   .mobile-drawer a { display:block; padding:12px 10px; border-radius:8px; color:#1d1d1f; font-weight:700; text-decoration:none; margin:2px 0; }
+  /* Popular categories as chips */
+  .mobile-drawer #drawerCategories a { display:flex; align-items:center; gap:10px; background:#f8fdff; border:1px solid #e7eef6; border-radius:9999px; padding:12px 14px; margin:6px 0; font-weight:800; }
+  .mobile-drawer #drawerCategories a::before { content:'#'; color:#00AFF0; font-weight:900; }
+  .mobile-drawer #drawerCategories a:hover { background:#eef9ff; color:#00AFF0; }
   .mobile-drawer a:hover { background:#f5f5f7; color:#00AFF0; }
   .mobile-drawer .drawer-section { margin-top:8px; color:#666; font-size:12px; text-transform:uppercase; letter-spacing:.6px; padding:8px 10px; }
   @media (max-width: 768px) { body { padding-top: 66px; } .header-container { flex-wrap: wrap; gap: 12px; } .logo-text .tagline { display:none; } .header-search-section { order:3; width:100%; max-width:100%; } .desktop-nav{ display:none; } .mobile-menu-toggle{ display:inline-flex; } .header-actions{ display:flex; } }
