@@ -17,7 +17,44 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    body { background-color: #f5f5f7; color: #1d1d1f; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; padding-top: 68px; }
+    /* ============================================
+       DARK MODE CSS VARIABLES
+       ============================================ */
+    :root {
+      --bg-primary: #f5f5f7;
+      --bg-secondary: #ffffff;
+      --text-primary: #1d1d1f;
+      --text-secondary: #666;
+      --text-muted: #888;
+      --border-color: #e0e0e0;
+      --card-shadow: rgba(0, 0, 0, 0.08);
+      --card-shadow-hover: rgba(0, 0, 0, 0.12);
+      --input-bg: #ffffff;
+      --chip-bg: #ffffff;
+      --chip-border: #e7eef6;
+      --chip-hover-bg: #007aff;
+      --chip-hover-text: #ffffff;
+      --brand-color: #0099D6;
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: #1a1a1a;
+      --bg-secondary: #2a2a2a;
+      --text-primary: #e8e8e8;
+      --text-secondary: #b8b8b8;
+      --text-muted: #888;
+      --border-color: #404040;
+      --card-shadow: rgba(0, 0, 0, 0.3);
+      --card-shadow-hover: rgba(0, 0, 0, 0.5);
+      --input-bg: #2a2a2a;
+      --chip-bg: #2a2a2a;
+      --chip-border: #404040;
+      --chip-hover-bg: #0099D6;
+      --chip-hover-text: #ffffff;
+      --brand-color: #00AFF0;
+    }
+
+    body { background-color: var(--bg-primary); color: var(--text-primary); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; padding-top: 68px; transition: background-color 0.3s ease, color 0.3s ease; }
     a { text-decoration: none; }
 
     /* Superior header (same look as homepage) */
@@ -38,6 +75,14 @@
     .header-search-icon { position: absolute; left: 16px; color: #00AFF0; font-size: 18px; pointer-events: none; }
   /* Header actions (match homepage) */
   .header-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+  /* Theme Toggle Button */
+  .theme-toggle {
+    width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.2);
+    color: white; font-size: 20px; cursor: pointer; transition: all 0.3s ease;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .theme-toggle:hover { background: rgba(255, 255, 255, 0.3); transform: translateY(-1px); }
+  .theme-toggle:active { transform: translateY(0); }
   .mobile-menu-toggle { display: none; background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.3); color: white; width: 44px; height: 44px; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; justify-content: center; align-items: center; }
   .mobile-menu-toggle:hover { background: rgba(255, 255, 255, 0.3); }
   /* Desktop Categories dropdown */
@@ -93,22 +138,22 @@
     /* Categories layout */
     .categories-hero { text-align: center; padding: 28px 0 8px; }
     .categories-hero h1 { color: #00aff0; font-weight: 800; letter-spacing: -0.4px; }
-    .categories-hero p { color: #5a5a5a; max-width: 800px; margin: 8px auto 0; }
+    .categories-hero p { color: var(--text-secondary); max-width: 800px; margin: 8px auto 0; }
     .chip-grid { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 18px auto 10px; }
-    .category-chip { display: inline-flex; align-items: center; padding: 10px 16px; background: #fff; border: 1px solid #e7eef6; border-radius: 9999px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); color: #1d1d1f; font-weight: 700; font-size: 14px; transition: transform .15s ease, box-shadow .15s ease, background .2s ease; }
+    .category-chip { display: inline-flex; align-items: center; padding: 10px 16px; background: var(--chip-bg); border: 1px solid var(--chip-border); border-radius: 9999px; box-shadow: 0 2px 8px var(--card-shadow); color: var(--text-primary); font-weight: 700; font-size: 14px; transition: transform .15s ease, box-shadow .15s ease, background .2s ease; }
     .category-chip:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(0,175,240,0.25); background: #f8fdff; }
     .category-chip i { margin-right: 8px; color: #00AFF0; }
     .category-section { max-width: 1100px; margin: 0 auto; padding: 0 16px 40px; }
-    .section-title { font-size: 20px; font-weight: 800; color: #1d1d1f; margin: 8px 0 6px; text-align: center; }
-    .section-subtle { color: #6b7280; font-size: 13px; text-align: center; margin-bottom: 8px; }
+    .section-title { font-size: 20px; font-weight: 800; color: var(--text-primary); margin: 8px 0 6px; text-align: center; }
+    .section-subtle { color: var(--text-secondary); font-size: 13px; text-align: center; margin-bottom: 8px; }
 
     /* Favorites bar (read-only chips of saved models) */
     .favorites-bar { display:none; gap:8px; align-items:center; overflow-x:auto; white-space:nowrap; padding:8px 0; margin-top:6px; scroll-snap-type:x proximity; overscroll-behavior-x:contain; -webkit-overflow-scrolling:touch; justify-content:center; }
-    .favorite-chip { display:inline-flex; align-items:center; gap:8px; padding:6px 12px; background:#fff; border:1px solid #d6ecfa; border-radius:9999px; color:#0099D6; font-weight:700; box-shadow:0 2px 6px rgba(0,175,240,0.12); transition:transform .2s ease, box-shadow .2s ease; scroll-snap-align:start; }
+    .favorite-chip { display:inline-flex; align-items:center; gap:8px; padding:6px 12px; background:var(--chip-bg); border:1px solid var(--chip-border); border-radius:9999px; color:var(--brand-color); font-weight:700; box-shadow:0 2px 6px rgba(0,175,240,0.12); transition:transform .2s ease, box-shadow .2s ease; scroll-snap-align:start; }
     .favorite-chip:hover { transform: translateY(-1px); box-shadow:0 6px 14px rgba(0,175,240,0.2); }
-    .favorite-chip .heart { color:#00AFF0; font-size:14px; }
+    .favorite-chip .heart { color:var(--brand-color); font-size:14px; }
     .favorite-chip .open { color: inherit; text-decoration: none; }
-    .favorite-chip .remove { background:none; border:none; color:#888; cursor:pointer; font-size:16px; line-height:1; padding:0 2px; margin-left:4px; border-radius:6px; transition:color .2s, background .2s; }
+    .favorite-chip .remove { background:none; border:none; color:var(--text-secondary); cursor:pointer; font-size:16px; line-height:1; padding:0 2px; margin-left:4px; border-radius:6px; transition:color .2s, background .2s; }
     .favorites-bar::-webkit-scrollbar{ display:none; }
     .favorites-bar{ scrollbar-width:none; }
     .favorite-chip .remove:hover{ color:#fff; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); }
@@ -142,6 +187,9 @@
           </div>
         </div>
         <div class="header-actions">
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+            <i class="fas fa-sun"></i>
+          </button>
           <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
             <i class="fas fa-bars"></i>
           </button>
@@ -300,9 +348,42 @@
   function toggleFavorite(username){ if(!username) return; const set=getFavoritesSet(); if(set.has(username)){ set.delete(username);} else { set.add(username);} saveFavoritesSet(set); renderFavoritesBar(); }
   function renderFavoritesBar(){ if(!favoritesBar) return; const list = Array.from(getFavoritesSet()); if(list.length===0){ favoritesBar.style.display='none'; favoritesBar.innerHTML=''; return; } favoritesBar.style.display='flex'; favoritesBar.innerHTML = list.map(u=>{ const safe=String(u).replace(/'/g, "\\'"); const url=`https://onlyfans.com/${encodeURIComponent(u)}`; return `<div class='favorite-chip' data-username='${safe}' onclick=\"window.open('${url}','_blank')\"><span class='heart'>♥</span><a class='open' href='${url}' target='_blank' rel='noopener'>@${u}</a><button class='remove' aria-label='Remove' onclick=\"event.stopPropagation(); toggleFavorite('${safe}');\">&times;</button></div>`; }).join(''); }
     renderFavoritesBar();
+
+  // ============================================
+  // DARK MODE THEME TOGGLE
+  // ============================================
+  function getCurrentTheme() {
+    const stored = localStorage.getItem('theme');
+    if (stored) return stored;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    const icon = document.querySelector('#themeToggle i');
+    if (icon) {
+      icon.className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+    }
+  }
+
+  function toggleTheme() {
+    const current = getCurrentTheme();
+    const newTheme = current === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('theme', newTheme);
+    applyTheme(newTheme);
+  }
+
+  // Initialize theme on load
+  applyTheme(getCurrentTheme());
+
+  // Theme toggle button handler
+  const themeToggleBtn = document.getElementById('themeToggle');
+  if (themeToggleBtn) {
+    themeToggleBtn.addEventListener('click', toggleTheme);
+  }
   </script>
 
-  <footer class="text-center mt-4 pb-4" style="color:#666;font-size:14px;">
+  <footer class="text-center mt-4 pb-4" style="color:var(--text-secondary);font-size:14px;">
     <p class="mb-2">© 2025 BestOnlyFansGirls.net - Browse categories and find the best OnlyFans creators</p>
   </footer>
 </body>
