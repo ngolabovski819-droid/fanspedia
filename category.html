@@ -291,8 +291,8 @@
 
       <!-- SEO content -->
       <section id="seoSection" class="mt-5 pt-4" style="max-width:900px; margin:0 auto; text-align:left; border-top:1px solid #e0e0e0;">
-        <h2 id="seoH2" style="color:#1d1d1f; font-weight:700; font-size:26px; margin-bottom:16px;">About this category</h2>
-        <p id="seoP1" style="color:#666; font-size:16px; line-height:1.7; margin-bottom:16px;">Find the best OnlyFans creators related to this category. We aggregate thousands of profiles and let you filter by verified status, bundles, and price.</p>
+        <h2 id="seoH2" style="color:#00AFF0; font-weight:700; font-size:26px; margin-bottom:16px;">About this category</h2>
+        <p id="seoP1" style="color:var(--text-primary); font-size:16px; line-height:1.7; margin-bottom:16px;">Find the best OnlyFans creators related to this category. We aggregate thousands of profiles and let you filter by verified status, bundles, and price.</p>
         <div id="faq" style="margin-top:20px;"></div>
       </section>
     </div>
@@ -408,10 +408,10 @@
     const faq = document.getElementById('faq');
     if (label && faq){
       faq.innerHTML = `
-        <h3 style=\"font-size:22px; font-weight:700; color:#1d1d1f; margin-top:8px;\">FAQ: ${label} on OnlyFans</h3>
+        <h3 style=\"font-size:22px; font-weight:700; color:#00AFF0; margin-top:8px;\">FAQ: ${label} on OnlyFans</h3>
         <div>
-          <p style=\"color:#666;\">Q: How do I find verified ${label} creators? <br> A: Toggle \"Verified only\" to see creators with the checkmark.</p>
-          <p style=\"color:#666;\">Q: Can I filter for free accounts? <br> A: Set Max price to 0 to surface free subscriptions when available.</p>
+          <p style=\"color:var(--text-primary);\">Q: How do I find verified ${label} creators? <br> A: Toggle \"Verified only\" to see creators with the checkmark.</p>
+          <p style=\"color:var(--text-primary);\">Q: Can I filter for free accounts? <br> A: Set Max price to 0 to surface free subscriptions when available.</p>
         </div>
       `;
     }
