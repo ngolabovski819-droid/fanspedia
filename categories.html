@@ -90,6 +90,8 @@
     .category-chip:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(0,175,240,0.25); background: #f8fdff; }
     .category-chip i { margin-right: 8px; color: #00AFF0; }
     .category-section { max-width: 1100px; margin: 0 auto; padding: 0 16px 40px; }
+    .section-title { font-size: 20px; font-weight: 800; color: #1d1d1f; margin: 8px 0 6px; text-align: center; }
+    .section-subtle { color: #6b7280; font-size: 13px; text-align: center; margin-bottom: 8px; }
   </style>
 </head>
 <body>
@@ -149,6 +151,13 @@
     </section>
 
     <section class="category-section">
+      <h2 class="section-title">Popular categories</h2>
+      <p class="section-subtle">Quick picks our visitors love</p>
+      <div id="popularGrid" class="chip-grid" aria-label="Popular categories"></div>
+    </section>
+
+    <section class="category-section">
+      <h2 class="section-title">All categories</h2>
       <div id="chipGrid" class="chip-grid" aria-label="Categories"></div>
     </section>
   </main>
@@ -238,12 +247,29 @@
 
     // No hero search UI here; header search handles queries and redirects to homepage
 
-    // Category chips - using imported categories
-    document.getElementById('chipGrid').innerHTML = categories.map(cat => {
-      const lbl = cat.startsWith('#') ? cat : '#' + cat;
-      const slug = categoryToSlug(cat);
-      return `<a class="category-chip" href="/categories/${slug}/"><i class='fas fa-hashtag' aria-hidden='true'></i><span>${lbl}</span></a>`;
-    }).join('');
+    // Popular chips (top row)
+    const popularGrid = document.getElementById('popularGrid');
+    if (popularGrid) {
+      popularGrid.innerHTML = popularCategories.map(cat => {
+        const lbl = cat.startsWith('#') ? cat : '#' + cat;
+        const slug = categoryToSlug(cat);
+        return `<a class="category-chip" href="/categories/${slug}/"><i class='fas fa-hashtag' aria-hidden='true'></i><span>${lbl}</span></a>`;
+      }).join('');
+    }
+
+    // All category chips - alphabetized and de-duplicated (exclude popular to avoid repeats)
+    const chipGrid = document.getElementById('chipGrid');
+    if (chipGrid) {
+      const popularSet = new Set(popularCategories);
+      const allSorted = [...categories]
+        .filter(cat => !popularSet.has(cat))
+        .sort((a, b) => a.localeCompare(b));
+      chipGrid.innerHTML = allSorted.map(cat => {
+        const lbl = cat.startsWith('#') ? cat : '#' + cat;
+        const slug = categoryToSlug(cat);
+        return `<a class="category-chip" href="/categories/${slug}/"><i class='fas fa-hashtag' aria-hidden='true'></i><span>${lbl}</span></a>`;
+      }).join('');
+    }
   </script>
 
   <footer class="text-center mt-4 pb-4" style="color:#666;font-size:14px;">
