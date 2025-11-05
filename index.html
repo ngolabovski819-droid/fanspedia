@@ -793,7 +793,7 @@
     }
     /* Filters bar */
     .filters-container {
-      background: #f5f5f7;
+      background: var(--bg-primary);
       padding: 16px 0;
       margin-bottom: 20px;
     }
@@ -1273,7 +1273,8 @@
     function getCurrentTheme() {
       const savedTheme = localStorage.getItem('theme');
       if (savedTheme) return savedTheme;
-      return prefersDarkScheme.matches ? 'dark' : 'light';
+      // Default to light mode
+      return 'light';
     }
     
     // Apply theme
