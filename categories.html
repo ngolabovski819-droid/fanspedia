@@ -257,13 +257,10 @@
       }).join('');
     }
 
-    // All category chips - alphabetized and de-duplicated (exclude popular to avoid repeats)
+    // All category chips - alphabetized (include everything to guarantee visibility)
     const chipGrid = document.getElementById('chipGrid');
     if (chipGrid) {
-      const popularSet = new Set(popularCategories);
-      const allSorted = [...categories]
-        .filter(cat => !popularSet.has(cat))
-        .sort((a, b) => a.localeCompare(b));
+      const allSorted = [...categories].sort((a, b) => a.localeCompare(b));
       chipGrid.innerHTML = allSorted.map(cat => {
         const lbl = cat.startsWith('#') ? cat : '#' + cat;
         const slug = categoryToSlug(cat);
