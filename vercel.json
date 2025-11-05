@@ -15,6 +15,12 @@
   ],
   "headers": [
     {
+      "source": "/config/categories.js",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, must-revalidate" }
+      ]
+    },
+    {
       "source": "/robots.txt",
       "headers": [
         {
