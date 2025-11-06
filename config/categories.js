@@ -10,8 +10,18 @@ export const categories = [
   'sextape', 'creampie', 'joi', 'threesome', 'teen (18+)', 'shemale', 'bbc', 'tits', 'ebony', 'pornhub',
   'footjob', 'foot fetish', 'dick ratings', 'bbw', 'mature', 'teacher', 'pussy', 'scottish', 'cuckold', 'big ass', 'squirting', 'hottest',
   'amateur', 'blonde', 'japanese', 'instagram', 'pawg', 'gangbang', 'redhead', 'male', 'vip', 'famous',
-  'twins', 'ass', 'deepthroat', 'pregnant', 'handjob', 'facial', 'asmr', 'pegging', 'no ppv', 'nurse', 'smoking fetish'
+  'twins', 'ass', 'deepthroat', 'pregnant', 'handjob', 'facial', 'asmr', 'pegging', 'no ppv', 'nurse', 'smoking fetish', 'goth-free'
 ];
+
+// Compound categories: special categories that combine search terms with automatic filters
+// Format: { slug: { searchTerm, filters: { verified?, bundles?, maxPrice? } } }
+export const compoundCategories = {
+  'goth-free': {
+    searchTerm: 'goth',
+    filters: { maxPrice: 0 },
+    displayLabel: 'Goth (Free)'
+  }
+};
 
 // Popular categories for header dropdown and mobile drawer (order matters for UX)
 export const popularCategories = [

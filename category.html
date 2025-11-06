@@ -302,7 +302,7 @@
     // ============================================
     // DYNAMIC CATEGORY NAVIGATION
     // ============================================
-  import { popularCategories, categoryToSlug } from '/config/categories.js?v=20251106-1';
+  import { popularCategories, categoryToSlug, compoundCategories } from '/config/categories.js?v=20251106-2';
     
     // Render desktop dropdown menu
     const catMenu = document.getElementById('categoriesMenu');
@@ -391,7 +391,12 @@
 
     // ----- Category setup -----
     const slug = getSlug();
-    const label = slugToLabel(slug || '');
+    
+    // Check if this is a compound category
+    const isCompound = compoundCategories && compoundCategories[slug];
+    const label = isCompound ? compoundCategories[slug].displayLabel : slugToLabel(slug || '');
+    const searchTerm = isCompound ? compoundCategories[slug].searchTerm : label;
+    
     const canonical = `https://bestonlyfansgirls.net/categories/${slug ? slug + '/' : ''}`;
 
     document.title = label ? `${label} OnlyFans Creators - Best ${label} Models | BestOnlyFansGirls` : 'OnlyFans Category | BestOnlyFansGirls';
@@ -428,6 +433,17 @@
     const loadMoreContainer = document.getElementById('loadMoreContainer');
     const loadMoreBtn = document.getElementById('loadMoreBtn');
     const loadedCountEl = document.getElementById('loadedCount');
+
+    // Initialize compound category filters if present
+    if (isCompound && compoundCategories[slug].filters) {
+      const filters = compoundCategories[slug].filters;
+      if (filters.verified !== undefined) verifiedToggle.checked = filters.verified;
+      if (filters.bundles !== undefined) bundlesToggle.checked = filters.bundles;
+      if (filters.maxPrice !== undefined) {
+        priceRange.value = String(filters.maxPrice);
+        priceValue.textContent = String(filters.maxPrice);
+      }
+    }
 
     let currentPage = Number(new URLSearchParams(location.search).get('page') || '1');
     const pageSize = 50;
@@ -521,7 +537,7 @@
     }
 
     async function performSearch(resetPage = true, append = false){
-      if (!label) return;
+      if (!searchTerm) return;
       if (isLoading || (!hasMore && !resetPage)) return;
       isLoading = true;
       try {
@@ -530,7 +546,7 @@
         }
   updateURL();
   updateActiveFilters();
-        const q = label;
+        const q = searchTerm;
         const verified = verifiedToggle.checked;
         const bundles = bundlesToggle.checked;
         const price = priceRange.value;
