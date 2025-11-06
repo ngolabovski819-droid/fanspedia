@@ -487,31 +487,50 @@
     .mobile-drawer { position: fixed; top: 0; right: -100%; width: 82%; max-width: 340px; height: 100%; background: #fff; box-shadow: -8px 0 24px rgba(0,0,0,0.2); z-index: 10001; padding: 16px; display: flex; flex-direction: column; gap: 6px; transition: right .3s ease; }
     .mobile-drawer.open { right: 0; }
     .mobile-drawer .drawer-close { align-self: flex-end; background: none; border: none; font-size: 28px; line-height: 1; color: #1d1d1f; margin-bottom: 4px; cursor: pointer; }
-    /* Base drawer links (Home/Categories) */
-    .mobile-drawer a { display:block; padding: 12px 10px; border-radius: 8px; color: #1d1d1f; font-weight: 700; text-decoration: none; margin: 2px 0; }
-    /* Popular categories as horizontal swipeable chips (mobile best practice) */
-    .mobile-drawer #drawerCategories {
-      display:flex; gap:8px; overflow-x:auto; white-space:nowrap; padding:8px 2px 6px; margin:0 0 4px;
-      -webkit-overflow-scrolling:touch; overscroll-behavior-x:contain; scroll-snap-type:x proximity;
-      position: relative; /* enable edge fades */
+    /* Base drawer links (Home) */
+    .mobile-drawer > a { display:block; padding: 14px 12px; border-radius: 8px; color: #1d1d1f; font-weight: 700; text-decoration: none; margin: 2px 0; font-size: 16px; }
+    .mobile-drawer > a:hover { background: #f5f5f7; color: #00AFF0; }
+    
+    /* Categories collapsible section */
+    .drawer-categories-toggle {
+      display: flex; align-items: center; justify-content: space-between; padding: 14px 12px; cursor: pointer;
+      border-radius: 8px; margin: 2px 0; transition: background 0.2s ease; font-size: 16px; font-weight: 700; color: #1d1d1f;
     }
-    /* Edge fade gradients to hint horizontal scroll */
-    .mobile-drawer #drawerCategories::before,
-    .mobile-drawer #drawerCategories::after {
-      content: ""; position: absolute; top: 0; bottom: 0; width: 24px; pointer-events: none; z-index: 1;
+    .drawer-categories-toggle:hover { background: #f5f5f7; }
+    .drawer-categories-toggle .icon-text { display: flex; align-items: center; gap: 10px; }
+    .drawer-categories-toggle .icon-text i { font-size: 18px; color: #1d1d1f; }
+    .drawer-categories-toggle .chevron { font-size: 14px; transition: transform 0.3s ease; color: #666; }
+    .drawer-categories-toggle.open .chevron { transform: rotate(180deg); }
+    
+    /* Categories list container */
+    #drawerCategoriesSection {
+      max-height: 0; overflow: hidden; transition: max-height 0.3s ease, opacity 0.3s ease; opacity: 0;
     }
-    .mobile-drawer #drawerCategories::before { left: 0; background: linear-gradient(to right, #ffffff 0%, rgba(255,255,255,0) 100%); }
-    .mobile-drawer #drawerCategories::after { right: 0; background: linear-gradient(to left, #ffffff 0%, rgba(255,255,255,0) 100%); }
-    .mobile-drawer #drawerCategories::-webkit-scrollbar{ display:none; }
-    .mobile-drawer #drawerCategories a { display:inline-flex; align-items:center; gap:10px; background:#f8fdff; border:1px solid #e7eef6; border-radius:9999px; padding:10px 14px; margin:0; font-weight:800; scroll-snap-align:start; }
-    /* Remove hashtag symbol in the mobile drawer chips (drawer only) */
-    .mobile-drawer #drawerCategories a::before { content: none; }
-    .mobile-drawer #drawerCategories a:hover { background:#eef9ff; color:#00AFF0; }
-    /* Divider above Popular section */
-    .mobile-drawer .drawer-section { border-top: 1px solid #eee; padding-top: 10px; margin-top: 12px; color:#00AFF0; font-weight:900; text-transform:uppercase; letter-spacing:.8px; font-size:12px; }
-    .mobile-drawer .drawer-section::before { content: '🔥'; margin-right: 6px; font-size: 13px; vertical-align: -1px; }
-    .mobile-drawer a:hover { background: #f5f5f7; color: #00AFF0; }
-    .mobile-drawer .drawer-section { margin-top: 8px; color: #666; font-size: 12px; text-transform: uppercase; letter-spacing: .6px; padding: 8px 10px; }
+    #drawerCategoriesSection.open { max-height: 600px; opacity: 1; }
+    
+    /* Most Popular label */
+    .drawer-categories-label {
+      color: #999; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px;
+      padding: 12px 16px 8px; margin: 0;
+    }
+    
+    /* Category list */
+    #drawerCategories { display: flex; flex-direction: column; gap: 0; padding: 0 4px; max-height: 400px; overflow-y: auto; }
+    #drawerCategories::-webkit-scrollbar { width: 4px; }
+    #drawerCategories::-webkit-scrollbar-thumb { background: #ddd; border-radius: 4px; }
+    #drawerCategories a {
+      display: block; padding: 12px 12px; color: #555; font-weight: 600; text-decoration: none;
+      border-radius: 6px; margin: 1px 0; font-size: 15px; transition: background 0.15s ease, color 0.15s ease;
+    }
+    #drawerCategories a:hover { background: #f5f5f7; color: #00AFF0; }
+    
+    /* View All button */
+    .drawer-view-all-btn {
+      display: block; margin: 12px 8px 8px; padding: 14px 20px; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
+      color: white; text-align: center; border-radius: 12px; font-weight: 800; text-decoration: none; font-size: 15px;
+      box-shadow: 0 4px 12px rgba(0,175,240,0.3); transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .drawer-view-all-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(0,175,240,0.4); color: white; }
 
     /* Header responsive breakpoints */
     @media (max-width: 1200px) {
@@ -1160,10 +1179,21 @@
   <nav id="mobileDrawer" class="mobile-drawer" aria-hidden="true" aria-labelledby="mobileMenuToggle">
     <button class="drawer-close" id="drawerClose" aria-label="Close menu">×</button>
     <a href="/">Home</a>
-    <a href="/categories/">Categories</a>
-    <div class="drawer-section">Popular</div>
-    <div id="drawerCategories">
-      <!-- Populated dynamically from config/categories.js -->
+    
+    <!-- Categories collapsible section -->
+    <div class="drawer-categories-toggle" id="drawerCategoriesToggle">
+      <div class="icon-text">
+        <i class="fas fa-th"></i>
+        <span>Categories</span>
+      </div>
+      <i class="fas fa-chevron-down chevron"></i>
+    </div>
+    <div id="drawerCategoriesSection">
+      <div class="drawer-categories-label">MOST POPULAR CATEGORIES</div>
+      <div id="drawerCategories">
+        <!-- Populated dynamically from config/categories.js -->
+      </div>
+      <a href="/categories/" class="drawer-view-all-btn">View All Categories</a>
     </div>
   </nav>
 
@@ -1293,6 +1323,15 @@
       }).join('');
       drawerCats.innerHTML = drawerHTML;
     }
+    
+    // Wire up categories toggle
+    const drawerCategoriesToggle = document.getElementById('drawerCategoriesToggle');
+    const drawerCategoriesSection = document.getElementById('drawerCategoriesSection');
+    if (drawerCategoriesToggle && drawerCategoriesSection) {
+      drawerCategoriesToggle.addEventListener('click', () => {
+        drawerCategoriesSection.classList.toggle('open');
+      });
+    }
   </script>
 
   <script>
@@ -1409,20 +1448,6 @@
       drawer.classList.add('open'); overlay.classList.add('open');
       drawer.setAttribute('aria-hidden','false'); overlay.setAttribute('aria-hidden','false');
       document.body.style.overflow='hidden';
-      // One-time gentle nudge to hint horizontal scroll in Popular row
-      try {
-        const nudgedKey = 'drawerPopularNudged';
-        const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (!prefersReduced && !localStorage.getItem(nudgedKey)) {
-          const row = document.getElementById('drawerCategories');
-          if (row && row.scrollWidth > row.clientWidth + 8) {
-            const to = Math.min(64, row.scrollWidth - row.clientWidth);
-            row.scrollTo({ left: to, behavior: 'smooth' });
-            setTimeout(() => row.scrollTo({ left: 0, behavior: 'smooth' }), 450);
-            localStorage.setItem(nudgedKey, '1');
-          }
-        }
-      } catch {}
     }
     function closeDrawer(){ if (!drawer || !overlay) return; drawer.classList.remove('open'); overlay.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); overlay.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
     if (mobileToggle){ mobileToggle.addEventListener('click', (e)=>{ e.preventDefault(); openDrawer(); }); }

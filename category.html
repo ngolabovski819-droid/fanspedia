@@ -104,22 +104,33 @@
   .mobile-drawer .drawer-close { align-self:flex-end; background:none; border:none; font-size:28px; line-height:1; color:#1d1d1f; margin-bottom:4px; cursor:pointer; }
   /* Base drawer links (Home/Categories) */
   .mobile-drawer a { display:block; padding:12px 10px; border-radius:8px; color:#1d1d1f; font-weight:700; text-decoration:none; margin:2px 0; }
-  /* Popular categories as horizontal swipeable chips (mobile best practice) */
-  .mobile-drawer #drawerCategories { display:flex; gap:8px; overflow-x:auto; white-space:nowrap; padding:8px 2px 6px; margin:0 0 4px; -webkit-overflow-scrolling:touch; overscroll-behavior-x:contain; scroll-snap-type:x proximity; position:relative; }
-  /* Edge fade gradients to hint horizontal scroll */
-  .mobile-drawer #drawerCategories::before,
-  .mobile-drawer #drawerCategories::after { content:""; position:absolute; top:0; bottom:0; width:24px; pointer-events:none; z-index:1; }
-  .mobile-drawer #drawerCategories::before { left:0; background: linear-gradient(to right, #ffffff 0%, rgba(255,255,255,0) 100%); }
-  .mobile-drawer #drawerCategories::after { right:0; background: linear-gradient(to left, #ffffff 0%, rgba(255,255,255,0) 100%); }
-  .mobile-drawer #drawerCategories::-webkit-scrollbar{ display:none; }
-  .mobile-drawer #drawerCategories a { display:inline-flex; align-items:center; gap:10px; background:#f8fdff; border:1px solid #e7eef6; border-radius:9999px; padding:10px 14px; margin:0; font-weight:800; scroll-snap-align:start; }
-  /* Remove hashtag symbol in the mobile drawer chips (drawer only) */
-  .mobile-drawer #drawerCategories a::before { content: none; }
-  .mobile-drawer #drawerCategories a:hover { background:#eef9ff; color:#00AFF0; }
-  /* Divider above Popular section */
-  .mobile-drawer .drawer-section { border-top: 1px solid #eee; padding-top: 10px; margin-top: 12px; color:#00AFF0; font-weight:900; text-transform:uppercase; letter-spacing:.8px; font-size:12px; }
-  .mobile-drawer .drawer-section::before { content: '🔥'; margin-right: 6px; font-size: 13px; vertical-align: -1px; }
   .mobile-drawer a:hover { background:#f5f5f7; color:#00AFF0; }
+  
+  /* Categories section toggle */
+  .drawer-categories-toggle { display:flex; align-items:center; justify-content:space-between; padding:12px 10px; cursor:pointer; user-select:none; border-radius:8px; transition:background .2s; }
+  .drawer-categories-toggle:hover { background:#f5f5f7; }
+  .drawer-categories-toggle .left { display:flex; align-items:center; gap:10px; }
+  .drawer-categories-toggle .icon { color:#00AFF0; font-size:18px; }
+  .drawer-categories-toggle .label { color:#1d1d1f; font-weight:700; font-size:16px; }
+  .drawer-categories-toggle .chevron { color:#999; font-size:14px; transition:transform .25s ease; }
+  
+  /* Categories section collapsible container */
+  .drawer-categories-section { max-height:0; overflow:hidden; transition:max-height .3s ease; }
+  .drawer-categories-section.open { max-height:500px; }
+  .drawer-categories-section .section-label { margin:12px 10px 8px; color:#999; font-size:11px; text-transform:uppercase; letter-spacing:.8px; font-weight:700; }
+  
+  /* Category vertical list */
+  .drawer-categories-section #drawerCategories { display:flex; flex-direction:column; gap:4px; padding:0 0 8px; }
+  .drawer-categories-section #drawerCategories a { padding:10px 10px; margin:0; border-radius:8px; font-weight:600; font-size:15px; color:#333; transition:background .2s, color .2s; }
+  .drawer-categories-section #drawerCategories a:hover { background:#f5f5f7; color:#00AFF0; }
+  
+  /* View all button */
+  .drawer-view-all { display:block; padding:12px 10px; margin:0 0 8px; border-radius:8px; text-align:center; background:linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); color:#fff; font-weight:700; font-size:15px; text-decoration:none; transition:transform .2s, box-shadow .2s; box-shadow:0 4px 12px rgba(0,175,240,0.3); }
+  .drawer-view-all:hover { transform:translateY(-1px); box-shadow:0 6px 16px rgba(0,175,240,0.4); color:#fff; }
+  
+  /* Toggle chevron rotation when open */
+  .drawer-categories-section.open ~ .drawer-categories-toggle .chevron,
+  .drawer-categories-toggle:has(+ .drawer-categories-section.open) .chevron { transform:rotate(180deg); }
   .mobile-drawer .drawer-section { margin-top:8px; color:#666; font-size:12px; text-transform:uppercase; letter-spacing:.6px; padding:8px 10px; }
   @media (max-width: 768px) { body { padding-top: 66px; } .header-container { flex-wrap: wrap; gap: 12px; } .logo-text .tagline { display:none; } .header-search-section { order:3; width:100%; max-width:100%; } .desktop-nav{ display:none; } .mobile-menu-toggle{ display:inline-flex; } .header-actions{ display:flex; } }
   @media (max-width: 480px) { body { padding-top: 62px; } .logo-text .brand { font-size: 16px; } .header-search-input { padding: 10px 16px 10px 40px; font-size: 14px; } .header-main { padding: 6px 0; } }
@@ -242,9 +253,21 @@
     <button class="drawer-close" id="drawerClose" aria-label="Close menu">×</button>
     <a href="/">Home</a>
     <a href="/categories/">Categories</a>
-    <div class="drawer-section">Popular</div>
-    <div id="drawerCategories">
-      <!-- Populated dynamically from config/categories.js -->
+    
+    <div class="drawer-categories-toggle" id="drawerCategoriesToggle">
+      <div class="left">
+        <i class="fas fa-th icon"></i>
+        <span class="label">Categories</span>
+      </div>
+      <i class="fas fa-chevron-down chevron"></i>
+    </div>
+    
+    <div class="drawer-categories-section" id="drawerCategoriesSection">
+      <div class="section-label">MOST POPULAR CATEGORIES</div>
+      <div id="drawerCategories">
+        <!-- Populated dynamically from config/categories.js -->
+      </div>
+      <a href="/categories/" class="drawer-view-all">View All Categories</a>
     </div>
   </nav>
 
@@ -332,6 +355,15 @@
       }).join('');
       drawerCats.innerHTML = drawerHTML;
     }
+    
+    // Wire up categories toggle
+    const drawerCategoriesToggle = document.getElementById('drawerCategoriesToggle');
+    const drawerCategoriesSection = document.getElementById('drawerCategoriesSection');
+    if (drawerCategoriesToggle && drawerCategoriesSection) {
+      drawerCategoriesToggle.addEventListener('click', () => {
+        drawerCategoriesSection.classList.toggle('open');
+      });
+    }
   </script>
 
   <script type="module">
@@ -395,20 +427,6 @@
       drawer.classList.add('open'); overlay.classList.add('open');
       drawer.setAttribute('aria-hidden','false'); overlay.setAttribute('aria-hidden','false');
       document.body.style.overflow='hidden';
-      // One-time gentle nudge to hint horizontal scroll in Popular row
-      try {
-        const nudgedKey = 'drawerPopularNudged';
-        const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (!prefersReduced && !localStorage.getItem(nudgedKey)) {
-          const row = document.getElementById('drawerCategories');
-          if (row && row.scrollWidth > row.clientWidth + 8) {
-            const to = Math.min(64, row.scrollWidth - row.clientWidth);
-            row.scrollTo({ left: to, behavior: 'smooth' });
-            setTimeout(() => row.scrollTo({ left: 0, behavior: 'smooth' }), 450);
-            localStorage.setItem(nudgedKey, '1');
-          }
-        }
-      } catch {}
     }
     function closeDrawer(){ if (!drawer || !overlay) return; drawer.classList.remove('open'); overlay.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); overlay.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
     if (mobileToggle){ mobileToggle.addEventListener('click', (e)=>{ e.preventDefault(); openDrawer(); }); }
