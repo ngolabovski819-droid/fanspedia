@@ -19,7 +19,7 @@ export default async function handler(req, res) {
       });
     }
 
-    const q = (req.query.q || "").trim();
+  const rawQ = (req.query.q || "").trim();
     const verified = (req.query.verified || "").toString().trim().toLowerCase();
     const bundles = (req.query.bundles || "").toString().trim().toLowerCase();
     const max_price = (req.query.price || "").toString().trim();
@@ -38,9 +38,13 @@ export default async function handler(req, res) {
     params.set('limit', String(page_size));
     params.set('offset', String((page - 1) * page_size));
 
-    if (q) {
-      const ors = ['username','name','location','about'].map(c => `${c}.ilike.*${q}*`);
-      params.set('or', `(${ors.join(',')})`);
+    if (rawQ) {
+      // Support multi-term queries separated by | or ,
+      // e.g., q=goth|gothic|alt builds an OR across all columns and terms
+      const terms = rawQ.split(/[|,]/).map(s => s.trim()).filter(Boolean);
+      const cols = ['username','name','location','about'];
+      const expressions = (terms.length ? terms : [rawQ]).flatMap(term => cols.map(c => `${c}.ilike.*${term}*`));
+      params.set('or', `(${expressions.join(',')})`);
     }
 
     if (verified === 'true' || verified === 'false') {

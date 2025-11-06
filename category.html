@@ -397,6 +397,9 @@
     const isCompound = compoundCategories && compoundCategories[slug];
     const label = isCompound ? compoundCategories[slug].displayLabel : slugToLabel(slug || '');
     const searchTerm = isCompound ? compoundCategories[slug].searchTerm : label;
+    const searchTerms = isCompound && Array.isArray(compoundCategories[slug].synonyms) && compoundCategories[slug].synonyms.length
+      ? compoundCategories[slug].synonyms
+      : [searchTerm];
     
   // Debug logging
   console.log('Category Debug:', { slug, isCompound, label, searchTerm, compoundCategories });
@@ -551,7 +554,7 @@
         }
   updateURL();
   updateActiveFilters();
-        const q = searchTerm;
+  const q = searchTerms.join('|');
         const verified = verifiedToggle.checked;
         const bundles = bundlesToggle.checked;
         const price = priceRange.value;
