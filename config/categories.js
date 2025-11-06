@@ -25,6 +25,94 @@ export const compoundCategories = {
   }
 };
 
+// Domain-specific synonym overrides for better recall. Keys are category labels (human-readable) or slugs.
+const synonymsOverrides = {
+  'big ass': ['big ass','big butt','booty','thick','dump truck','phat'],
+  'ass': ['ass','booty','butt','bottom'],
+  'pawg': ['pawg','phat ass white girl','phat ass','thick white','big booty white'],
+  'big tits': ['big tits','big boobs','large breasts','boobs','tits'],
+  'boobs': ['boobs','tits','breasts'],
+  'tits': ['tits','boobs','breasts'],
+  'milf': ['milf','mom','hot mom','mature mom','cougar'],
+  'mature': ['mature','cougar','older'],
+  'ebony': ['ebony','black','melanin'],
+  'asian': ['asian','korean','japanese','chinese','thai','pinay','filipina'],
+  'korean': ['korean','korea','hangul'],
+  'japanese': ['japanese','japan','jp'],
+  'redhead': ['redhead','ginger','red hair'],
+  'blonde': ['blonde','blond','blonde hair'],
+  'lesbian': ['lesbian','girls only','wlw','sapphic'],
+  'gay': ['gay','men','mlm'],
+  'trans': ['trans','transgender','trans woman','tg'],
+  'shemale': ['trans','transgender','tgirl'],
+  'feet': ['feet','foot','toes','foot fetish'],
+  'foot fetish': ['foot fetish','feet','toes'],
+  'footjob': ['footjob','foot job','feet'],
+  'dick ratings': ['dick ratings','rate my dick','rmd','rating'],
+  'blowjobs': ['blowjobs','blowjob','bj','oral'],
+  'anal': ['anal','backdoor'],
+  'creampie': ['creampie','cream pie'],
+  'handjob': ['handjob','hand job','hj'],
+  'asmr': ['asmr','audio'],
+  'cosplay': ['cosplay','costume','anime'],
+  'instagram': ['instagram','ig'],
+  'twitter': ['twitter','x','x.com'],
+  'pornhub': ['pornhub','ph'],
+  'no ppv': ['no ppv','no pay per view','all inclusive'],
+  'vip': ['vip','premium'],
+  'famous': ['famous','celebrity','popular'],
+  'bbw': ['bbw','plus size','curvy','thick'],
+  'pussy': ['pussy','kitty','coochie'],
+  'pregnant': ['pregnant','preggo','expecting'],
+  'deepthroat': ['deepthroat','deep throat','oral'],
+  'pegging': ['pegging','strap-on','strapon'],
+  'couple': ['couple','duo','pair'],
+  'amateur': ['amateur','homemade'],
+  'vip': ['vip','exclusive'],
+  'models': ['models','model'],
+  'sex': ['sex','xxx','nsfw'],
+  'nude': ['nude','nudity','naked'],
+  'reddit': ['reddit','subreddit'],
+  'girl': ['girl','girls','babe'],
+  'male': ['male','man','men']
+};
+
+function normalizeTerm(s){
+  return String(s || '').trim();
+}
+
+function baseVariants(label){
+  const variants = new Set();
+  const l = normalizeTerm(label);
+  if (!l) return [];
+  variants.add(l);
+  variants.add(l.toLowerCase());
+  variants.add(l.replace(/\s+/g,'-'));
+  variants.add(l.replace(/\s+/g,''));
+  const words = l.split(/\s+/);
+  if (words.length > 1) variants.add(words[0]);
+  return Array.from(variants).filter(Boolean);
+}
+
+export const synonymsMap = (() => {
+  const map = {};
+  for (const cat of categories) {
+    const slug = categoryToSlug(cat);
+    const set = new Set(baseVariants(cat));
+    const override = synonymsOverrides[cat] || synonymsOverrides[slug];
+    if (override) override.forEach(v => set.add(normalizeTerm(v)));
+    map[slug] = Array.from(set).filter(Boolean);
+  }
+  // Include compound category synonyms as well (by slug)
+  Object.entries(compoundCategories || {}).forEach(([slug, def]) => {
+    const arr = Array.isArray(def.synonyms) ? def.synonyms : [def.searchTerm].filter(Boolean);
+    if (!map[slug]) map[slug] = [];
+    arr.forEach(v => map[slug].push(normalizeTerm(v)));
+    map[slug] = Array.from(new Set(map[slug].filter(Boolean)));
+  });
+  return map;
+})();
+
 // Popular categories for header dropdown and mobile drawer (order matters for UX)
 export const popularCategories = [
   'milf',

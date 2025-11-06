@@ -302,7 +302,7 @@
     // ============================================
     // DYNAMIC CATEGORY NAVIGATION
     // ============================================
-  import { popularCategories, categoryToSlug, compoundCategories } from '/config/categories.js?v=20251106-2';
+  import { popularCategories, categoryToSlug, compoundCategories } from '/config/categories.js?v=20251106-3';
     
     // Render desktop dropdown menu
     const catMenu = document.getElementById('categoriesMenu');
@@ -328,7 +328,7 @@
   </script>
 
   <script type="module">
-    import { compoundCategories } from '/config/categories.js?v=20251106-2';
+    import { compoundCategories, synonymsMap } from '/config/categories.js?v=20251106-3';
     // Scroll preservation like homepage
     let savedScrollY = 0;
     function lockScroll(){ savedScrollY = window.scrollY || window.pageYOffset || 0; }
@@ -397,9 +397,9 @@
     const isCompound = compoundCategories && compoundCategories[slug];
     const label = isCompound ? compoundCategories[slug].displayLabel : slugToLabel(slug || '');
     const searchTerm = isCompound ? compoundCategories[slug].searchTerm : label;
-    const searchTerms = isCompound && Array.isArray(compoundCategories[slug].synonyms) && compoundCategories[slug].synonyms.length
+    const searchTerms = (isCompound && Array.isArray(compoundCategories[slug].synonyms) && compoundCategories[slug].synonyms.length)
       ? compoundCategories[slug].synonyms
-      : [searchTerm];
+      : (synonymsMap[slug] && synonymsMap[slug].length ? synonymsMap[slug] : [searchTerm]);
     
   // Debug logging
   console.log('Category Debug:', { slug, isCompound, label, searchTerm, compoundCategories });
