@@ -346,6 +346,7 @@
   function getFavoritesSet(){ try { const raw = localStorage.getItem('favorites') || '[]'; const arr = JSON.parse(raw); return new Set(Array.isArray(arr)?arr:[]);} catch { return new Set(); } }
   function saveFavoritesSet(set){ try { localStorage.setItem('favorites', JSON.stringify(Array.from(set))); } catch {} }
   function toggleFavorite(username){ if(!username) return; const set=getFavoritesSet(); if(set.has(username)){ set.delete(username);} else { set.add(username);} saveFavoritesSet(set); renderFavoritesBar(); }
+  window.toggleFavorite = toggleFavorite;
   function renderFavoritesBar(){ if(!favoritesBar) return; const list = Array.from(getFavoritesSet()); if(list.length===0){ favoritesBar.style.display='none'; favoritesBar.innerHTML=''; return; } favoritesBar.style.display='flex'; favoritesBar.innerHTML = list.map(u=>{ const safe=String(u).replace(/'/g, "\\'"); const url=`https://onlyfans.com/${encodeURIComponent(u)}`; return `<div class='favorite-chip' data-username='${safe}' onclick=\"window.open('${url}','_blank')\"><span class='heart'>♥</span><a class='open' href='${url}' target='_blank' rel='noopener'>@${u}</a><button class='remove' aria-label='Remove' onclick=\"event.stopPropagation(); toggleFavorite('${safe}');\">&times;</button></div>`; }).join(''); }
     renderFavoritesBar();
 

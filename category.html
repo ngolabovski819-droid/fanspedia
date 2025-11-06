@@ -479,6 +479,7 @@
   function updateFavoriteButtons(username, active){ try{ const buttons = document.querySelectorAll(`.favorite-btn[data-username="${CSS.escape(username)}"]`); buttons.forEach(b=>{ b.classList.toggle('active', active); const s=b.querySelector('span'); if(s) s.textContent = active ? '♥' : '♡'; }); }catch{} }
   function renderFavoritesBar(){ if(!favoritesBar) return; const set=getFavoritesSet(); const list=Array.from(set); if(list.length===0){ favoritesBar.style.display='none'; favoritesBar.innerHTML=''; return; } favoritesBar.style.display='flex'; favoritesBar.innerHTML = list.map(u=>{ const safe=String(u).replace(/'/g, "\\'"); const url=`https://onlyfans.com/${encodeURIComponent(u)}`; return `<div class="favorite-chip" data-username="${safe}" onclick="window.open('${url}','_blank')"><span class='heart'>♥</span><a class='open' href='${url}' target='_blank' rel='noopener'>@${u}</a><button class='remove' aria-label='Remove' onclick="event.stopPropagation(); toggleFavorite('${safe}');">&times;</button></div>`; }).join(''); }
   function toggleFavorite(username, btnEl){ if(!username) return; const set=getFavoritesSet(); let active; if(set.has(username)){ set.delete(username); active=false; } else { set.add(username); active=true; } saveFavoritesSet(set); if(btnEl){ btnEl.classList.toggle('active', active); const s=btnEl.querySelector('span'); if(s) s.textContent = active ? '♥' : '♡'; } updateFavoriteButtons(username, active); renderFavoritesBar(); }
+  window.toggleFavorite = toggleFavorite;
 
     function updateLoadMoreButton(){
       const totalLoaded = resultsDiv.children.length;
@@ -539,15 +540,6 @@
       if (verifiedToggle.checked) chips.push(`<div class="search-chip" data-filter="verified">Verified only <span class="remove" aria-label="Remove">×</span></div>`);
       if (bundlesToggle.checked) chips.push(`<div class="search-chip" data-filter="bundles">Bundles <span class="remove" aria-label="Remove">×</span></div>`);
       if (priceRange.value !== '100') chips.push(`<div class="search-chip" data-filter="max">Max $${priceRange.value} <span class="remove" aria-label="Remove">×</span></div>`);
-      // Keywords chip (read-only): show up to 3, then +N
-      if (Array.isArray(searchTerms) && searchTerms.length) {
-        const uniq = Array.from(new Set(searchTerms.map(s => String(s).toLowerCase()).filter(Boolean)));
-        if (uniq.length) {
-          const sample = uniq.slice(0, 3).join(', ');
-          const more = uniq.length > 3 ? ` +${uniq.length - 3}` : '';
-          chips.push(`<div class="search-chip" aria-label="Keywords">Keywords: ${sample}${more}</div>`);
-        }
-      }
       wrap.innerHTML = chips.join('');
       wrap.style.display = chips.length ? 'flex' : 'none';
     }
