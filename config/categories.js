@@ -18,8 +18,8 @@ export const categories = [
 export const compoundCategories = {
   'goth-free': {
     searchTerm: 'goth',
-    // Synonyms broaden the search to catch bio variations
-    synonyms: ['goth', 'gothic', 'alt', 'emo', 'punk', 'egirl', 'e-girl'],
+    // Keep synonyms tight to avoid false positives
+    synonyms: ['goth', 'gothic'],
     filters: { maxPrice: 0 },
     displayLabel: 'Goth (Free)'
   }

@@ -302,7 +302,7 @@
     // ============================================
     // DYNAMIC CATEGORY NAVIGATION
     // ============================================
-  import { popularCategories, categoryToSlug, compoundCategories } from '/config/categories.js?v=20251106-3';
+  import { popularCategories, categoryToSlug, compoundCategories } from '/config/categories.js?v=20251106-4';
     
     // Render desktop dropdown menu
     const catMenu = document.getElementById('categoriesMenu');
@@ -328,7 +328,7 @@
   </script>
 
   <script type="module">
-    import { compoundCategories, synonymsMap } from '/config/categories.js?v=20251106-3';
+    import { compoundCategories, synonymsMap } from '/config/categories.js?v=20251106-4';
     // Scroll preservation like homepage
     let savedScrollY = 0;
     function lockScroll(){ savedScrollY = window.scrollY || window.pageYOffset || 0; }
@@ -448,7 +448,11 @@
       if (filters.bundles !== undefined) bundlesToggle.checked = filters.bundles;
       if (filters.maxPrice !== undefined) {
         priceRange.value = String(filters.maxPrice);
-        priceValue.textContent = String(filters.maxPrice);
+        priceValue.textContent = filters.maxPrice === 0 ? 'Free' : String(filters.maxPrice);
+        // Disable price slider for compound categories with auto-maxPrice
+        priceRange.disabled = true;
+        priceRange.style.opacity = '0.5';
+        priceRange.style.cursor = 'not-allowed';
       }
     }
 
@@ -547,9 +551,29 @@
       const chips = [];
       if (verifiedToggle.checked) chips.push(`<div class="search-chip" data-filter="verified">Verified only <span class="remove" aria-label="Remove">×</span></div>`);
       if (bundlesToggle.checked) chips.push(`<div class="search-chip" data-filter="bundles">Bundles <span class="remove" aria-label="Remove">×</span></div>`);
-      if (priceRange.value !== '100') chips.push(`<div class="search-chip" data-filter="max">Max $${priceRange.value} <span class="remove" aria-label="Remove">×</span></div>`);
+      
+      // For compound categories with auto-maxPrice, show a non-removable chip
+      const autoMaxPrice = isCompound && compoundCategories[slug]?.filters?.maxPrice !== undefined;
+      if (autoMaxPrice) {
+        const maxVal = compoundCategories[slug].filters.maxPrice;
+        const label = maxVal === 0 ? 'Free Only' : `Max $${maxVal}`;
+        chips.push(`<div class="search-chip" aria-label="Price filter">${label}</div>`);
+      } else if (priceRange.value !== '100') {
+        chips.push(`<div class="search-chip" data-filter="max">Max $${priceRange.value} <span class="remove" aria-label="Remove">×</span></div>`);
+      }
+      
       wrap.innerHTML = chips.join('');
       wrap.style.display = chips.length ? 'flex' : 'none';
+      
+      // Add click handlers for removable chips
+      wrap.querySelectorAll('.search-chip[data-filter]').forEach(chip => {
+        chip.addEventListener('click', () => {
+          const filter = chip.dataset.filter;
+          if (filter === 'verified') { verifiedToggle.checked = false; performSearch(true); }
+          else if (filter === 'bundles') { bundlesToggle.checked = false; performSearch(true); }
+          else if (filter === 'max') { priceRange.value = '100'; priceValue.textContent = '100'; performSearch(true); }
+        });
+      });
     }
 
     // Fire-and-forget analytics using sendBeacon when available
