@@ -526,9 +526,17 @@
     function updateURL(){
       const params = new URLSearchParams();
       if (currentPage > 1) params.set('page', String(currentPage));
-      if (verifiedToggle.checked) params.set('verified', 'true');
-      if (bundlesToggle.checked) params.set('bundles', 'true');
-      if (priceRange.value !== '100') params.set('max', priceRange.value);
+      
+      // For compound categories, don't add auto-applied filters to URL (keep it clean for SEO)
+      const autoFilters = isCompound && compoundCategories[slug]?.filters;
+      const userChangedVerified = !autoFilters || autoFilters.verified === undefined;
+      const userChangedBundles = !autoFilters || autoFilters.bundles === undefined;
+      const userChangedPrice = !autoFilters || autoFilters.maxPrice === undefined;
+      
+      if (verifiedToggle.checked && userChangedVerified) params.set('verified', 'true');
+      if (bundlesToggle.checked && userChangedBundles) params.set('bundles', 'true');
+      if (priceRange.value !== '100' && userChangedPrice) params.set('max', priceRange.value);
+      
       const newURL = params.toString() ? `${location.pathname}?${params.toString()}` : location.pathname;
       history.replaceState({}, '', newURL);
     }
