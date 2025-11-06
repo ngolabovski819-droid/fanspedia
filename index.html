@@ -1404,7 +1404,26 @@
     const drawer = document.getElementById('mobileDrawer');
     const overlay = document.getElementById('drawerOverlay');
     const drawerClose = document.getElementById('drawerClose');
-    function openDrawer(){ if (!drawer || !overlay) return; drawer.classList.add('open'); overlay.classList.add('open'); drawer.setAttribute('aria-hidden','false'); overlay.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+    function openDrawer(){
+      if (!drawer || !overlay) return;
+      drawer.classList.add('open'); overlay.classList.add('open');
+      drawer.setAttribute('aria-hidden','false'); overlay.setAttribute('aria-hidden','false');
+      document.body.style.overflow='hidden';
+      // One-time gentle nudge to hint horizontal scroll in Popular row
+      try {
+        const nudgedKey = 'drawerPopularNudged';
+        const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (!prefersReduced && !localStorage.getItem(nudgedKey)) {
+          const row = document.getElementById('drawerCategories');
+          if (row && row.scrollWidth > row.clientWidth + 8) {
+            const to = Math.min(64, row.scrollWidth - row.clientWidth);
+            row.scrollTo({ left: to, behavior: 'smooth' });
+            setTimeout(() => row.scrollTo({ left: 0, behavior: 'smooth' }), 450);
+            localStorage.setItem(nudgedKey, '1');
+          }
+        }
+      } catch {}
+    }
     function closeDrawer(){ if (!drawer || !overlay) return; drawer.classList.remove('open'); overlay.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); overlay.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
     if (mobileToggle){ mobileToggle.addEventListener('click', (e)=>{ e.preventDefault(); openDrawer(); }); }
     if (overlay){ overlay.addEventListener('click', closeDrawer); }
