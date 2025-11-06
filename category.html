@@ -539,8 +539,37 @@
       if (verifiedToggle.checked) chips.push(`<div class="search-chip" data-filter="verified">Verified only <span class="remove" aria-label="Remove">×</span></div>`);
       if (bundlesToggle.checked) chips.push(`<div class="search-chip" data-filter="bundles">Bundles <span class="remove" aria-label="Remove">×</span></div>`);
       if (priceRange.value !== '100') chips.push(`<div class="search-chip" data-filter="max">Max $${priceRange.value} <span class="remove" aria-label="Remove">×</span></div>`);
+      // Keywords chip (read-only): show up to 3, then +N
+      if (Array.isArray(searchTerms) && searchTerms.length) {
+        const uniq = Array.from(new Set(searchTerms.map(s => String(s).toLowerCase()).filter(Boolean)));
+        if (uniq.length) {
+          const sample = uniq.slice(0, 3).join(', ');
+          const more = uniq.length > 3 ? ` +${uniq.length - 3}` : '';
+          chips.push(`<div class="search-chip" aria-label="Keywords">Keywords: ${sample}${more}</div>`);
+        }
+      }
       wrap.innerHTML = chips.join('');
       wrap.style.display = chips.length ? 'flex' : 'none';
+    }
+
+    // Fire-and-forget analytics using sendBeacon when available
+    function sendAnalytics(eventName){
+      try {
+        const payload = JSON.stringify({
+          event: eventName,
+          slug,
+          q: searchTerms.join('|'),
+          page: currentPage,
+          filters: { verified: verifiedToggle.checked, bundles: bundlesToggle.checked, max: priceRange.value }
+        });
+        const url = '/api/analytics';
+        if (navigator.sendBeacon) {
+          const blob = new Blob([payload], { type: 'application/json' });
+          navigator.sendBeacon(url, blob);
+        } else {
+          fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payload });
+        }
+      } catch {}
     }
 
     async function performSearch(resetPage = true, append = false){
@@ -561,6 +590,8 @@
         let apiUrl = `/api/search?q=${encodeURIComponent(q)}&price=${price}&page=${currentPage}&page_size=${pageSize}`;
         if (verified) apiUrl += '&verified=true';
         if (bundles) apiUrl += '&bundles=true';
+        // log analytics best-effort
+        sendAnalytics('category_search');
         statusDiv.textContent = `Loading page ${currentPage}...`;
         const response = await fetch(apiUrl);
         if (!response.ok) { const errorText = await response.text(); throw new Error(`HTTP ${response.status}: ${errorText}`); }
