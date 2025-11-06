@@ -327,7 +327,8 @@
     }
   </script>
 
-  <script>
+  <script type="module">
+    import { compoundCategories } from '/config/categories.js?v=20251106-2';
     // Scroll preservation like homepage
     let savedScrollY = 0;
     function lockScroll(){ savedScrollY = window.scrollY || window.pageYOffset || 0; }
