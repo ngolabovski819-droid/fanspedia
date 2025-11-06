@@ -105,7 +105,12 @@
   /* Base drawer links (Home/Categories) */
   .mobile-drawer a { display:block; padding:12px 10px; border-radius:8px; color:#1d1d1f; font-weight:700; text-decoration:none; margin:2px 0; }
   /* Popular categories as horizontal swipeable chips (mobile best practice) */
-  .mobile-drawer #drawerCategories { display:flex; gap:8px; overflow-x:auto; white-space:nowrap; padding:8px 2px 6px; margin:0 0 4px; -webkit-overflow-scrolling:touch; overscroll-behavior-x:contain; scroll-snap-type:x proximity; }
+  .mobile-drawer #drawerCategories { display:flex; gap:8px; overflow-x:auto; white-space:nowrap; padding:8px 2px 6px; margin:0 0 4px; -webkit-overflow-scrolling:touch; overscroll-behavior-x:contain; scroll-snap-type:x proximity; position:relative; }
+  /* Edge fade gradients to hint horizontal scroll */
+  .mobile-drawer #drawerCategories::before,
+  .mobile-drawer #drawerCategories::after { content:""; position:absolute; top:0; bottom:0; width:24px; pointer-events:none; z-index:1; }
+  .mobile-drawer #drawerCategories::before { left:0; background: linear-gradient(to right, #ffffff 0%, rgba(255,255,255,0) 100%); }
+  .mobile-drawer #drawerCategories::after { right:0; background: linear-gradient(to left, #ffffff 0%, rgba(255,255,255,0) 100%); }
   .mobile-drawer #drawerCategories::-webkit-scrollbar{ display:none; }
   .mobile-drawer #drawerCategories a { display:inline-flex; align-items:center; gap:10px; background:#f8fdff; border:1px solid #e7eef6; border-radius:9999px; padding:10px 14px; margin:0; font-weight:800; scroll-snap-align:start; }
   /* Remove hashtag symbol in the mobile drawer chips (drawer only) */
