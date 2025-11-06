@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -2065,9 +2065,479 @@
   </script>
 
   <!-- Footer -->
-  <footer class="text-center mt-5 pb-4" style="color: var(--text-secondary); font-size: 14px;">
-    <p class="mb-2">© 2025 BestOnlyFansGirls.net - Find the best OnlyFans creators</p>
-    <p class="mb-0">9,500+ verified creators • Updated daily</p>
+  <footer class="modern-footer">
+    <div class="footer-container">
+      <!-- Main Footer Content -->
+      <div class="footer-grid">
+        <!-- Column 1: Brand -->
+        <div class="footer-column footer-brand">
+          <div class="footer-logo">
+            <div class="footer-logo-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="currentColor" opacity="0.8"/>
+                <path d="M2 17L12 22L22 17V12L12 17L2 12V17Z" fill="currentColor"/>
+              </svg>
+            </div>
+            <div class="footer-logo-text">
+              <span class="footer-logo-main">BestOnlyFansGirls</span>
+              <span class="footer-logo-sub">Your Premium Creator Directory</span>
+            </div>
+          </div>
+          <p class="footer-description">
+            Discover and connect with verified OnlyFans creators. Updated daily with 9,500+ profiles across all categories.
+          </p>
+          <!-- Social Links -->
+          <div class="footer-social">
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Twitter">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="YouTube">
+              <i class="fab fa-youtube"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Column 2: Popular Categories -->
+        <div class="footer-column">
+          <h3 class="footer-heading">Popular Categories</h3>
+          <ul class="footer-links">
+            <li><a href="/categories/verified">Verified Creators</a></li>
+            <li><a href="/categories/free">Free OnlyFans</a></li>
+            <li><a href="/categories/cosplay">Cosplay Models</a></li>
+            <li><a href="/categories/fitness">Fitness & Wellness</a></li>
+            <li><a href="/categories/gaming">Gaming Creators</a></li>
+            <li><a href="/categories">View All Categories</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Resources -->
+        <div class="footer-column">
+          <h3 class="footer-heading">Resources</h3>
+          <ul class="footer-links">
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Creator Guide</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">How to Subscribe</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Safety Tips</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">FAQ</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Blog</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Support</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Legal & Info -->
+        <div class="footer-column">
+          <h3 class="footer-heading">Legal & Info</h3>
+          <ul class="footer-links">
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">About Us</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Contact</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Terms of Service</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Privacy Policy</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">DMCA Policy</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Cookie Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <div class="footer-bottom-content">
+          <p class="footer-copyright">
+            © 2025 BestOnlyFansGirls.net - All rights reserved
+          </p>
+          <div class="footer-stats">
+            <span class="stat-badge">
+              <i class="fas fa-check-circle"></i>
+              9,500+ Verified Creators
+            </span>
+            <span class="stat-badge">
+              <i class="fas fa-sync-alt"></i>
+              Updated Daily
+            </span>
+          </div>
+        </div>
+        <p class="footer-disclaimer">
+          This website is an independent directory and is not affiliated with OnlyFans. All trademarks belong to their respective owners.
+        </p>
+      </div>
+    </div>
   </footer>
+
+  <style>
+    /* ============================================
+       MODERN FOOTER STYLES
+       ============================================ */
+    .modern-footer {
+      background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+      border-top: 1px solid var(--border-color);
+      margin-top: 80px;
+      padding: 60px 0 0;
+      position: relative;
+    }
+
+    .modern-footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, #00AFF0 50%, transparent 100%);
+      opacity: 0.5;
+    }
+
+    .footer-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    /* Footer Brand Column */
+    .footer-brand {
+      max-width: 380px;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .footer-logo-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(0, 175, 240, 0.3);
+    }
+
+    .footer-logo-icon svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .footer-logo-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .footer-logo-main {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+
+    .footer-logo-sub {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .footer-description {
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    /* Social Links */
+    .footer-social {
+      display: flex;
+      gap: 12px;
+    }
+
+    .social-link {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      font-size: 18px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      text-decoration: none;
+    }
+
+    .social-link:hover {
+      background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
+      border-color: transparent;
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0, 175, 240, 0.35);
+    }
+
+    /* Footer Columns */
+    .footer-column h3.footer-heading {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 12px;
+    }
+
+    .footer-column h3.footer-heading::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 32px;
+      height: 2px;
+      background: linear-gradient(90deg, #00AFF0, #0099D6);
+      border-radius: 2px;
+    }
+
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      transition: all 0.2s ease;
+      position: relative;
+      padding-left: 0;
+    }
+
+    .footer-links a::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #00AFF0, #0099D6);
+      bottom: -2px;
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .footer-links a:hover {
+      color: #00AFF0;
+      padding-left: 8px;
+    }
+
+    .footer-links a:hover::before {
+      width: 24px;
+    }
+
+    /* Footer Bottom */
+    .footer-bottom {
+      padding: 32px 0;
+    }
+
+    .footer-bottom-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 16px;
+    }
+
+    .footer-copyright {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin: 0;
+      font-weight: 500;
+    }
+
+    .footer-stats {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .stat-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .stat-badge i {
+      color: #00AFF0;
+      font-size: 12px;
+    }
+
+    .footer-disclaimer {
+      color: var(--text-muted);
+      font-size: 12px;
+      text-align: center;
+      margin: 0;
+      line-height: 1.5;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* ============================================
+       RESPONSIVE DESIGN
+       ============================================ */
+    
+    /* Tablet */
+    @media (max-width: 992px) {
+      .footer-grid {
+        grid-template-columns: 2fr 1fr 1fr;
+        gap: 40px;
+      }
+
+      .footer-brand {
+        grid-column: 1 / -1;
+        max-width: 100%;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .modern-footer {
+        margin-top: 60px;
+        padding: 40px 0 0;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 36px;
+        padding-bottom: 36px;
+      }
+
+      .footer-brand {
+        text-align: center;
+      }
+
+      .footer-logo {
+        justify-content: center;
+      }
+
+      .footer-description {
+        text-align: center;
+      }
+
+      .footer-social {
+        justify-content: center;
+      }
+
+      .footer-column h3.footer-heading {
+        text-align: center;
+      }
+
+      .footer-column h3.footer-heading::after {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .footer-links {
+        text-align: center;
+      }
+
+      .footer-links a::before {
+        display: none;
+      }
+
+      .footer-links a:hover {
+        padding-left: 0;
+      }
+
+      .footer-bottom-content {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .footer-stats {
+        justify-content: center;
+      }
+    }
+
+    /* Small Mobile */
+    @media (max-width: 480px) {
+      .footer-logo-icon {
+        width: 40px;
+        height: 40px;
+      }
+
+      .footer-logo-icon svg {
+        width: 24px;
+        height: 24px;
+      }
+
+      .footer-logo-main {
+        font-size: 16px;
+      }
+
+      .footer-logo-sub {
+        font-size: 12px;
+      }
+
+      .social-link {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+      }
+
+      .footer-stats {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .stat-badge {
+        justify-content: center;
+        width: 100%;
+      }
+    }
+
+    /* Dark mode adjustments */
+    [data-theme="dark"] .footer-logo-icon {
+      box-shadow: 0 4px 12px rgba(0, 175, 240, 0.4);
+    }
+
+    [data-theme="dark"] .social-link {
+      background: var(--bg-primary);
+    }
+
+    [data-theme="dark"] .stat-badge {
+      background: var(--bg-primary);
+    }
+
+    [data-theme="dark"] .modern-footer::before {
+      opacity: 0.7;
+    }
+  </style>
 </body>
 </html>
