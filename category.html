@@ -397,6 +397,9 @@
     const label = isCompound ? compoundCategories[slug].displayLabel : slugToLabel(slug || '');
     const searchTerm = isCompound ? compoundCategories[slug].searchTerm : label;
     
+  // Debug logging
+  console.log('Category Debug:', { slug, isCompound, label, searchTerm, compoundCategories });
+    
     const canonical = `https://bestonlyfansgirls.net/categories/${slug ? slug + '/' : ''}`;
 
     document.title = label ? `${label} OnlyFans Creators - Best ${label} Models | BestOnlyFansGirls` : 'OnlyFans Category | BestOnlyFansGirls';
@@ -537,6 +540,7 @@
     }
 
     async function performSearch(resetPage = true, append = false){
+  console.log('performSearch called with searchTerm:', searchTerm, 'label:', label);
       if (!searchTerm) return;
       if (isLoading || (!hasMore && !resetPage)) return;
       isLoading = true;
