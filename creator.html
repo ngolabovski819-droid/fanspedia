@@ -650,20 +650,29 @@
       const profileContent = document.getElementById('profileContent');
 
       try {
-        const apiUrl = `/api/search?q=${encodeURIComponent(username)}&page=1&page_size=1`;
+        // Try exact username match first
+        let apiUrl = `/api/search?q=${encodeURIComponent(username)}&page=1&page_size=10`;
         console.log('Fetching from API:', apiUrl);
         
         const response = await fetch(apiUrl);
         console.log('API response status:', response.status);
         
+        if (!response.ok) {
+          throw new Error(`API error: ${response.status}`);
+        }
+        
         const data = await response.json();
         console.log('API response data:', data);
+        console.log('Number of results:', data.length);
 
         if (!data || data.length === 0) {
           throw new Error('Creator not found');
         }
 
-        const creator = data[0];
+        // Find exact username match (case-insensitive)
+        const creator = data.find(c => c.username && c.username.toLowerCase() === username.toLowerCase()) || data[0];
+        console.log('Selected creator:', creator);
+        
         renderProfile(creator);
         
         loadingState.style.display = 'none';
@@ -675,6 +684,7 @@
           <div class="error-message">
             <h2><i class="fas fa-exclamation-triangle"></i> Creator Not Found</h2>
             <p>Sorry, we couldn't find a creator with username "${username}"</p>
+            <p style="font-size: 14px; opacity: 0.8; margin-top: 10px;">Error: ${error.message}</p>
             <a href="/" style="color: white; text-decoration: underline; margin-top: 10px; display: inline-block;">Return to Search</a>
           </div>
         `;
