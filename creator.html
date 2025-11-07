@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Creator Profile - BestOFGirls</title>
+  <meta name="description" content="View detailed OnlyFans creator profile with stats, pricing, and direct link">
+  
+  <!-- Preconnect to critical domains -->
+  <link rel="preconnect" href="https://images.weserv.nl">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="dns-prefetch" href="https://onlyfans.com">
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8f9fa;
+      --bg-card: #ffffff;
+      --text-primary: #212529;
+      --text-secondary: #6c757d;
+      --text-muted: #adb5bd;
+      --border-color: #dee2e6;
+      --brand-color: #00AFF0;
+      --brand-gradient: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
+      --success-color: #28a745;
+      --warning-color: #ffc107;
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.12);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.15);
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: #1a1a1a;
+      --bg-secondary: #2d2d2d;
+      --bg-card: #242424;
+      --text-primary: #f8f9fa;
+      --text-secondary: #adb5bd;
+      --text-muted: #6c757d;
+      --border-color: #404040;
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Header */
+    .superior-header {
+      background: var(--brand-gradient);
+      padding: 16px 0;
+      box-shadow: var(--shadow-md);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .superior-header .container { display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 24px; font-weight: 800; color: white; text-decoration: none; }
+    .theme-toggle { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px; border-radius: 20px; cursor: pointer; transition: background 0.2s; }
+    .theme-toggle:hover { background: rgba(255,255,255,0.3); }
+
+    /* Breadcrumbs */
+    .breadcrumbs-wrapper { background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); padding: 0; }
+    .breadcrumbs { max-width: 1400px; margin: 0 auto; padding: 12px 16px; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 13px; list-style: none; }
+    .breadcrumb-item { display: inline-flex; align-items: center; color: var(--text-secondary); font-weight: 500; }
+    .breadcrumb-item a { color: var(--text-secondary); text-decoration: none; transition: color .2s ease; padding: 4px 6px; border-radius: 6px; }
+    .breadcrumb-item a:hover { color: var(--brand-color); background: rgba(0, 175, 240, 0.08); }
+    .breadcrumb-item.active { color: var(--text-primary); font-weight: 600; }
+    .breadcrumb-separator { color: var(--text-muted); margin: 0 2px; font-size: 11px; user-select: none; }
+    .breadcrumb-home { display: inline-flex; align-items: center; gap: 4px; }
+
+    /* Profile Container */
+    .profile-container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+    .profile-grid { display: grid; grid-template-columns: 350px 1fr; gap: 40px; }
+    
+    /* Left Column - Image & CTA */
+    .profile-sidebar { position: sticky; top: 100px; height: fit-content; }
+    .profile-image-wrapper {
+      background: var(--bg-card);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 20px;
+    }
+    .profile-image-wrapper img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      display: block;
+    }
+    .profile-cta {
+      background: var(--brand-gradient);
+      color: white;
+      padding: 16px;
+      text-align: center;
+      border-radius: 12px;
+      text-decoration: none;
+      display: block;
+      font-weight: 700;
+      font-size: 18px;
+      box-shadow: var(--shadow-md);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .profile-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+      color: white;
+    }
+    .profile-cta i { margin-right: 8px; }
+
+    /* Right Column - Info */
+    .profile-header { margin-bottom: 30px; }
+    .profile-header h1 {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .profile-username {
+      font-size: 20px;
+      color: var(--brand-color);
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: block;
+    }
+    .profile-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+    .profile-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .profile-meta-item i { color: var(--brand-color); font-size: 16px; }
+    .verified-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--success-color);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* Stats Grid */
+    .stats-section { margin: 30px 0; }
+    .stats-section h2 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+      border-bottom: 2px solid var(--brand-color);
+      padding-bottom: 10px;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .stat-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .stat-card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      background: linear-gradient(135deg, rgba(0, 175, 240, 0.1), rgba(0, 153, 214, 0.2));
+      color: var(--brand-color);
+    }
+    .stat-card-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .stat-card-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-top: 4px;
+    }
+    .stat-card-value.price {
+      color: var(--success-color);
+    }
+
+    /* Pricing Section */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .price-card {
+      background: var(--bg-card);
+      border: 2px solid var(--brand-color);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+    .price-card-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .price-card-value {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--brand-color);
+      margin-bottom: 4px;
+    }
+    .price-card-duration {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .price-card-discount {
+      background: var(--warning-color);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      display: inline-block;
+      margin-top: 8px;
+    }
+
+    /* Location */
+    .location-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 175, 240, 0.1);
+      color: var(--brand-color);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .profile-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .profile-sidebar { position: static; }
+      .profile-header h1 { font-size: 28px; }
+      .stats-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+      .stat-card { padding: 16px; }
+      .stat-card-value { font-size: 24px; }
+      .pricing-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Loading State */
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-secondary);
+    }
+    .loading i { font-size: 48px; margin-bottom: 16px; color: var(--brand-color); }
+
+    /* Error State */
+    .error-message {
+      background: #dc3545;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 40px auto;
+      max-width: 600px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="superior-header">
+    <div class="container">
+      <a href="/" class="logo">BestOFGirls</a>
+      <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i> <span id="themeText">Dark Mode</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="breadcrumbs-wrapper" aria-label="Breadcrumb">
+    <ol id="breadcrumbsList" class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
+      <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href="/" itemprop="item" class="breadcrumb-home">
+          <i class="fas fa-home" aria-hidden="true"></i>
+          <span itemprop="name">Home</span>
+        </a>
+      </li>
+      <li class="breadcrumb-separator" aria-hidden="true">/</li>
+      <li class="breadcrumb-item active" aria-current="page" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <span itemprop="name" id="breadcrumbName">Creator Profile</span>
+      </li>
+    </ol>
+  </nav>
+
+  <!-- Main Content -->
+  <main>
+    <div id="loadingState" class="loading">
+      <i class="fas fa-spinner fa-spin"></i>
+      <p>Loading creator profile...</p>
+    </div>
+
+    <div id="errorState" style="display: none;"></div>
+
+    <div id="profileContent" class="profile-container" style="display: none;">
+      <div class="profile-grid">
+        <!-- Left Sidebar -->
+        <aside class="profile-sidebar">
+          <div class="profile-image-wrapper">
+            <img id="profileAvatar" src="" alt="" loading="eager" fetchpriority="high">
+          </div>
+          <a id="onlyfansLink" href="" target="_blank" rel="noopener noreferrer" class="profile-cta">
+            <i class="fas fa-external-link-alt"></i>
+            Visit OnlyFans
+          </a>
+        </aside>
+
+        <!-- Right Content -->
+        <div class="profile-main">
+          <!-- Header -->
+          <div class="profile-header">
+            <h1 id="profileName"></h1>
+            <span id="profileUsername" class="profile-username"></span>
+            
+            <div class="profile-meta">
+              <div class="profile-meta-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Joined: <strong id="joinDate"></strong></span>
+              </div>
+              <div class="profile-meta-item" id="lastSeenItem" style="display: none;">
+                <i class="fas fa-eye"></i>
+                <span>Last Seen: <strong id="lastSeen"></strong></span>
+              </div>
+              <div id="verifiedBadge" style="display: none;">
+                <span class="verified-badge">
+                  <i class="fas fa-check-circle"></i> Verified & Active
+                </span>
+              </div>
+            </div>
+
+            <div id="locationContainer" style="display: none; margin-top: 12px;">
+              <span class="location-tag">
+                <i class="fas fa-map-marker-alt"></i>
+                <span id="location"></span>
+              </span>
+            </div>
+          </div>
+
+          <!-- Content Stats -->
+          <section class="stats-section">
+            <h2><i class="fas fa-photo-video"></i> Content Statistics</h2>
+            <div class="stats-grid" id="contentStats"></div>
+          </section>
+
+          <!-- Engagement Stats -->
+          <section class="stats-section">
+            <h2><i class="fas fa-heart"></i> Engagement & Reach</h2>
+            <div class="stats-grid" id="engagementStats"></div>
+          </section>
+
+          <!-- Pricing -->
+          <section class="stats-section" id="pricingSection">
+            <h2><i class="fas fa-dollar-sign"></i> Subscription Pricing</h2>
+            <div class="pricing-grid" id="pricingGrid"></div>
+          </section>
+
+          <!-- Bundles -->
+          <section class="stats-section" id="bundlesSection" style="display: none;">
+            <h2><i class="fas fa-gift"></i> Bundle Offers</h2>
+            <div class="pricing-grid" id="bundlesGrid"></div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    // Theme management
+    function getCurrentTheme() {
+      return localStorage.getItem('theme') || 'light';
+    }
+    
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+      const themeText = document.getElementById('themeText');
+      const icon = document.querySelector('#themeToggle i');
+      if (theme === 'dark') {
+        themeText.textContent = 'Light Mode';
+        icon.className = 'fas fa-sun';
+      } else {
+        themeText.textContent = 'Dark Mode';
+        icon.className = 'fas fa-moon';
+      }
+    }
+
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const current = getCurrentTheme();
+      applyTheme(current === 'light' ? 'dark' : 'light');
+    });
+
+    applyTheme(getCurrentTheme());
+
+    // Image proxy helper
+    function proxyImg(url, w, h) {
+      try {
+        if (!url || url.startsWith('/static/')) return url;
+        const noScheme = url.replace(/^https?:\/\//, '');
+        return `https://images.weserv.nl/?url=${encodeURIComponent(noScheme)}&w=${w}&h=${h}&fit=cover&output=webp`;
+      } catch {
+        return url;
+      }
+    }
+
+    // Format number
+    function formatNumber(num) {
+      if (num === null || num === undefined || num === '') return 'N/A';
+      const n = Number(num);
+      if (isNaN(n)) return 'N/A';
+      if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+      if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+      return n.toLocaleString();
+    }
+
+    // Format price
+    function formatPrice(price) {
+      if (price === null || price === undefined || price === '') return 'N/A';
+      const p = Number(price);
+      if (isNaN(p)) return 'N/A';
+      if (p === 0) return 'Free';
+      return '$' + p.toFixed(2);
+    }
+
+    // Format date
+    function formatDate(dateStr) {
+      if (!dateStr) return 'N/A';
+      try {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+      } catch {
+        return dateStr;
+      }
+    }
+
+    // Get username from URL
+    function getUsername() {
+      // Extract from path: /username or /username/
+      const path = window.location.pathname;
+      const match = path.match(/^\/([^\/]+)\/?$/);
+      if (match && match[1]) {
+        return match[1];
+      }
+      // Fallback to query param for testing
+      const params = new URLSearchParams(window.location.search);
+      return params.get('u') || 'levibabestation';
+    }
+
+    // Fetch creator data
+    async function loadCreatorProfile() {
+      const username = getUsername();
+      const loadingState = document.getElementById('loadingState');
+      const errorState = document.getElementById('errorState');
+      const profileContent = document.getElementById('profileContent');
+
+      try {
+        const response = await fetch(`/api/search?q=${encodeURIComponent(username)}&page=1&page_size=1`);
+        const data = await response.json();
+
+        if (!data || data.length === 0) {
+          throw new Error('Creator not found');
+        }
+
+        const creator = data[0];
+        renderProfile(creator);
+        
+        loadingState.style.display = 'none';
+        profileContent.style.display = 'block';
+      } catch (error) {
+        console.error('Error loading profile:', error);
+        loadingState.style.display = 'none';
+        errorState.innerHTML = `
+          <div class="error-message">
+            <h2><i class="fas fa-exclamation-triangle"></i> Creator Not Found</h2>
+            <p>Sorry, we couldn't find a creator with username "${username}"</p>
+            <a href="/" style="color: white; text-decoration: underline; margin-top: 10px; display: inline-block;">Return to Search</a>
+          </div>
+        `;
+        errorState.style.display = 'block';
+      }
+    }
+
+    // Render profile
+    function renderProfile(c) {
+      // Update breadcrumb
+      document.getElementById('breadcrumbName').textContent = c.name || c.username;
+
+      // Avatar
+      const avatar = c.avatar || '/static/no-image.png';
+      document.getElementById('profileAvatar').src = proxyImg(avatar, 350, 467);
+      document.getElementById('profileAvatar').alt = `${c.name || c.username} avatar`;
+
+      // OnlyFans link
+      document.getElementById('onlyfansLink').href = `https://onlyfans.com/${c.username}`;
+
+      // Header info
+      document.getElementById('profileName').textContent = c.name || c.username;
+      document.getElementById('profileUsername').textContent = '@' + c.username;
+      document.getElementById('joinDate').textContent = formatDate(c.joinDate);
+      
+      if (c.lastSeen) {
+        document.getElementById('lastSeen').textContent = formatDate(c.lastSeen);
+        document.getElementById('lastSeenItem').style.display = 'flex';
+      }
+
+      if (c.isVerified) {
+        document.getElementById('verifiedBadge').style.display = 'block';
+      }
+
+      if (c.location) {
+        document.getElementById('location').textContent = c.location;
+        document.getElementById('locationContainer').style.display = 'block';
+      }
+
+      // Content Stats
+      const contentStats = [
+        { icon: 'fa-image', label: 'Photos', value: formatNumber(c.photosCount) },
+        { icon: 'fa-video', label: 'Videos', value: formatNumber(c.videosCount) },
+        { icon: 'fa-file-alt', label: 'Posts', value: formatNumber(c.postsCount) },
+        { icon: 'fa-archive', label: 'Archived Posts', value: formatNumber(c.archivedPostsCount) },
+        { icon: 'fa-broadcast-tower', label: 'Finished Streams', value: formatNumber(c.finishedStreamsCount) },
+        { icon: 'fa-music', label: 'Audios', value: formatNumber(c.audiosCount) }
+      ];
+
+      document.getElementById('contentStats').innerHTML = contentStats.map(stat => `
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <div class="stat-card-icon">
+              <i class="fas ${stat.icon}"></i>
+            </div>
+          </div>
+          <div class="stat-card-label">${stat.label}</div>
+          <div class="stat-card-value">${stat.value}</div>
+        </div>
+      `).join('');
+
+      // Engagement Stats
+      const engagementStats = [
+        { icon: 'fa-users', label: 'Subscribers', value: c.showSubscribersCount ? formatNumber(c.subscribersCount) : 'Hidden' },
+        { icon: 'fa-heart', label: 'Likes', value: formatNumber(c.favoritedCount) },
+        { icon: 'fa-star', label: 'Favorites', value: formatNumber(c.favoritesCount) }
+      ];
+
+      // Add earnings if can earn
+      if (c.canEarn) {
+        engagementStats.push({ icon: 'fa-dollar-sign', label: 'Can Earn', value: 'Yes' });
+      }
+
+      document.getElementById('engagementStats').innerHTML = engagementStats.map(stat => `
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <div class="stat-card-icon">
+              <i class="fas ${stat.icon}"></i>
+            </div>
+          </div>
+          <div class="stat-card-label">${stat.label}</div>
+          <div class="stat-card-value">${stat.value}</div>
+        </div>
+      `).join('');
+
+      // Pricing
+      const prices = [];
+      if (c.subscribePrice !== null && c.subscribePrice !== undefined) {
+        prices.push({
+          label: 'Monthly Subscription',
+          value: formatPrice(c.subscribePrice),
+          duration: 'per month'
+        });
+      }
+
+      // Promotions
+      if (c.promotion1_price) {
+        prices.push({
+          label: 'Promotion Offer',
+          value: formatPrice(c.promotion1_price),
+          discount: c.promotion1_discount ? `${c.promotion1_discount}% OFF` : null
+        });
+      }
+
+      if (prices.length > 0) {
+        document.getElementById('pricingGrid').innerHTML = prices.map(p => `
+          <div class="price-card">
+            <div class="price-card-label">${p.label}</div>
+            <div class="price-card-value">${p.value}</div>
+            ${p.duration ? `<div class="price-card-duration">${p.duration}</div>` : ''}
+            ${p.discount ? `<div class="price-card-discount">${p.discount}</div>` : ''}
+          </div>
+        `).join('');
+      }
+
+      // Bundles
+      const bundles = [];
+      if (c.bundle1_price) {
+        bundles.push({
+          duration: c.bundle1_duration + ' months',
+          price: formatPrice(c.bundle1_price),
+          discount: c.bundle1_discount ? `${c.bundle1_discount}% OFF` : null
+        });
+      }
+      if (c.bundle2_price) {
+        bundles.push({
+          duration: c.bundle2_duration + ' months',
+          price: formatPrice(c.bundle2_price),
+          discount: c.bundle2_discount ? `${c.bundle2_discount}% OFF` : null
+        });
+      }
+      if (c.bundle3_price) {
+        bundles.push({
+          duration: c.bundle3_duration + ' months',
+          price: formatPrice(c.bundle3_price),
+          discount: c.bundle3_discount ? `${c.bundle3_discount}% OFF` : null
+        });
+      }
+
+      if (bundles.length > 0) {
+        document.getElementById('bundlesSection').style.display = 'block';
+        document.getElementById('bundlesGrid').innerHTML = bundles.map(b => `
+          <div class="price-card">
+            <div class="price-card-label">Bundle Deal</div>
+            <div class="price-card-value">${b.price}</div>
+            <div class="price-card-duration">${b.duration}</div>
+            ${b.discount ? `<div class="price-card-discount">${b.discount}</div>` : ''}
+          </div>
+        `).join('');
+      }
+    }
+
+    // Load on page ready
+    loadCreatorProfile();
+  </script>
+</body>
+</html>

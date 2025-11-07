@@ -5,7 +5,8 @@
     { "source": "/categories/", "destination": "/categories.html" },
     { "source": "/categories/:slug", "destination": "/category.html" },
     { "source": "/categories/:slug/", "destination": "/category.html" },
-    { "source": "/categories/:slug/page/:page", "destination": "/category.html?page=:page" }
+    { "source": "/categories/:slug/page/:page", "destination": "/category.html?page=:page" },
+    { "source": "/:username", "destination": "/creator.html" }
   ],
   "redirects": [
     { "source": "/category", "destination": "/categories", "permanent": true },
@@ -28,6 +29,12 @@
     },
     {
       "source": "/category.html",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/creator.html",
       "headers": [
         { "key": "Cache-Control", "value": "no-store, must-revalidate" }
       ]
