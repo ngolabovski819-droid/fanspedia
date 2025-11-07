@@ -102,8 +102,9 @@
   <!-- Preload Bootstrap CSS and swap rel on load for faster first paint -->
   <link rel="preload" as="style" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"></noscript>
-  <!-- Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Font Awesome for icons - async loaded to prevent render blocking -->
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
   <style>
     /* ============================================
        DARK MODE CSS VARIABLES
@@ -1113,6 +1114,20 @@
         font-size: 16px;
       }
     }
+
+    /* ============================================
+       BREADCRUMBS - SEO Optimized
+       ============================================ */
+    .breadcrumbs-wrapper { background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); padding: 0; position: relative; z-index: 100; }
+    .breadcrumbs { max-width: 1400px; margin: 0 auto; padding: 12px 16px; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 13px; }
+    .breadcrumb-item { display: inline-flex; align-items: center; color: var(--text-secondary); font-weight: 500; }
+    .breadcrumb-item a { color: var(--text-secondary); text-decoration: none; transition: color .2s ease; padding: 4px 6px; border-radius: 6px; }
+    .breadcrumb-item a:hover { color: var(--brand-color); background: rgba(0, 175, 240, 0.08); }
+    .breadcrumb-item.active { color: var(--text-primary); font-weight: 600; }
+    .breadcrumb-separator { color: var(--text-muted); margin: 0 2px; font-size: 11px; user-select: none; }
+    .breadcrumb-home { display: inline-flex; align-items: center; gap: 4px; }
+    .breadcrumb-home i { font-size: 13px; }
+    @media (max-width: 480px) { .breadcrumbs { font-size: 12px; padding: 10px 16px; gap: 4px; } .breadcrumb-separator { margin: 0 1px; } }
   </style>
 </head>
 <body>
@@ -1195,6 +1210,24 @@
       </div>
       <a href="/categories/" class="drawer-view-all-btn">View All Categories</a>
     </div>
+  </nav>
+
+  <!-- Breadcrumbs -->
+  <nav class="breadcrumbs-wrapper" aria-label="Breadcrumb">
+    <ol class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
+      <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href="/" itemprop="item" class="breadcrumb-home">
+          <i class="fas fa-home" aria-hidden="true"></i>
+          <span itemprop="name">Home</span>
+        </a>
+        <meta itemprop="position" content="1" />
+      </li>
+      <li class="breadcrumb-separator" aria-hidden="true">/</li>
+      <li class="breadcrumb-item active" aria-current="page" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <span itemprop="name">Search</span>
+        <meta itemprop="position" content="2" />
+      </li>
+    </ol>
   </nav>
 
   <div class="container text-center">
