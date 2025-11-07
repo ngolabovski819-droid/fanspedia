@@ -153,6 +153,50 @@
     }
     .theme-toggle:hover { background: rgba(255, 255, 255, 0.3); }
 
+    /* Desktop Categories Dropdown */
+    .desktop-nav { position: relative; flex-shrink: 0; }
+    .desktop-nav .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 9999px;
+      padding: 10px 14px;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+    .desktop-nav .nav-btn:hover { background: rgba(255,255,255,0.3); }
+    .desktop-nav .nav-btn i { font-size: 12px; opacity: 0.9; }
+    .desktop-nav .dropdown-menu {
+      position: absolute;
+      left: 0;
+      top: calc(100% + 8px);
+      background: var(--bg-card);
+      border-radius: 12px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+      padding: 8px;
+      min-width: 240px;
+      display: none;
+      z-index: 10000;
+    }
+    .desktop-nav .dropdown-menu.open { display: block; }
+    .desktop-nav .dropdown-menu a {
+      display: block;
+      padding: 10px 12px;
+      color: var(--text-primary);
+      font-weight: 700;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background .15s ease, color .15s ease;
+    }
+    .desktop-nav .dropdown-menu a:hover { background: #f5f5f7; color: #00AFF0; }
+    .desktop-nav .dropdown-menu .divider { height: 1px; background: var(--border-color); margin: 6px 6px; }
+    .desktop-nav .dropdown-menu a.view-all { color: #00AFF0; }
+
     /* Breadcrumbs */
     .breadcrumbs-wrapper { 
       background: var(--bg-secondary); 
@@ -416,6 +460,16 @@
           </div>
         </a>
 
+        <!-- Desktop categories -->
+        <div class="desktop-nav">
+          <button id="categoriesToggle" class="nav-btn" aria-haspopup="true" aria-expanded="false">
+            Categories <i class="fas fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div id="categoriesMenu" class="dropdown-menu" role="menu" aria-hidden="true">
+            <!-- Populated dynamically from config/categories.js -->
+          </div>
+        </div>
+
         <!-- Search -->
         <div class="header-search-section">
           <div class="header-search-wrapper">
@@ -538,6 +592,52 @@
       </div>
     </div>
   </main>
+
+  <script type="module">
+    // ============================================
+    // DYNAMIC CATEGORY NAVIGATION
+    // ============================================
+    import { popularCategories, categoryToSlug } from '/config/categories.js?v=20251106-2';
+    
+    // Render desktop dropdown menu
+    const catMenu = document.getElementById('categoriesMenu');
+    if (catMenu) {
+      const menuHTML = popularCategories.map(cat => {
+        const slug = categoryToSlug(cat);
+        const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        return `<a role="menuitem" href="/categories/${slug}/">${label}</a>`;
+      }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Browse all categories →</a>';
+      catMenu.innerHTML = menuHTML;
+    }
+
+    // Desktop Categories dropdown toggle
+    const catToggle = document.getElementById('categoriesToggle');
+    const catMenuEl = document.getElementById('categoriesMenu');
+    if (catToggle && catMenuEl) {
+      catToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = catMenuEl.classList.contains('open');
+        catMenuEl.classList.toggle('open');
+        catToggle.setAttribute('aria-expanded', !isOpen);
+      });
+
+      // Close on outside click
+      document.addEventListener('click', (e) => {
+        if (!catToggle.contains(e.target) && !catMenuEl.contains(e.target)) {
+          catMenuEl.classList.remove('open');
+          catToggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      // Close on escape
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && catMenuEl.classList.contains('open')) {
+          catMenuEl.classList.remove('open');
+          catToggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+  </script>
 
   <script type="module">
     // Theme management
