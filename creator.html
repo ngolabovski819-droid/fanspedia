@@ -624,25 +624,40 @@
     function getUsername() {
       // Extract from path: /username or /username/
       const path = window.location.pathname;
+      console.log('Current path:', path);
+      
       const match = path.match(/^\/([^\/]+)\/?$/);
       if (match && match[1]) {
+        console.log('Extracted username from path:', match[1]);
         return match[1];
       }
+      
       // Fallback to query param for testing
       const params = new URLSearchParams(window.location.search);
-      return params.get('u') || 'levibabestation';
+      const queryUsername = params.get('u');
+      console.log('Query param username:', queryUsername);
+      
+      return queryUsername || 'levibabestation';
     }
 
     // Fetch creator data
     async function loadCreatorProfile() {
       const username = getUsername();
+      console.log('Loading profile for username:', username);
+      
       const loadingState = document.getElementById('loadingState');
       const errorState = document.getElementById('errorState');
       const profileContent = document.getElementById('profileContent');
 
       try {
-        const response = await fetch(`/api/search?q=${encodeURIComponent(username)}&page=1&page_size=1`);
+        const apiUrl = `/api/search?q=${encodeURIComponent(username)}&page=1&page_size=1`;
+        console.log('Fetching from API:', apiUrl);
+        
+        const response = await fetch(apiUrl);
+        console.log('API response status:', response.status);
+        
         const data = await response.json();
+        console.log('API response data:', data);
 
         if (!data || data.length === 0) {
           throw new Error('Creator not found');
