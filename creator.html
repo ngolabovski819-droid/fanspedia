@@ -56,22 +56,110 @@
       transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    /* Header */
+    /* Header - Match site style */
     .superior-header {
-      background: var(--brand-gradient);
-      padding: 16px 0;
-      box-shadow: var(--shadow-md);
-      position: sticky;
+      position: fixed;
       top: 0;
-      z-index: 1000;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
+      box-shadow: 0 4px 24px rgba(0, 175, 240, 0.25);
     }
-    .superior-header .container { display: flex; justify-content: space-between; align-items: center; }
-    .logo { font-size: 24px; font-weight: 800; color: white; text-decoration: none; }
-    .theme-toggle { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px; border-radius: 20px; cursor: pointer; transition: background 0.2s; }
-    .theme-toggle:hover { background: rgba(255,255,255,0.3); }
+    .header-main { padding: 10px 0; }
+    .header-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: white;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    .logo-icon i { color: #00AFF0; }
+    .logo-text { display: flex; flex-direction: column; }
+    .logo-text .brand {
+      font-size: 20px;
+      font-weight: 800;
+      color: white;
+      letter-spacing: -0.5px;
+      line-height: 1;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+    .logo-text .tagline {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+    .header-search-section { flex: 1; max-width: 560px; }
+    .header-search-wrapper { position: relative; display: flex; align-items: center; }
+    .header-search-input {
+      width: 100%;
+      padding: 10px 16px 10px 44px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.95);
+      font-size: 15px;
+      font-weight: 500;
+      color: #1d1d1f;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+    .header-search-input:focus {
+      outline: none;
+      border-color: white;
+      background: white;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    }
+    .header-search-icon {
+      position: absolute;
+      left: 16px;
+      color: #00AFF0;
+      font-size: 18px;
+    }
+    .header-actions { display: flex; align-items: center; gap: 12px; }
+    .theme-toggle {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .theme-toggle:hover { background: rgba(255, 255, 255, 0.3); }
 
     /* Breadcrumbs */
-    .breadcrumbs-wrapper { background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); padding: 0; }
+    .breadcrumbs-wrapper { 
+      background: var(--bg-secondary); 
+      border-bottom: 1px solid var(--border-color); 
+      padding: 0;
+      margin-top: 64px; /* Account for fixed header */
+    }
     .breadcrumbs { max-width: 1400px; margin: 0 auto; padding: 12px 16px; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 13px; list-style: none; }
     .breadcrumb-item { display: inline-flex; align-items: center; color: var(--text-secondary); font-weight: 500; }
     .breadcrumb-item a { color: var(--text-secondary); text-decoration: none; transition: color .2s ease; padding: 4px 6px; border-radius: 6px; }
@@ -314,12 +402,43 @@
 </head>
 <body>
   <!-- Header -->
-  <header class="superior-header">
-    <div class="container">
-      <a href="/" class="logo">BestOFGirls</a>
-      <button class="theme-toggle" id="themeToggle">
-        <i class="fas fa-moon"></i> <span id="themeText">Dark Mode</span>
-      </button>
+  <header class="superior-header" id="mainHeader">
+    <div class="header-main">
+      <div class="header-container">
+        <!-- Logo -->
+        <a href="/" class="logo-section">
+          <div class="logo-icon">
+            <i class="fas fa-fire"></i>
+          </div>
+          <div class="logo-text">
+            <div class="brand">BestOFGirls</div>
+            <div class="tagline">10k+ TOP Creators</div>
+          </div>
+        </a>
+
+        <!-- Search -->
+        <div class="header-search-section">
+          <div class="header-search-wrapper">
+            <i class="fas fa-search header-search-icon"></i>
+            <input 
+              type="text" 
+              class="header-search-input" 
+              placeholder="Search by name, location, category..."
+              id="headerSearch"
+              autocomplete="off"
+              autocapitalize="none"
+              spellcheck="false"
+            >
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="header-actions">
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+          </button>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -446,6 +565,19 @@
     });
 
     applyTheme(getCurrentTheme());
+
+    // Header search functionality
+    const headerSearch = document.getElementById('headerSearch');
+    if (headerSearch) {
+      headerSearch.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          const query = headerSearch.value.trim();
+          if (query) {
+            window.location.href = `/?q=${encodeURIComponent(query)}`;
+          }
+        }
+      });
+    }
 
     // Image proxy helper
     function proxyImg(url, w, h) {
