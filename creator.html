@@ -641,6 +641,8 @@
 
   <script type="module">
     // Theme management
+    console.log('Theme script loaded');
+    
     function getCurrentTheme() {
       return localStorage.getItem('theme') || 'light';
     }
@@ -649,19 +651,25 @@
       document.documentElement.setAttribute('data-theme', theme);
       localStorage.setItem('theme', theme);
       const icon = document.querySelector('#themeToggle i');
-      if (theme === 'dark') {
-        icon.className = 'fas fa-sun';
-      } else {
-        icon.className = 'fas fa-moon';
+      if (icon) {
+        if (theme === 'dark') {
+          icon.className = 'fas fa-sun';
+        } else {
+          icon.className = 'fas fa-moon';
+        }
       }
     }
 
-    document.getElementById('themeToggle').addEventListener('click', () => {
-      const current = getCurrentTheme();
-      applyTheme(current === 'light' ? 'dark' : 'light');
-    });
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        const current = getCurrentTheme();
+        applyTheme(current === 'light' ? 'dark' : 'light');
+      });
+    }
 
     applyTheme(getCurrentTheme());
+    console.log('Theme initialized');
 
     // Header search functionality
     const headerSearch = document.getElementById('headerSearch');
