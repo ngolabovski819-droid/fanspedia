@@ -648,13 +648,10 @@
     function applyTheme(theme) {
       document.documentElement.setAttribute('data-theme', theme);
       localStorage.setItem('theme', theme);
-      const themeText = document.getElementById('themeText');
       const icon = document.querySelector('#themeToggle i');
       if (theme === 'dark') {
-        themeText.textContent = 'Light Mode';
         icon.className = 'fas fa-sun';
       } else {
-        themeText.textContent = 'Dark Mode';
         icon.className = 'fas fa-moon';
       }
     }
