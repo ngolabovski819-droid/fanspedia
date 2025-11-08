@@ -37,6 +37,45 @@
       --placeholder-color: #999;
       --heading-color: #1d1d1f;
     }
+  /* Header effects */
+  .superior-header { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+  .superior-header.scrolled { box-shadow: 0 8px 32px rgba(0, 175, 240, 0.35); }
+
+  /* Mobile drawer & overlay styles (match homepage) */
+  .mobile-menu-toggle { display: none; background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.3); color: #fff; width: 44px; height: 44px; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; justify-content: center; align-items: center; }
+  .mobile-menu-toggle:hover { background: rgba(255, 255, 255, 0.3); }
+  .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 10000; opacity: 0; pointer-events: none; transition: opacity .3s ease; }
+  .drawer-overlay.open { opacity: 1; pointer-events: auto; }
+  .mobile-drawer { position: fixed; top: 0; right: -100%; width: 82%; max-width: 340px; height: 100%; background: #fff; box-shadow: -8px 0 24px rgba(0,0,0,0.2); z-index: 10001; padding: 16px; display: flex; flex-direction: column; gap: 6px; transition: right .3s ease; }
+  .mobile-drawer.open { right: 0; }
+  .mobile-drawer .drawer-close { align-self: flex-end; background: none; border: none; font-size: 28px; line-height: 1; color: #1d1d1f; margin-bottom: 4px; cursor: pointer; }
+  .mobile-drawer > a { display:block; padding: 14px 12px; border-radius: 8px; color: #1d1d1f; font-weight: 700; text-decoration: none; margin: 2px 0; font-size: 16px; }
+  .mobile-drawer > a:hover { background: #f5f5f7; color: #00AFF0; }
+  .drawer-categories-toggle { display:flex; align-items:center; justify-content:space-between; padding: 14px 12px; cursor:pointer; border-radius:8px; margin:2px 0; transition: background .2s ease; font-size:16px; font-weight:700; color:#1d1d1f; }
+  .drawer-categories-toggle:hover { background:#f5f5f7; }
+  .drawer-categories-toggle .icon-text { display:flex; align-items:center; gap:10px; }
+  .drawer-categories-toggle .icon-text i { font-size:18px; color:#1d1d1f; }
+  .drawer-categories-toggle .chevron { font-size:14px; transition: transform 0.3s ease; color:#666; }
+  .drawer-categories-toggle.open .chevron { transform: rotate(180deg); }
+  #drawerCategoriesSection { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, opacity 0.3s ease; opacity: 0; }
+  #drawerCategoriesSection.open { max-height: 600px; opacity: 1; }
+  .drawer-categories-label { color: #999; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; padding: 12px 16px 8px; margin: 0; }
+  #drawerCategories { display: flex; flex-direction: column; gap: 0; padding: 0 4px; max-height: 400px; overflow-y: auto; }
+  #drawerCategories::-webkit-scrollbar { width: 4px; }
+  #drawerCategories::-webkit-scrollbar-thumb { background: #ddd; border-radius: 4px; }
+  #drawerCategories a { display: block; padding: 12px 12px; color: #555; font-weight: 600; text-decoration: none; border-radius: 6px; margin: 1px 0; font-size: 15px; transition: background 0.15s ease, color 0.15s ease; }
+  #drawerCategories a:hover { background: #f5f5f7; color: #00AFF0; }
+  .drawer-view-all-btn { display: block; margin: 12px 8px 8px; padding: 14px 20px; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); color: white; text-align: center; border-radius: 12px; font-weight: 800; text-decoration: none; font-size: 15px; box-shadow: 0 4px 12px rgba(0,175,240,0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+  .drawer-view-all-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(0,175,240,0.4); color: white; }
+    @media (max-width: 768px) { 
+      .desktop-nav { display:none; } 
+      .mobile-menu-toggle { display:inline-flex; } 
+      .header-search-section { order:3; width:100%; max-width:100%; } 
+      .logo-text .tagline { display:none; } 
+      .header-main { padding: 8px 0; } 
+      .header-container { flex-wrap: wrap; gap: 12px; }
+    }
+  @media (max-width: 480px) { .header-search-input { padding: 10px 16px 10px 40px; font-size: 14px; } .header-main { padding: 6px 0; } }
 
     [data-theme="dark"] {
       --bg-primary: #1a1a1a;
@@ -80,15 +119,21 @@
       padding: 0 16px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 16px;
+      gap: 12px;
     }
+    .header-reordered { grid-template-columns: none; }
+    .header-actions.compact-actions { display:flex; align-items:center; gap:12px; flex-shrink:0; }
+    .tail-search { flex: 1; max-width: 560px; }
+    @media (max-width:768px){ .tail-search{ order:3; width:100%; max-width:100%; } }
     .logo-section {
       display: flex;
       align-items: center;
       gap: 12px;
       text-decoration: none;
     }
+    .logo-section { order: 0; }
+    .header-actions.compact-actions { order: 1; }
+    .tail-search { order: 2; }
     .logo-icon {
       width: 40px;
       height: 40px;
@@ -205,11 +250,12 @@
     .desktop-nav .dropdown-menu a.view-all { color: #00AFF0; }
 
     /* Breadcrumbs */
+    body { padding-top: 68px; }
     .breadcrumbs-wrapper { 
       background: var(--bg-secondary); 
       border-bottom: 1px solid var(--border-color); 
       padding: 0;
-      margin-top: 64px; /* Account for fixed header */
+      /* removed margin-top, body now reserves space */
     }
     .breadcrumbs { max-width: 1400px; margin: 0 auto; padding: 12px 16px; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 13px; list-style: none; }
     .breadcrumb-item { display: inline-flex; align-items: center; color: var(--text-secondary); font-weight: 500; }
@@ -848,53 +894,51 @@
   <!-- Header -->
   <header class="superior-header" id="mainHeader">
     <div class="header-main">
-      <div class="header-container">
-        <!-- Logo -->
+      <div class="header-container header-reordered">
+        <!-- Logo (icon + brand) -->
         <a href="/" class="logo-section">
-          <div class="logo-icon">
-            <i class="fas fa-fire"></i>
-          </div>
+          <div class="logo-icon"><i class="fas fa-fire"></i></div>
           <div class="logo-text">
             <div class="brand">BestOFGirls</div>
             <div class="tagline">10k+ TOP Creators</div>
           </div>
         </a>
-
-        <!-- Desktop categories -->
-        <div class="desktop-nav">
-          <button id="categoriesToggle" class="nav-btn" aria-haspopup="true" aria-expanded="false">
-            Categories <i class="fas fa-chevron-down" aria-hidden="true"></i>
-          </button>
-          <div id="categoriesMenu" class="dropdown-menu" role="menu" aria-hidden="true">
-            <!-- Populated dynamically from config/categories.js -->
-          </div>
+        <!-- Actions: theme + burger come immediately after logo -->
+        <div class="header-actions compact-actions">
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><i class="fas fa-moon"></i></button>
+          <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
         </div>
-
-        <!-- Search -->
-        <div class="header-search-section">
+        <!-- Search positioned last (flex grows) -->
+        <div class="header-search-section tail-search">
           <div class="header-search-wrapper">
             <i class="fas fa-search header-search-icon"></i>
-            <input 
-              type="text" 
-              class="header-search-input" 
-              placeholder="Search by name, location, category..."
-              id="headerSearch"
-              autocomplete="off"
-              autocapitalize="none"
-              spellcheck="false"
-            >
+            <input type="text" class="header-search-input" placeholder="Search by name, location, category..." id="headerSearch" autocomplete="off" autocapitalize="none" spellcheck="false">
           </div>
-        </div>
-
-        <!-- Actions -->
-        <div class="header-actions">
-          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-            <i class="fas fa-moon"></i>
-          </button>
         </div>
       </div>
     </div>
   </header>
+
+  <!-- Mobile Drawer -->
+  <div id="drawerOverlay" class="drawer-overlay" tabindex="-1" aria-hidden="true"></div>
+  <nav id="mobileDrawer" class="mobile-drawer" aria-hidden="true" aria-labelledby="mobileMenuToggle">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">×</button>
+    <a href="/">Home</a>
+
+    <!-- Categories collapsible section -->
+    <div class="drawer-categories-toggle" id="drawerCategoriesToggle">
+      <div class="icon-text">
+        <i class="fas fa-th"></i>
+        <span>Categories</span>
+      </div>
+      <i class="fas fa-chevron-down chevron"></i>
+    </div>
+    <div id="drawerCategoriesSection">
+      <div class="drawer-categories-label">MOST POPULAR CATEGORIES</div>
+      <div id="drawerCategories"><!-- populated dynamically --></div>
+      <a href="/categories/" class="drawer-view-all-btn">View All Categories</a>
+    </div>
+  </nav>
 
   <!-- Breadcrumbs -->
   <nav class="breadcrumbs-wrapper" aria-label="Breadcrumb">
@@ -999,44 +1043,72 @@
     // ============================================
     import { popularCategories, categoryToSlug } from '/config/categories.js?v=20251106-2';
     
-    // Render desktop dropdown menu
-    const catMenu = document.getElementById('categoriesMenu');
-    if (catMenu) {
-      const menuHTML = popularCategories.map(cat => {
+    // No desktop categories button on creator page (order requested: logo, brand, dark mode, burger, search)
+
+    // ===========================
+    // Mobile drawer wiring
+    // ===========================
+    const drawerOverlay = document.getElementById('drawerOverlay');
+    const mobileDrawer = document.getElementById('mobileDrawer');
+    const drawerClose = document.getElementById('drawerClose');
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const drawerCategoriesToggle = document.getElementById('drawerCategoriesToggle');
+    const drawerCategoriesSection = document.getElementById('drawerCategoriesSection');
+    const drawerCategories = document.getElementById('drawerCategories');
+
+    function openDrawer() {
+      if (!mobileDrawer || !drawerOverlay) return;
+      mobileDrawer.classList.add('open');
+      drawerOverlay.classList.add('open');
+      mobileDrawer.setAttribute('aria-hidden', 'false');
+      drawerOverlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+      if (!mobileDrawer || !drawerOverlay) return;
+      mobileDrawer.classList.remove('open');
+      drawerOverlay.classList.remove('open');
+      mobileDrawer.setAttribute('aria-hidden', 'true');
+      drawerOverlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    // Populate drawer categories (popular only)
+    if (drawerCategories) {
+      drawerCategories.innerHTML = popularCategories.map(cat => {
         const slug = categoryToSlug(cat);
         const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-        return `<a role="menuitem" href="/categories/${slug}/">${label}</a>`;
-      }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Browse all categories →</a>';
-      catMenu.innerHTML = menuHTML;
+        return `<a href="/categories/${slug}/">${label}</a>`;
+      }).join('');
     }
 
-    // Desktop Categories dropdown toggle
-    const catToggle = document.getElementById('categoriesToggle');
-    const catMenuEl = document.getElementById('categoriesMenu');
-    if (catToggle && catMenuEl) {
-      catToggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isOpen = catMenuEl.classList.contains('open');
-        catMenuEl.classList.toggle('open');
-        catToggle.setAttribute('aria-expanded', !isOpen);
-      });
+    if (mobileMenuToggle) mobileMenuToggle.addEventListener('click', openDrawer);
+    if (drawerClose) drawerClose.addEventListener('click', closeDrawer);
+    if (drawerOverlay) drawerOverlay.addEventListener('click', closeDrawer);
 
-      // Close on outside click
-      document.addEventListener('click', (e) => {
-        if (!catToggle.contains(e.target) && !catMenuEl.contains(e.target)) {
-          catMenuEl.classList.remove('open');
-          catToggle.setAttribute('aria-expanded', 'false');
-        }
-      });
+    // ESC to close
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileDrawer && mobileDrawer.classList.contains('active')) {
+        closeDrawer();
+      }
+    });
 
-      // Close on escape
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && catMenuEl.classList.contains('open')) {
-          catMenuEl.classList.remove('open');
-          catToggle.setAttribute('aria-expanded', 'false');
-        }
+    // Toggle categories section inside drawer
+    if (drawerCategoriesToggle && drawerCategoriesSection) {
+      drawerCategoriesToggle.addEventListener('click', () => {
+        const isOpen = drawerCategoriesSection.classList.toggle('open');
+        drawerCategoriesToggle.classList.toggle('open', isOpen);
       });
     }
+
+    // Header scrolled shadow
+    window.addEventListener('scroll', () => {
+      const header = document.getElementById('mainHeader');
+      if (!header) return;
+      if (window.pageYOffset > 50) header.classList.add('scrolled');
+      else header.classList.remove('scrolled');
+    });
   </script>
 
   <script type="module">
