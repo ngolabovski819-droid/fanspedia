@@ -27,8 +27,16 @@ export default async function handler(req, res) {
     const page_size = Math.max(1, Math.min(parseInt(req.query.page_size || "50", 10) || 50, 1000)); // Allow up to 1000 per request
 
     const selectCols = [
-      "id","username","name","location","avatar",
-      "isverified","subscribeprice","header","avatar_c50","avatar_c144","bundle1_price"
+      "id","username","name","location","avatar","header",
+      "isverified","subscribeprice",
+      "avatar_c50","avatar_c144",
+      "photoscount","videoscount","postscount","archivedpostscount","finishedstreamscount","audioscount",
+      "subscriberscount","favoritedcount","showsubscriberscount","canearn",
+      "firstpublishedpostdate","joindate","lastseen",
+      "bundle1_price","bundle1_duration","bundle1_discount",
+      "bundle2_price","bundle2_duration","bundle2_discount",
+      "bundle3_price","bundle3_duration","bundle3_discount",
+      "promotion1_price","promotion1_discount"
     ].join(',');
 
     const base = `${SUPABASE_URL}/rest/v1/onlyfans_profiles`;
