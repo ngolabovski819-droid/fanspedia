@@ -217,7 +217,7 @@
     .profile-grid { display: grid; grid-template-columns: 350px 1fr; gap: 40px; }
     
     /* Left Column - Image & CTA */
-    .profile-sidebar { position: sticky; top: 100px; height: fit-content; }
+    .profile-sidebar { position: sticky; top: 80px; height: fit-content; }
     .profile-image-wrapper {
       background: var(--bg-card);
       border-radius: 16px;
@@ -811,9 +811,9 @@
       document.getElementById('onlyfansLink').href = `https://onlyfans.com/${c.username}`;
 
       // Header info
-      document.getElementById('profileName').textContent = c.name || c.username;
+      document.getElementById('profileName').textContent = (c.name || c.username) + ' OnlyFans profile';
       document.getElementById('profileUsername').textContent = '@' + c.username;
-      document.getElementById('joinDate').textContent = formatDate(c.joinDate);
+      document.getElementById('joinDate').textContent = formatDate(c.firstPublishedPostDate || c.joinDate);
       
       if (c.lastSeen) {
         document.getElementById('lastSeen').textContent = formatDate(c.lastSeen);
@@ -831,12 +831,12 @@
 
       // Content Stats
       const contentStats = [
-        { icon: 'fa-image', label: 'Photos', value: formatNumber(c.photosCount) },
-        { icon: 'fa-video', label: 'Videos', value: formatNumber(c.videosCount) },
-        { icon: 'fa-file-alt', label: 'Posts', value: formatNumber(c.postsCount) },
-        { icon: 'fa-archive', label: 'Archived Posts', value: formatNumber(c.archivedPostsCount) },
-        { icon: 'fa-broadcast-tower', label: 'Finished Streams', value: formatNumber(c.finishedStreamsCount) },
-        { icon: 'fa-music', label: 'Audios', value: formatNumber(c.audiosCount) }
+        { icon: 'fa-image', label: 'Photos', value: formatNumber(c.photoscount) },
+        { icon: 'fa-video', label: 'Videos', value: formatNumber(c.videoscount) },
+        { icon: 'fa-file-alt', label: 'Posts', value: formatNumber(c.postscount) },
+        { icon: 'fa-archive', label: 'Archived Posts', value: formatNumber(c.archivedpostscount) },
+        { icon: 'fa-broadcast-tower', label: 'Finished Streams', value: formatNumber(c.finishedstreamscount) },
+        { icon: 'fa-music', label: 'Audios', value: formatNumber(c.audioscount) }
       ];
 
       document.getElementById('contentStats').innerHTML = contentStats.map(stat => `
@@ -853,13 +853,12 @@
 
       // Engagement Stats
       const engagementStats = [
-        { icon: 'fa-users', label: 'Subscribers', value: c.showSubscribersCount ? formatNumber(c.subscribersCount) : 'Hidden' },
-        { icon: 'fa-heart', label: 'Likes', value: formatNumber(c.favoritedCount) },
-        { icon: 'fa-star', label: 'Favorites', value: formatNumber(c.favoritesCount) }
+        { icon: 'fa-users', label: 'Subscribers', value: c.showsubscriberscount ? formatNumber(c.subscriberscount) : 'Hidden' },
+        { icon: 'fa-heart', label: 'Likes', value: formatNumber(c.favoritedcount) }
       ];
 
       // Add earnings if can earn
-      if (c.canEarn) {
+      if (c.canearn) {
         engagementStats.push({ icon: 'fa-dollar-sign', label: 'Can Earn', value: 'Yes' });
       }
 
