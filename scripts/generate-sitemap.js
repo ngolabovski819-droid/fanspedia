@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * generate-sitemap.js
- * Automatically generates sitemap.xml from the categories list and creator profiles.
+ * Automatically generates sitemap.xml from the categories list.
  * Run: node scripts/generate-sitemap.js
  */
 
@@ -16,10 +16,6 @@ const __dirname = path.dirname(__filename);
 // Base URL of your site
 const BASE_URL = 'https://bestonlyfansgirls.net';
 
-// Supabase configuration - use process.env directly (works in Vercel and local with vercel env pull)
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_KEY = process.env.SUPABASE_KEY;
-
 // Get current date in YYYY-MM-DD format
 function getCurrentDate() {
   const now = new Date();
@@ -29,39 +25,9 @@ function getCurrentDate() {
   return `${year}-${month}-${day}`;
 }
 
-// Fetch creator profiles from Supabase
-async function fetchCreatorProfiles() {
-  if (!SUPABASE_URL || !SUPABASE_KEY) {
-    console.warn('⚠️ Supabase credentials not found. Skipping creator profiles.');
-    return [];
-  }
-
-  try {
-    const url = `${SUPABASE_URL}/rest/v1/onlyfans_profiles?select=username&order=favoritedcount.desc&limit=1000`;
-    const response = await fetch(url, {
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`,
-        'Accept-Profile': 'public'
-      }
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const profiles = await response.json();
-    return profiles.filter(p => p.username).map(p => p.username);
-  } catch (error) {
-    console.error('❌ Error fetching creator profiles:', error.message);
-    return [];
-  }
-}
-
 // Build sitemap XML
-async function generateSitemap() {
+function generateSitemap() {
   const today = getCurrentDate();
-  const creatorUsernames = await fetchCreatorProfiles();
   
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
   xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
@@ -93,15 +59,13 @@ async function generateSitemap() {
     xml += '  </url>\n';
   });
   
-  // All creator profile pages
-  creatorUsernames.forEach(username => {
-    xml += '  <url>\n';
-    xml += `    <loc>${BASE_URL}/creator/${encodeURIComponent(username)}/</loc>\n`;
-    xml += `    <lastmod>${today}</lastmod>\n`;
-    xml += '    <changefreq>weekly</changefreq>\n';
-    xml += '    <priority>0.7</priority>\n';
-    xml += '  </url>\n';
-  });
+  // Creator profile page
+  xml += '  <url>\n';
+  xml += `    <loc>${BASE_URL}/levibabestation</loc>\n`;
+  xml += `    <lastmod>${today}</lastmod>\n`;
+  xml += '    <changefreq>weekly</changefreq>\n';
+  xml += '    <priority>0.7</priority>\n';
+  xml += '  </url>\n';
   
   xml += '</urlset>';
   
@@ -109,9 +73,9 @@ async function generateSitemap() {
 }
 
 // Main execution
-async function main() {
+function main() {
   console.log('🔄 Generating sitemap...');
-  const sitemap = await generateSitemap();
+  const sitemap = generateSitemap();
   const outputPath = path.join(__dirname, '..', 'sitemap.xml');
   const publicOutputPath = path.join(__dirname, '..', 'public', 'sitemap.xml');
   
@@ -128,10 +92,7 @@ async function main() {
   console.log(`✅ Sitemap generated successfully!`);
   console.log(`📁 Location: ${outputPath}`);
   console.log(`📁 Public copy: ${publicOutputPath}`);
-  console.log(`📊 Total URLs: ${urlCount} (homepage + categories hub + ${categories.length} categories + creator profiles)`);
+  console.log(`📊 Total URLs: ${urlCount} (homepage + categories hub + ${categories.length} categories + 1 creator profile)`);
 }
 
-main().catch(error => {
-  console.error('❌ Error generating sitemap:', error);
-  process.exit(1);
-});
+main();
