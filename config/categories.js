@@ -10,7 +10,8 @@ export const categories = [
   'sextape', 'creampie', 'joi', 'threesome', 'teen (18+)', 'shemale', 'bbc', 'tits', 'ebony', 'pornhub',
   'footjob', 'foot fetish', 'dick ratings', 'bbw', 'mature', 'teacher', 'pussy', 'scottish', 'cuckold', 'big ass', 'squirting', 'hottest',
   'amateur', 'blonde', 'japanese', 'instagram', 'pawg', 'gangbang', 'redhead', 'male', 'vip', 'famous',
-  'twins', 'ass', 'deepthroat', 'pregnant', 'handjob', 'facial', 'asmr', 'pegging', 'no ppv', 'nurse', 'smoking fetish', 'goth-free'
+  'twins', 'ass', 'deepthroat', 'pregnant', 'handjob', 'facial', 'asmr', 'pegging', 'no ppv', 'nurse', 'smoking fetish', 'goth-free',
+  'big natural boobs'
 ];
 
 // Compound categories: special categories that combine search terms with automatic filters
@@ -33,6 +34,8 @@ const synonymsOverrides = {
   'big tits': ['big tits','big boobs','large breasts','boobs','tits'],
   'boobs': ['boobs','tits','breasts'],
   'tits': ['tits','boobs','breasts'],
+  'big natural boobs': ['big natural boobs','natural boobs','big naturals','natural big boobs','natural breasts','natural tits','big natural','bignaturals'],
+  'big-natural-boobs': ['big natural boobs','natural boobs','big naturals','natural big boobs','natural breasts','natural tits','big natural','bignaturals'],
   'milf': ['milf','mom','hot mom','mature mom','cougar'],
   'mature': ['mature','cougar','older'],
   'ebony': ['ebony','black','melanin'],

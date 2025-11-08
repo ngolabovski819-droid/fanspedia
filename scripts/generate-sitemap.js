@@ -68,11 +68,18 @@ function generateSitemap() {
 function main() {
   const sitemap = generateSitemap();
   const outputPath = path.join(__dirname, '..', 'sitemap.xml');
+  const publicOutputPath = path.join(__dirname, '..', 'public', 'sitemap.xml');
   
   fs.writeFileSync(outputPath, sitemap, 'utf8');
+  try {
+    fs.writeFileSync(publicOutputPath, sitemap, 'utf8');
+  } catch (e) {
+    console.warn('⚠️ Failed to write public/sitemap.xml:', e.message);
+  }
   
   console.log(`✅ Sitemap generated successfully!`);
   console.log(`📁 Location: ${outputPath}`);
+  console.log(`📁 Public copy: ${publicOutputPath}`);
   console.log(`📊 Total URLs: ${categories.length + 2} (homepage + categories hub + ${categories.length} category pages)`);
 }
 
