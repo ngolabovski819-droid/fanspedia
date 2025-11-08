@@ -449,6 +449,33 @@
       margin: 40px auto;
       max-width: 600px;
     }
+    /* Back to top button (match homepage) */
+    #backToTop {
+      position: fixed;
+      right: 16px;
+      bottom: 80px;
+      width: 48px;
+      height: 48px;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
+      color: #fff;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 18px rgba(0,175,240,0.35);
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(6px);
+      transition: opacity .25s ease, transform .25s ease, background-color .2s ease;
+      z-index: 1000;
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 1;
+    }
+    #backToTop.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    #backToTop:hover { background: linear-gradient(135deg, #0099D6 0%, #0088C0 100%); box-shadow: 0 10px 26px rgba(0,175,240,0.5); }
 
     /* ============================================
        MODERN FOOTER STYLES
@@ -1316,6 +1343,23 @@
 
     // Load on page ready
     loadCreatorProfile();
+  </script>
+  <!-- Back to top button -->
+  <button id="backToTop" aria-label="Back to top" title="Back to top">↑</button>
+  <script>
+    (function(){
+      const backToTopBtn = document.getElementById('backToTop');
+      window.addEventListener('scroll', () => {
+        if (!backToTopBtn) return;
+        if (window.scrollY > 600) backToTopBtn.classList.add('visible');
+        else backToTopBtn.classList.remove('visible');
+      });
+      if (backToTopBtn) {
+        backToTopBtn.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+    })();
   </script>
 
   <!-- Footer -->
