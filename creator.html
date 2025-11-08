@@ -67,13 +67,35 @@
   #drawerCategories a:hover { background: #f5f5f7; color: #00AFF0; }
   .drawer-view-all-btn { display: block; margin: 12px 8px 8px; padding: 14px 20px; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); color: white; text-align: center; border-radius: 12px; font-weight: 800; text-decoration: none; font-size: 15px; box-shadow: 0 4px 12px rgba(0,175,240,0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; }
   .drawer-view-all-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(0,175,240,0.4); color: white; }
+
+  /* Mobile Search Modal Styles */
+  .mobile-search-modal { display: none; position: fixed; inset: 0; background: #fff; z-index: 10003; flex-direction: column; }
+  .mobile-search-modal.active { display: flex; }
+  .mobile-search-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 12px 16px; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+  .mobile-search-back { background: rgba(255,255,255,0.2); border: none; color: white; width: 36px; height: 36px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s; }
+  .mobile-search-back:hover { background: rgba(255,255,255,0.3); }
+  .mobile-search-input-wrapper { flex: 1; position: relative; }
+  .mobile-search-input { width: 100%; padding: 10px 16px 10px 42px; border: 2px solid rgba(255,255,255,0.3); border-radius: 24px; background: rgba(255,255,255,0.95); font-size: 16px; color: #2d3748; }
+  .mobile-search-input::placeholder { color: #718096; }
+  .mobile-search-input:focus { outline: none; border-color: rgba(255,255,255,0.6); background: white; }
+  .mobile-search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #667eea; pointer-events: none; }
+  .mobile-search-suggestions { padding: 16px; }
+  .mobile-search-suggestions-title { font-size: 13px; font-weight: 600; color: #718096; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+  .mobile-search-suggestion { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #f7fafc; border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s; text-decoration: none; color: #2d3748; }
+  .mobile-search-suggestion:hover { background: #edf2f7; transform: translateX(4px); }
+  .mobile-search-suggestion i { color: #f56565; font-size: 14px; }
+  .mobile-search-suggestion span { font-size: 15px; font-weight: 500; }
+  .mobile-search-trigger { display: none; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; color: white; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; align-items: center; justify-content: center; transition: all 0.3s; box-shadow: 0 2px 8px rgba(102,126,234,0.3); }
+  .mobile-search-trigger:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(102,126,234,0.4); }
+
     @media (max-width: 768px) { 
       .desktop-nav { display:none; } 
       .mobile-menu-toggle { display:inline-flex; } 
-      .header-search-section { order:3; width:100%; max-width:100%; } 
+      .header-search-section { display: none !important; } 
       .logo-text .tagline { display:none; } 
       .header-main { padding: 8px 0; } 
       .header-container { flex-wrap: wrap; gap: 12px; }
+      .mobile-search-trigger { display: inline-flex; }
     }
   @media (max-width: 480px) { .header-search-input { padding: 10px 16px 10px 40px; font-size: 14px; } .header-main { padding: 6px 0; } }
 
@@ -960,6 +982,9 @@
         </div>
         <!-- Actions: safe search + theme + burger on the right -->
         <div class="header-actions">
+          <button class="mobile-search-trigger" id="mobileSearchTrigger" aria-label="Search">
+            <i class="fas fa-search"></i>
+          </button>
           <button class="safe-search-toggle" id="safeSearchToggle" aria-label="Toggle Safe Search (blur images)" title="Safe Search: Browse comfortably in public">
             <i class="fas fa-eye-slash"></i>
           </button>
@@ -969,6 +994,23 @@
       </div>
     </div>
   </header>
+
+  <!-- Mobile Search Modal -->
+  <div class="mobile-search-modal" id="mobileSearchModal">
+    <div class="mobile-search-header">
+      <button class="mobile-search-back" id="mobileSearchBack" aria-label="Close search">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div class="mobile-search-input-wrapper">
+        <i class="fas fa-search mobile-search-icon"></i>
+        <input type="text" class="mobile-search-input" id="mobileSearchInput" placeholder="Search creators..." autocomplete="off" />
+      </div>
+    </div>
+    <div class="mobile-search-suggestions">
+      <div class="mobile-search-suggestions-title">Popular Searches</div>
+      <div id="mobileSearchSuggestionsContainer"></div>
+    </div>
+  </div>
 
   <!-- Safe Search Modal -->
   <div class="safe-search-modal" id="safeSearchModal" role="dialog" aria-labelledby="safeSearchModalTitle" aria-modal="true">
@@ -1341,6 +1383,56 @@
 
     initSafeSearch();
     console.log('Safe Search initialized');
+
+    // ===== MOBILE SEARCH MODAL FUNCTIONALITY =====
+    const mobileSearchModal = document.getElementById('mobileSearchModal');
+    const mobileSearchTrigger = document.getElementById('mobileSearchTrigger');
+    const mobileSearchBack = document.getElementById('mobileSearchBack');
+    const mobileSearchInput = document.getElementById('mobileSearchInput');
+    const mobileSearchSuggestionsContainer = document.getElementById('mobileSearchSuggestionsContainer');
+
+    const popularSearches = ['milf', 'asian', 'big tits', 'trans', 'mature', 'latina', 'big ass', 'bbw'];
+
+    function populateMobileSuggestions() {
+      mobileSearchSuggestionsContainer.innerHTML = popularSearches.map(term => `
+        <a href="/?q=${encodeURIComponent(term)}" class="mobile-search-suggestion">
+          <i class="fas fa-fire"></i>
+          <span>${term.charAt(0).toUpperCase() + term.slice(1)}</span>
+        </a>
+      `).join('');
+    }
+
+    function openMobileSearch() {
+      mobileSearchModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => mobileSearchInput.focus(), 100);
+    }
+
+    function closeMobileSearch() {
+      mobileSearchModal.classList.remove('active');
+      document.body.style.overflow = '';
+      mobileSearchInput.value = '';
+    }
+
+    // Event listeners
+    if (mobileSearchTrigger) {
+      mobileSearchTrigger.addEventListener('click', openMobileSearch);
+    }
+
+    if (mobileSearchBack) {
+      mobileSearchBack.addEventListener('click', closeMobileSearch);
+    }
+
+    if (mobileSearchInput) {
+      mobileSearchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && mobileSearchInput.value.trim()) {
+          window.location.href = `/?q=${encodeURIComponent(mobileSearchInput.value.trim())}`;
+        }
+      });
+    }
+
+    // Populate suggestions on page load
+    populateMobileSuggestions();
 
     // Header search functionality
     const headerSearch = document.getElementById('headerSearch');
