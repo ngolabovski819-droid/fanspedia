@@ -1743,9 +1743,9 @@
       const savedState = getSafeSearchState();
       applySafeSearch(savedState);
       
-      // Show modal for first-time visitors (after short delay for better UX)
+      // Show modal for first-time visitors (after 10 seconds of browsing)
       if (!hasSeenSafeSearchModal()) {
-        setTimeout(showSafeSearchModal, 1500);
+        setTimeout(showSafeSearchModal, 10000);
       }
       
       // Check URL parameter for forced state (?safe=1)

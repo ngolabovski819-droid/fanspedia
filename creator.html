@@ -121,19 +121,14 @@
       align-items: center;
       gap: 12px;
     }
-    .header-reordered { grid-template-columns: none; }
-    .header-actions.compact-actions { display:flex; align-items:center; gap:12px; flex-shrink:0; }
-    .tail-search { flex: 1; max-width: 560px; }
-    @media (max-width:768px){ .tail-search{ order:3; width:100%; max-width:100%; } }
+    .header-search-section { flex: 1; max-width: 560px; }
+    .header-actions { display:flex; align-items:center; gap:12px; flex-shrink:0; }
     .logo-section {
       display: flex;
       align-items: center;
       gap: 12px;
       text-decoration: none;
     }
-    .logo-section { order: 0; }
-    .header-actions.compact-actions { order: 1; }
-    .tail-search { order: 2; }
     .logo-icon {
       width: 40px;
       height: 40px;
@@ -283,12 +278,40 @@
       overflow: hidden;
       box-shadow: var(--shadow-md);
       margin-bottom: 20px;
+      position: relative;
     }
     .profile-image-wrapper img {
       width: 100%;
       aspect-ratio: 3/4;
       object-fit: cover;
       display: block;
+      transition: filter 0.3s ease;
+    }
+    /* Safe Search Blur for Profile Image */
+    body.safe-search-active .profile-image-wrapper img {
+      filter: blur(20px) saturate(0.7);
+      opacity: 0.85;
+    }
+    body.safe-search-active .profile-image-wrapper:hover img {
+      filter: blur(8px) saturate(0.8);
+      opacity: 0.9;
+    }
+    body.safe-search-active .profile-image-wrapper::before {
+      content: '18+';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 48px;
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.95);
+      z-index: 5;
+      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      pointer-events: none;
+      backdrop-filter: blur(2px);
+      padding: 12px 24px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.2);
     }
     .profile-cta {
       background: var(--brand-gradient);
@@ -927,20 +950,20 @@
             <div class="tagline">10k+ TOP Creators</div>
           </div>
         </a>
-        <!-- Actions: safe search + theme + burger come immediately after logo -->
-        <div class="header-actions compact-actions">
+        <!-- Search positioned in middle (flex grows) -->
+        <div class="header-search-section">
+          <div class="header-search-wrapper">
+            <i class="fas fa-search header-search-icon"></i>
+            <input type="text" class="header-search-input" placeholder="Search by name, location, category..." id="headerSearch" autocomplete="off" autocapitalize="none" spellcheck="false">
+          </div>
+        </div>
+        <!-- Actions: safe search + theme + burger on the right -->
+        <div class="header-actions">
           <button class="safe-search-toggle" id="safeSearchToggle" aria-label="Toggle Safe Search (blur images)" title="Safe Search: Browse comfortably in public">
             <i class="fas fa-eye-slash"></i>
           </button>
           <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><i class="fas fa-moon"></i></button>
           <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
-        </div>
-        <!-- Search positioned last (flex grows) -->
-        <div class="header-search-section tail-search">
-          <div class="header-search-wrapper">
-            <i class="fas fa-search header-search-icon"></i>
-            <input type="text" class="header-search-input" placeholder="Search by name, location, category..." id="headerSearch" autocomplete="off" autocapitalize="none" spellcheck="false">
-          </div>
         </div>
       </div>
     </div>
@@ -1267,7 +1290,7 @@
       if (!hasSeenSafeSearchModal()) {
         setTimeout(() => {
           showSafeSearchModal();
-        }, 1500);
+        }, 10000);
       }
 
       const toggleBtn = document.getElementById('safeSearchToggle');
