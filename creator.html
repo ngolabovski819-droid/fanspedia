@@ -23,7 +23,7 @@
       --bg-card: #ffffff;
       --text-primary: #212529;
       --text-secondary: #6c757d;
-      --text-muted: #adb5bd;
+      --text-muted: #888;
       --border-color: #dee2e6;
       --brand-color: #00AFF0;
       --brand-gradient: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
@@ -40,7 +40,7 @@
       --bg-card: #242424;
       --text-primary: #f8f9fa;
       --text-secondary: #adb5bd;
-      --text-muted: #6c757d;
+      --text-muted: #888;
       --border-color: #404040;
       --shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
       --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
@@ -753,6 +753,60 @@
       .footer-stats {
         justify-content: center;
       }
+    }
+
+    /* Small Mobile */
+    @media (max-width: 480px) {
+      .footer-logo-icon {
+        width: 40px;
+        height: 40px;
+      }
+
+      .footer-logo-icon svg {
+        width: 24px;
+        height: 24px;
+      }
+
+      .footer-logo-main {
+        font-size: 16px;
+      }
+
+      .footer-logo-sub {
+        font-size: 12px;
+      }
+
+      .social-link {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+      }
+
+      .footer-stats {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .stat-badge {
+        justify-content: center;
+        width: 100%;
+      }
+    }
+
+    /* Dark mode adjustments */
+    [data-theme="dark"] .footer-logo-icon {
+      box-shadow: 0 4px 12px rgba(0, 175, 240, 0.4);
+    }
+
+    [data-theme="dark"] .social-link {
+      background: var(--bg-primary);
+    }
+
+    [data-theme="dark"] .stat-badge {
+      background: var(--bg-primary);
+    }
+
+    [data-theme="dark"] .modern-footer::before {
+      opacity: 0.7;
     }
   </style>
 </head>
