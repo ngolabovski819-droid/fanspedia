@@ -1488,22 +1488,26 @@
 
     // Get username from URL
     function getUsername() {
-      // Extract from path: /username or /username/
+      // Priority 1: Check query param (used by SSR redirect)
+      const params = new URLSearchParams(window.location.search);
+      const queryUsername = params.get('u');
+      if (queryUsername) {
+        console.log('Extracted username from query param:', queryUsername);
+        return queryUsername;
+      }
+      
+      // Priority 2: Extract from path: /username or /username/
       const path = window.location.pathname;
       console.log('Current path:', path);
       
       const match = path.match(/^\/([^\/]+)\/?$/);
-      if (match && match[1]) {
+      if (match && match[1] && match[1] !== 'creator.html') {
         console.log('Extracted username from path:', match[1]);
         return match[1];
       }
       
-      // Fallback to query param for testing
-      const params = new URLSearchParams(window.location.search);
-      const queryUsername = params.get('u');
-      console.log('Query param username:', queryUsername);
-      
-      return queryUsername || 'levibabestation';
+      console.log('No username found, using default');
+      return 'levibabestation';
     }
 
     // Fetch creator data
