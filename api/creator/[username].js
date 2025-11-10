@@ -215,8 +215,8 @@ ${JSON.stringify(jsonLd, null, 2)}
     window.__SSR_USERNAME__ = ${JSON.stringify(username)};
     window.__SSR_CLEAN_URL__ = ${JSON.stringify('/' + username)};
     
-    // Instant redirect to creator.html with query param
-    window.location.replace('/creator.html?u=' + encodeURIComponent(${JSON.stringify(username)}) + '&ssr=1');
+    // Instant redirect to creator.html with clean URL in fragment
+    window.location.replace('/creator.html?u=' + encodeURIComponent(${JSON.stringify(username)}) + '&ssr=1&cleanUrl=' + encodeURIComponent(${JSON.stringify('/' + username)}));
   </script>
   
   <noscript>

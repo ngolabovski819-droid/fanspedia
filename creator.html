@@ -10,9 +10,10 @@
   <script>
     (function() {
       const params = new URLSearchParams(window.location.search);
-      if (params.get('ssr') === '1' && window.__SSR_CLEAN_URL__) {
+      const cleanUrl = params.get('cleanUrl') || window.__SSR_CLEAN_URL__;
+      if (params.get('ssr') === '1' && cleanUrl) {
         if (window.history && window.history.replaceState) {
-          window.history.replaceState(null, '', window.__SSR_CLEAN_URL__);
+          window.history.replaceState(null, '', cleanUrl);
         }
       }
     })();
