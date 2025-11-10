@@ -6,11 +6,22 @@
     { "source": "/categories/:slug", "destination": "/category.html" },
     { "source": "/categories/:slug/", "destination": "/category.html" },
     { "source": "/categories/:slug/page/:page", "destination": "/category.html?page=:page" },
-    { "source": "/creator.html", "destination": "/api/creator-redirect" },
     { "source": "/api/:path*", "destination": "/api/:path*" },
     { "source": "/:username([a-zA-Z0-9_-]+)", "destination": "/api/creator/:username" }
   ],
   "redirects": [
+    {
+      "source": "/creator.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "u",
+          "value": "(?<username>.*)"
+        }
+      ],
+      "destination": "/:username",
+      "permanent": true
+    },
     { "source": "/category", "destination": "/categories", "permanent": true },
     { "source": "/category/", "destination": "/categories/", "permanent": true },
     { "source": "/categories/big-butt", "destination": "/categories/big-ass", "permanent": true },
