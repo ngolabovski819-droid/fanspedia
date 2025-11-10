@@ -19,6 +19,12 @@
           "value": "(?<username>.*)"
         }
       ],
+      "missing": [
+        {
+          "type": "query",
+          "key": "ssr"
+        }
+      ],
       "destination": "/:username",
       "permanent": true
     },
