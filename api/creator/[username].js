@@ -209,69 +209,19 @@ function generateHtml(creator) {
 ${JSON.stringify(jsonLd, null, 2)}
   </script>
   
-  <!-- Load Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  
   <!-- Pre-cache creator data for zero-latency client render -->
   <script>
     window.__CREATOR_SSR__ = ${JSON.stringify(creator)};
     window.__SSR_USERNAME__ = ${JSON.stringify(username)};
+    window.__SSR_CLEAN_URL__ = ${JSON.stringify('/' + username)};
+    
+    // Instant redirect to creator.html with query param
+    window.location.replace('/creator.html?u=' + encodeURIComponent(${JSON.stringify(username)}) + '&ssr=1');
   </script>
   
-  <style>
-    body { opacity: 0; transition: opacity 0.3s; }
-    body.loaded { opacity: 1; }
-  </style>
-  
-  <!-- Fetch and inject creator.html content while preserving URL -->
-  <script>
-    (async function() {
-      try {
-        // Fetch creator.html content
-        const response = await fetch('/creator.html');
-        const html = await response.text();
-        
-        // Create a temporary container to parse HTML safely
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        
-        // Get body content and inject it
-        const bodyContent = doc.body;
-        if (bodyContent) {
-          // Copy all body content
-          document.body.innerHTML = bodyContent.innerHTML;
-          document.body.className = bodyContent.className + ' loaded';
-          
-          // Copy body attributes
-          for (let attr of bodyContent.attributes) {
-            if (attr.name !== 'class') {
-              document.body.setAttribute(attr.name, attr.value);
-            }
-          }
-          
-          // Re-execute inline scripts
-          const scripts = document.body.querySelectorAll('script');
-          scripts.forEach(oldScript => {
-            const newScript = document.createElement('script');
-            if (oldScript.src) {
-              newScript.src = oldScript.src;
-            } else {
-              newScript.textContent = oldScript.textContent;
-            }
-            // Copy attributes
-            for (let attr of oldScript.attributes) {
-              newScript.setAttribute(attr.name, attr.value);
-            }
-            oldScript.parentNode.replaceChild(newScript, oldScript);
-          });
-        }
-      } catch (error) {
-        console.error('Failed to load creator content:', error);
-        document.body.innerHTML = '<p style="text-align:center;padding:60px;">Error loading profile. <a href="/">Return home</a></p>';
-      }
-    })();
-  </script>
+  <noscript>
+    <meta http-equiv="refresh" content="0;url=/creator.html?u=${encodeURIComponent(username)}">
+  </noscript>
 </head>
 <body>
   <!-- Creator content will be injected here via JavaScript while preserving /${username} URL -->
