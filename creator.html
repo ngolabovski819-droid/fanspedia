@@ -1515,8 +1515,17 @@
       const errorState = document.getElementById('errorState');
       const profileContent = document.getElementById('profileContent');
 
+      // Check for SSR-injected data (from /:username SSR route)
+      if (window.__CREATOR_SSR__ && window.__SSR_USERNAME__ === username) {
+        console.log('Using SSR pre-fetched data (zero API calls needed)');
+        renderProfile(window.__CREATOR_SSR__);
+        loadingState.style.display = 'none';
+        profileContent.style.display = 'block';
+        return;
+      }
+
       try {
-        // Try exact username match first
+        // Fallback: fetch from API
         let apiUrl = `/api/search?q=${encodeURIComponent(username)}&page=1&page_size=10`;
         console.log('Fetching from API:', apiUrl);
         

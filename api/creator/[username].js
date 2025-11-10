@@ -141,7 +141,7 @@ async function fetchCreator(username) {
   }
 }
 
-// Generate full HTML
+// Generate full HTML matching creator.html structure exactly
 function generateHtml(creator) {
   const displayName = escapeHtml(creator.name || creator.username);
   const username = escapeHtml(creator.username);
@@ -170,6 +170,8 @@ function generateHtml(creator) {
   // Calculate ETag from last_seen_at or current time
   const etag = `"${Buffer.from(creator.last_seen_at || new Date().toISOString()).toString('base64').substring(0, 16)}"`;
   
+  // Hybrid approach: Redirect to creator.html with username to maintain 100% visual parity
+  // The static creator.html will handle all the UI/UX while SSR provides SEO meta tags
   return {
     html: `<!DOCTYPE html>
 <html lang="en" data-theme="light">
@@ -198,127 +200,31 @@ function generateHtml(creator) {
   <meta name="twitter:description" content="${metaDesc}">
   <meta name="twitter:image" content="${ogImage}">
   
-  <!-- Preconnect to critical domains -->
+  <!-- Preconnect -->
   <link rel="preconnect" href="https://images.weserv.nl">
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
-  <link rel="dns-prefetch" href="https://onlyfans.com">
   
-  <!-- Preload OG image to avoid CLS -->
-  <link rel="preload" as="image" href="${ogImage}">
-  
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <!-- JSON-LD Structured Data -->
+  <!-- JSON-LD Structured Data for SEO -->
   <script type="application/ld+json">
 ${JSON.stringify(jsonLd, null, 2)}
   </script>
   
-  <!-- Inject pre-fetched creator data for client hydration (no refetch needed) -->
-  <script>
-    window.__CREATOR__ = ${JSON.stringify(creator)};
-  </script>
+  <!-- Instant redirect to static creator.html with cached data -->
+  <meta http-equiv="refresh" content="0;url=/creator.html?u=${encodeURIComponent(username)}">
   
-  <style>
-    /* Critical CSS for above-the-fold content */
-    :root { --brand:#00AFF0; --brand-d:#0099D6; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f7; margin: 0; }
-    .loading-skeleton { display: none; }
-    /* Header (uses creator.header if available) */
-    .creator-header { position: relative; color: #fff; text-align: center; min-height: 220px; padding: 48px 20px 88px; background:
-      linear-gradient(135deg, rgba(0,175,240,0.85) 0%, rgba(0,153,214,0.85) 100%);
-      background-size: cover; background-position: center; }
-    .creator-header.has-bg { background-blend-mode: overlay; }
-  .page-container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
-    /* Avatar overlay card */
-    .avatar-card { position: relative; margin-top: -64px; display: flex; align-items: center; gap: 16px; background: #fff; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); padding: 16px 20px; }
-    .creator-avatar { width: 120px; height: 120px; border-radius: 50%; border: 4px solid #fff; object-fit: cover; flex: 0 0 auto; }
-    .creator-title { display: flex; flex-direction: column; align-items: flex-start; }
-    .creator-name { font-size: 28px; font-weight: 800; margin: 4px 0; color: #1d1d1f; }
-    .creator-username { font-size: 16px; color: #555; }
-    .verified-badge { font-size: 13px; background: linear-gradient(135deg, var(--brand) 0%, var(--brand-d) 100%); color: #fff; padding: 6px 10px; border-radius: 999px; display: inline-flex; align-items: center; gap: 6px; }
-    /* Stats grid */
-  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; max-width: 1280px; margin: 20px auto; padding: 0; }
-  @media (max-width: 600px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
-    .stat-card { background: white; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-    .stat-value { font-size: 22px; font-weight: 800; color: var(--brand); }
-    .stat-label { font-size: 13px; color: #666; margin-top: 6px; text-transform: uppercase; letter-spacing: .4px; }
-    /* Content */
-  .content-row { display: grid; grid-template-columns: minmax(0,1fr); gap: 16px; max-width: 1280px; margin: 20px auto 40px; }
-    .card { background: #fff; border-radius: 16px; box-shadow: 0 6px 18px rgba(0,0,0,0.08); padding: 24px; }
-    .card h2 { font-size: 20px; font-weight: 800; margin: 0 0 12px; color: #1d1d1f; }
-    .card p { line-height: 1.7; color: #333; }
-    .cta { text-align: center; margin: 26px 0 0; }
-    .cta a { display: inline-block; background: linear-gradient(135deg, var(--brand) 0%, var(--brand-d) 100%); color: #fff; padding: 14px 32px; border-radius: 999px; text-decoration: none; font-weight: 800; font-size: 16px; box-shadow: 0 10px 22px rgba(0,175,240,0.25); }
-  </style>
+  <!-- Pre-cache creator data for zero-latency client render -->
+  <script>
+    window.__CREATOR_SSR__ = ${JSON.stringify(creator)};
+    window.__SSR_USERNAME__ = ${JSON.stringify(username)};
+    // Instant client-side redirect (faster than meta refresh)
+    window.location.replace('/creator.html?u=' + encodeURIComponent(${JSON.stringify(username)}));
+  </script>
 </head>
 <body>
-  <!-- Pre-rendered content for SEO and instant display -->
-  <div class="creator-header ${headerImage ? 'has-bg' : ''}" ${headerImage ? `style="background-image: linear-gradient(135deg, rgba(0,175,240,0.70) 0%, rgba(0,153,214,0.70) 100%), url('${headerImage}')"` : ''}>
-    <div class="page-container">
-      <div class="page-title" style="max-width:1100px;margin:0 auto;">
-        <h1 style="margin:0;font-size:28px;font-weight:800;">${displayName}</h1>
-        <div style="opacity:.95; margin-top:6px;">@${username}</div>
-      </div>
-    </div>
-  </div>
-  <div class="page-container" style="margin-top:-60px;">
-    <div class="avatar-card">
-      <img src="${avatarThumb}" alt="${displayName} avatar" class="creator-avatar" width="120" height="120">
-      <div class="creator-title">
-        <div class="creator-name">${displayName}</div>
-        <div class="creator-username">@${username}</div>
-        ${creator.isVerified ? '<span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>' : ''}
-      </div>
-    </div>
-  </div>
-  
-  <div class="stats-grid page-container" style="margin-top:16px;">
-    <div class="stat-card">
-      <div class="stat-value">${price}</div>
-      <div class="stat-label">Subscription</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value">${creator.postsCount || 0}</div>
-      <div class="stat-label">Posts</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value">${creator.photosCount || 0}</div>
-      <div class="stat-label">Photos</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value">${creator.videosCount || 0}</div>
-      <div class="stat-label">Videos</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value">${(creator.favoritedCount || 0).toLocaleString()}</div>
-      <div class="stat-label">Favorites</div>
-    </div>
-  </div>
-  
-  <div class="content-row">
-    <div class="card">
-      <h2>About</h2>
-      <p style="white-space: normal;">${bio || 'No description provided.'}</p>
-      <div class="cta">
-        <a href="https://onlyfans.com/${username}" rel="nofollow noopener" target="_blank">
-          Visit OnlyFans Profile <i class="fas fa-external-link-alt" style="margin-left:8px;"></i>
-        </a>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Full client-side template will hydrate without refetching -->
-  <div id="creatorProfile" style="display: none;"></div>
-  
-  <!-- Load client-side JS for interactivity (theme toggle, favorites, etc) -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    // Client hydration will use window.__CREATOR__ data (no API fetch needed)
-    console.log('Creator data pre-loaded for hydration:', window.__CREATOR__);
-  </script>
+  <p style="font-family: sans-serif; text-align: center; padding: 60px 20px;">
+    Loading ${displayName}'s profile... 
+    <a href="/creator.html?u=${encodeURIComponent(username)}" style="color: #00AFF0;">Click here if not redirected</a>
+  </p>
 </body>
 </html>`,
     etag
