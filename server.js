@@ -35,6 +35,18 @@ app.get('/categories/:slug', (req, res) => {
   res.sendFile(path.join(__dirname, 'category.html'));
 });
 
+// Handle /creator.html with query param - redirect to clean URL
+app.get('/creator.html', (req, res) => {
+  const username = req.query.u;
+  if (username) {
+    // 301 permanent redirect to clean URL
+    res.redirect(301, `/${username}`);
+  } else {
+    // No username, redirect to homepage
+    res.redirect(302, '/');
+  }
+});
+
 // Handle /creator route explicitly (serves creator.html for client-side rendering)
 app.get('/creator', (req, res) => {
   res.sendFile(path.join(__dirname, 'creator.html'));
