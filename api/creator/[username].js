@@ -145,8 +145,12 @@ async function fetchCreator(username) {
 function generateHtml(creator) {
   const displayName = escapeHtml(creator.name || creator.username);
   const username = escapeHtml(creator.username);
-  const bio = creator.about ? escapeHtml(creator.about) : '';
-  const bioPreview = bio.substring(0, 155);
+  const bioRaw = creator.about || '';
+  const bioEscaped = escapeHtml(bioRaw)
+    .replace(/&lt;br\s*\/?&gt;/gi, '<br>')
+    .replace(/\n+/g, '<br>');
+  const bio = bioEscaped;
+  const bioPreview = (bioRaw || '').replace(/<[^>]*>/g, '').substring(0, 155);
   
   const price = creator.subscribePrice !== null && creator.subscribePrice !== undefined 
     ? `$${creator.subscribePrice}/month` 
@@ -158,6 +162,7 @@ function generateHtml(creator) {
   // Use proxied and sized images for OG tags
   const ogImage = proxyImage(creator.avatar, 1200, 630);
   const avatarThumb = proxyImage(creator.avatar, 400, 400);
+  const headerImage = creator.header ? proxyImage(creator.header, 1600, 360) : '';
   const canonicalUrl = `${BASE_URL}/${username}`;
   
   const jsonLd = generateJsonLd(creator);
@@ -218,28 +223,59 @@ ${JSON.stringify(jsonLd, null, 2)}
   
   <style>
     /* Critical CSS for above-the-fold content */
+    :root { --brand:#00AFF0; --brand-d:#0099D6; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f7; margin: 0; }
     .loading-skeleton { display: none; }
-    .creator-header { background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); padding: 40px 20px; color: white; text-align: center; }
-    .creator-avatar { width: 120px; height: 120px; border-radius: 50%; border: 4px solid white; object-fit: cover; }
-    .creator-name { font-size: 28px; font-weight: 800; margin: 16px 0 8px; }
-    .creator-username { font-size: 18px; opacity: 0.9; }
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; max-width: 800px; margin: 20px auto; padding: 0 20px; }
-    .stat-card { background: white; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    .stat-value { font-size: 24px; font-weight: 700; color: #00AFF0; }
-    .stat-label { font-size: 14px; color: #666; margin-top: 4px; }
+    /* Header (uses creator.header if available) */
+    .creator-header { position: relative; color: #fff; text-align: center; min-height: 220px; padding: 48px 20px 88px; background:
+      linear-gradient(135deg, rgba(0,175,240,0.85) 0%, rgba(0,153,214,0.85) 100%);
+      background-size: cover; background-position: center; }
+    .creator-header.has-bg { background-blend-mode: overlay; }
+  .page-container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
+    /* Avatar overlay card */
+    .avatar-card { position: relative; margin-top: -64px; display: flex; align-items: center; gap: 16px; background: #fff; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); padding: 16px 20px; }
+    .creator-avatar { width: 120px; height: 120px; border-radius: 50%; border: 4px solid #fff; object-fit: cover; flex: 0 0 auto; }
+    .creator-title { display: flex; flex-direction: column; align-items: flex-start; }
+    .creator-name { font-size: 28px; font-weight: 800; margin: 4px 0; color: #1d1d1f; }
+    .creator-username { font-size: 16px; color: #555; }
+    .verified-badge { font-size: 13px; background: linear-gradient(135deg, var(--brand) 0%, var(--brand-d) 100%); color: #fff; padding: 6px 10px; border-radius: 999px; display: inline-flex; align-items: center; gap: 6px; }
+    /* Stats grid */
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; max-width: 1280px; margin: 20px auto; padding: 0; }
+  @media (max-width: 600px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+    .stat-card { background: white; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .stat-value { font-size: 22px; font-weight: 800; color: var(--brand); }
+    .stat-label { font-size: 13px; color: #666; margin-top: 6px; text-transform: uppercase; letter-spacing: .4px; }
+    /* Content */
+  .content-row { display: grid; grid-template-columns: minmax(0,1fr); gap: 16px; max-width: 1280px; margin: 20px auto 40px; }
+    .card { background: #fff; border-radius: 16px; box-shadow: 0 6px 18px rgba(0,0,0,0.08); padding: 24px; }
+    .card h2 { font-size: 20px; font-weight: 800; margin: 0 0 12px; color: #1d1d1f; }
+    .card p { line-height: 1.7; color: #333; }
+    .cta { text-align: center; margin: 26px 0 0; }
+    .cta a { display: inline-block; background: linear-gradient(135deg, var(--brand) 0%, var(--brand-d) 100%); color: #fff; padding: 14px 32px; border-radius: 999px; text-decoration: none; font-weight: 800; font-size: 16px; box-shadow: 0 10px 22px rgba(0,175,240,0.25); }
   </style>
 </head>
 <body>
   <!-- Pre-rendered content for SEO and instant display -->
-  <div class="creator-header">
-    <img src="${avatarThumb}" alt="${displayName} avatar" class="creator-avatar" width="120" height="120">
-    <h1 class="creator-name">${displayName}</h1>
-    <p class="creator-username">@${username}</p>
-    ${creator.isVerified ? '<span style="font-size: 14px; background: rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 20px; display: inline-block; margin-top: 8px;"><i class="fas fa-check-circle"></i> Verified</span>' : ''}
+  <div class="creator-header ${headerImage ? 'has-bg' : ''}" ${headerImage ? `style="background-image: linear-gradient(135deg, rgba(0,175,240,0.70) 0%, rgba(0,153,214,0.70) 100%), url('${headerImage}')"` : ''}>
+    <div class="page-container">
+      <div class="page-title" style="max-width:1100px;margin:0 auto;">
+        <h1 style="margin:0;font-size:28px;font-weight:800;">${displayName}</h1>
+        <div style="opacity:.95; margin-top:6px;">@${username}</div>
+      </div>
+    </div>
+  </div>
+  <div class="page-container" style="margin-top:-60px;">
+    <div class="avatar-card">
+      <img src="${avatarThumb}" alt="${displayName} avatar" class="creator-avatar" width="120" height="120">
+      <div class="creator-title">
+        <div class="creator-name">${displayName}</div>
+        <div class="creator-username">@${username}</div>
+        ${creator.isVerified ? '<span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>' : ''}
+      </div>
+    </div>
   </div>
   
-  <div class="stats-grid">
+  <div class="stats-grid page-container" style="margin-top:16px;">
     <div class="stat-card">
       <div class="stat-value">${price}</div>
       <div class="stat-label">Subscription</div>
@@ -262,23 +298,16 @@ ${JSON.stringify(jsonLd, null, 2)}
     </div>
   </div>
   
-  ${bio ? `
-  <div style="max-width: 800px; margin: 30px auto; padding: 0 20px;">
-    <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-      <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 16px;">About</h2>
-      <p style="line-height: 1.6; color: #333; white-space: pre-wrap;">${bio}</p>
+  <div class="content-row">
+    <div class="card">
+      <h2>About</h2>
+      <p style="white-space: normal;">${bio || 'No description provided.'}</p>
+      <div class="cta">
+        <a href="https://onlyfans.com/${username}" rel="nofollow noopener" target="_blank">
+          Visit OnlyFans Profile <i class="fas fa-external-link-alt" style="margin-left:8px;"></i>
+        </a>
+      </div>
     </div>
-  </div>
-  ` : ''}
-  
-  <div style="text-align: center; margin: 40px 0;">
-    <a href="https://onlyfans.com/${username}" 
-       rel="nofollow noopener" 
-       target="_blank"
-       style="display: inline-block; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); color: white; padding: 16px 40px; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 18px; box-shadow: 0 4px 12px rgba(0,175,240,0.3);">
-      Visit OnlyFans Profile
-      <i class="fas fa-external-link-alt" style="margin-left: 8px;"></i>
-    </a>
   </div>
   
   <!-- Full client-side template will hydrate without refetching -->
