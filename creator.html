@@ -993,6 +993,17 @@
             <div class="tagline">10k+ TOP Creators</div>
           </div>
         </a>
+
+        <!-- Desktop categories dropdown -->
+        <div class="desktop-nav">
+          <button id="categoriesToggle" class="nav-btn" aria-haspopup="true" aria-expanded="false">
+            Categories <i class="fas fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div id="categoriesMenu" class="dropdown-menu" role="menu" aria-hidden="true">
+            <!-- Populated dynamically from config/categories.js -->
+          </div>
+        </div>
+
         <!-- Search positioned in middle (flex grows) -->
         <div class="header-search-section">
           <div class="header-search-wrapper">
@@ -1178,7 +1189,38 @@
     // ============================================
   import { popularCategories, categoryToSlug } from '/config/categories.js?v=20251108-1';
     
-    // No desktop categories button on creator page (order requested: logo, brand, dark mode, burger, search)
+    // ===========================
+    // Desktop Categories Dropdown
+    // ===========================
+    const categoriesToggle = document.getElementById('categoriesToggle');
+    const categoriesMenu = document.getElementById('categoriesMenu');
+
+    // Populate categories menu
+    if (categoriesMenu) {
+      categoriesMenu.innerHTML = popularCategories.map(cat => {
+        const slug = categoryToSlug(cat);
+        return `<a href="/categories/${slug}" class="dropdown-item" role="menuitem">${cat}</a>`;
+      }).join('') + '<a href="/categories" class="dropdown-item view-all" role="menuitem">View All Categories</a>';
+    }
+
+    // Toggle dropdown
+    if (categoriesToggle && categoriesMenu) {
+      categoriesToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = categoriesMenu.classList.toggle('show');
+        categoriesToggle.setAttribute('aria-expanded', isOpen);
+        categoriesMenu.setAttribute('aria-hidden', !isOpen);
+      });
+
+      // Close on outside click
+      document.addEventListener('click', () => {
+        if (categoriesMenu.classList.contains('show')) {
+          categoriesMenu.classList.remove('show');
+          categoriesToggle.setAttribute('aria-expanded', 'false');
+          categoriesMenu.setAttribute('aria-hidden', 'true');
+        }
+      });
+    }
 
     // ===========================
     // Mobile drawer wiring
