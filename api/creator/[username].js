@@ -232,25 +232,39 @@ ${JSON.stringify(jsonLd, null, 2)}
         const response = await fetch('/creator.html');
         const html = await response.text();
         
-        // Extract body content (everything between <body> and </body>)
-        const bodyMatch = html.match(/<body[^>]*>([\s\S]*)<\/body>/i);
-        if (bodyMatch) {
-          // Inject body content
-          document.body.innerHTML = bodyMatch[1];
-          document.body.classList.add('loaded');
+        // Create a temporary container to parse HTML safely
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        
+        // Get body content and inject it
+        const bodyContent = doc.body;
+        if (bodyContent) {
+          // Copy all body content
+          document.body.innerHTML = bodyContent.innerHTML;
+          document.body.className = bodyContent.className + ' loaded';
           
-          // Extract and execute scripts from the fetched HTML
-          const scriptMatches = html.match(/<script[^>]*>([\s\S]*?)<\/script>/gi);
-          if (scriptMatches) {
-            scriptMatches.forEach(scriptTag => {
-              const scriptContent = scriptTag.replace(/<\/?script[^>]*>/gi, '');
-              if (scriptContent.trim()) {
-                const newScript = document.createElement('script');
-                newScript.textContent = scriptContent;
-                document.body.appendChild(newScript);
-              }
-            });
+          // Copy body attributes
+          for (let attr of bodyContent.attributes) {
+            if (attr.name !== 'class') {
+              document.body.setAttribute(attr.name, attr.value);
+            }
           }
+          
+          // Re-execute inline scripts
+          const scripts = document.body.querySelectorAll('script');
+          scripts.forEach(oldScript => {
+            const newScript = document.createElement('script');
+            if (oldScript.src) {
+              newScript.src = oldScript.src;
+            } else {
+              newScript.textContent = oldScript.textContent;
+            }
+            // Copy attributes
+            for (let attr of oldScript.attributes) {
+              newScript.setAttribute(attr.name, attr.value);
+            }
+            oldScript.parentNode.replaceChild(newScript, oldScript);
+          });
         }
       } catch (error) {
         console.error('Failed to load creator content:', error);
