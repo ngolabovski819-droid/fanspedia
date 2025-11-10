@@ -6,6 +6,18 @@
   <title>Creator Profile - BestOFGirls</title>
   <meta name="description" content="View detailed OnlyFans creator profile with stats, pricing, and direct link">
   
+  <!-- Replace URL immediately if coming from SSR -->
+  <script>
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('ssr') === '1' && window.__SSR_CLEAN_URL__) {
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState(null, '', window.__SSR_CLEAN_URL__);
+        }
+      }
+    })();
+  </script>
+  
   <!-- Preconnect to critical domains -->
   <link rel="preconnect" href="https://images.weserv.nl">
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
@@ -1485,18 +1497,6 @@
         return dateStr;
       }
     }
-
-    // Replace URL if coming from SSR (clean URL)
-    (function() {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('ssr') === '1' && window.__SSR_CLEAN_URL__) {
-        // Replace URL with clean version (no query params)
-        if (window.history && window.history.replaceState) {
-          window.history.replaceState(null, '', window.__SSR_CLEAN_URL__);
-          console.log('URL replaced with clean version:', window.__SSR_CLEAN_URL__);
-        }
-      }
-    })();
 
     // Get username from URL
     function getUsername() {
