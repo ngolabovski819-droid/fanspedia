@@ -6,14 +6,23 @@
   <title>Creator Profile - BestOFGirls</title>
   <meta name="description" content="View detailed OnlyFans creator profile with stats, pricing, and direct link">
   
-  <!-- Replace URL immediately if coming from SSR -->
+  <!-- Replace URL immediately for clean URLs -->
   <script>
     (function() {
       const params = new URLSearchParams(window.location.search);
+      const username = params.get('u');
+      
+      // Case 1: Coming from SSR with cleanUrl param
       const cleanUrl = params.get('cleanUrl') || window.__SSR_CLEAN_URL__;
       if (params.get('ssr') === '1' && cleanUrl) {
         if (window.history && window.history.replaceState) {
           window.history.replaceState(null, '', cleanUrl);
+        }
+      }
+      // Case 2: Old URL format without SSR flag - redirect to clean URL
+      else if (username && !params.get('ssr')) {
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState(null, '', '/' + username);
         }
       }
     })();
