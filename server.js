@@ -21,6 +21,19 @@ app.all('/api/search', async (req, res) => {
   }
 });
 
+// Handle /creator.html with query param - redirect to clean URL (BEFORE static middleware)
+app.get('/creator.html', (req, res) => {
+  const username = req.query.u;
+  if (username) {
+    console.log(`Redirecting /creator.html?u=${username} to /${username}`);
+    // 301 permanent redirect to clean URL
+    res.redirect(301, `/${username}`);
+  } else {
+    // No username, serve the static file normally
+    res.sendFile(path.join(__dirname, 'creator.html'));
+  }
+});
+
 // Serve static files BEFORE the catch-all SSR route
 // This ensures static assets (HTML, CSS, JS, images) are served first
 app.use(express.static(path.join(__dirname)));
@@ -33,18 +46,6 @@ app.get('/categories', (req, res) => {
 // Handle /categories/:slug route (Vercel rewrite: "/categories/:slug" -> "/category.html")
 app.get('/categories/:slug', (req, res) => {
   res.sendFile(path.join(__dirname, 'category.html'));
-});
-
-// Handle /creator.html with query param - redirect to clean URL
-app.get('/creator.html', (req, res) => {
-  const username = req.query.u;
-  if (username) {
-    // 301 permanent redirect to clean URL
-    res.redirect(301, `/${username}`);
-  } else {
-    // No username, redirect to homepage
-    res.redirect(302, '/');
-  }
 });
 
 // Handle /creator route explicitly (serves creator.html for client-side rendering)
