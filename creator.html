@@ -1488,7 +1488,13 @@
 
     // Get username from URL
     function getUsername() {
-      // Priority 1: Check query param (used by SSR redirect)
+      // Priority 1: Check SSR pre-injected username (from /:username SSR route)
+      if (window.__SSR_USERNAME__) {
+        console.log('Using SSR pre-injected username:', window.__SSR_USERNAME__);
+        return window.__SSR_USERNAME__;
+      }
+      
+      // Priority 2: Check query param (for direct creator.html access)
       const params = new URLSearchParams(window.location.search);
       const queryUsername = params.get('u');
       if (queryUsername) {
@@ -1496,7 +1502,7 @@
         return queryUsername;
       }
       
-      // Priority 2: Extract from path: /username or /username/
+      // Priority 3: Extract from path: /username or /username/
       const path = window.location.pathname;
       console.log('Current path:', path);
       

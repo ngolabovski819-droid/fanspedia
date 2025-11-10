@@ -209,22 +209,61 @@ function generateHtml(creator) {
 ${JSON.stringify(jsonLd, null, 2)}
   </script>
   
-  <!-- Instant redirect to static creator.html with cached data -->
-  <meta http-equiv="refresh" content="0;url=/creator.html?u=${encodeURIComponent(username)}">
+  <!-- Load Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   
   <!-- Pre-cache creator data for zero-latency client render -->
   <script>
     window.__CREATOR_SSR__ = ${JSON.stringify(creator)};
     window.__SSR_USERNAME__ = ${JSON.stringify(username)};
-    // Instant client-side redirect (faster than meta refresh)
-    window.location.replace('/creator.html?u=' + encodeURIComponent(${JSON.stringify(username)}));
+  </script>
+  
+  <style>
+    body { opacity: 0; transition: opacity 0.3s; }
+    body.loaded { opacity: 1; }
+  </style>
+  
+  <!-- Fetch and inject creator.html content while preserving URL -->
+  <script>
+    (async function() {
+      try {
+        // Fetch creator.html content
+        const response = await fetch('/creator.html');
+        const html = await response.text();
+        
+        // Extract body content (everything between <body> and </body>)
+        const bodyMatch = html.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+        if (bodyMatch) {
+          // Inject body content
+          document.body.innerHTML = bodyMatch[1];
+          document.body.classList.add('loaded');
+          
+          // Extract and execute scripts from the fetched HTML
+          const scriptMatches = html.match(/<script[^>]*>([\s\S]*?)<\/script>/gi);
+          if (scriptMatches) {
+            scriptMatches.forEach(scriptTag => {
+              const scriptContent = scriptTag.replace(/<\/?script[^>]*>/gi, '');
+              if (scriptContent.trim()) {
+                const newScript = document.createElement('script');
+                newScript.textContent = scriptContent;
+                document.body.appendChild(newScript);
+              }
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load creator content:', error);
+        document.body.innerHTML = '<p style="text-align:center;padding:60px;">Error loading profile. <a href="/">Return home</a></p>';
+      }
+    })();
   </script>
 </head>
 <body>
-  <p style="font-family: sans-serif; text-align: center; padding: 60px 20px;">
-    Loading ${displayName}'s profile... 
-    <a href="/creator.html?u=${encodeURIComponent(username)}" style="color: #00AFF0;">Click here if not redirected</a>
-  </p>
+  <!-- Creator content will be injected here via JavaScript while preserving /${username} URL -->
+  <div style="text-align: center; padding: 60px 20px; font-family: sans-serif;">
+    <p>Loading ${displayName}'s profile...</p>
+  </div>
 </body>
 </html>`,
     etag
