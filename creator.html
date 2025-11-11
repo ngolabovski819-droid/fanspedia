@@ -990,118 +990,138 @@
     .safe-search-modal-footer { margin-top:24px; text-align:center; font-size:13px; color:var(--text-muted); }
     @media(max-width:576px){ .safe-search-modal-content{padding:32px 24px;} .safe-search-modal h2{font-size:24px;} .safe-search-modal p{font-size:15px;} }
     
-    /* Similar Creators Card Styles */
-    .card {
-      position: relative;
+    /* Similar Creators Section */
+    #similarCreatorsSection {
+      background: var(--bg-primary);
+      padding: 80px 0;
+      transition: background-color 0.3s ease;
+    }
+    #similarCreatorsSection h2 {
+      text-align: center;
+      color: var(--text-primary);
+      font-size: 2.5rem;
+      margin-bottom: 3rem;
+      font-weight: 800;
+    }
+    
+    /* Similar Creators Card Styles - Matching Homepage Design */
+    #similarCreatorsSection .card {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
       border: none;
-      border-radius: 16px;
-      overflow: hidden;
-      background: white;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      border-radius: 20px;
       transition: all 0.3s ease;
+      overflow: hidden;
+      box-shadow: 0 2px 8px var(--card-shadow);
+      position: relative;
     }
-    .card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+    #similarCreatorsSection .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px var(--card-shadow-hover);
     }
-    .card img {
-      width: 100%;
-      height: auto;
+    #similarCreatorsSection .card img {
+      border-radius: 20px 20px 0 0;
+      height: 360px;
       object-fit: cover;
-      display: block;
+      width: 100%;
+      min-height: 360px;
+      transition: filter 0.3s ease, opacity 0.3s ease;
     }
-    .card-body {
+    #similarCreatorsSection .favorite-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      transition: all 0.2s ease;
+      z-index: 10;
+      font-size: 20px;
+    }
+    #similarCreatorsSection .favorite-btn span { 
+      color: #ccc; 
+    }
+    #similarCreatorsSection .favorite-btn:hover {
+      transform: scale(1.1);
+      background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
+      box-shadow: 0 6px 16px rgba(0,175,240,0.35);
+    }
+    #similarCreatorsSection .favorite-btn:hover span { 
+      color: #fff !important; 
+    }
+    #similarCreatorsSection .favorite-btn.active {
+      background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
+      box-shadow: 0 6px 16px rgba(0,175,240,0.35);
+    }
+    #similarCreatorsSection .favorite-btn.active span { 
+      color: #fff !important; 
+    }
+    #similarCreatorsSection .view-profile-btn {
+      background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      display: block;
+      width: 100%;
+      text-align: center;
+      margin-top: 16px;
+      box-shadow: 0 6px 18px rgba(0,175,240,0.35);
+    }
+    #similarCreatorsSection .view-profile-btn:hover {
+      background: linear-gradient(135deg, #0099D6 0%, #0088C0 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 22px rgba(0,175,240,0.45);
+      color: white;
+      text-decoration: none;
+    }
+    #similarCreatorsSection .card-body {
       padding: 20px;
     }
-    .card-body h5 {
-      font-size: 18px;
+    #similarCreatorsSection .card h5 {
+      font-size: 20px;
       font-weight: 700;
-      color: #1a1a1a;
-      margin: 0 0 8px 0;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      margin-bottom: 4px;
+      color: var(--text-primary);
     }
-    .card-body .username {
+    #similarCreatorsSection .username {
+      color: var(--text-secondary);
       font-size: 14px;
-      color: #666;
-      margin: 0 0 12px 0;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      margin-bottom: 8px;
     }
-    .card-body .price-free {
+    #similarCreatorsSection .price-tag {
+      color: #34c759;
+      font-weight: 700;
+      font-size: 18px;
+    }
+    #similarCreatorsSection .price-free {
       color: #34c759;
       font-weight: 700;
       font-size: 16px;
       text-transform: uppercase;
-      margin: 12px 0;
     }
-    .card-body .price-tag {
-      color: #34c759;
-      font-weight: 700;
-      font-size: 18px;
-      margin: 12px 0;
-    }
-    .card-body .bio-snippet {
-      color: #666;
+    #similarCreatorsSection .bio-snippet {
+      color: var(--text-secondary);
       font-size: 13px;
       line-height: 1.4;
-      margin: 8px 0;
+      margin-top: 8px;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
-    }
-    .view-profile-btn {
-      display: block;
-      width: 100%;
-      padding: 12px;
-      background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
-      color: white;
-      text-align: center;
-      border-radius: 8px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      margin-top: 16px;
-    }
-    .view-profile-btn:hover {
-      background: linear-gradient(135deg, #0099D6 0%, #0088BB 100%);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(0, 175, 240, 0.3);
-      color: white;
-      text-decoration: none;
-    }
-    .favorite-btn {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.95);
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      cursor: pointer;
-      z-index: 10;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-    .favorite-btn:hover {
-      transform: scale(1.1);
-      background: white;
-    }
-    .favorite-btn.active {
-      background: #ff4757;
-      color: white;
-    }
-    .favorite-btn.active:hover {
-      background: #ff3838;
     }
   </style>
 </head>
@@ -2070,11 +2090,9 @@
   </script>
 
   <!-- Similar Creators Section -->
-  <section id="similarCreatorsSection" style="display: none; padding: 60px 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+  <section id="similarCreatorsSection" style="display: none;">
     <div class="container">
-      <h2 style="text-align: center; color: white; font-size: 2.5rem; margin-bottom: 3rem; font-weight: 700;">
-        Similar OnlyFans Creators
-      </h2>
+      <h2>Similar OnlyFans Creators</h2>
       <div id="similarCreatorsGrid" class="row">
         <!-- Cards will be inserted here by JavaScript -->
       </div>
