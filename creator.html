@@ -989,6 +989,120 @@
     .safe-search-modal-btn-secondary:hover { background:var(--bg-secondary); border-color:var(--text-secondary); }
     .safe-search-modal-footer { margin-top:24px; text-align:center; font-size:13px; color:var(--text-muted); }
     @media(max-width:576px){ .safe-search-modal-content{padding:32px 24px;} .safe-search-modal h2{font-size:24px;} .safe-search-modal p{font-size:15px;} }
+    
+    /* Similar Creators Card Styles */
+    .card {
+      position: relative;
+      border: none;
+      border-radius: 16px;
+      overflow: hidden;
+      background: white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+    }
+    .card img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      display: block;
+    }
+    .card-body {
+      padding: 20px;
+    }
+    .card-body h5 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin: 0 0 8px 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .card-body .username {
+      font-size: 14px;
+      color: #666;
+      margin: 0 0 12px 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .card-body .price-free {
+      color: #34c759;
+      font-weight: 700;
+      font-size: 16px;
+      text-transform: uppercase;
+      margin: 12px 0;
+    }
+    .card-body .price-tag {
+      color: #34c759;
+      font-weight: 700;
+      font-size: 18px;
+      margin: 12px 0;
+    }
+    .card-body .bio-snippet {
+      color: #666;
+      font-size: 13px;
+      line-height: 1.4;
+      margin: 8px 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .view-profile-btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
+      color: white;
+      text-align: center;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      margin-top: 16px;
+    }
+    .view-profile-btn:hover {
+      background: linear-gradient(135deg, #0099D6 0%, #0088BB 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 175, 240, 0.3);
+      color: white;
+      text-decoration: none;
+    }
+    .favorite-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.95);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 10;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    .favorite-btn:hover {
+      transform: scale(1.1);
+      background: white;
+    }
+    .favorite-btn.active {
+      background: #ff4757;
+      color: white;
+    }
+    .favorite-btn.active:hover {
+      background: #ff3838;
+    }
   </style>
 </head>
 <body>
@@ -1820,6 +1934,125 @@
 
     // Load on page ready
     loadCreatorProfile();
+    
+    // Load similar creators
+    async function loadSimilarCreators() {
+      try {
+        // Fetch random creators (exclude current one)
+        const currentUsername = new URLSearchParams(window.location.search).get('u');
+        const response = await fetch(`/api/search?page=1&page_size=8`);
+        const data = await response.json();
+        
+        // Filter out current creator and shuffle
+        const filtered = data.filter(c => c.username !== currentUsername);
+        const shuffled = filtered.sort(() => 0.5 - Math.random());
+        const similar = shuffled.slice(0, 8);
+        
+        if (similar.length > 0) {
+          renderSimilarCreators(similar);
+        }
+      } catch (error) {
+        console.error('Error loading similar creators:', error);
+      }
+    }
+    
+    function renderSimilarCreators(creators) {
+      const container = document.getElementById('similarCreatorsGrid');
+      if (!container) return;
+      
+      container.innerHTML = creators.map((item, idx) => {
+        const img = item.avatar || item.avatar_c144 || "";
+        const imgSrc = img && img.startsWith("http") ? img : "/static/no-image.png";
+        const responsive = buildResponsiveSources(imgSrc);
+        
+        const name = item.name || "Unknown";
+        const username = item.username || "—";
+        const priceText = (item.subscribePrice && !isNaN(item.subscribePrice))
+          ? `$${parseFloat(item.subscribePrice).toFixed(2)}`
+          : "FREE";
+        const verifiedIcon = item.isVerified ? "✅ " : "";
+        const bio = item.about || "";
+        const profileUrl = username !== "—" ? `https://bestonlyfansgirls.net/${username}` : "#";
+
+        const safeUsername = String(username).replace(/'/g, "\\'");
+        const favSet = getFavoritesSet();
+        const favActive = username !== "—" && favSet.has(username);
+        const favChar = favActive ? '♥' : '♡';
+        
+        return `
+          <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+            <div class="card h-100">
+              <button class="favorite-btn ${favActive ? 'active' : ''}" data-username="${safeUsername}" onclick="event.preventDefault(); toggleFavorite('${safeUsername}', this);">
+                <span>${favChar}</span>
+              </button>
+              <img src="${responsive.src}" srcset="${responsive.srcset}" sizes="${responsive.sizes}" alt="${name}" width="270" height="360" style="aspect-ratio: 3 / 4;" loading="lazy" fetchpriority="low" decoding="async" referrerpolicy="no-referrer" onerror="if(this.src!='/static/no-image.png'){this.removeAttribute('srcset'); this.removeAttribute('sizes'); this.src='${imgSrc}';}">
+              <div class="card-body">
+                <h5>${verifiedIcon}${name}</h5>
+                <p class="username">@${username}</p>
+                ${priceText === "FREE" 
+                  ? `<p class="price-free">${priceText}</p>` 
+                  : `<p class="price-tag">${priceText}</p>`}
+                ${bio ? `<p class="bio-snippet">${bio}</p>` : ''}
+                <a href="${profileUrl}" class="view-profile-btn">
+                  View Profile
+                </a>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+      
+      // Show the section
+      document.getElementById('similarCreatorsSection').style.display = 'block';
+    }
+    
+    function buildResponsiveSources(originalUrl) {
+      const widths = [144, 240, 320, 480, 720];
+      const srcset = widths
+        .map(w => `${proxyImg(originalUrl, w, Math.round(w * 4 / 3))} ${w}w`)
+        .join(', ');
+      const src = proxyImg(originalUrl, 320, Math.round(320 * 4 / 3));
+      const sizes = '(max-width: 480px) 144px, (max-width: 768px) 240px, 320px';
+      return { src, srcset, sizes };
+    }
+    
+    function proxyImg(url, width, height) {
+      if (!url || !url.startsWith('http')) return '/static/no-image.png';
+      const encoded = encodeURIComponent(url);
+      return `https://images.weserv.nl/?url=${encoded}&w=${width}&h=${height}&fit=cover&a=top`;
+    }
+    
+    function getFavoritesSet() {
+      try {
+        const saved = localStorage.getItem('favorites');
+        if (saved) return new Set(JSON.parse(saved));
+      } catch (e) {
+        console.error('Failed to parse favorites:', e);
+      }
+      return new Set();
+    }
+    
+    function toggleFavorite(username, btn) {
+      let favorites = [];
+      try {
+        const saved = localStorage.getItem('favorites');
+        if (saved) favorites = JSON.parse(saved);
+      } catch (e) {}
+      
+      if (favorites.includes(username)) {
+        favorites = favorites.filter(f => f !== username);
+        btn.classList.remove('active');
+        btn.querySelector('span').textContent = '♡';
+      } else {
+        favorites.push(username);
+        btn.classList.add('active');
+        btn.querySelector('span').textContent = '♥';
+      }
+      
+      localStorage.setItem('favorites', JSON.stringify(favorites));
+    }
+    
+    // Load similar creators after main profile loads
+    setTimeout(loadSimilarCreators, 500);
   </script>
   <!-- Back to top button -->
   <button id="backToTop" aria-label="Back to top" title="Back to top">↑</button>
@@ -1838,6 +2071,18 @@
       }
     })();
   </script>
+
+  <!-- Similar Creators Section -->
+  <section id="similarCreatorsSection" style="display: none; padding: 60px 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+    <div class="container">
+      <h2 style="text-align: center; color: white; font-size: 2.5rem; margin-bottom: 3rem; font-weight: 700;">
+        Similar OnlyFans Creators
+      </h2>
+      <div id="similarCreatorsGrid" class="row">
+        <!-- Cards will be inserted here by JavaScript -->
+      </div>
+    </div>
+  </section>
 
   <!-- Footer -->
   <footer class="modern-footer">
