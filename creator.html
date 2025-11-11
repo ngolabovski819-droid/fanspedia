@@ -279,7 +279,17 @@
       display: none;
       z-index: 10000;
     }
-    .desktop-nav .dropdown-menu.open { display: block; }
+      .desktop-nav .dropdown-menu.open {
+        display: block;
+      }
+      .dropdown-menu.show {
+        display: block;
+        animation: fadeIn 0.2s;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-8px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
     .desktop-nav .dropdown-menu a {
       display: block;
       padding: 10px 12px;
