@@ -2196,7 +2196,7 @@
           const verifiedIcon = item.isVerified ? "✅ " : "";
           const location = item.location || "";
           const bio = item.about || "";
-          const profileUrl = username !== "—" ? `https://bestonlyfansgirls.net/${username}` : "#";
+          const profileUrl = username !== "—" ? `/creator.html?u=${encodeURIComponent(username)}` : "#";
 
           const isFirstCard = resultsDiv.children.length === 0 && currentPage === 1;
           // Preload the first, above-the-fold image to help LCP
