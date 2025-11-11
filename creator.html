@@ -2062,7 +2062,7 @@
           : "FREE";
         const verifiedIcon = item.isVerified ? "✅ " : "";
         const bio = item.about || "";
-  const profileUrl = username !== "—" ? `https://bestonlyfansgirls.net/${username}` : "#";
+  const profileUrl = username !== "—" ? `/creator.html?u=${encodeURIComponent(username)}` : "#";
   // Removed onlyfansUrl and Visit OnlyFans link
 
         const safeUsername = String(username).replace(/'/g, "\\'");

@@ -824,7 +824,7 @@
           const priceText = (item.subscribePrice && !isNaN(item.subscribePrice)) ? `$${parseFloat(item.subscribePrice).toFixed(2)}` : 'FREE';
           const verifiedIcon = item.isVerified ? '✅ ' : '';
           const bio = item.about || '';
-          const profileUrl = username !== '—' ? `https://bestonlyfansgirls.net/${username}` : '#';
+          const profileUrl = username !== '—' ? `/creator.html?u=${encodeURIComponent(username)}` : '#';
           const col = document.createElement('div');
           col.className = 'col-sm-6 col-md-4 col-lg-3 mb-4';
           const safeUsername = String(username).replace(/'/g, "\\'");
