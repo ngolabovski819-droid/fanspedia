@@ -2063,7 +2063,7 @@
         const verifiedIcon = item.isVerified ? "✅ " : "";
         const bio = item.about || "";
   const profileUrl = username !== "—" ? `https://bestonlyfansgirls.net/${username}` : "#";
-  const onlyfansUrl = username !== "—" ? `https://onlyfans.com/${username}` : "#";
+  // Removed onlyfansUrl and Visit OnlyFans link
 
         const safeUsername = String(username).replace(/'/g, "\\'");
         const favSet = getFavoritesSet();
@@ -2085,7 +2085,6 @@
                   : `<p class="price-tag">${priceText}</p>`}
                 ${bio ? `<p class="bio-snippet">${bio}</p>` : ''}
                 <a href="${profileUrl}" class="view-profile-btn">View Profile</a>
-                <a href="${onlyfansUrl}" target="_blank" rel="nofollow noopener noreferrer" class="visit-onlyfans-btn">Visit OnlyFans</a>
               </div>
             </div>
           </div>`;
