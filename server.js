@@ -4,7 +4,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import searchHandler from './api/search.js';
-import creatorHandler from './api/creator/[username].js';
+// Use the catch-all SSR handler for local testing (matches Vercel's [...params] serverless function)
+import creatorHandler from './api/creator/[...params].js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -23,15 +24,9 @@ app.all('/api/search', async (req, res) => {
 
 // Handle /creator.html with query param - redirect to clean URL (BEFORE static middleware)
 app.get('/creator.html', (req, res) => {
-  const username = req.query.u;
-  if (username) {
-    console.log(`Redirecting /creator.html?u=${username} to /${username}`);
-    // 301 permanent redirect to clean URL
-    res.redirect(301, `/${username}`);
-  } else {
-    // No username, serve the static file normally
-    res.sendFile(path.join(__dirname, 'creator.html'));
-  }
+  // Serve the static creator.html for client-side rendering when accessed with query params.
+  // Avoid server-side redirect to /:username which can cause 404s for dotted usernames in local dev.
+  res.sendFile(path.join(__dirname, 'creator.html'));
 });
 
 // Serve static files BEFORE the catch-all SSR route
@@ -56,11 +51,11 @@ app.get('/creator', (req, res) => {
 // Mount the SSR creator profile handler at /:username as LAST route
 // This matches Vercel's rewrite: { "source": "/:username([a-zA-Z0-9_-]+)", "destination": "/api/creator/:username" }
 // IMPORTANT: This must come AFTER static files to avoid intercepting /index.html, /categories.html, etc.
-app.get('/:username([a-zA-Z0-9_-]+)', async (req, res, next) => {
+app.get('/:username([a-zA-Z0-9_.-]+)', async (req, res, next) => {
   const username = req.params.username;
   
-  // Skip if this looks like a file extension (static asset)
-  if (username.includes('.')) {
+  // Skip if this looks like a file extension for static assets (e.g., .css, .js)
+  if (username.includes('.') && !username.match(/^[^\.]+\.[^\.]+$/)) {
     return next();
   }
   
@@ -71,9 +66,10 @@ app.get('/:username([a-zA-Z0-9_-]+)', async (req, res, next) => {
   
   try {
     // Transform Express params to match Vercel's query structure
-    req.query = req.query || {};
-    req.query.username = username;
-    await creatorHandler(req, res);
+  req.query = req.query || {};
+  // Vercel passes catch-all params as an array in req.query.params
+  req.query.params = [username];
+  await creatorHandler(req, res);
   } catch (err) {
     console.error('local creator handler error', err);
     res.status(500).json({ error: 'local_handler_error', message: String(err) });
