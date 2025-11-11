@@ -7,7 +7,6 @@ const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_KEY;
 const BASE_URL = 'https://bestonlyfansgirls.net';
 
-// Normalize field names from database (lowercase) to camelCase for client consistency
 function normalizeCreator(raw) {
   if (!raw) return null;
   // ...existing code...
@@ -47,12 +46,10 @@ function normalizeCreator(raw) {
     joinDate: raw.joindate,
     lastSeen: raw.lastseen,
     firstPublishedPostDate: raw.firstpublishedpostdate,
-    // Thumbnails
     avatar_c50: raw.avatar_c50,
     avatar_c144: raw.avatar_c144,
     header_w480: raw.header_w480,
     header_w760: raw.header_w760,
-    // Bundles
     bundle1_id: raw.bundle1_id,
     bundle1_price: raw.bundle1_price,
     bundle1_discount: raw.bundle1_discount,
@@ -61,17 +58,14 @@ function normalizeCreator(raw) {
     bundle2_price: raw.bundle2_price,
     bundle3_id: raw.bundle3_id,
     bundle3_price: raw.bundle3_price,
-    // Promotions
     promotion1_price: raw.promotion1_price,
     promotion1_discount: raw.promotion1_discount,
-    // V2 tracking
     first_seen_at: raw.first_seen_at,
     last_seen_at: raw.last_seen_at,
     status: raw.status
   };
 }
 
-// HTML escape to prevent XSS
 function escapeHtml(text) {
   if (!text) return '';
   return String(text)
@@ -82,14 +76,12 @@ function escapeHtml(text) {
     .replace(/'/g, '&#039;');
 }
 
-// Proxy image through weserv.nl with fixed dimensions
 function proxyImage(url, width, height) {
   if (!url) return '';
   const encoded = encodeURIComponent(url);
   return `https://images.weserv.nl/?url=${encoded}&w=${width}&h=${height}&fit=cover&output=webp`;
 }
 
-// Generate JSON-LD structured data
 function generateJsonLd(creator) {
   const displayName = escapeHtml(creator.name || creator.username);
   const bio = creator.about ? escapeHtml(creator.about.substring(0, 280)) : '';
@@ -115,7 +107,6 @@ function generateJsonLd(creator) {
   };
 }
 
-// Fetch creator from Supabase
 async function fetchCreator(username) {
   try {
     const url = `${SUPABASE_URL}/rest/v1/onlyfans_profiles?username=ilike.${encodeURIComponent(username)}&limit=1`;
@@ -136,7 +127,6 @@ async function fetchCreator(username) {
   }
 }
 
-// Generate full HTML matching creator.html structure exactly
 function generateHtml(creator) {
   const displayName = escapeHtml(creator.name || creator.username);
   const username = escapeHtml(creator.username);
@@ -151,27 +141,21 @@ function generateHtml(creator) {
     : 'Free';
   const stats = `${creator.postsCount || 0} posts • ${creator.photosCount || 0} photos • ${creator.videosCount || 0} videos`;
   const metaDesc = `${displayName} OnlyFans profile. ${stats}. Subscribe for ${price}. ${bioPreview}`;
-  // Use proxied and sized images for OG tags
   const ogImage = proxyImage(creator.avatar, 1200, 630);
   const avatarThumb = proxyImage(creator.avatar, 400, 400);
   const headerImage = creator.header ? proxyImage(creator.header, 1600, 360) : '';
   const canonicalUrl = `${BASE_URL}/${username}`;
   const jsonLd = generateJsonLd(creator);
-  // Calculate ETag from last_seen_at or current time
   const etag = `"${Buffer.from(creator.last_seen_at || new Date().toISOString()).toString('base64').substring(0, 16)}"`;
-  // Hybrid approach: Redirect to creator.html with username to maintain 100% visual parity
-  // The static creator.html will handle all the UI/UX while SSR provides SEO meta tags
   return {
     html: `<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <!-- Primary Meta Tags -->
   <title>${displayName} (@${username}) OnlyFans Profile • Stats & Pricing</title>
   <meta name="description" content="${metaDesc}">
   <link rel="canonical" href="${canonicalUrl}">
-  <!-- Open Graph / Facebook -->
   <meta property="og:type" content="profile">
   <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:title" content="${displayName} OnlyFans Profile">
@@ -179,25 +163,20 @@ function generateHtml(creator) {
   <meta property="og:image" content="${ogImage}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="${canonicalUrl}">
   <meta name="twitter:title" content="${displayName} OnlyFans Profile">
   <meta name="twitter:description" content="${metaDesc}">
   <meta name="twitter:image" content="${ogImage}">
-  <!-- Preconnect -->
   <link rel="preconnect" href="https://images.weserv.nl">
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
-  <!-- JSON-LD Structured Data for SEO -->
   <script type="application/ld+json">
 ${JSON.stringify(jsonLd, null, 2)}
   </script>
-  <!-- Pre-cache creator data for zero-latency client render -->
   <script>
     window.__CREATOR_SSR__ = ${JSON.stringify(creator)};
     window.__SSR_USERNAME__ = ${JSON.stringify(username)};
     window.__SSR_CLEAN_URL__ = ${JSON.stringify('/' + username)};
-    // Instant redirect to creator.html with clean URL in fragment
     window.location.replace('/creator.html?u=' + encodeURIComponent(${JSON.stringify(username)}) + '&ssr=1&cleanUrl=' + encodeURIComponent(${JSON.stringify('/' + username)}));
   </script>
   <noscript>
@@ -205,7 +184,6 @@ ${JSON.stringify(jsonLd, null, 2)}
   </noscript>
 </head>
 <body>
-  <!-- Creator content will be injected here via JavaScript while preserving /${username} URL -->
   <div style="text-align: center; padding: 60px 20px; font-family: sans-serif;">
     <p>Loading ${displayName}'s profile...</p>
   </div>
@@ -215,7 +193,6 @@ ${JSON.stringify(jsonLd, null, 2)}
   };
 }
 
-// Generate 404 page
 function generate404Html(username) {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -244,10 +221,9 @@ function generate404Html(username) {
 </html>`;
 }
 
-// Main handler
 export default async function handler(req, res) {
-  // Vercel catch-all: req.query.username is array for [...username]
-  let username = req.query.username;
+  // Vercel catch-all: req.query.params is array for [...params]
+  let username = req.query.params;
   if (Array.isArray(username)) {
     username = username.join('.');
   }
@@ -256,7 +232,6 @@ export default async function handler(req, res) {
     return;
   }
   try {
-    // Fetch creator (with 2s timeout)
     const timeoutPromise = new Promise((_, reject) => 
       setTimeout(() => reject(new Error('Timeout')), 2000)
     );
@@ -265,21 +240,17 @@ export default async function handler(req, res) {
       timeoutPromise
     ]).catch(() => null);
     if (!creator) {
-      // 404 with noindex
       res.status(404);
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
-      res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=300'); // Cache 404s for 5 min
+      res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=300');
       res.send(generate404Html(username));
       return;
     }
-    // Generate HTML
     const { html, etag } = generateHtml(creator);
-    // Set headers for edge caching and validation
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=3600, stale-while-revalidate=86400');
     res.setHeader('ETag', etag);
     res.setHeader('Vary', 'Accept-Encoding');
-    // Check If-None-Match for 304 response
     const clientEtag = req.headers['if-none-match'];
     if (clientEtag === etag) {
       res.status(304).end();
@@ -288,7 +259,6 @@ export default async function handler(req, res) {
     res.status(200).send(html);
   } catch (error) {
     console.error('SSR error:', error);
-    // Fallback: Return minimal HTML with noindex and client-side render trigger
     res.status(500);
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('X-Render-Error', 'true');
