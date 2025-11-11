@@ -1,6 +1,9 @@
 {
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
+    { "source": "/sitemap.xml", "destination": "/public/sitemap.xml" },
+    { "source": "/sitemap_base.xml", "destination": "/public/sitemap_base.xml" },
+    { "source": "/sitemap_creators_:index.xml", "destination": "/public/sitemap_creators_:index.xml" },
     { "source": "/categories", "destination": "/categories.html" },
     { "source": "/categories/", "destination": "/categories.html" },
     { "source": "/categories/:slug", "destination": "/category.html" },
