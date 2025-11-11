@@ -1,6 +1,7 @@
 {
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
+    { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
     { "source": "/categories", "destination": "/categories.html" },
     { "source": "/categories/", "destination": "/categories.html" },
     { "source": "/categories/:slug", "destination": "/category.html" },

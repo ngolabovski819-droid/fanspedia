@@ -4,10 +4,12 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "sitemap": "node scripts/generate-sitemap.js"
+    "sitemap": "node scripts/generate-sitemap.cjs",
+    "build:sitemaps": "node scripts/build-sitemaps.cjs"
   },
   "dependencies": {
     "dotenv": "^17.2.3",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "node-fetch": "^2.7.0"
   }
 }
