@@ -1207,10 +1207,12 @@
 
     // Populate categories menu
     if (categoriesMenu) {
-      categoriesMenu.innerHTML = popularCategories.map(cat => {
+      const menuHTML = popularCategories.map(cat => {
         const slug = categoryToSlug(cat);
-        return `<a href="/categories/${slug}" class="dropdown-item" role="menuitem">${cat}</a>`;
-      }).join('') + '<a href="/categories" class="dropdown-item view-all" role="menuitem">View All Categories</a>';
+        const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        return `<a role="menuitem" href="/categories/${slug}/">${label}</a>`;
+      }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Browse all categories →</a>';
+      categoriesMenu.innerHTML = menuHTML;
     }
 
     // Toggle dropdown
@@ -1282,11 +1284,12 @@
 
     // Populate drawer categories (popular only)
     if (drawerCategories) {
-      drawerCategories.innerHTML = popularCategories.map(cat => {
+      const drawerHTML = popularCategories.map(cat => {
         const slug = categoryToSlug(cat);
         const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
         return `<a href="/categories/${slug}/">${label}</a>`;
       }).join('');
+      drawerCategories.innerHTML = drawerHTML;
     }
 
     if (mobileMenuToggle) mobileMenuToggle.addEventListener('click', openDrawer);
