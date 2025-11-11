@@ -44,10 +44,8 @@ async function fetchAllCreatorUsernames() {
 
 function ensureDirs() {
   const publicDir = path.join(__dirname, '..', 'public');
-  const sitemapsDir = path.join(publicDir, 'sitemaps');
   if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
-  if (!fs.existsSync(sitemapsDir)) fs.mkdirSync(sitemapsDir, { recursive: true });
-  return { publicDir, sitemapsDir };
+  return publicDir;
 }
 
 function buildBaseSitemap() {
@@ -89,12 +87,12 @@ function buildSitemapIndex(files) {
 (async function main() {
   try {
     console.log('🔄 Building sitemap index and parts...');
-  const { publicDir, sitemapsDir } = ensureDirs();
+    const publicDir = ensureDirs();
 
     // 1) Base sitemap
-  const baseXml = buildBaseSitemap();
-  const baseName = 'sitemaps/sitemap-base.xml';
-  fs.writeFileSync(path.join(publicDir, baseName), baseXml, 'utf8');
+    const baseXml = buildBaseSitemap();
+    const baseName = 'sitemap_base.xml';
+    fs.writeFileSync(path.join(publicDir, baseName), baseXml, 'utf8');
 
     // 2) Creators, chunk into multiple files
     const allUsernames = await fetchAllCreatorUsernames();
@@ -102,13 +100,11 @@ function buildSitemapIndex(files) {
     const partFiles = [];
     for (let i = 0; i < allUsernames.length; i += SITEMAP_CHUNK_SIZE) {
       const chunk = allUsernames.slice(i, i + SITEMAP_CHUNK_SIZE);
-  const xml = buildCreatorSitemap(chunk);
-  const name = `sitemaps/sitemap-creators-${Math.floor(i / SITEMAP_CHUNK_SIZE) + 1}.xml`;
-  fs.writeFileSync(path.join(publicDir, name), xml, 'utf8');
+      const xml = buildCreatorSitemap(chunk);
+      const name = `sitemap_creators_${Math.floor(i / SITEMAP_CHUNK_SIZE) + 1}.xml`;
+      fs.writeFileSync(path.join(publicDir, name), xml, 'utf8');
       partFiles.push(name);
-    }
-
-    // 3) Build index file referencing base + parts
+    }    // 3) Build index file referencing base + parts
     const indexFiles = [baseName, ...partFiles];
     const indexXml = buildSitemapIndex(indexFiles);
     const indexName = 'sitemap-index.xml';

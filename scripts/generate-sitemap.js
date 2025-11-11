@@ -1,22 +1,9 @@
-#!/usr/bin/env node
-/**
- * generate-sitemap.js
- * Automatically generates sitemap.xml from the categories list.
- * Run: node scripts/generate-sitemap.js
- */
-
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { categories, categoryToSlug } from '../config/categories.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Base URL of your site
-const BASE_URL = 'https://bestonlyfansgirls.net';
-
-// Get current date in YYYY-MM-DD format
+// CommonJS imports for Node.js compatibility
+const fs = require('fs');
+const path = require('path');
+require('dotenv').config();
+const fetch = require('node-fetch');
+const { categories, categoryToSlug } = require('../config/categories.js');
 function getCurrentDate() {
   const now = new Date();
   const year = now.getFullYear();
@@ -25,13 +12,11 @@ function getCurrentDate() {
   return `${year}-${month}-${day}`;
 }
 
-// Build sitemap XML
-function generateSitemap() {
+async function generateSitemap() {
   const today = getCurrentDate();
-  
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
   xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
-  
+
   // Homepage
   xml += '  <url>\n';
   xml += `    <loc>${BASE_URL}/</loc>\n`;
@@ -39,7 +24,7 @@ function generateSitemap() {
   xml += '    <changefreq>daily</changefreq>\n';
   xml += '    <priority>1.0</priority>\n';
   xml += '  </url>\n';
-  
+
   // Categories hub
   xml += '  <url>\n';
   xml += `    <loc>${BASE_URL}/categories/</loc>\n`;
@@ -47,7 +32,7 @@ function generateSitemap() {
   xml += '    <changefreq>weekly</changefreq>\n';
   xml += '    <priority>0.9</priority>\n';
   xml += '  </url>\n';
-  
+
   // All category pages
   categories.forEach(category => {
     const slug = categoryToSlug(category);
@@ -58,41 +43,60 @@ function generateSitemap() {
     xml += '    <priority>0.8</priority>\n';
     xml += '  </url>\n';
   });
-  
-  // Creator profile page
-  xml += '  <url>\n';
-  xml += `    <loc>${BASE_URL}/levibabestation</loc>\n`;
-  xml += `    <lastmod>${today}</lastmod>\n`;
-  xml += '    <changefreq>weekly</changefreq>\n';
-  xml += '    <priority>0.7</priority>\n';
-  xml += '  </url>\n';
-  
+
+  // Fetch all creator usernames from Supabase
+  let page = 1;
+  const pageSize = 1000;
+  let more = true;
+  while (more) {
+    const url = `${SUPABASE_URL}/rest/v1/onlyfans_profiles?select=username&order=username.asc&limit=${pageSize}&offset=${(page-1)*pageSize}`;
+    const headers = {
+      apikey: SUPABASE_KEY,
+      Authorization: `Bearer ${SUPABASE_KEY}`,
+      Accept: 'application/json',
+      'Accept-Profile': 'public',
+      Prefer: 'count=exact'
+    };
+    const resp = await fetch(url, { headers });
+    if (!resp.ok) throw new Error(`Supabase fetch failed: ${resp.status}`);
+    const creators = await resp.json();
+    if (!creators.length) break;
+    creators.forEach(row => {
+      if (row.username) {
+        xml += '  <url>\n';
+        xml += `    <loc>${BASE_URL}/${row.username}</loc>\n`;
+        xml += `    <lastmod>${today}</lastmod>\n`;
+        xml += '    <changefreq>weekly</changefreq>\n';
+        xml += '    <priority>0.7</priority>\n';
+        xml += '  </url>\n';
+      }
+    });
+    more = creators.length === pageSize;
+    page++;
+  }
+
   xml += '</urlset>';
-  
   return xml;
 }
 
-// Main execution
-function main() {
+(async function main() {
   console.log('🔄 Generating sitemap...');
-  const sitemap = generateSitemap();
-  const outputPath = path.join(__dirname, '..', 'sitemap.xml');
-  const publicOutputPath = path.join(__dirname, '..', 'public', 'sitemap.xml');
-  
-  fs.writeFileSync(outputPath, sitemap, 'utf8');
   try {
-    fs.writeFileSync(publicOutputPath, sitemap, 'utf8');
+    const sitemap = await generateSitemap();
+    const outputPath = path.join(__dirname, '..', 'sitemap.xml');
+    const publicOutputPath = path.join(__dirname, '..', 'public', 'sitemap.xml');
+    fs.writeFileSync(outputPath, sitemap, 'utf8');
+    try {
+      fs.writeFileSync(publicOutputPath, sitemap, 'utf8');
+    } catch (e) {
+      console.warn('⚠️ Failed to write public/sitemap.xml:', e.message);
+    }
+    const urlCount = (sitemap.match(/<url>/g) || []).length;
+    console.log(`✅ Sitemap generated successfully!`);
+    console.log(`📁 Location: ${outputPath}`);
+    console.log(`📁 Public copy: ${publicOutputPath}`);
+    console.log(`📊 Total URLs: ${urlCount} (homepage + categories hub + ${categories.length} categories + creators)`);
   } catch (e) {
-    console.warn('⚠️ Failed to write public/sitemap.xml:', e.message);
+    console.error('❌ Error generating sitemap:', e);
   }
-  
-  // Count URLs in sitemap
-  const urlCount = (sitemap.match(/<url>/g) || []).length;
-  
-  console.log(`✅ Sitemap generated successfully!`);
-  console.log(`📁 Location: ${outputPath}`);
-  console.log(`📁 Public copy: ${publicOutputPath}`);
-  console.log(`📊 Total URLs: ${urlCount} (homepage + categories hub + ${categories.length} categories + 1 creator profile)`);
-}
-
-main();
+})();

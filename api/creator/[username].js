@@ -7,6 +7,51 @@ const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_KEY;
 const BASE_URL = 'https://bestonlyfansgirls.net';
 
+/**
+ * @type {import('next').NextConfig}
+ **/
+const nextConfig = {
+  reactStrictMode: true,
+  images: {
+    domains: ['bestonlyfansgirls.net', 'images.weserv.nl', 'cdn.jsdelivr.net'],
+  },
+  async headers() {
+    return [
+      {
+        // Matching all routes
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'no-referrer',
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=()',
+          },
+        ],
+      },
+    ];
+  },
+  async rewrites() {
+    return [
+      {
+        // Redirect /username to /creator.html?u=username
+        source: '/([^/]+)',
+        destination: '/creator.html?u=$1',
+      },
+    ];
+  },
+};
+
 // Normalize field names from database (lowercase) to camelCase for client consistency
 function normalizeCreator(raw) {
   if (!raw) return null;
@@ -329,5 +374,91 @@ export default async function handler(req, res) {
   <p>Loading... <a href="/creator.html?username=${encodeURIComponent(username)}">Click here if not redirected</a></p>
 </body>
 </html>`);
+  }
+}
+
+export async function getServerSideProps(context) {
+  const { username } = context.query;
+  
+  if (!username) {
+    return {
+      notFound: true,
+    };
+  }
+  
+  try {
+    const creator = await fetchCreator(username);
+    
+    if (!creator) {
+      return {
+        notFound: true,
+      };
+    }
+    
+    return {
+      props: {
+        creator,
+        username,
+      },
+    };
+  } catch (error) {
+    console.error('getServerSideProps error:', error);
+    return {
+      notFound: true,
+    };
+  }
+}
+
+// Sitemap XML
+export async function getServerSideSitemap(context) {
+  try {
+    const url = `${SUPABASE_URL}/rest/v1/onlyfans_profiles?select=username&limit=500`;
+    const response = await fetch(url, {
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Accept-Profile': 'public'
+      }
+    });
+    
+    if (!response.ok) return null;
+    
+    const data = await response.json();
+    if (!data || data.length === 0) return null;
+    
+    const baseUrl = 'https://bestonlyfansgirls.net';
+    const sitemapEntries = data.map((creator) => {
+      const username = creator.username;
+      const url = `${baseUrl}/${username}`;
+      return `
+  <url>
+    <loc>${url}</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>`;
+    }).join('');
+    
+    const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap-image/1.1"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap-image/1.1 http://www.sitemaps.org/schemas/sitemap-image/1.1/sitemap-image.xsd">
+  <url>
+    <loc>${baseUrl}/</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  ${sitemapEntries}
+</urlset>`;
+    
+    return {
+      props: {
+        sitemapXml,
+      },
+    };
+  } catch (error) {
+    console.error('getServerSideSitemap error:', error);
+    return {
+      notFound: true,
+    };
   }
 }
