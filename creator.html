@@ -1667,6 +1667,49 @@
       }
     }
 
+    // Build responsive image sources
+    function buildResponsiveSources(originalUrl) {
+      const widths = [144, 240, 320, 480, 720];
+      const srcset = widths
+        .map(w => `${proxyImg(originalUrl, w, Math.round(w * 4 / 3))} ${w}w`)
+        .join(', ');
+      const src = proxyImg(originalUrl, 320, Math.round(320 * 4 / 3));
+      const sizes = '(max-width: 480px) 144px, (max-width: 768px) 240px, 320px';
+      return { src, srcset, sizes };
+    }
+    
+    // Get favorites from localStorage
+    function getFavoritesSet() {
+      try {
+        const saved = localStorage.getItem('favorites');
+        if (saved) return new Set(JSON.parse(saved));
+      } catch (e) {
+        console.error('Failed to parse favorites:', e);
+      }
+      return new Set();
+    }
+    
+    // Toggle favorite
+    function toggleFavorite(username, btn) {
+      let favorites = [];
+      try {
+        const saved = localStorage.getItem('favorites');
+        if (saved) favorites = JSON.parse(saved);
+      } catch (e) {}
+      
+      if (favorites.includes(username)) {
+        favorites = favorites.filter(f => f !== username);
+        btn.classList.remove('active');
+        btn.querySelector('span').textContent = '♡';
+      } else {
+        favorites.push(username);
+        btn.classList.add('active');
+        btn.querySelector('span').textContent = '♥';
+      }
+      
+      localStorage.setItem('favorites', JSON.stringify(favorites));
+    }
+
     // Format number
     function formatNumber(num) {
       if (num === null || num === undefined || num === '') return 'N/A';
@@ -2003,52 +2046,6 @@
       
       // Show the section
       document.getElementById('similarCreatorsSection').style.display = 'block';
-    }
-    
-    function buildResponsiveSources(originalUrl) {
-      const widths = [144, 240, 320, 480, 720];
-      const srcset = widths
-        .map(w => `${proxyImg(originalUrl, w, Math.round(w * 4 / 3))} ${w}w`)
-        .join(', ');
-      const src = proxyImg(originalUrl, 320, Math.round(320 * 4 / 3));
-      const sizes = '(max-width: 480px) 144px, (max-width: 768px) 240px, 320px';
-      return { src, srcset, sizes };
-    }
-    
-    function proxyImg(url, width, height) {
-      if (!url || !url.startsWith('http')) return '/static/no-image.png';
-      const encoded = encodeURIComponent(url);
-      return `https://images.weserv.nl/?url=${encoded}&w=${width}&h=${height}&fit=cover&a=top`;
-    }
-    
-    function getFavoritesSet() {
-      try {
-        const saved = localStorage.getItem('favorites');
-        if (saved) return new Set(JSON.parse(saved));
-      } catch (e) {
-        console.error('Failed to parse favorites:', e);
-      }
-      return new Set();
-    }
-    
-    function toggleFavorite(username, btn) {
-      let favorites = [];
-      try {
-        const saved = localStorage.getItem('favorites');
-        if (saved) favorites = JSON.parse(saved);
-      } catch (e) {}
-      
-      if (favorites.includes(username)) {
-        favorites = favorites.filter(f => f !== username);
-        btn.classList.remove('active');
-        btn.querySelector('span').textContent = '♡';
-      } else {
-        favorites.push(username);
-        btn.classList.add('active');
-        btn.querySelector('span').textContent = '♥';
-      }
-      
-      localStorage.setItem('favorites', JSON.stringify(favorites));
     }
     
     // Load similar creators after main profile loads
