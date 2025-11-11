@@ -1290,7 +1290,7 @@
           <div class="profile-image-wrapper">
             <img id="profileAvatar" src="" alt="" loading="eager" fetchpriority="high">
           </div>
-          <a id="onlyfansLink" href="" target="_blank" rel="noopener noreferrer" class="profile-cta">
+          <a id="onlyfansLink" href="" target="_blank" rel="nofollow noopener noreferrer" class="profile-cta">
             <i class="fas fa-external-link-alt"></i>
             Visit OnlyFans
           </a>
@@ -2062,7 +2062,8 @@
           : "FREE";
         const verifiedIcon = item.isVerified ? "✅ " : "";
         const bio = item.about || "";
-        const profileUrl = username !== "—" ? `https://bestonlyfansgirls.net/${username}` : "#";
+  const profileUrl = username !== "—" ? `https://bestonlyfansgirls.net/${username}` : "#";
+  const onlyfansUrl = username !== "—" ? `https://onlyfans.com/${username}` : "#";
 
         const safeUsername = String(username).replace(/'/g, "\\'");
         const favSet = getFavoritesSet();
@@ -2083,9 +2084,8 @@
                   ? `<p class="price-free">${priceText}</p>` 
                   : `<p class="price-tag">${priceText}</p>`}
                 ${bio ? `<p class="bio-snippet">${bio}</p>` : ''}
-                <a href="${profileUrl}" class="view-profile-btn">
-                  View Profile
-                </a>
+                <a href="${profileUrl}" class="view-profile-btn">View Profile</a>
+                <a href="${onlyfansUrl}" target="_blank" rel="nofollow noopener noreferrer" class="visit-onlyfans-btn">Visit OnlyFans</a>
               </div>
             </div>
           </div>`;
