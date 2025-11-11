@@ -1217,14 +1217,33 @@
     if (categoriesToggle && categoriesMenu) {
       categoriesToggle.addEventListener('click', (e) => {
         e.stopPropagation();
+        // Close any other open dropdowns
+        document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+          if (menu !== categoriesMenu) menu.classList.remove('show');
+        });
         const isOpen = categoriesMenu.classList.toggle('show');
         categoriesToggle.setAttribute('aria-expanded', isOpen);
         categoriesMenu.setAttribute('aria-hidden', !isOpen);
       });
 
+      // Prevent closing when clicking inside dropdown
+      categoriesMenu.addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+
       // Close on outside click
-      document.addEventListener('click', () => {
-        if (categoriesMenu.classList.contains('show')) {
+      document.addEventListener('click', (e) => {
+        if (!categoriesMenu.contains(e.target) && !categoriesToggle.contains(e.target)) {
+          if (categoriesMenu.classList.contains('show')) {
+            categoriesMenu.classList.remove('show');
+            categoriesToggle.setAttribute('aria-expanded', 'false');
+            categoriesMenu.setAttribute('aria-hidden', 'true');
+          }
+        }
+      });
+      // Keyboard accessibility: ESC closes dropdown
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && categoriesMenu.classList.contains('show')) {
           categoriesMenu.classList.remove('show');
           categoriesToggle.setAttribute('aria-expanded', 'false');
           categoriesMenu.setAttribute('aria-hidden', 'true');
