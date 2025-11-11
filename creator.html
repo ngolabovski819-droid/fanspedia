@@ -1789,30 +1789,39 @@
 
     // Get username from URL
     function getUsername() {
-      // Priority 1: Check SSR pre-injected username (from /:username SSR route)
+      // Priority 1: SSR pre-injected username
       if (window.__SSR_USERNAME__) {
         console.log('Using SSR pre-injected username:', window.__SSR_USERNAME__);
         return window.__SSR_USERNAME__;
       }
-      
-      // Priority 2: Check query param (for direct creator.html access)
+
+      // Priority 2: Query param (for direct creator.html access)
       const params = new URLSearchParams(window.location.search);
       const queryUsername = params.get('u');
       if (queryUsername) {
         console.log('Extracted username from query param:', queryUsername);
         return queryUsername;
       }
-      
-      // Priority 3: Extract from path: /username or /username/
+
+      // Priority 3: Extract from path: /username or /username/ (including dots)
       const path = window.location.pathname;
       console.log('Current path:', path);
-      
-      const match = path.match(/^\/([^\/]+)\/?$/);
-      if (match && match[1] && match[1] !== 'creator.html') {
-        console.log('Extracted username from path:', match[1]);
-        return match[1];
+
+      // Remove leading slash and trailing slash
+      let raw = path.replace(/^\/+/, '').replace(/\/+$/, '');
+      // Ignore creator.html and empty
+      if (raw && raw !== 'creator.html') {
+        // If there is a query string, remove it
+        raw = raw.split('?')[0];
+        // If there is a hash, remove it
+        raw = raw.split('#')[0];
+        // Validate: Only allow valid usernames (letters, numbers, dots, underscores, hyphens)
+        if (/^[A-Za-z0-9._-]+$/.test(raw)) {
+          console.log('Extracted username from path:', raw);
+          return raw;
+        }
       }
-      
+
       console.log('No username found, using default');
       return 'levibabestation';
     }
