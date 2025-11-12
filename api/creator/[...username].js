@@ -26,6 +26,8 @@ export default async function handler(req, res) {
     if (!creator) {
       console.log('[SSR] Creator not found, sending 404');
       res.status(404);
+      res.setHeader('X-SSR-Handler', 'creator-ssr-username');
+      res.setHeader('X-SSR-Username', String(username));
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
       res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=300');
       res.send(generate404Html(username));
@@ -33,7 +35,9 @@ export default async function handler(req, res) {
     }
     const { html, etag } = generateHtml(creator);
     console.log('[SSR] Sending 200 response for creator:', username);
-    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.setHeader('X-SSR-Handler', 'creator-ssr-username');
+  res.setHeader('X-SSR-Username', String(username));
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=3600, stale-while-revalidate=86400');
     res.setHeader('ETag', etag);
     res.setHeader('Vary', 'Accept-Encoding');
