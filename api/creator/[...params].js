@@ -112,7 +112,13 @@ async function fetchCreator(username) {
     // Use wildcard search for username to match frontend search logic
     // Debug log: incoming username
     console.log('[SSR] Incoming username:', username);
-    const url = `${SUPABASE_URL}/rest/v1/onlyfans_profiles?username=ilike.*${encodeURIComponent(username)}*&limit=1`;
+    const encodedUsername = encodeURIComponent(username);
+    console.log('[SSR] encodeURIComponent(username):', encodedUsername);
+    // Check for double encoding of dot
+    if (encodedUsername.includes('%252E')) {
+      console.warn('[SSR] Possible double-encoding of dot in username:', encodedUsername);
+    }
+    const url = `${SUPABASE_URL}/rest/v1/onlyfans_profiles?username=ilike.*${encodedUsername}*&limit=1`;
     // Debug log: constructed Supabase URL
     console.log('[SSR] Supabase REST URL:', url);
     const response = await fetch(url, {
@@ -127,6 +133,7 @@ async function fetchCreator(username) {
       return null;
     }
     const data = await response.json();
+    console.log('[SSR] Supabase raw response:', data);
     if (!data || data.length === 0) return null;
     return normalizeCreator(data[0]);
   } catch (error) {
@@ -185,7 +192,8 @@ ${JSON.stringify(jsonLd, null, 2)}
     window.__CREATOR_SSR__ = ${JSON.stringify(creator)};
     window.__SSR_USERNAME__ = ${JSON.stringify(username)};
     window.__SSR_CLEAN_URL__ = ${JSON.stringify('/' + username)};
-    window.location.replace('/creator.html?u=' + encodeURIComponent(${JSON.stringify(username)}) + '&ssr=1&cleanUrl=' + encodeURIComponent(${JSON.stringify('/' + username)}));
+    // window.location.replace('/creator.html?u=' + encodeURIComponent(${JSON.stringify(username)}) + '&ssr=1&cleanUrl=' + encodeURIComponent(${JSON.stringify('/' + username)}));
+    // SSR redirect disabled for local debugging
   </script>
   <noscript>
     <meta http-equiv="refresh" content="0;url=/creator.html?u=${encodeURIComponent(username)}">
@@ -263,15 +271,8 @@ export default async function handler(req, res) {
     const { html, etag } = generateHtml(creator);
     console.log('[SSR] Sending 200 response for creator:', username);
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=3600, stale-while-revalidate=86400');
-    res.setHeader('ETag', etag);
-    res.setHeader('Vary', 'Accept-Encoding');
-    const clientEtag = req.headers['if-none-match'];
-    if (clientEtag === etag) {
-      console.log('[SSR] ETag match, sending 304');
-      res.status(304).end();
-      return;
-    }
+    res.setHeader('Cache-Control', 'no-store, must-revalidate');
+    // ETag logic disabled for local debugging; always send fresh SSR HTML
     res.status(200).send(html);
   } catch (error) {
     console.error('SSR error:', error);
