@@ -87,13 +87,27 @@ export default async function handler(req, res) {
       'Prefer': 'count=exact'
     };
 
-    const r = await fetch(url, { headers });
+    // DEBUG: print the Supabase REST URL being requested (no secrets)
+    try {
+      console.log('[debug] Supabase REST URL ->', url);
+    } catch (e) { /* ignore */ }
+
+    let r;
+    try {
+      r = await fetch(url, { headers });
+    } catch (err) {
+      console.error('[debug] fetch error when contacting Supabase:', err && err.message);
+      return res.status(500).json({ error: true, message: 'fetch_error', detail: String(err && err.message) });
+    }
+
     if (!r.ok) {
       const text = await r.text();
+      console.error('[debug] Supabase returned non-OK status', r.status, text && text.slice(0, 200));
       return res.status(500).json({ error: true, status: r.status, message: text });
     }
 
     const data = await r.json();
+    try { console.log('[debug] Supabase returned rows:', Array.isArray(data) ? data.length : 'non-array'); } catch (e) {}
 
     // Store in cache
     cache.set(cacheKey, { data, ts: Date.now() });
