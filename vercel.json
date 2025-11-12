@@ -1,6 +1,6 @@
 {
   "rewrites": [
-  { "source": "/:username([a-zA-Z0-9_.-]+)", "destination": "/api/creator/[...params]" },
+  { "source": "/:username([a-zA-Z0-9_-]+\\.[a-zA-Z0-9_.-]+)", "destination": "/api/creator/:username" },
     { "source": "/", "destination": "/index.html" },
     { "source": "/sitemap.xml", "destination": "/public/sitemap.xml" },
     { "source": "/sitemap_base.xml", "destination": "/public/sitemap_base.xml" },
