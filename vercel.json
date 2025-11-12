@@ -1,4 +1,5 @@
 {
+  "version": 2,
   "rewrites": [
   { "source": "/:file((?:.+)\\.(?:js|css|png|jpg|jpeg|svg|ico|webp|map|json|txt|xml))", "destination": "/:file" },
     { "source": "/", "destination": "/index.html" },
