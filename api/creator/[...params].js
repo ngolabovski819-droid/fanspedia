@@ -109,7 +109,8 @@ function generateJsonLd(creator) {
 
 async function fetchCreator(username) {
   try {
-    const url = `${SUPABASE_URL}/rest/v1/onlyfans_profiles?username=ilike.${encodeURIComponent(username)}&limit=1`;
+    // Use wildcard search for username to match frontend search logic
+    const url = `${SUPABASE_URL}/rest/v1/onlyfans_profiles?username=ilike.*${encodeURIComponent(username)}*&limit=1`;
     const response = await fetch(url, {
       headers: {
         'apikey': SUPABASE_KEY,
