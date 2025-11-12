@@ -10,7 +10,7 @@
     { "source": "/categories/:slug/", "destination": "/category.html" },
     { "source": "/categories/:slug/page/:page", "destination": "/category.html?page=:page" },
   { "source": "/api/:path*", "destination": "/api/:path*" },
-  { "source": "/:username([a-zA-Z0-9_.-]+)", "destination": "/api/creator/:params*" }
+  { "source": "/:username([^/]+)", "destination": "/api/creator/:params*" }
   ],
   "redirects": [
     {
