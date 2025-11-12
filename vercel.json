@@ -1,6 +1,6 @@
 {
   "rewrites": [
-  { "source": "/:username([a-zA-Z0-9_-]+\\.[a-zA-Z0-9_.-]+)", "destination": "/api/creator/[...username]?username=:username" },
+  { "source": "/:file((?:.+)\\.(?:js|css|png|jpg|jpeg|svg|ico|webp|map|json|txt|xml))", "destination": "/:file" },
     { "source": "/", "destination": "/index.html" },
     { "source": "/sitemap.xml", "destination": "/public/sitemap.xml" },
     { "source": "/sitemap_base.xml", "destination": "/public/sitemap_base.xml" },
@@ -12,8 +12,10 @@
     { "source": "/categories/:slug/page/:page", "destination": "/category.html?page=:page" },
   { "source": "/api/:path*", "destination": "/api/:path*" },
   { "source": "/c/:id/:slug", "destination": "/creator.html?id=:id" },
-  { "source": "/creator.html", "destination": "/creator.html" }
+  { "source": "/creator.html", "destination": "/creator.html" },
+  { "source": "/:username([^/]+)", "destination": "/api/creator/[...username]?username=:username" }
   ],
+  "routes": [],
   "redirects": [
     { "source": "/creator.html", "has": [{ "type": "query", "key": "u" }], "destination": "/c/:id/:slug", "permanent": true },
     { "source": "/category", "destination": "/categories", "permanent": true },
