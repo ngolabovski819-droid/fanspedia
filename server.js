@@ -78,3 +78,8 @@ app.get('/:username([a-zA-Z0-9_.-]+)', async (req, res, next) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Local test server running on http://127.0.0.1:${PORT}`));
+// Lightweight health endpoint for quick availability checks
+app.get('/health', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.status(200).json({ status: 'ok', ts: new Date().toISOString() });
+});
