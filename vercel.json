@@ -14,7 +14,7 @@
   { "source": "/api/:path*", "destination": "/api/:path*" },
   { "source": "/c/:id/:slug", "destination": "/creator.html?id=:id" },
   { "source": "/creator.html", "destination": "/creator.html" },
-  { "source": "/:username((?:[a-zA-Z0-9_-]+\\.)+[a-zA-Z0-9_-]+)", "destination": "/api/dot-redirect?username=:username" }
+  { "source": "/:username((?:[A-Za-z0-9_-]+\\.)+[A-Za-z0-9_-]+)", "destination": "/api/dot/:username" }
   ],
   "routes": [],
   "redirects": [
