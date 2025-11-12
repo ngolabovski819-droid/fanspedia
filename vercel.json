@@ -11,7 +11,7 @@
     { "source": "/categories/:slug/page/:page", "destination": "/category.html?page=:page" },
   { "source": "/api/:path*", "destination": "/api/:path*" },
   { "source": "/:username([^/]+)", "destination": "/api/creator/:params*" },
-  { "source": "/:params*", "destination": "/api/creator/:params*" }
+  { "source": "/((?!api|public|static|robots\\.txt|sitemap\\.xml).*)", "destination": "/api/creator/:params*" }
   ],
   "redirects": [
     {
