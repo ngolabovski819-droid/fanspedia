@@ -1150,25 +1150,22 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
-  </style>
-</head>
-<body>
-  <!-- Header -->
-  <header class="superior-header" id="mainHeader">
-    <div class="header-main">
-      <div class="header-container header-reordered">
-        <!-- Logo (icon + brand) -->
-        <a href="/" class="logo-section">
-          <div class="logo-icon"><i class="fas fa-fire"></i></div>
-          <div class="logo-text">
-            <div class="brand">BestOFGirls</div>
-            <div class="tagline">10k+ TOP Creators</div>
-          </div>
-        </a>
-
-        <!-- Desktop categories dropdown -->
-        <div class="desktop-nav">
-          <button id="categoriesToggle" class="nav-btn" aria-haspopup="true" aria-expanded="false">
+  <script type="module">
+    import { slugify, toCreatorUrl } from '/utils/creatorUrl.js';
+    (async () => {
+      const params = new URLSearchParams(window.location.search);
+      const username = params.get('u');
+      if (username) {
+        // Fetch id for username (API or lookup)
+        const res = await fetch(`/api/lookup-id?username=${encodeURIComponent(username)}`);
+        const { id } = await res.json();
+        const canonicalUrl = toCreatorUrl({ id, username });
+        document.head.insertAdjacentHTML('beforeend', `<link rel="canonical" href="${canonicalUrl}">`);
+        document.head.insertAdjacentHTML('beforeend', `<meta name="robots" content="noindex,follow">`);
+        history.replaceState({}, '', canonicalUrl);
+      }
+    })();
+  </script>
             Categories <i class="fas fa-chevron-down" aria-hidden="true"></i>
           </button>
           <div id="categoriesMenu" class="dropdown-menu" role="menu" aria-hidden="true">

@@ -125,3 +125,24 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'internal_error', message: err.message || String(err) });
   }
 }
+
+async function fetchCreator(username) {
+  try {
+    // Use wildcard search for username
+    const url = `${SUPABASE_URL}/rest/v1/onlyfans_profiles?username=ilike.*${encodeURIComponent(username)}*&limit=1`;
+    const response = await fetch(url, {
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Accept-Profile': 'public'
+      }
+    });
+    if (!response.ok) return null;
+    const data = await response.json();
+    if (!data || data.length === 0) return null;
+    return normalizeCreator(data[0]);
+  } catch (error) {
+    console.error('Fetch creator error:', error);
+    return null;
+  }
+}

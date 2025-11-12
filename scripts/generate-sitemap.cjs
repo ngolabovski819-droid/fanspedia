@@ -1,14 +1,13 @@
+// Load dotenv before reading env vars
+require('dotenv').config();
+const SUPABASE_KEY = process.env.SUPABASE_KEY;
+const SUPABASE_URL = process.env.SUPABASE_URL;
 // CommonJS imports for Node.js compatibility
 const fs = require('fs');
+const baseUrl = 'https://bestonlyfansgirls.net';
 const path = require('path');
-require('dotenv').config();
 const fetch = require('node-fetch');
 const { categories, categoryToSlug } = require('../config/categories.js');
-
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_KEY = process.env.SUPABASE_KEY;
-const BASE_URL = 'https://bestonlyfansgirls.net';
-
 function getCurrentDate() {
   const now = new Date();
   const year = now.getFullYear();
@@ -18,13 +17,14 @@ function getCurrentDate() {
 }
 
 async function generateSitemap() {
+  console.log('SUPABASE_URL:', SUPABASE_URL);
   const today = getCurrentDate();
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
   xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
 
   // Homepage
   xml += '  <url>\n';
-  xml += `    <loc>${BASE_URL}/</loc>\n`;
+  xml += `    <loc>${baseUrl}/</loc>\n`;
   xml += `    <lastmod>${today}</lastmod>\n`;
   xml += '    <changefreq>daily</changefreq>\n';
   xml += '    <priority>1.0</priority>\n';
@@ -32,7 +32,7 @@ async function generateSitemap() {
 
   // Categories hub
   xml += '  <url>\n';
-  xml += `    <loc>${BASE_URL}/categories/</loc>\n`;
+  xml += `    <loc>${baseUrl}/categories/</loc>\n`;
   xml += `    <lastmod>${today}</lastmod>\n`;
   xml += '    <changefreq>weekly</changefreq>\n';
   xml += '    <priority>0.9</priority>\n';
@@ -42,7 +42,7 @@ async function generateSitemap() {
   categories.forEach(category => {
     const slug = categoryToSlug(category);
     xml += '  <url>\n';
-    xml += `    <loc>${BASE_URL}/categories/${slug}/</loc>\n`;
+    xml += `    <loc>${baseUrl}/categories/${slug}/</loc>\n`;
     xml += `    <lastmod>${today}</lastmod>\n`;
     xml += '    <changefreq>weekly</changefreq>\n';
     xml += '    <priority>0.8</priority>\n';
@@ -68,12 +68,12 @@ async function generateSitemap() {
     if (!creators.length) break;
     creators.forEach(row => {
       if (row.username) {
-        xml += '  <url>\n';
-        xml += `    <loc>${BASE_URL}/${row.username}</loc>\n`;
-        xml += `    <lastmod>${today}</lastmod>\n`;
-        xml += '    <changefreq>weekly</changefreq>\n';
-        xml += '    <priority>0.7</priority>\n';
-        xml += '  </url>\n';
+  xml += '  <url>\n';
+  xml += `    <loc>${baseUrl}/${row.username}</loc>\n`;
+  xml += `    <lastmod>${today}</lastmod>\n`;
+  xml += '    <changefreq>weekly</changefreq>\n';
+  xml += '    <priority>0.7</priority>\n';
+  xml += '  </url>\n';
       }
     });
     more = creators.length === pageSize;
@@ -88,11 +88,18 @@ async function generateSitemap() {
   console.log('🔄 Generating sitemap...');
   try {
     const sitemap = await generateSitemap();
+    const outputPath = path.join(__dirname, '..', 'sitemap.xml');
     const publicOutputPath = path.join(__dirname, '..', 'public', 'sitemap.xml');
-    fs.writeFileSync(publicOutputPath, sitemap, 'utf8');
+    fs.writeFileSync(outputPath, sitemap, 'utf8');
+    try {
+      fs.writeFileSync(publicOutputPath, sitemap, 'utf8');
+    } catch (e) {
+      console.warn('⚠️ Failed to write public/sitemap.xml:', e.message);
+    }
     const urlCount = (sitemap.match(/<url>/g) || []).length;
     console.log(`✅ Sitemap generated successfully!`);
-  console.log(`📁 Public sitemap: ${publicOutputPath}`);
+    console.log(`📁 Location: ${outputPath}`);
+    console.log(`📁 Public copy: ${publicOutputPath}`);
     console.log(`📊 Total URLs: ${urlCount} (homepage + categories hub + ${categories.length} categories + creators)`);
   } catch (e) {
     console.error('❌ Error generating sitemap:', e);
