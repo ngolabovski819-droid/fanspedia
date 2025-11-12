@@ -110,7 +110,11 @@ function generateJsonLd(creator) {
 async function fetchCreator(username) {
   try {
     // Use wildcard search for username to match frontend search logic
+    // Debug log: incoming username
+    console.log('[SSR] Incoming username:', username);
     const url = `${SUPABASE_URL}/rest/v1/onlyfans_profiles?username=ilike.*${encodeURIComponent(username)}*&limit=1`;
+    // Debug log: constructed Supabase URL
+    console.log('[SSR] Supabase REST URL:', url);
     const response = await fetch(url, {
       headers: {
         'apikey': SUPABASE_KEY,
@@ -118,7 +122,10 @@ async function fetchCreator(username) {
         'Accept-Profile': 'public'
       }
     });
-    if (!response.ok) return null;
+    if (!response.ok) {
+      console.log('[SSR] Supabase result count:', 'not array');
+      return null;
+    }
     const data = await response.json();
     if (!data || data.length === 0) return null;
     return normalizeCreator(data[0]);
