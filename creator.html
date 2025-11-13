@@ -2057,16 +2057,20 @@
         const response = await fetch(`/api/search?verified=true&page=${randomPage}&page_size=100`);
         const data = await response.json();
         
-        console.log('Current creator to exclude:', currentCreator.username, currentCreator.id);
-        console.log('Fetching from page:', randomPage);
-        console.log('Total candidates before filter:', data.length);
+        console.log('🎯 Current creator to exclude:', currentCreator.username, '(ID:', currentCreator.id, ')');
+        console.log('📄 Fetching from page:', randomPage);
+        console.log('📦 Total candidates before filter:', data.length);
+        console.log('🔍 All usernames in pool:', data.map(c => c.username).join(', '));
         
-        // Filter out current creator by username AND id (for safety)
+        // Filter out current creator by username AND id (case-insensitive)
         const candidates = data.filter(c => {
-          const isCurrentByUsername = c.username === currentCreator.username;
+          const currentUsernameLower = (currentCreator.username || '').toLowerCase();
+          const candidateUsernameLower = (c.username || '').toLowerCase();
+          const isCurrentByUsername = candidateUsernameLower === currentUsernameLower;
           const isCurrentById = c.id === currentCreator.id;
+          
           if (isCurrentByUsername || isCurrentById) {
-            console.log('Filtering out current creator:', c.username, c.id);
+            console.log('🚫 Filtering out current creator:', c.username, c.id);
           }
           return !isCurrentByUsername && !isCurrentById;
         });
@@ -2174,13 +2178,21 @@
       const container = document.getElementById('similarCreatorsGrid');
       if (!container) return;
       
-      // Extra safety: Filter out current creator again at render time
+      // Extra safety: Filter out current creator again at render time (case-insensitive)
       const currentCreator = window.currentCreator;
       const filtered = currentCreator 
-        ? creators.filter(c => c.username !== currentCreator.username && c.id !== currentCreator.id)
+        ? creators.filter(c => {
+            const currentUsernameLower = (currentCreator.username || '').toLowerCase();
+            const candidateUsernameLower = (c.username || '').toLowerCase();
+            const isDifferent = candidateUsernameLower !== currentUsernameLower && c.id !== currentCreator.id;
+            if (!isDifferent) {
+              console.log('🚫 Render filter caught:', c.username, c.id);
+            }
+            return isDifferent;
+          })
         : creators;
       
-      console.log('Rendering similar creators:', filtered.length, 'Current creator:', currentCreator?.username);
+      console.log('✅ Rendering similar creators:', filtered.length, 'Current creator:', currentCreator?.username);
       
       container.innerHTML = filtered.map((item, idx) => {
         const img = item.avatar || item.avatar_c144 || "";
