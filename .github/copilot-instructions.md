@@ -68,6 +68,33 @@ npm start
 ```
 Server mounts `api/search.js` at `/api/search` and serves static files from root.
 
+### Known Issues & Workarounds
+
+**Vercel Routing Configuration Issue (Nov 2025)**
+- **Problem**: `vercel.json` rewrites not being applied on production deployments
+- **Symptoms**: 
+  - Test URLs like `/dot-test`, `/debug/dot-test` return "Creator Not Found" page or Vercel 404
+  - Direct API access (e.g., `/api/health`) works correctly
+  - Dotted usernames (e.g., `/peyton.kinsly`) don't trigger redirect handler
+- **Root Cause**: Likely Output Directory override set to "." or framework detection interfering with vercel.json processing
+- **Workaround**: 
+  - Users can access redirect function directly: `https://bestonlyfansgirls.net/api/dot/peyton.kinsly` → 301 to `/c/{id}/{slug}`
+  - All canonical `/c/{id}/{slug}` URLs work correctly
+  - SEO is protected (sitemaps reference canonical URLs)
+- **Fix When Revisiting**:
+  1. Vercel Settings → Build and Deployment → Build & Output:
+     - Framework Preset: Other
+     - Build Command: empty
+     - Output Directory: turn OFF the Override toggle (leave blank, not ".")
+     - Root Directory: empty
+     - Save and redeploy
+  2. Test `/zz-redirect-test` → should redirect to `/api/health` if vercel.json is applied
+  3. If still broken, check for `.vercelignore` or monorepo config
+  4. Nuclear option: create fresh Vercel project with auto-detection
+- **Files Involved**:
+  - `vercel.json` - contains rewrites and redirects (already correct)
+  - `api/dot/[username].js` - redirect handler (working, just not reachable via clean URLs)
+
 ### V1 Scraping Workflow (Legacy URL-based)
 1. Set `cookies.json` with OnlyFans auth cookies (format: list of dicts with `name`, `value`, `domain`, etc.)
 2. Run scraper: `python scripts/mega_onlyfans_scraper_full.py --urls urls.txt --output temp.csv --cookies cookies.json`
