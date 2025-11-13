@@ -483,25 +483,39 @@
 
     // No hero search UI here; header search handles queries and redirects to homepage
 
-    // Popular chips (top row)
+    // SSR Detection - Skip rendering if server already generated chips
+    const isSSR = document.body.dataset.ssr === 'true';
+    const categoriesCount = parseInt(document.body.dataset.categoriesCount || '0', 10);
+    
     const popularGrid = document.getElementById('popularGrid');
-    if (popularGrid) {
-      popularGrid.innerHTML = popularCategories.map(cat => {
-        const lbl = cat.startsWith('#') ? cat : '#' + cat;
-        const slug = categoryToSlug(cat);
-        return `<a class="category-chip" href="/categories/${slug}/"><i class='fas fa-hashtag' aria-hidden='true'></i><span>${lbl}</span></a>`;
-      }).join('');
-    }
-
-    // All category chips - alphabetized (include everything to guarantee visibility)
     const chipGrid = document.getElementById('chipGrid');
-    if (chipGrid) {
-      const allSorted = [...categories].sort((a, b) => a.localeCompare(b));
-      chipGrid.innerHTML = allSorted.map(cat => {
-        const lbl = cat.startsWith('#') ? cat : '#' + cat;
-        const slug = categoryToSlug(cat);
-        return `<a class="category-chip" href="/categories/${slug}/"><i class='fas fa-hashtag' aria-hidden='true'></i><span>${lbl}</span></a>`;
-      }).join('');
+    
+    if (isSSR && categoriesCount > 0) {
+      // Categories already rendered by server - just log for verification
+      console.log(`SSR detected: ${categoriesCount} categories pre-rendered`);
+      // Chips are already in the HTML, no client-side rendering needed
+    } else {
+      // No SSR - render categories client-side (fallback)
+      console.log('Client-side rendering categories');
+      
+      // Popular chips (top row)
+      if (popularGrid) {
+        popularGrid.innerHTML = popularCategories.map(cat => {
+          const slug = categoryToSlug(cat);
+          const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+          return `<a href="/categories/${slug}/" class="chip" rel="category tag">${label}</a>`;
+        }).join('');
+      }
+
+      // All category chips - alphabetized (include everything to guarantee visibility)
+      if (chipGrid) {
+        const allSorted = [...categories].sort((a, b) => a.localeCompare(b));
+        chipGrid.innerHTML = allSorted.map(cat => {
+          const slug = categoryToSlug(cat);
+          const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+          return `<a href="/categories/${slug}/" class="chip" rel="category tag">${label}</a>`;
+        }).join('');
+      }
     }
 
   // Favorites bar (read from localStorage, removable)

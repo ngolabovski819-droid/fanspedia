@@ -2644,10 +2644,42 @@
 
 
 
-    // Initial load - load popular models
-    statusDiv.textContent = "Loading popular creators...";
-  loadFromURL(); // Load search state from URL
-    performSearch(true);
+    // SSR Detection - Skip initial load if server already rendered content
+    const isSSR = document.body.dataset.ssr === 'true';
+    const initialCreatorCount = parseInt(document.body.dataset.initialCreators || '0', 10);
+    
+    if (isSSR && initialCreatorCount > 0) {
+      // Content already rendered by server - just hydrate interactive features
+      console.log(`SSR detected: ${initialCreatorCount} creators pre-rendered`);
+      statusDiv.textContent = "";
+      currentPage = 1; // SSR renders page 1
+      hasMore = true; // Assume more results available
+      
+      // Attach favorite button event listeners to SSR-rendered cards
+      document.querySelectorAll('.favorite-btn').forEach(btn => {
+        const creatorId = btn.dataset.id;
+        if (favorites.includes(creatorId)) {
+          btn.classList.add('active');
+          btn.querySelector('i').className = 'fas fa-heart';
+        }
+        // Event listener already attached via event delegation, no action needed
+      });
+      
+      // Show Load More button if we have results
+      if (loadMoreContainer && resultsDiv.children.length > 0) {
+        loadMoreContainer.style.display = 'block';
+        updateLoadedCount();
+      }
+      
+      // Load URL params for filters (user might have bookmarked a filtered view)
+      loadFromURL();
+      
+    } else {
+      // No SSR or empty results - perform initial client-side search
+      statusDiv.textContent = "Loading popular creators...";
+      loadFromURL(); // Load search state from URL
+      performSearch(true);
+    }
   </script>
 
   <!-- Footer -->
