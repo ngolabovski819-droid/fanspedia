@@ -2052,11 +2052,18 @@
         const response = await fetch(`/api/search?verified=true&page=1&page_size=100`);
         const data = await response.json();
         
+        console.log('Current creator to exclude:', currentCreator.username, currentCreator.id);
+        console.log('Total candidates before filter:', data.length);
+        
         // Filter out current creator by username AND id (for safety)
-        const candidates = data.filter(c => 
-          c.username !== currentCreator.username && 
-          c.id !== currentCreator.id
-        );
+        const candidates = data.filter(c => {
+          const isCurrentByUsername = c.username === currentCreator.username;
+          const isCurrentById = c.id === currentCreator.id;
+          if (isCurrentByUsername || isCurrentById) {
+            console.log('Filtering out current creator:', c.username, c.id);
+          }
+          return !isCurrentByUsername && !isCurrentById;
+        });
         
         // Score each candidate by similarity
         const scored = candidates.map(candidate => ({
@@ -2064,9 +2071,13 @@
           similarityScore: calculateSimilarityScore(currentCreator, candidate)
         }));
         
+        console.log('Candidates after filter:', candidates.length);
+        
         // Sort by score (highest first) and take top 8
         scored.sort((a, b) => b.similarityScore - a.similarityScore);
         const similar = scored.slice(0, 8);
+        
+        console.log('Top 8 similar creators:', similar.map(s => `${s.username} (score: ${s.similarityScore})`));
         
         if (similar.length > 0) {
           renderSimilarCreators(similar);
@@ -2156,7 +2167,15 @@
       const container = document.getElementById('similarCreatorsGrid');
       if (!container) return;
       
-      container.innerHTML = creators.map((item, idx) => {
+      // Extra safety: Filter out current creator again at render time
+      const currentCreator = window.currentCreator;
+      const filtered = currentCreator 
+        ? creators.filter(c => c.username !== currentCreator.username && c.id !== currentCreator.id)
+        : creators;
+      
+      console.log('Rendering similar creators:', filtered.length, 'Current creator:', currentCreator?.username);
+      
+      container.innerHTML = filtered.map((item, idx) => {
         const img = item.avatar || item.avatar_c144 || "";
         const imgSrc = img && img.startsWith("http") ? img : "/static/no-image.png";
         const responsive = buildResponsiveSources(imgSrc);
