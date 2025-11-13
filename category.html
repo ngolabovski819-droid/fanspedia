@@ -498,6 +498,7 @@
       
       breadcrumbsList.innerHTML = `
         <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <meta itemprop="position" content="1">
           <a href="/" itemprop="item" class="breadcrumb-home">
             <i class="fas fa-home" aria-hidden="true"></i>
             <span itemprop="name">Home</span>
@@ -505,12 +506,15 @@
         </li>
         <li class="breadcrumb-separator" aria-hidden="true">/</li>
         <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <meta itemprop="position" content="2">
           <a href="/categories/" itemprop="item">
             <span itemprop="name">Categories</span>
           </a>
         </li>
         <li class="breadcrumb-separator" aria-hidden="true">/</li>
         <li class="breadcrumb-item active" aria-current="page" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <meta itemprop="position" content="3">
+          <link itemprop="item" href="${categoryUrl}">
           <span itemprop="name">${label}</span>
         </li>
       `;
