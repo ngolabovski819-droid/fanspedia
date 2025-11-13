@@ -1835,6 +1835,10 @@
       // Check for SSR-injected data (from /:username SSR route)
       if (window.__CREATOR_SSR__ && window.__SSR_USERNAME__ === username) {
         console.log('Using SSR pre-fetched data (zero API calls needed)');
+        
+        // Store for similarity calculation
+        window.currentCreator = window.__CREATOR_SSR__;
+        
         renderProfile(window.__CREATOR_SSR__);
         loadingState.style.display = 'none';
         profileContent.style.display = 'block';
@@ -1864,6 +1868,9 @@
         // Find exact username match (case-insensitive)
         const creator = data.find(c => c.username && c.username.toLowerCase() === username.toLowerCase()) || data[0];
         console.log('Selected creator:', creator);
+        
+        // Store for similarity calculation
+        window.currentCreator = creator;
         
         renderProfile(creator);
         
@@ -2031,18 +2038,34 @@
     // Load on page ready
     loadCreatorProfile();
     
-    // Load similar creators
+    // Load similar creators with smart similarity scoring
     async function loadSimilarCreators() {
       try {
-        // Fetch random creators (exclude current one)
         const currentUsername = new URLSearchParams(window.location.search).get('u');
-        const response = await fetch(`/api/search?page=1&page_size=8`);
+        
+        // Get current creator's full profile first
+        const currentCreator = window.currentCreator; // Set when profile loads
+        if (!currentCreator) {
+          console.warn('Current creator not loaded yet');
+          return;
+        }
+        
+        // Fetch a larger pool to score from (top 100 verified creators for quality)
+        const response = await fetch(`/api/search?verified=true&page=1&page_size=100`);
         const data = await response.json();
         
-        // Filter out current creator and shuffle
-        const filtered = data.filter(c => c.username !== currentUsername);
-        const shuffled = filtered.sort(() => 0.5 - Math.random());
-        const similar = shuffled.slice(0, 8);
+        // Filter out current creator
+        const candidates = data.filter(c => c.username !== currentUsername);
+        
+        // Score each candidate by similarity
+        const scored = candidates.map(candidate => ({
+          ...candidate,
+          similarityScore: calculateSimilarityScore(currentCreator, candidate)
+        }));
+        
+        // Sort by score (highest first) and take top 8
+        scored.sort((a, b) => b.similarityScore - a.similarityScore);
+        const similar = scored.slice(0, 8);
         
         if (similar.length > 0) {
           renderSimilarCreators(similar);
@@ -2050,6 +2073,82 @@
       } catch (error) {
         console.error('Error loading similar creators:', error);
       }
+    }
+    
+    // Calculate similarity score based on multiple factors
+    function calculateSimilarityScore(current, candidate) {
+      let score = 0;
+      
+      // 1. Price similarity (40 points max)
+      const currentPrice = parseFloat(current.subscribePrice || current.subscribeprice || 0);
+      const candidatePrice = parseFloat(candidate.subscribePrice || candidate.subscribeprice || 0);
+      const priceDiff = Math.abs(currentPrice - candidatePrice);
+      
+      if (priceDiff === 0) {
+        score += 40; // Exact same price tier
+      } else if (priceDiff <= 5) {
+        score += 30; // Very similar price
+      } else if (priceDiff <= 10) {
+        score += 20; // Somewhat similar
+      } else if (priceDiff <= 20) {
+        score += 10; // Same ballpark
+      }
+      
+      // 2. Verification status match (20 points)
+      const currentVerified = current.isVerified || current.isverified || false;
+      const candidateVerified = candidate.isVerified || candidate.isverified || false;
+      if (currentVerified === candidateVerified) {
+        score += 20;
+      }
+      
+      // 3. Engagement level similarity (30 points max)
+      const currentFavorites = parseInt(current.favoritedCount || current.favoritedcount || 0);
+      const candidateFavorites = parseInt(candidate.favoritedCount || candidate.favoritedcount || 0);
+      
+      // Categorize into tiers
+      const getTier = (favs) => {
+        if (favs > 100000) return 'mega';
+        if (favs > 50000) return 'huge';
+        if (favs > 10000) return 'large';
+        if (favs > 5000) return 'medium';
+        if (favs > 1000) return 'small';
+        return 'micro';
+      };
+      
+      const currentTier = getTier(currentFavorites);
+      const candidateTier = getTier(candidateFavorites);
+      
+      if (currentTier === candidateTier) {
+        score += 30; // Same engagement tier
+      } else {
+        // Adjacent tiers get partial points
+        const tiers = ['micro', 'small', 'medium', 'large', 'huge', 'mega'];
+        const currentIdx = tiers.indexOf(currentTier);
+        const candidateIdx = tiers.indexOf(candidateTier);
+        const tierDiff = Math.abs(currentIdx - candidateIdx);
+        if (tierDiff === 1) score += 20;
+        else if (tierDiff === 2) score += 10;
+      }
+      
+      // 4. Content volume similarity (10 points max)
+      const currentPosts = parseInt(current.postsCount || current.postscount || 0);
+      const candidatePosts = parseInt(candidate.postsCount || candidate.postscount || 0);
+      
+      const getContentLevel = (posts) => {
+        if (posts > 1000) return 'prolific';
+        if (posts > 500) return 'active';
+        if (posts > 100) return 'moderate';
+        return 'starter';
+      };
+      
+      if (getContentLevel(currentPosts) === getContentLevel(candidatePosts)) {
+        score += 10;
+      }
+      
+      // 5. Add small random factor to break ties (0-5 points)
+      score += Math.random() * 5;
+      
+      return score;
     }
     
     function renderSimilarCreators(creators) {
