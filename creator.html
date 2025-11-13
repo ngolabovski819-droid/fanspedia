@@ -2041,8 +2041,6 @@
     // Load similar creators with smart similarity scoring
     async function loadSimilarCreators() {
       try {
-        const currentUsername = new URLSearchParams(window.location.search).get('u');
-        
         // Get current creator's full profile first
         const currentCreator = window.currentCreator; // Set when profile loads
         if (!currentCreator) {
@@ -2054,8 +2052,11 @@
         const response = await fetch(`/api/search?verified=true&page=1&page_size=100`);
         const data = await response.json();
         
-        // Filter out current creator
-        const candidates = data.filter(c => c.username !== currentUsername);
+        // Filter out current creator by username AND id (for safety)
+        const candidates = data.filter(c => 
+          c.username !== currentCreator.username && 
+          c.id !== currentCreator.id
+        );
         
         // Score each candidate by similarity
         const scored = candidates.map(candidate => ({
