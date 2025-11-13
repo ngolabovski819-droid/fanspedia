@@ -1,6 +1,7 @@
 {
   "version": 2,
   "rewrites": [
+  { "source": "/dot-test", "destination": "/api/health" },
   { "source": "/:file((?:.+)\\.(?:js|css|png|jpg|jpeg|svg|ico|webp|map|json|txt|xml))", "destination": "/:file" },
     { "source": "/", "destination": "/index.html" },
     { "source": "/sitemap.xml", "destination": "/public/sitemap.xml" },
@@ -14,7 +15,6 @@
   { "source": "/api/:path*", "destination": "/api/:path*" },
   { "source": "/c/:id/:slug", "destination": "/creator.html?id=:id" },
   { "source": "/creator.html", "destination": "/creator.html" },
-  { "source": "/dot-test", "destination": "/api/health" },
   { "source": "/:username(.*\\..*)", "destination": "/api/dot/:username" }
   ],
   "routes": [],
