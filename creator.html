@@ -2052,11 +2052,13 @@
           return;
         }
         
-        // Fetch a larger pool to score from (top 100 verified creators for quality)
-        const response = await fetch(`/api/search?verified=true&page=1&page_size=100`);
+        // Fetch from a random page to get variety (pages 1-5, 100 creators each)
+        const randomPage = Math.floor(Math.random() * 5) + 1;
+        const response = await fetch(`/api/search?verified=true&page=${randomPage}&page_size=100`);
         const data = await response.json();
         
         console.log('Current creator to exclude:', currentCreator.username, currentCreator.id);
+        console.log('Fetching from page:', randomPage);
         console.log('Total candidates before filter:', data.length);
         
         // Filter out current creator by username AND id (for safety)
@@ -2091,7 +2093,7 @@
       }
     }
     
-    // Calculate similarity score based on multiple factors
+    // Calculate similarity score based on multiple factors (0-120 scale)
     function calculateSimilarityScore(current, candidate) {
       let score = 0;
       
@@ -2161,8 +2163,9 @@
         score += 10;
       }
       
-      // 5. Add small random factor to break ties (0-5 points)
-      score += Math.random() * 5;
+      // 5. Add random factor for variety (0-20 points)
+      // Higher random weight ensures different recommendations on each page load
+      score += Math.random() * 20;
       
       return score;
     }
