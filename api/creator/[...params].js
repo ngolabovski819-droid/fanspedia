@@ -266,12 +266,17 @@ async function renderCreatorHtmlWithSSR(creator, username) {
 }
 
 export default async function handler(req, res) {
-  // Vercel catch-all: req.query.params is array for [...params]
-  let username = req.query.params;
+  // Vercel catch-all: try multiple sources for the username, then fallback to parsing the URL
   console.log('[SSR] Incoming request path:', req.url);
+  let username = req.query?.params ?? req.query?.username ?? null;
   console.log('[SSR] Raw params:', username);
-  if (Array.isArray(username)) {
-    username = username.join('.');
+  if (Array.isArray(username)) username = username.join('/');
+  if (!username && typeof req.url === 'string') {
+    const m = req.url.match(/\/api\/creator\/(.*)$/);
+    if (m && m[1]) username = decodeURIComponent(m[1]);
+  }
+  if (typeof username === 'string') {
+    username = username.replace(/^\/+|\/+$/g, '');
   }
   console.log('[SSR] Parsed username:', username);
   if (!username) {
