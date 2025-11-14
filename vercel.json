@@ -1,4 +1,4 @@
-{
+﻿{
   "version": 2,
   "rewrites": [
   { "source": "/zz-redirect-test", "destination": "/api/health" },
@@ -19,7 +19,6 @@
   { "source": "/:username(.*\\..*)", "destination": "/api/dot/:username" },
   { "source": "/:username([a-zA-Z0-9_-]+)", "destination": "/api/creator/:username" }
   ],
-  "routes": [],
   "redirects": [
     
     { "source": "/creator.html", "has": [{ "type": "query", "key": "u" }], "destination": "/c/:id/:slug", "permanent": true },
@@ -87,3 +86,4 @@
     }
   ]
 }
+
