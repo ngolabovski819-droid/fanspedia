@@ -279,6 +279,17 @@ export default async function handler(req, res) {
     res.status(400).send('Username required');
     return;
   }
+  // Built-in sanity check path so we can verify routing even if vercel.json rewrites are ignored
+  if (username === 'zz-redirect-test') {
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('Cache-Control', 'no-store, must-revalidate');
+    return res.status(200).json({
+      ok: true,
+      handler: 'api/creator/[...params].js',
+      note: 'vercel.json rewrites may be bypassed; this catch-all handled /zz-redirect-test',
+      timestamp: new Date().toISOString()
+    });
+  }
   try {
     const timeoutPromise = new Promise((_, reject) => 
       setTimeout(() => reject(new Error('Timeout')), 2000)
