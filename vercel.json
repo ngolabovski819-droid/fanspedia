@@ -1,12 +1,25 @@
 {
   "version": 2,
   "rewrites": [
-    { "source": "/categories/goth-free", "destination": "/categories/goth?price=0" },
-    { "source": "/categories/latina-free", "destination": "/categories/latina?price=0" },
-    { "source": "/categories/asian-free", "destination": "/categories/asian?price=0" },
-    { "source": "/categories/bbw-free", "destination": "/categories/bbw?price=0" },
-    { "source": "/categories/ebony-free", "destination": "/categories/ebony?price=0" },
+    { "source": "/categories", "destination": "/categories.html" },
     { "source": "/categories/:slug", "destination": "/category.html" },
-    { "source": "/c/:id/:slug", "destination": "/creator.html" }
+    { "source": "/c/:id/:slug", "destination": "/creator.html" },
+    { "source": "/:username", "destination": "/api/creator/:username" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)\\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-XSS-Protection", "value": "1; mode=block" }
+      ]
+    }
   ]
 }
