@@ -2062,7 +2062,7 @@
     loadCreatorProfile();
     
     // Load similar creators with smart similarity scoring
-    async function loadSimilarCreators(retryCount = 0) {
+  async function loadSimilarCreators(retryCount = 0) {
       try {
         // Get current creator's full profile first
         const currentCreator = window.currentCreator; // Set when profile loads
@@ -2079,9 +2079,11 @@
         const p1 = Math.floor(Math.random() * 5) + 1;
         let p2 = Math.floor(Math.random() * 5) + 1;
         if (p2 === p1) p2 = ((p2) % 5) + 1; // ensure distinct pages
+        // Match verification filter to the current creator when possible for better relevance
+        const verifiedFilter = (currentCreator.isVerified || currentCreator.isverified) ? 'true' : '';
         const urls = [
-          `/api/search?verified=true&page=${p1}&page_size=100`,
-          `/api/search?verified=true&page=${p2}&page_size=100`
+          `/api/search?${verifiedFilter ? 'verified=true&' : ''}page=${p1}&page_size=100`,
+          `/api/search?${verifiedFilter ? 'verified=true&' : ''}page=${p2}&page_size=100`
         ];
         const responses = await Promise.all(urls.map(u => fetch(u).then(r => r.json()).catch(() => [])));
         // Merge and dedupe by username
@@ -2120,14 +2122,16 @@
         
         console.log('Candidates after filter:', candidates.length);
         
-        // Sort by score (highest first), final safety filter, then take top 8
+        // Sort by score (highest first), final safety filter
         scored.sort((a, b) => b.similarityScore - a.similarityScore);
         const finalFiltered = scored.filter(s => {
           const cu = (currentCreator.username || '').toLowerCase();
           const su = (s.username || '').toLowerCase();
           return su !== cu && s.id !== currentCreator.id;
         });
-        const similar = finalFiltered.slice(0, 8);
+        // Take the top 40 by score and then draw 8 via weighted sampling
+        const candidateTop = finalFiltered.slice(0, 40);
+        const similar = weightedSample(candidateTop, 8, x => Math.max(1, x.similarityScore));
         
         console.log('Top 8 similar creators:', similar.map(s => `${s.username} (score: ${s.similarityScore})`));
         
@@ -2139,7 +2143,27 @@
       }
     }
     
-    // Calculate similarity score based on multiple factors (0-120 scale)
+    // Tokenization helpers for text similarity
+    const STOPWORDS = new Set(['the','and','for','you','your','with','from','that','this','have','has','are','was','were','but','not','just','onlyfans','page','account','free']);
+    function tokenize(str) {
+      if (!str) return [];
+      return String(str)
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, ' ')
+        .split(/\s+/)
+        .filter(w => w.length >= 3 && !STOPWORDS.has(w));
+    }
+    function jaccard(aTokens, bTokens) {
+      const a = new Set(aTokens);
+      const b = new Set(bTokens);
+      if (a.size === 0 || b.size === 0) return 0;
+      let inter = 0;
+      for (const t of a) if (b.has(t)) inter++;
+      const uni = a.size + b.size - inter;
+      return inter / (uni || 1);
+    }
+
+    // Calculate similarity score based on multiple factors (0-120+ scale)
     function calculateSimilarityScore(current, candidate) {
       let score = 0;
       
@@ -2209,11 +2233,35 @@
         score += 10;
       }
       
-      // 5. Add random factor for variety (0-20 points)
-      // Higher random weight ensures different recommendations on each page load
-      score += Math.random() * 20;
+      // 5. Text similarity based on name/username/about (up to 35)
+      const curText = [current.name, current.username, current.about].filter(Boolean).join(' ');
+      const candText = [candidate.name, candidate.username, candidate.about].filter(Boolean).join(' ');
+      const textSim = jaccard(tokenize(curText), tokenize(candText)); // 0..1
+      score += Math.min(35, Math.round(textSim * 35));
+
+      // 6. Add random factor for variety (0-10 points)
+      score += Math.random() * 10;
       
       return score;
+    }
+
+    // Weighted sampling without replacement
+    function weightedSample(items, k, getWeight) {
+      const arr = [...items];
+      const out = [];
+      for (let i = 0; i < k && arr.length > 0; i++) {
+        const weights = arr.map(getWeight);
+        const total = weights.reduce((a,b) => a + b, 0);
+        let r = Math.random() * (total || 1);
+        let idx = 0;
+        for (; idx < arr.length; idx++) {
+          r -= weights[idx];
+          if (r <= 0) break;
+        }
+        const chosen = arr.splice(Math.min(idx, arr.length - 1), 1)[0];
+        out.push(chosen);
+      }
+      return out;
     }
     
     function renderSimilarCreators(creators) {
