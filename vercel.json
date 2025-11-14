@@ -1,86 +1,39 @@
 ﻿{
   "version": 2,
   "rewrites": [
-  { "source": "/zz-redirect-test", "destination": "/api/health" },
-  { "source": "/dot-test", "destination": "/api/health" },
-  { "source": "/debug/dot-test", "destination": "/api/health" },
-  { "source": "/__dot-test", "destination": "/api/health" },
     { "source": "/", "destination": "/index.html" },
-    
+    { "source": "/zz-redirect-test", "destination": "/api/health" },
+    { "source": "/dot-test", "destination": "/api/health" },
+    { "source": "/debug/dot-test", "destination": "/api/health" },
+    { "source": "/__dot-test", "destination": "/api/health" },
     { "source": "/categories", "destination": "/api/categories" },
     { "source": "/categories/", "destination": "/api/categories" },
     { "source": "/categories/:slug", "destination": "/category.html" },
     { "source": "/categories/:slug/", "destination": "/category.html" },
     { "source": "/categories/:slug/page/:page", "destination": "/category.html?page=:page" },
-  { "source": "/c/:id/:slug", "destination": "/creator.html?id=:id" },
-  { "source": "/creator.html", "destination": "/creator.html" },
-  { "source": "/:username(.*\\..*)", "destination": "/api/dot/:username" },
-  { "source": "/:username([a-zA-Z0-9_-]+)", "destination": "/api/creator/:username" }
+    { "source": "/c/:id/:slug", "destination": "/creator.html?id=:id" },
+    { "source": "/creator.html", "destination": "/creator.html" },
+    { "source": "/:username(.*\\..*)", "destination": "/api/dot/:username" },
+    { "source": "/:username([a-zA-Z0-9_-]+)", "destination": "/api/creator/:username" }
   ],
   "redirects": [
-    
     { "source": "/category", "destination": "/categories", "permanent": true },
     { "source": "/category/", "destination": "/categories/", "permanent": true },
     { "source": "/categories/big-butt", "destination": "/categories/big-ass", "permanent": true },
     { "source": "/categories/booty", "destination": "/categories/big-ass", "permanent": true }
   ],
   "headers": [
-    {
-      "source": "/index.html",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-store, must-revalidate" }
-      ]
-    },
-    {
-      "source": "/categories.html",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-store, must-revalidate" }
-      ]
-    },
-    {
-      "source": "/category.html",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-store, must-revalidate" }
-      ]
-    },
-    {
-      "source": "/creator.html",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-store, must-revalidate" }
-      ]
-    },
-    {
-      "source": "/config/categories.js",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-store, must-revalidate" }
-      ]
-    },
-    {
-      "source": "/robots.txt",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "text/plain; charset=utf-8"
-        },
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=86400, must-revalidate"
-        },
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex"
-        }
-      ]
-    },
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "index, follow"
-        }
-      ]
-    }
+    { "source": "/index.html", "headers": [ { "key": "Cache-Control", "value": "no-store, must-revalidate" } ] },
+    { "source": "/categories.html", "headers": [ { "key": "Cache-Control", "value": "no-store, must-revalidate" } ] },
+    { "source": "/category.html", "headers": [ { "key": "Cache-Control", "value": "no-store, must-revalidate" } ] },
+    { "source": "/creator.html", "headers": [ { "key": "Cache-Control", "value": "no-store, must-revalidate" } ] },
+    { "source": "/config/categories.js", "headers": [ { "key": "Cache-Control", "value": "no-store, must-revalidate" } ] },
+    { "source": "/robots.txt", "headers": [
+      { "key": "Content-Type", "value": "text/plain; charset=utf-8" },
+      { "key": "Cache-Control", "value": "public, max-age=86400, must-revalidate" },
+      { "key": "X-Robots-Tag", "value": "noindex" }
+    ] },
+    { "source": "/(.*)", "headers": [ { "key": "X-Robots-Tag", "value": "index, follow" } ] }
   ]
 }
 
