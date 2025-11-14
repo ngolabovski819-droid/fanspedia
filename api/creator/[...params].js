@@ -245,6 +245,26 @@ function generate404Html(username) {
 </html>`;
 }
 
+async function renderCreatorHtmlWithSSR(creator, username) {
+  try {
+    const fs = await import('fs/promises');
+    const path = await import('path');
+    const filePath = path.resolve(process.cwd(), 'creator.html');
+    let html = await fs.readFile(filePath, 'utf8');
+    const inject = `\n<script>\n  window.__CREATOR_SSR__ = ${JSON.stringify(creator)};\n  window.__SSR_USERNAME__ = ${JSON.stringify(username)};\n  window.__SSR_CLEAN_URL__ = ${JSON.stringify('/' + username)};\n</script>\n`;
+    // Inject before closing head to ensure early availability
+    if (html.includes('</head>')) {
+      html = html.replace('</head>', `${inject}</head>`);
+    } else {
+      html = inject + html;
+    }
+    return html;
+  } catch (e) {
+    console.error('[SSR] Failed to read creator.html:', e);
+    return null;
+  }
+}
+
 export default async function handler(req, res) {
   // Vercel catch-all: req.query.params is array for [...params]
   let username = req.query.params;
@@ -278,14 +298,14 @@ export default async function handler(req, res) {
       res.send(generate404Html(username));
       return;
     }
-    const { html, etag } = generateHtml(creator);
-    console.log('[SSR] Sending 200 response for creator:', username);
-    res.setHeader('X-SSR-Handler', 'creator-ssr');
-    res.setHeader('X-SSR-Username', String(username));
-    res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.setHeader('Cache-Control', 'no-store, must-revalidate');
-    // ETag logic disabled for local debugging; always send fresh SSR HTML
-    res.status(200).send(html);
+  // Serve the actual creator.html with SSR globals injected (no redirect, preserves clean URL)
+  const html = await renderCreatorHtmlWithSSR(creator, username);
+  console.log('[SSR] Sending 200 response for creator:', username, 'via creator.html injection');
+  res.setHeader('X-SSR-Handler', 'creator-ssr');
+  res.setHeader('X-SSR-Username', String(username));
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.setHeader('Cache-Control', 'no-store, must-revalidate');
+  res.status(200).send(html || generate404Html(username));
   } catch (error) {
     console.error('SSR error:', error);
     res.status(500);
