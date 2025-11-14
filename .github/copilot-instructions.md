@@ -1,4 +1,4 @@
-# OnlyFans Scraper & Search Platform - AI Agent Instructions
+﻿# OnlyFans Scraper & Search Platform - AI Agent Instructions
 
 > **Quick Links**: [Patterns](./PATTERNS.md) | [Checklists](./CHECKLISTS.md) | [Architecture](./ARCHITECTURE.md) | [Quickstart](./QUICKSTART.md) | [Troubleshooting](./TROUBLESHOOTING.md)
 
@@ -78,7 +78,7 @@ Server mounts `api/search.js` at `/api/search` and serves static files from root
   - Dotted usernames (e.g., `/peyton.kinsly`) don't trigger redirect handler
 - **Root Cause**: Likely Output Directory override set to "." or framework detection interfering with vercel.json processing
 - **Workaround**: 
-  - Users can access redirect function directly: `https://bestonlyfansgirls.net/api/dot/peyton.kinsly` → 301 to `/c/{id}/{slug}`
+  - Users can access redirect function directly: `https://fanspedia.net/api/dot/peyton.kinsly` → 301 to `/c/{id}/{slug}`
   - All canonical `/c/{id}/{slug}` URLs work correctly
   - SEO is protected (sitemaps reference canonical URLs)
 - **Fix When Revisiting**:
@@ -341,7 +341,7 @@ cat failed_batch.json | python -m json.tool
 Each page needs:
 - Canonical URL (`<link rel="canonical">`)
 - OG tags for social sharing
-- Structured title: "[Topic] - BestOFGirls | [Context]"
+- Structured title: "[Topic] - FansPedia | [Context]"
 - Description with keyword density (verified, free, subscription, price)
 
 ### Cache Headers (vercel.json)
@@ -353,7 +353,7 @@ Each page needs:
 - **Never commit**: `.env`, `cookies.json`, `*.csv`, `failed_batch.json`, `failed_ids_v2.json`, `progress_urls.json`
 - **Gitignore check**: Verify `.gitignore` includes all sensitive patterns before scraping
 - Use service role key for Supabase (broader permissions needed for upserts)
-- Cloudflare DNS configured for `bestonlyfansgirls.net`
+- Cloudflare DNS configured for `fanspedia.net`
 - **V2 Scraper**: Rate limiting is critical to avoid IP bans - use `--rate 0.5` (0.5 req/sec) for safety
 
 ## Common Gotchas

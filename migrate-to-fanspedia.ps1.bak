@@ -1,0 +1,93 @@
+# FansPedia Migration Script
+# This script updates all domain and branding references
+
+Write-Host "🔄 Starting FansPedia migration..." -ForegroundColor Cyan
+
+$files = @(
+    "index.html",
+    "categories.html",
+    "category.html",
+    "creator.html",
+    "api/creator/[...params].js",
+    "api/creator/[...username].js",
+    "api/creator.js",
+    "api/index.js",
+    "api/categories.js",
+    "scripts/generate-sitemap.cjs",
+    "scripts/build-sitemaps.cjs",
+    "robots.txt",
+    ".github/copilot-instructions.md",
+    ".github/CHECKLISTS.md",
+    ".github/README.md",
+    ".github/QUICKSTART.md",
+    ".github/ARCHITECTURE.md",
+    ".github/PATTERNS.md",
+    ".github/TROUBLESHOOTING.md"
+)
+
+# Add public files if they exist
+if (Test-Path "public/robots.txt") {
+    $files += "public/robots.txt"
+}
+
+# Add backup files if they exist
+if (Test-Path "creator.html.backup") {
+    $files += "creator.html.backup"
+}
+if (Test-Path "creator_temp_backup.html") {
+    $files += "creator_temp_backup.html"
+}
+
+$replacements = @{
+    "bestonlyfansgirls.net" = "fanspedia.net"
+    "BestOnlyFansGirls"     = "FansPedia"
+    "BestOFGirls"           = "FansPedia"
+}
+
+$totalChanges = 0
+$filesModified = 0
+
+foreach ($file in $files) {
+    if (Test-Path $file) {
+        Write-Host "📝 Processing: $file" -ForegroundColor Yellow
+        $content = Get-Content $file -Raw -Encoding UTF8
+        $originalContent = $content
+        $fileChanges = 0
+        
+        foreach ($old in $replacements.Keys) {
+            $new = $replacements[$old]
+            if ($content -match [regex]::Escape($old)) {
+                $matches = ([regex]::Matches($content, [regex]::Escape($old))).Count
+                $content = $content -replace [regex]::Escape($old), $new
+                Write-Host "   ✓ Replaced '$old' → '$new' ($matches occurrences)" -ForegroundColor Green
+                $totalChanges += $matches
+                $fileChanges += $matches
+            }
+        }
+        
+        if ($content -ne $originalContent) {
+            Set-Content $file -Value $content -Encoding UTF8 -NoNewline
+            $filesModified++
+        }
+        else {
+            Write-Host "   ℹ️  No changes needed" -ForegroundColor Gray
+        }
+    }
+    else {
+        Write-Host "⚠️  File not found: $file" -ForegroundColor DarkGray
+    }
+}
+
+Write-Host ""
+Write-Host "✅ Migration complete!" -ForegroundColor Green
+Write-Host "   Files modified: $filesModified" -ForegroundColor Cyan
+Write-Host "   Total changes: $totalChanges" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "📋 Next steps:" -ForegroundColor Cyan
+Write-Host "1. Review changes: git diff" -ForegroundColor White
+Write-Host "2. Stage changes: git add -A" -ForegroundColor White
+Write-Host "3. Commit: git commit -m 'chore: migrate to FansPedia branding'" -ForegroundColor White
+Write-Host "4. Add remote: git remote add origin https://github.com/ngolabovski819-droid/fanspedia.git" -ForegroundColor White
+Write-Host "5. Push: git push -u origin main" -ForegroundColor White
+Write-Host ""
+Write-Host "💡 After pushing, import to Vercel and configure environment variables" -ForegroundColor Yellow

@@ -1,11 +1,11 @@
-/**
+﻿/**
  * Server-Side Rendered Creator Profile Page (Catch-all for dotted usernames)
  * Fetches data from Supabase and returns fully rendered HTML with SEO meta tags
  */
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_KEY;
-const BASE_URL = 'https://bestonlyfansgirls.net';
+const BASE_URL = 'https://fanspedia.net';
 
 function normalizeCreator(raw) {
   if (!raw) return null;
@@ -223,7 +223,7 @@ function generate404Html(username) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Creator Not Found - BestOFGirls</title>
+  <title>Creator Not Found - FansPedia</title>
   <meta name="robots" content="noindex, nofollow">
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f7; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; text-align: center; }

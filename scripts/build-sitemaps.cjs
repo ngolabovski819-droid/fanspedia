@@ -1,4 +1,4 @@
-const fs = require('fs');
+﻿const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
 const fetch = require('node-fetch');
@@ -6,7 +6,7 @@ const { categories, categoryToSlug } = require('../config/categories.js');
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_KEY;
-const BASE_URL = 'https://bestonlyfansgirls.net';
+const BASE_URL = 'https://fanspedia.net';
 
 const CREATOR_PAGE_SIZE = 1000; // Supabase page size per request
 const SITEMAP_CHUNK_SIZE = 40000; // URLs per creator sitemap file (well below 50k cap)

@@ -1,4 +1,4 @@
-# Development Checklists
+﻿# Development Checklists
 
 ## ✅ Adding a New Category
 
@@ -129,7 +129,7 @@
    - [ ] Wait for "Deployment successful" confirmation
 
 4. **Post-Deploy Verification**
-   - [ ] Visit production URL: `https://bestonlyfansgirls.net`
+   - [ ] Visit production URL: `https://fanspedia.net`
    - [ ] Test search functionality
    - [ ] Verify new changes appear
    - [ ] Check categories page

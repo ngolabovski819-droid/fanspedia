@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Categories Page SSR - Server-Side Rendering for SEO
  * Pre-renders all category links with structured data
  */
@@ -44,9 +44,9 @@ export default async function handler(req, res) {
         "position": index + 1,
         "item": {
           "@type": "CollectionPage",
-          "@id": `https://bestonlyfansgirls.net/categories/${slugify(category)}/`,
+          "@id": `https://fanspedia.net/categories/${slugify(category)}/`,
           "name": capitalizeCategory(category),
-          "url": `https://bestonlyfansgirls.net/categories/${slugify(category)}/`
+          "url": `https://fanspedia.net/categories/${slugify(category)}/`
         }
       }))
     };

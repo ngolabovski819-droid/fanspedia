@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Homepage SSR - Server-Side Rendering for SEO
  * Pre-renders top 50 creators with structured data for search engines
  */
@@ -43,9 +43,9 @@ export default async function handler(req, res) {
         "position": index + 1,
         "item": {
           "@type": "Person",
-          "@id": `https://bestonlyfansgirls.net/c/${creator.id}/${slugify(creator.username)}`,
+          "@id": `https://fanspedia.net/c/${creator.id}/${slugify(creator.username)}`,
           "name": creator.name || creator.username,
-          "url": `https://bestonlyfansgirls.net/c/${creator.id}/${slugify(creator.username)}`,
+          "url": `https://fanspedia.net/c/${creator.id}/${slugify(creator.username)}`,
           "image": proxyImg(creator.avatar, 320, 427),
           "description": creator.about ? creator.about.substring(0, 200) : `${creator.name || creator.username} OnlyFans profile`
         }

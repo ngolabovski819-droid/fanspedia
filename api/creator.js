@@ -1,9 +1,9 @@
-// Simple creator SSR endpoint for rewrites using query param (easier than dynamic route)
+﻿// Simple creator SSR endpoint for rewrites using query param (easier than dynamic route)
 import 'dotenv/config';
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_KEY;
-const BASE_URL = 'https://bestonlyfansgirls.net';
+const BASE_URL = 'https://fanspedia.net';
 
 function escapeHtml(text) {
   if (!text) return '';

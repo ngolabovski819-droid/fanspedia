@@ -1,4 +1,4 @@
-# robots.txt for bestonlyfansgirls.net
+﻿# robots.txt for fanspedia.net
 
 # Block AI training bots
 User-agent: Amazonbot
@@ -30,7 +30,7 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://bestonlyfansgirls.net/sitemap.xml
+Sitemap: https://fanspedia.net/sitemap.xml
 
 # Crawl-delay for good bots
 Crawl-delay: 1

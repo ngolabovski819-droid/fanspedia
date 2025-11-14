@@ -1,10 +1,10 @@
-// Load dotenv before reading env vars
+﻿// Load dotenv before reading env vars
 require('dotenv').config();
 const SUPABASE_KEY = process.env.SUPABASE_KEY;
 const SUPABASE_URL = process.env.SUPABASE_URL;
 // CommonJS imports for Node.js compatibility
 const fs = require('fs');
-const baseUrl = 'https://bestonlyfansgirls.net';
+const baseUrl = 'https://fanspedia.net';
 const path = require('path');
 const fetch = require('node-fetch');
 const { categories, categoryToSlug } = require('../config/categories.js');
