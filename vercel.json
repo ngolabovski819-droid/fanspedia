@@ -1,6 +1,7 @@
 {
   "version": 2,
   "rewrites": [
+  { "source": "/zz-redirect-test", "destination": "/api/health" },
   { "source": "/dot-test", "destination": "/api/health" },
   { "source": "/debug/dot-test", "destination": "/api/health" },
   { "source": "/__dot-test", "destination": "/api/health" },
@@ -20,7 +21,7 @@
   ],
   "routes": [],
   "redirects": [
-    { "source": "/zz-redirect-test", "destination": "/api/health", "permanent": false },
+    
     { "source": "/creator.html", "has": [{ "type": "query", "key": "u" }], "destination": "/c/:id/:slug", "permanent": true },
     { "source": "/category", "destination": "/categories", "permanent": true },
     { "source": "/category/", "destination": "/categories/", "permanent": true },
