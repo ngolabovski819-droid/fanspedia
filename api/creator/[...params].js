@@ -192,8 +192,16 @@ ${JSON.stringify(jsonLd, null, 2)}
     window.__CREATOR_SSR__ = ${JSON.stringify(creator)};
     window.__SSR_USERNAME__ = ${JSON.stringify(username)};
     window.__SSR_CLEAN_URL__ = ${JSON.stringify('/' + username)};
-    // window.location.replace('/creator.html?u=' + encodeURIComponent(${JSON.stringify(username)}) + '&ssr=1&cleanUrl=' + encodeURIComponent(${JSON.stringify('/' + username)}));
-    // SSR redirect disabled for local debugging
+    // Client-side redirect to the rich client page for full functionality
+    // Add a cache-busting version to ensure the latest creator.html is fetched
+    (function(){
+      var v = '20251114-1'; // bump to bust CDN/browser cache when creator.html changes
+      var target = '/creator.html?v=' + v + '&u=' + encodeURIComponent(${JSON.stringify(username)}) + '&ssr=1&cleanUrl=' + encodeURIComponent(${JSON.stringify('/' + username)});
+      // Give the browser a tick to paint meta tags, then redirect
+      setTimeout(function(){
+        try { window.location.replace(target); } catch (e) { window.location.href = target; }
+      }, 10);
+    })();
   </script>
   <noscript>
     <meta http-equiv="refresh" content="0;url=/creator.html?u=${encodeURIComponent(username)}">
@@ -263,6 +271,8 @@ export default async function handler(req, res) {
     if (!creator) {
       console.log('[SSR] Creator not found, sending 404');
       res.status(404);
+      res.setHeader('X-SSR-Handler', 'creator-ssr');
+      res.setHeader('X-SSR-Username', String(username));
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
       res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=300');
       res.send(generate404Html(username));
@@ -270,6 +280,8 @@ export default async function handler(req, res) {
     }
     const { html, etag } = generateHtml(creator);
     console.log('[SSR] Sending 200 response for creator:', username);
+    res.setHeader('X-SSR-Handler', 'creator-ssr');
+    res.setHeader('X-SSR-Username', String(username));
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('Cache-Control', 'no-store, must-revalidate');
     // ETag logic disabled for local debugging; always send fresh SSR HTML
