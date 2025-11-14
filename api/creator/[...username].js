@@ -14,6 +14,12 @@ export default async function handler(req, res) {
     res.status(400).send('Username required');
     return;
   }
+  // Special-case: allow /api/creator/zz-redirect-test to validate routing without rewrites
+  if (username === 'zz-redirect-test') {
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('Cache-Control', 'no-store, must-revalidate');
+    return res.status(200).json({ ok: true, handler: 'api/creator/[...username].js', timestamp: new Date().toISOString() });
+  }
   try {
     const timeoutPromise = new Promise((_, reject) => 
       setTimeout(() => reject(new Error('Timeout')), 2000)
