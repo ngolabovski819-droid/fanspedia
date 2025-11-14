@@ -2086,13 +2086,16 @@
           `/api/search?${verifiedFilter ? 'verified=true&' : ''}page=${p2}&page_size=100`
         ];
         const responses = await Promise.all(urls.map(u => fetch(u).then(r => r.json()).catch(() => [])));
-        // Merge and dedupe by username
+        // Merge and dedupe by username AND id
         const merged = [...responses[0], ...responses[1]];
-        const seen = new Set();
+        const seenUser = new Set();
+        const seenId = new Set();
         const data = merged.filter(x => {
-          const key = (x.username || '').toLowerCase();
-          if (!key || seen.has(key)) return false;
-          seen.add(key);
+          const uname = (x.username || '').trim().toLowerCase();
+          const idStr = x.id != null ? String(x.id) : '';
+          if (!uname || seenUser.has(uname) || (idStr && seenId.has(idStr))) return false;
+          seenUser.add(uname);
+          if (idStr) seenId.add(idStr);
           return true;
         });
         
@@ -2103,10 +2106,10 @@
         
         // Filter out current creator by username AND id (case-insensitive)
         const candidates = data.filter(c => {
-          const currentUsernameLower = (currentCreator.username || '').toLowerCase();
-          const candidateUsernameLower = (c.username || '').toLowerCase();
+          const currentUsernameLower = (currentCreator.username || '').trim().toLowerCase();
+          const candidateUsernameLower = (c.username || '').trim().toLowerCase();
           const isCurrentByUsername = candidateUsernameLower === currentUsernameLower;
-          const isCurrentById = c.id === currentCreator.id;
+          const isCurrentById = (c.id != null && currentCreator.id != null) && (String(c.id) === String(currentCreator.id));
           
           if (isCurrentByUsername || isCurrentById) {
             console.log('🚫 Filtering out current creator:', c.username, c.id);
@@ -2125,13 +2128,56 @@
         // Sort by score (highest first), final safety filter
         scored.sort((a, b) => b.similarityScore - a.similarityScore);
         const finalFiltered = scored.filter(s => {
-          const cu = (currentCreator.username || '').toLowerCase();
-          const su = (s.username || '').toLowerCase();
-          return su !== cu && s.id !== currentCreator.id;
+          const cu = (currentCreator.username || '').trim().toLowerCase();
+          const su = (s.username || '').trim().toLowerCase();
+          const sameUser = su === cu;
+          const sameId = (s.id != null && currentCreator.id != null) && (String(s.id) === String(currentCreator.id));
+          return !sameUser && !sameId;
         });
-        // Take the top 40 by score and then draw 8 via weighted sampling
-        const candidateTop = finalFiltered.slice(0, 40);
-        const similar = weightedSample(candidateTop, 8, x => Math.max(1, x.similarityScore));
+        // Diversity-aware selection: greedily pick from top 60 while capping per tier & price bucket
+        const topPool = finalFiltered.slice(0, 60);
+        const priceBucket = (p) => {
+          const val = parseFloat(p || 0);
+          if (!isFinite(val) || val <= 0) return 'free';
+          if (val <= 5) return '0-5';
+          if (val <= 10) return '5-10';
+          if (val <= 20) return '10-20';
+          if (val <= 30) return '20-30';
+          return '30+';
+        };
+        const tierFor = (favs) => {
+          if (favs > 100000) return 'mega';
+          if (favs > 50000) return 'huge';
+          if (favs > 10000) return 'large';
+          if (favs > 5000) return 'medium';
+          if (favs > 1000) return 'small';
+          return 'micro';
+        };
+        const caps = { price: 3, tier: 3, verified: 5 };
+        const priceCounts = new Map();
+        const tierCounts = new Map();
+        let verifiedCount = 0;
+        const chosen = [];
+        for (const s of topPool) {
+          if (chosen.length >= 8) break;
+          const pb = priceBucket(s.subscribePrice ?? s.subscribeprice);
+          const tr = tierFor(parseInt(s.favoritedCount ?? s.favoritedcount ?? 0));
+          const ver = !!(s.isVerified || s.isverified);
+          const pc = priceCounts.get(pb) || 0;
+          const tc = tierCounts.get(tr) || 0;
+          if (pc >= caps.price || tc >= caps.tier || (ver && verifiedCount >= caps.verified)) continue;
+          chosen.push(s);
+          priceCounts.set(pb, pc + 1);
+          tierCounts.set(tr, tc + 1);
+          if (ver) verifiedCount++;
+        }
+        // If not enough picked (rare), fill remaining with weighted sampling from remaining top pool
+        if (chosen.length < 8) {
+          const remaining = topPool.filter(x => !chosen.includes(x));
+          const extras = weightedSample(remaining, 8 - chosen.length, x => Math.max(1, x.similarityScore));
+          chosen.push(...extras);
+        }
+        const similar = chosen;
         
         console.log('Top 8 similar creators:', similar.map(s => `${s.username} (score: ${s.similarityScore})`));
         

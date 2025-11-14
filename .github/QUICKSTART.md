@@ -30,8 +30,8 @@ npm start
 ```powershell
 # 1. Edit config/categories.js - add to categories array
 # 2. Update version in ALL HTML files (increment from ?v=20251106-2 to ?v=20251107-1)
-# 3. Regenerate sitemap
-node scripts/generate-sitemap.js
+# 3. Regenerate sitemaps (writes to repo root)
+node scripts/build-sitemaps.cjs
 # 4. Test locally
 npm start
 ```

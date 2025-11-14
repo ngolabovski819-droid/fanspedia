@@ -42,10 +42,12 @@ async function fetchAllCreatorUsernames() {
   return all;
 }
 
-function ensureDirs() {
-  const publicDir = path.join(__dirname, '..', 'public');
-  if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
-  return publicDir;
+// We intentionally write sitemaps to the repository root to avoid creating a
+// top-level "public/" folder that can cause Vercel to auto-detect an Output
+// Directory and force the override toggle. Keeping all SEO files at the root
+// ensures vercel.json rewrites work reliably without framework auto-detection.
+function outputDir() {
+  return path.join(__dirname, '..');
 }
 
 function buildBaseSitemap() {
@@ -87,12 +89,12 @@ function buildSitemapIndex(files) {
 (async function main() {
   try {
     console.log('🔄 Building sitemap index and parts...');
-    const publicDir = ensureDirs();
+    const outDir = outputDir();
 
     // 1) Base sitemap
     const baseXml = buildBaseSitemap();
     const baseName = 'sitemap_base.xml';
-    fs.writeFileSync(path.join(publicDir, baseName), baseXml, 'utf8');
+  fs.writeFileSync(path.join(outDir, baseName), baseXml, 'utf8');
 
     // 2) Creators, chunk into multiple files
     const allUsernames = await fetchAllCreatorUsernames();
@@ -102,16 +104,16 @@ function buildSitemapIndex(files) {
       const chunk = allUsernames.slice(i, i + SITEMAP_CHUNK_SIZE);
       const xml = buildCreatorSitemap(chunk);
       const name = `sitemap_creators_${Math.floor(i / SITEMAP_CHUNK_SIZE) + 1}.xml`;
-      fs.writeFileSync(path.join(publicDir, name), xml, 'utf8');
+      fs.writeFileSync(path.join(outDir, name), xml, 'utf8');
       partFiles.push(name);
     }    // 3) Build index file referencing base + parts
     const indexFiles = [baseName, ...partFiles];
     const indexXml = buildSitemapIndex(indexFiles);
     const indexName = 'sitemap-index.xml';
-    fs.writeFileSync(path.join(publicDir, indexName), indexXml, 'utf8');
+    fs.writeFileSync(path.join(outDir, indexName), indexXml, 'utf8');
 
     // Also write root sitemap.xml as index for convenience
-    fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), indexXml, 'utf8');
+  fs.writeFileSync(path.join(outDir, 'sitemap.xml'), indexXml, 'utf8');
 
     console.log('✅ Sitemaps built:');
     console.log(`- ${indexName}`);

@@ -149,7 +149,7 @@ python scripts/v2_refresh_orchestrator.py --cookies cookies.json --batch-size 10
 - **Production**: Push to `main` triggers Vercel GitHub Action (`.github/workflows/vercel-deploy.yml`)
 - **Environment**: Set `SUPABASE_URL` and `SUPABASE_KEY` in Vercel dashboard → Settings → Environment Variables
 - **Rewrites**: `vercel.json` handles `/categories/:slug` → `/category.html` routing
-- **Sitemap**: Regenerate with `node scripts/generate-sitemap.js` (writes to `public/sitemap.xml`)
+- **Sitemap**: Regenerate with `node scripts/build-sitemaps.cjs` (writes to repo root: `sitemap.xml`, `sitemap-index.xml`, and chunked `sitemap_creators_*.xml`)
 
 ## Critical Conventions
 
@@ -225,7 +225,7 @@ params.set('or', `(${expressions.join(',')})`);
 - **scripts/**: Python scrapers and data tools
 - **config/**: Categories configuration (single source of truth)
 - **static/**: Fallback images (`no-image.png`)
-- **public/**: SEO files (`robots.txt`, `sitemap.xml`)
+- **root**: SEO files (`robots.txt`, `sitemap.xml`) — we avoid a `public/` folder to prevent Vercel Output Directory auto-detection
 
 ## Frontend Patterns & Best Practices
 

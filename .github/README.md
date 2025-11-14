@@ -73,7 +73,7 @@ When making significant changes to the project:
 npm start
 
 # Add category (after editing config)
-node scripts/generate-sitemap.js
+node scripts/build-sitemaps.cjs
 
 # Scrape profiles
 python scripts/mega_onlyfans_scraper_full.py --urls urls.txt --output temp.csv --cookies cookies.json
