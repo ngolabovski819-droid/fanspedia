@@ -1,27 +1,12 @@
 {
   "version": 2,
-  "buildCommand": null,
-  "outputDirectory": null,
-  "routes": [
-    { "src": "/categories/goth-free", "dest": "/categories/goth?price=0", "status": 302 },
-    { "src": "/categories/latina-free", "dest": "/categories/latina?price=0", "status": 302 },
-    { "src": "/categories/asian-free", "dest": "/categories/asian?price=0", "status": 302 },
-    { "src": "/categories/bbw-free", "dest": "/categories/bbw?price=0", "status": 302 },
-    { "src": "/categories/ebony-free", "dest": "/categories/ebony?price=0", "status": 302 },
-    { "src": "/", "dest": "/index.html" },
-    { "src": "/categories", "dest": "/categories.html" },
-    { "src": "/categories/(.*)", "dest": "/category.html" },
-    { "src": "/c/([^/]+)/(.*)", "dest": "/creator.html" },
-    { "handle": "filesystem" }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "X-XSS-Protection", "value": "1; mode=block" }
-      ]
-    }
+  "rewrites": [
+    { "source": "/categories/goth-free", "destination": "/categories/goth?price=0" },
+    { "source": "/categories/latina-free", "destination": "/categories/latina?price=0" },
+    { "source": "/categories/asian-free", "destination": "/categories/asian?price=0" },
+    { "source": "/categories/bbw-free", "destination": "/categories/bbw?price=0" },
+    { "source": "/categories/ebony-free", "destination": "/categories/ebony?price=0" },
+    { "source": "/categories/:slug", "destination": "/category.html" },
+    { "source": "/c/:id/:slug", "destination": "/creator.html" }
   ]
 }
