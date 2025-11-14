@@ -2052,15 +2052,29 @@
           return;
         }
         
-        // Fetch from a random page to get variety (pages 1-5, 100 creators each)
-        const randomPage = Math.floor(Math.random() * 5) + 1;
-        const response = await fetch(`/api/search?verified=true&page=${randomPage}&page_size=100`);
-        const data = await response.json();
+        // Fetch from two random pages to get more variety (pages 1-5, 100 creators each)
+        const p1 = Math.floor(Math.random() * 5) + 1;
+        let p2 = Math.floor(Math.random() * 5) + 1;
+        if (p2 === p1) p2 = ((p2) % 5) + 1; // ensure distinct pages
+        const urls = [
+          `/api/search?verified=true&page=${p1}&page_size=100`,
+          `/api/search?verified=true&page=${p2}&page_size=100`
+        ];
+        const responses = await Promise.all(urls.map(u => fetch(u).then(r => r.json()).catch(() => [])));
+        // Merge and dedupe by username
+        const merged = [...responses[0], ...responses[1]];
+        const seen = new Set();
+        const data = merged.filter(x => {
+          const key = (x.username || '').toLowerCase();
+          if (!key || seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        });
         
         console.log('🎯 Current creator to exclude:', currentCreator.username, '(ID:', currentCreator.id, ')');
-        console.log('📄 Fetching from page:', randomPage);
+        console.log('📄 Fetching from pages:', p1, 'and', p2);
         console.log('📦 Total candidates before filter:', data.length);
-        console.log('🔍 All usernames in pool:', data.map(c => c.username).join(', '));
+        console.log('🔍 Sample usernames in pool:', data.slice(0, 30).map(c => c.username).join(', '));
         
         // Filter out current creator by username AND id (case-insensitive)
         const candidates = data.filter(c => {
@@ -2083,9 +2097,14 @@
         
         console.log('Candidates after filter:', candidates.length);
         
-        // Sort by score (highest first) and take top 8
+        // Sort by score (highest first), final safety filter, then take top 8
         scored.sort((a, b) => b.similarityScore - a.similarityScore);
-        const similar = scored.slice(0, 8);
+        const finalFiltered = scored.filter(s => {
+          const cu = (currentCreator.username || '').toLowerCase();
+          const su = (s.username || '').toLowerCase();
+          return su !== cu && s.id !== currentCreator.id;
+        });
+        const similar = finalFiltered.slice(0, 8);
         
         console.log('Top 8 similar creators:', similar.map(s => `${s.username} (score: ${s.similarityScore})`));
         
@@ -2199,14 +2218,14 @@
         const imgSrc = img && img.startsWith("http") ? img : "/static/no-image.png";
         const responsive = buildResponsiveSources(imgSrc);
         
-        const name = item.name || "Unknown";
-        const username = item.username || "—";
+  const name = item.name || "Unknown";
+  const username = item.username || "—";
         const priceText = (item.subscribePrice && !isNaN(item.subscribePrice))
           ? `$${parseFloat(item.subscribePrice).toFixed(2)}`
           : "FREE";
         const verifiedIcon = item.isVerified ? "✅ " : "";
         const bio = item.about || "";
-  const profileUrl = username !== "—" ? `/creator.html?u=${encodeURIComponent(username)}` : "#";
+  const profileUrl = username !== "—" ? `/creator.html?v=20251114-1&u=${encodeURIComponent(username)}` : "#";
   // Removed onlyfansUrl and Visit OnlyFans link
 
         const safeUsername = String(username).replace(/'/g, "\\'");
