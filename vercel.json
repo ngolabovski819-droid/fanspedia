@@ -5,7 +5,6 @@
   { "source": "/dot-test", "destination": "/api/health" },
   { "source": "/debug/dot-test", "destination": "/api/health" },
   { "source": "/__dot-test", "destination": "/api/health" },
-  { "source": "/:file((?:.+)\\.(?:js|css|png|jpg|jpeg|svg|ico|webp|map|json|txt|xml))", "destination": "/:file" },
     { "source": "/", "destination": "/index.html" },
     
     { "source": "/categories", "destination": "/api/categories" },
@@ -13,7 +12,6 @@
     { "source": "/categories/:slug", "destination": "/category.html" },
     { "source": "/categories/:slug/", "destination": "/category.html" },
     { "source": "/categories/:slug/page/:page", "destination": "/category.html?page=:page" },
-  { "source": "/api/:path*", "destination": "/api/:path*" },
   { "source": "/c/:id/:slug", "destination": "/creator.html?id=:id" },
   { "source": "/creator.html", "destination": "/creator.html" },
   { "source": "/:username(.*\\..*)", "destination": "/api/dot/:username" },
@@ -21,7 +19,6 @@
   ],
   "redirects": [
     
-    { "source": "/creator.html", "has": [{ "type": "query", "key": "u" }], "destination": "/c/:id/:slug", "permanent": true },
     { "source": "/category", "destination": "/categories", "permanent": true },
     { "source": "/category/", "destination": "/categories/", "permanent": true },
     { "source": "/categories/big-butt", "destination": "/categories/big-ass", "permanent": true },
