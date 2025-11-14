@@ -1,9 +1,8 @@
-# Prevent Vercel from detecting a static output directory
-public/
-index.html
-
 # Usual ignores
 *.csv
 cookies.json
 .env
 __pycache__/
+*.log
+failed_*.json
+progress_*.json
