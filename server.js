@@ -53,23 +53,18 @@ app.get('/creator', (req, res) => {
 // IMPORTANT: This must come AFTER static files to avoid intercepting /index.html, /categories.html, etc.
 app.get('/:username([a-zA-Z0-9_.-]+)', async (req, res, next) => {
   const username = req.params.username;
-  
-  // Skip if this looks like a file extension for static assets (e.g., .css, .js)
-  if (username.includes('.') && !username.match(/^[^\.]+\.[^\.]+$/)) {
+  // Skip if the username matches a known static file extension (e.g., .js, .css, .png, etc.)
+  if (username.match(/\.(js|css|png|jpg|jpeg|svg|ico|webp|map|json)$/i)) {
     return next();
   }
-  
   // Skip known routes that should hit static files or other handlers
-  if (['index', 'category', 'creator', 'static', 'config', 'api', 'public', 'tests'].includes(username)) {
+  if (["index", "category", "creator", "static", "config", "api", "public", "tests"].includes(username)) {
     return next();
   }
-  
   try {
-    // Transform Express params to match Vercel's query structure
-  req.query = req.query || {};
-  // Vercel passes catch-all params as an array in req.query.params
-  req.query.params = [username];
-  await creatorHandler(req, res);
+    req.query = req.query || {};
+    req.query.params = [username]; // Emulate Vercel catch-all for SSR
+    await creatorHandler(req, res);
   } catch (err) {
     console.error('local creator handler error', err);
     res.status(500).json({ error: 'local_handler_error', message: String(err) });
@@ -82,4 +77,16 @@ app.listen(PORT, () => console.log(`Local test server running on http://127.0.0.
 app.get('/health', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   res.status(200).json({ status: 'ok', ts: new Date().toISOString() });
+});
+
+// Example endpoint to test Supabase integration
+app.get('/supabase/test', async (req, res) => {
+  try {
+    const response = await fetch('https://your-supabase-url/rest/v1/onlyfans_profiles?username=ilike.*peyton.kinsly*&limit=1');
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    console.error('Supabase test error', err);
+    res.status(500).json({ error: 'Supabase test error', message: String(err) });
+  }
 });

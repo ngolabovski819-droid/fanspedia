@@ -30,7 +30,7 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://bestonlyfansgirls.net/api/sitemap.xml
+Sitemap: https://bestonlyfansgirls.net/sitemap.xml
 
 # Crawl-delay for good bots
 Crawl-delay: 1
