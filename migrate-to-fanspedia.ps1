@@ -69,3 +69,10 @@ Write-Host ' git add -A' -ForegroundColor White
 Write-Host " git commit -m 'chore: migrate to FansPedia branding'" -ForegroundColor White
 Write-Host ' git remote add origin https://github.com/your-username/fanspedia.git' -ForegroundColor White
 Write-Host ' git push -u origin main' -ForegroundColor White
+
+{
+  "version": 2,
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" }
+  ]
+}
