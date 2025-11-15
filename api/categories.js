@@ -63,14 +63,14 @@ export default async function handler(req, res) {
     const popularHTML = popularCategories.map(category => {
       const slug = slugify(category);
       const label = capitalizeCategory(category);
-      return `<a href="/categories/${slug}/" class="chip" rel="category tag">${escapeHtml(label)}</a>`;
+      return `<a href="/categories/${slug}/" class="category-chip" rel="category tag"><i class="fas fa-tag" aria-hidden="true"></i>${escapeHtml(label)}</a>`;
     }).join('\n        ');
 
     // Generate all categories HTML
     const allCategoriesHTML = categories.map(category => {
       const slug = slugify(category);
       const label = capitalizeCategory(category);
-      return `<a href="/categories/${slug}/" class="chip" rel="category tag">${escapeHtml(label)}</a>`;
+      return `<a href="/categories/${slug}/" class="category-chip" rel="category tag"><i class="fas fa-tag" aria-hidden="true"></i>${escapeHtml(label)}</a>`;
     }).join('\n        ');
 
     // Inject popular categories
