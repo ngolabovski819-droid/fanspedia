@@ -108,6 +108,7 @@ function generateJsonLd(creator) {
 }
 
 async function fetchCreator(username) {
+  const debug = { variants: [], attempts: [], match: null };
   try {
     const headers = {
       'apikey': SUPABASE_KEY,
@@ -127,14 +128,16 @@ async function fetchCreator(username) {
     if (noDots && noDots !== u) variants.push(noDots);
     const noPunct = u.replace(/[._-]+/g, '');
     if (noPunct && !variants.includes(noPunct)) variants.push(noPunct);
+    debug.variants = variants.slice(0);
 
-    // Try exact eq for each variant
+    // Try exact eq for each variant (fastest and most precise)
     for (const v of variants) {
       const p = new URLSearchParams();
       p.set('select', '*,avatar_c50,avatar_c144,header_w480,header_w760');
       p.set('username', `eq.${v}`);
       p.set('limit', '1');
       const url = `${base}?${p.toString()}`;
+      debug.attempts.push({ type: 'eq', v });
       console.log('[SSR] Supabase URL (eq):', url);
       try {
         const r = await fetch(url, { headers });
@@ -142,21 +145,26 @@ async function fetchCreator(username) {
           const j = await r.json();
           if (Array.isArray(j) && j[0]) {
             console.log('[SSR] Exact variant match hit:', v);
-            return normalizeCreator(j[0]);
+            debug.match = { type: 'eq', v };
+            return { creator: normalizeCreator(j[0]), debug };
           }
+        } else {
+          const t = await r.text().catch(() => '');
+          console.warn('[SSR] eq response not ok', r.status, t);
         }
       } catch (e) {
         console.warn('[SSR] eq fetch failed for', v, ':', e?.message || e);
       }
     }
 
-    // Try ilike for each variant (broad fallback)
+    // Try ilike for each variant (broader fallback)
     for (const v of variants) {
       const p = new URLSearchParams();
       p.set('select', '*,avatar_c50,avatar_c144,header_w480,header_w760');
       p.set('username', `ilike.*${v}*`);
       p.set('limit', '1');
       const url = `${base}?${p.toString()}`;
+      debug.attempts.push({ type: 'ilike', v });
       console.log('[SSR] Supabase URL (ilike):', url);
       try {
         const r = await fetch(url, { headers });
@@ -164,18 +172,23 @@ async function fetchCreator(username) {
           const j = await r.json();
           if (Array.isArray(j) && j[0]) {
             console.log('[SSR] ilike variant match hit:', v);
-            return normalizeCreator(j[0]);
+            debug.match = { type: 'ilike', v };
+            return { creator: normalizeCreator(j[0]), debug };
           }
+        } else {
+          const t = await r.text().catch(() => '');
+          console.warn('[SSR] ilike response not ok', r.status, t);
         }
       } catch (e) {
         console.warn('[SSR] ilike fetch failed for', v, ':', e?.message || e);
       }
     }
 
-    return null;
+    return { creator: null, debug };
   } catch (error) {
     console.error('Fetch creator error:', error);
-    return null;
+    debug.error = String(error && error.message ? error.message : error);
+    return { creator: null, debug };
   }
 }
 
@@ -260,7 +273,7 @@ function generate404Html(username) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Creator Not Found - BestOFGirls</title>
+  <title>Creator Not Found - FansPedia</title>
   <meta name="robots" content="noindex, nofollow">
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f7; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; text-align: center; }
@@ -333,19 +346,25 @@ export default async function handler(req, res) {
     });
   }
   try {
+    const timeoutMs = 5000; // allow more time to avoid false 404s on cold start
     const timeoutPromise = new Promise((_, reject) => 
-      setTimeout(() => reject(new Error('Timeout')), 2000)
+      setTimeout(() => reject(new Error('Timeout')), timeoutMs)
     );
-    const creator = await Promise.race([
+    const result = await Promise.race([
       fetchCreator(username),
       timeoutPromise
-    ]).catch(() => null);
+    ]).catch((err) => ({ creator: null, debug: { error: (err && err.message) || 'timeout' } }));
+    const creator = result && result.creator ? result.creator : null;
+    const debug = result && result.debug ? result.debug : {};
     console.log('[SSR] Supabase result:', creator);
     if (!creator) {
       console.log('[SSR] Creator not found, sending 404');
       res.status(404);
       res.setHeader('X-SSR-Handler', 'creator-ssr');
       res.setHeader('X-SSR-Username', String(username));
+      if (debug && debug.variants) res.setHeader('X-SSR-Variants', debug.variants.join('|'));
+      if (debug && debug.match) res.setHeader('X-SSR-Match', `${debug.match.type}:${debug.match.v}`);
+      if (debug && debug.error) res.setHeader('X-SSR-Error', String(debug.error));
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
       res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=300');
       res.send(generate404Html(username));
@@ -356,6 +375,8 @@ export default async function handler(req, res) {
   console.log('[SSR] Sending 200 response for creator:', username, 'via creator.html injection');
   res.setHeader('X-SSR-Handler', 'creator-ssr');
   res.setHeader('X-SSR-Username', String(username));
+  if (debug && debug.match) res.setHeader('X-SSR-Match', `${debug.match.type}:${debug.match.v}`);
+  if (debug && debug.variants) res.setHeader('X-SSR-Variants', debug.variants.join('|'));
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.setHeader('Cache-Control', 'no-store, must-revalidate');
   res.status(200).send(html || generate404Html(username));
