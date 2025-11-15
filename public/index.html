@@ -2200,7 +2200,7 @@
           const verifiedIcon = item.isVerified ? "✅ " : "";
           const location = item.location || "";
           const bio = item.about || "";
-          const profileUrl = username !== "—" ? `/creator.html?u=${encodeURIComponent(username)}` : "#";
+          const profileUrl = username !== "—" ? `https://onlyfans.com/${encodeURIComponent(username)}` : "#";
 
           const isFirstCard = resultsDiv.children.length === 0 && currentPage === 1;
           // Preload the first, above-the-fold image to help LCP
@@ -2245,7 +2245,7 @@
                   ? `<p class="price-free">${priceText}</p>` 
                   : `<p class="price-tag">${priceText}</p>`}
                 ${bio ? `<p class="bio-snippet">${bio}</p>` : ''}
-                <a href="${profileUrl}" class="view-profile-btn">
+                <a href="${profileUrl}" class="view-profile-btn" target="_blank" rel="noopener noreferrer">
                   View Profile
                 </a>
               </div>
