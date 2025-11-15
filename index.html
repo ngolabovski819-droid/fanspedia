@@ -2200,6 +2200,7 @@
           const verifiedIcon = item.isVerified ? "✅ " : "";
           const location = item.location || "";
           const bio = item.about || "";
+          // Link directly to OnlyFans profile
           const profileUrl = username !== "—" ? `https://onlyfans.com/${encodeURIComponent(username)}` : "#";
 
           const isFirstCard = resultsDiv.children.length === 0 && currentPage === 1;
