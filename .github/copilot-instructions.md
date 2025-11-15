@@ -3,11 +3,27 @@
 > **Quick Links**: [Patterns](./PATTERNS.md) | [Checklists](./CHECKLISTS.md) | [Architecture](./ARCHITECTURE.md) | [Quickstart](./QUICKSTART.md) | [Troubleshooting](./TROUBLESHOOTING.md)
 
 ## Project Overview
-Full-stack OnlyFans creator search platform with dual scraping systems (V1 URL-based, V2 ID-based), Supabase PostgreSQL backend with longitudinal tracking, and Vercel serverless deployment. 9,500+ creator profiles with advanced filtering (verified, price, bundles) and infinite scroll UI.
+Full-stack OnlyFans creator search platform with dual scraping systems (V1 URL-based, V2 ID-based), Supabase PostgreSQL backend with longitudinal tracking, and Vercel serverless deployment. 10,000+ creator profiles with advanced filtering (verified, price, bundles) and infinite scroll UI.
+
+**Current Status**: Creator profile pages are **temporarily disabled** (redirects to home, API returns 410 Gone). Search and category browsing remain fully functional.
 
 **Tech Stack**: Vanilla JS (no build step) | Node.js serverless | Python async Playwright | Supabase PostgreSQL with snapshots | Vercel deployment
 
 **Scraping Architecture**: V1 (batch URL scraping) + V2 (sequential ID enumeration with historical snapshots)
+
+**Domain**: Production site is `fanspedia.net` (NOT bestonlyfansgirls.net)
+
+## Workspace Context
+
+**Important**: This is the **fanspedia.net** production codebase. All changes here deploy directly to `fanspedia.net`.
+
+**Current Feature Status**:
+- ✅ Search functionality - Active
+- ✅ Category browsing - Active
+- ⏸️ Creator profile pages - Temporarily disabled for testing (1-2 months)
+  - Redirects: `/creator.html`, `/c/:id/:slug` → `/` (home)
+  - API: `/api/creator/*` returns 410 Gone via `api/disabled.js`
+  - SSR handler exists in `api/creator/[username].js` but is not mounted in production
 
 ## Architecture
 
@@ -70,30 +86,29 @@ Server mounts `api/search.js` at `/api/search` and serves static files from root
 
 ### Known Issues & Workarounds
 
+**Creator Profiles Temporarily Disabled (Testing Phase - Nov 2025)**
+- **Duration**: Disabled for 1-2 months as a test, may be re-enabled
+- **Implementation**:
+  - `vercel.json` redirects `/creator.html` and `/c/:id/:slug` → `/` (home)
+  - `api/disabled.js` returns HTTP 410 Gone with message
+  - `server.js` mirrors production behavior in local dev
+- **Files when re-enabling**:
+  - `vercel.json` - remove lines 13-15 (creator redirects)
+  - `api/creator/[username].js` - SSR handler (exists, unmount in server.js lines 22-24)
+  - `creator.html` - profile template (exists, served via vercel.json rewrite)
+  - `server.js` - remove lines 25-28 (creator redirect middleware)
+
 **Vercel Routing Configuration Issue (Nov 2025)**
-- **Problem**: `vercel.json` rewrites not being applied on production deployments
-- **Symptoms**: 
-  - Test URLs like `/dot-test`, `/debug/dot-test` return "Creator Not Found" page or Vercel 404
-  - Direct API access (e.g., `/api/health`) works correctly
-  - Dotted usernames (e.g., `/peyton.kinsly`) don't trigger redirect handler
-- **Root Cause**: Likely Output Directory override set to "." or framework detection interfering with vercel.json processing
-- **Workaround**: 
-  - Users can access redirect function directly: `https://fanspedia.net/api/dot/peyton.kinsly` → 301 to `/c/{id}/{slug}`
-  - All canonical `/c/{id}/{slug}` URLs work correctly
-  - SEO is protected (sitemaps reference canonical URLs)
-- **Fix When Revisiting**:
-  1. Vercel Settings → Build and Deployment → Build & Output:
-     - Framework Preset: Other
-     - Build Command: empty
-     - Output Directory: turn OFF the Override toggle (leave blank, not ".")
-     - Root Directory: empty
-     - Save and redeploy
-  2. Test `/zz-redirect-test` → should redirect to `/api/health` if vercel.json is applied
-  3. If still broken, check for `.vercelignore` or monorepo config
-  4. Nuclear option: create fresh Vercel project with auto-detection
-- **Files Involved**:
-  - `vercel.json` - contains rewrites and redirects (already correct)
-  - `api/dot/[username].js` - redirect handler (working, just not reachable via clean URLs)
+- **Problem**: `vercel.json` rewrites may not apply if Output Directory override is set
+- **Symptoms**: Category routes return 404 instead of serving HTML files
+- **Root Cause**: Framework detection or Output Directory override interfering with vercel.json
+- **Fix Steps** (see VERCEL_FIX_INSTRUCTIONS.md for details):
+  1. Vercel Dashboard → Settings → Build & Development Settings
+  2. Framework Preset: **Other** (NOT auto-detect)
+  3. Output Directory: **Turn OFF Override** (leave blank, not ".")
+  4. Build Command: Leave empty or `echo "No build needed"`
+  5. Save and redeploy with fresh cache
+- **Testing**: All `/categories/:slug` routes should return 200 OK, not 404
 
 ### V1 Scraping Workflow (Legacy URL-based)
 1. Set `cookies.json` with OnlyFans auth cookies (format: list of dicts with `name`, `value`, `domain`, etc.)
@@ -105,14 +120,15 @@ python scripts/load_csv_to_supabase.py --csv temp.csv --table onlyfans_profiles 
 - **CRITICAL**: Use `--exclude-columns` for problematic timestamp/JSON fields
 - Failed batches dump to `failed_batch.json` for debugging
 
-### V2 Scraping Workflow (Modern ID-based with tracking)
+**V2 Scraping Workflow (Modern ID-based with tracking)
 
 **One-Time Setup**:
-1. Apply database migration: Run `scripts/migrations/001_v2_snapshots_and_tracking.sql` in Supabase SQL Editor
+1. **Database migration**: Run `scripts/migrations/001_v2_snapshots_and_tracking.sql` in Supabase SQL Editor
    - Creates 4 tables: `onlyfans_profile_snapshots`, `crawl_runs`, `scan_progress`, `crawl_jobs`
    - Adds tracking columns to `onlyfans_profiles`: `first_seen_at`, `last_seen_at`, `last_refreshed_at`, `next_refresh_at`, `status`
-2. Verify setup: `python scripts/test_v2_setup.py` (checks DB schema, cookies, env vars)
-3. Export `cookies.json` from authenticated OnlyFans session (browser DevTools → Application → Cookies)
+   - **Check status**: Run `python scripts/test_v2_setup.py` (may have Unicode display issues on Windows PowerShell, ignore formatting errors)
+2. **Session cookies**: Export `cookies.json` from authenticated OnlyFans session (browser DevTools → Application → Cookies)
+3. **Environment**: Ensure `.env` has `SUPABASE_URL` and `SUPABASE_KEY` (service role key)
 
 **Initial Database Population** (1-2 days for 100K IDs):
 ```powershell
@@ -146,10 +162,10 @@ python scripts/v2_refresh_orchestrator.py --cookies cookies.json --batch-size 10
 - **Priority tiers**: `--priority-only` flag for verified/popular creators only
 
 ### Deployment
-- **Production**: Push to `main` triggers Vercel GitHub Action (`.github/workflows/vercel-deploy.yml`)
+- **Production**: Push to `main` triggers Vercel deployment to `fanspedia.net`
 - **Environment**: Set `SUPABASE_URL` and `SUPABASE_KEY` in Vercel dashboard → Settings → Environment Variables
 - **Rewrites**: `vercel.json` handles `/categories/:slug` → `/category.html` routing
-- **Sitemap**: Regenerate with `node scripts/build-sitemaps.cjs` (writes to repo root: `sitemap.xml`, `sitemap-index.xml`, and chunked `sitemap_creators_*.xml`)
+- **Sitemaps**: Regenerate with `npm run build:sitemaps` before deploying (creates multiple files in repo root)
 
 ## Critical Conventions
 
@@ -201,8 +217,8 @@ params.set('or', `(${expressions.join(',')})`);
 1. Edit `config/categories.js` → add to `categories` array
 2. If compound (with filters), add to `compoundCategories` object
 3. Add synonyms to `synonymsOverrides` if needed
-4. **Update version** in all HTML imports (e.g., `?v=20251106-2` → `?v=20251107-1`)
-5. Regenerate sitemap: `node scripts/generate-sitemap.js`
+4. **Update version** in all HTML imports (e.g., `?v=20251106-2` → `?v=20251115-1`)
+5. Regenerate sitemaps: `npm run build:sitemaps` (writes to repo root: `sitemap.xml`, `sitemap-index.xml`, chunked `sitemap_creators_*.xml`)
 
 ### Fix Search Results
 - Check `api/search.js` query construction (lines 34-64)
@@ -332,17 +348,24 @@ cat failed_batch.json | python -m json.tool
 ## SEO & Performance
 
 ### Sitemap Management
-- **Auto-generation**: `node scripts/generate-sitemap.js` creates XML from `config/categories.js`
-- **Update frequency**: Run after adding/removing categories
-- **URLs included**: Homepage, /categories/, and all category pages (/categories/:slug/)
-- **Priority levels**: Homepage (1.0), Categories hub (0.9), Category pages (0.8)
+- **Command**: `npm run build:sitemaps` - generates comprehensive sitemap suite
+- **Scripts available**:
+  - `build-sitemaps.cjs` (recommended) - Fetches all creators from Supabase, chunks into 40k URL files
+  - `generate-sitemap.cjs` (legacy) - Simple category-only sitemap
+- **Update frequency**: Run after adding/removing categories or bulk creator imports
+- **Output files**: `sitemap.xml` (index), `sitemap-index.xml`, `sitemap_creators_*.xml` (chunked)
+- **URLs included**: Homepage, /categories/, category pages, creator profiles (when enabled)
+- **Priority levels**: Homepage (1.0), Categories hub (0.9), Category pages (0.8), Creator profiles (0.7)
 
 ### Meta Tags Pattern
 Each page needs:
 - Canonical URL (`<link rel="canonical">`)
-- OG tags for social sharing
-- Structured title: "[Topic] - FansPedia | [Context]"
-- Description with keyword density (verified, free, subscription, price)
+- OG tags for social sharing (og:title, og:description, og:image, og:url)
+- Twitter card meta tags
+- Structured title: "[Topic] - Best OnlyFans Search Engine | FansPedia"
+- Description with keyword density (verified, free, subscription, price, search engine)
+- Google Analytics (gtag.js) with ID `G-3XB30HS12L`
+- Preconnect hints for external domains: `cdn.jsdelivr.net`, `images.weserv.nl`, `public.onlyfans.com`
 
 ### Cache Headers (vercel.json)
 - **Dynamic pages**: `no-store, must-revalidate` (index.html, category.html)
@@ -350,11 +373,13 @@ Each page needs:
 - **Categories config**: `no-store` to ensure version param works
 
 ## Security Notes
-- **Never commit**: `.env`, `cookies.json`, `*.csv`, `failed_batch.json`, `failed_ids_v2.json`, `progress_urls.json`
-- **Gitignore check**: Verify `.gitignore` includes all sensitive patterns before scraping
-- Use service role key for Supabase (broader permissions needed for upserts)
-- Cloudflare DNS configured for `fanspedia.net`
-- **V2 Scraper**: Rate limiting is critical to avoid IP bans - use `--rate 0.5` (0.5 req/sec) for safety
+- **Never commit**: `.env`, `cookies.json`, `*.csv`, `*.log`, `failed_batch.json`, `failed_ids_v2.json`, `progress_urls.json`, `onlyfans_urls.txt`
+- **Gitignore patterns**: Verify includes `node_modules/`, `__pycache__/`, `venv/`, `.venv/`, `.vercel/`, `dist/`, `build/`, all CSV/log files
+- **Supabase keys**: Use service role key (NOT anon key) for backend - broader permissions needed for upserts
+- **Python virtual environment**: Use `.venv/` for isolation - activate with `& .\.venv\Scripts\Activate.ps1` on Windows
+- **Domain**: Production DNS for `fanspedia.net` configured via Cloudflare
+- **V2 Scraper**: Rate limiting critical to avoid IP bans - use `--rate 0.5` (0.5 req/sec) for safety
+- **Session cookies**: `cookies.json` must be refreshed regularly - OnlyFans sessions expire after inactivity
 
 ## Common Gotchas
 
