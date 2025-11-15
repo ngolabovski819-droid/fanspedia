@@ -109,33 +109,53 @@ function generateJsonLd(creator) {
 
 async function fetchCreator(username) {
   try {
-    // Use wildcard search for username to match frontend search logic
-    // Debug log: incoming username
-    console.log('[SSR] Incoming username:', username);
-    const encodedUsername = encodeURIComponent(username);
-    console.log('[SSR] encodeURIComponent(username):', encodedUsername);
-    // Check for double encoding of dot
-    if (encodedUsername.includes('%252E')) {
-      console.warn('[SSR] Possible double-encoding of dot in username:', encodedUsername);
-    }
-    const url = `${SUPABASE_URL}/rest/v1/onlyfans_profiles?username=ilike.*${encodedUsername}*&limit=1`;
-    // Debug log: constructed Supabase URL
-    console.log('[SSR] Supabase REST URL:', url);
-    const response = await fetch(url, {
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`,
-        'Accept-Profile': 'public'
+    const headers = {
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
+      'Accept-Profile': 'public',
+      'Content-Profile': 'public',
+      'Prefer': 'count=exact'
+    };
+
+    const base = `${(SUPABASE_URL || '').replace(/\/+$/, '')}/rest/v1/onlyfans_profiles`;
+    // Pass 1: exact match (fast path)
+    {
+      const p1 = new URLSearchParams();
+      p1.set('select', '*,avatar_c50,avatar_c144,header_w480,header_w760');
+      p1.set('username', `eq.${username}`);
+      p1.set('limit', '1');
+      const url1 = `${base}?${p1.toString()}`;
+      console.log('[SSR] Supabase URL (exact):', url1);
+      try {
+        const r1 = await fetch(url1, { headers });
+        if (r1.ok) {
+          const j1 = await r1.json();
+          if (Array.isArray(j1) && j1[0]) {
+            console.log('[SSR] Exact match hit');
+            return normalizeCreator(j1[0]);
+          }
+        }
+      } catch (e) {
+        console.warn('[SSR] Exact match fetch failed:', e?.message || e);
       }
-    });
-    if (!response.ok) {
-      console.log('[SSR] Supabase result count:', 'not array');
+    }
+
+    // Pass 2: ilike wildcard (fallback)
+    const p2 = new URLSearchParams();
+    p2.set('select', '*,avatar_c50,avatar_c144,header_w480,header_w760');
+    p2.set('username', `ilike.*${username}*`);
+    p2.set('limit', '1');
+    const url2 = `${base}?${p2.toString()}`;
+    console.log('[SSR] Supabase URL (ilike):', url2);
+    const r2 = await fetch(url2, { headers });
+    if (!r2.ok) {
+      console.warn('[SSR] ilike fetch not ok:', r2.status);
       return null;
     }
-    const data = await response.json();
-    console.log('[SSR] Supabase raw response:', data);
-    if (!data || data.length === 0) return null;
-    return normalizeCreator(data[0]);
+    const j2 = await r2.json();
+    console.log('[SSR] Supabase response (ilike):', j2);
+    if (!Array.isArray(j2) || j2.length === 0) return null;
+    return normalizeCreator(j2[0]);
   } catch (error) {
     console.error('Fetch creator error:', error);
     return null;
