@@ -6,8 +6,10 @@
     </linearGradient>
   </defs>
 
-  <!-- Chat bubble + star + search (no outer circle) -->
-  <g transform="translate(26 26) scale(0.9)">
+  <!-- Chat bubble + star + search (enlarged, reduced padding) -->
+  <!-- Previous transform: translate(26 26) scale(0.9) -->
+  <!-- New transform expands icon ~55% area usage -> ~85% area usage -->
+  <g transform="translate(8 6) scale(1.35)">
     <!-- Chat bubble -->
     <path d="M18 6
              h40
