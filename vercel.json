@@ -1,12 +1,46 @@
 {
   "version": 2,
   "rewrites": [
+    { "source": "/", "destination": "/index.html" },
     { "source": "/categories", "destination": "/categories.html" },
+    { "source": "/categories/", "destination": "/categories.html" },
     { "source": "/categories/:slug", "destination": "/category.html" },
+    { "source": "/categories/:slug/", "destination": "/category.html" },
     { "source": "/c/:id/:slug", "destination": "/creator.html" },
-    { "source": "/:username", "destination": "/api/creator/:username" }
+    { "source": "/creator.html", "destination": "/creator.html" },
+    { "source": "/:username([a-zA-Z0-9_-]+)", "destination": "/api/creator/:username" }
   ],
   "headers": [
+    {
+      "source": "/index.html",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/categories.html",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/category.html",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/creator.html",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/config/categories.js",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, must-revalidate" }
+      ]
+    },
     {
       "source": "/(.*)\\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)",
       "headers": [
