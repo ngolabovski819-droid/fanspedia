@@ -507,7 +507,7 @@
         popularGrid.innerHTML = popularCategories.map(cat => {
           const slug = categoryToSlug(cat);
           const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-          return `<a href="/categories/${slug}/" class="chip" rel="category tag">${label}</a>`;
+          return `<a href="/categories/${slug}/" class="category-chip" rel="category tag"><i class="fas fa-tag" aria-hidden="true"></i>${label}</a>`;
         }).join('');
       }
 
@@ -517,7 +517,7 @@
         chipGrid.innerHTML = allSorted.map(cat => {
           const slug = categoryToSlug(cat);
           const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-          return `<a href="/categories/${slug}/" class="chip" rel="category tag">${label}</a>`;
+          return `<a href="/categories/${slug}/" class="category-chip" rel="category tag"><i class="fas fa-tag" aria-hidden="true"></i>${label}</a>`;
         }).join('');
       }
     }
