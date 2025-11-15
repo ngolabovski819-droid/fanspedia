@@ -6,11 +6,9 @@
     </linearGradient>
   </defs>
 
-  <!-- Dark circle background -->
-  <circle cx="48" cy="48" r="36" fill="#020617"/>
-
-  <!-- Bubble scaled down -->
+  <!-- Chat bubble + star + search (no outer circle) -->
   <g transform="translate(26 26) scale(0.9)">
+    <!-- Chat bubble -->
     <path d="M18 6
              h40
              a14 14 0 0 1 14 14
