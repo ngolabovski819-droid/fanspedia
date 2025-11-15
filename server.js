@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 
 import searchHandler from './api/search.js';
 // Use the catch-all SSR handler for local testing (matches Vercel's [...params] serverless function)
-import creatorHandler from './api/creator/[...params].js';
+// creator profiles temporarily disabled; keep SSR handler code in repo but do not mount it
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,11 +22,9 @@ app.all('/api/search', async (req, res) => {
   }
 });
 
-// Handle /creator.html with query param - redirect to clean URL (BEFORE static middleware)
+// Disable direct access to creator.html in local dev to mirror production
 app.get('/creator.html', (req, res) => {
-  // Serve the static creator.html for client-side rendering when accessed with query params.
-  // Avoid server-side redirect to /:username which can cause 404s for dotted usernames in local dev.
-  res.sendFile(path.join(__dirname, 'creator.html'));
+  res.redirect(302, '/');
 });
 
 // Serve static files BEFORE the catch-all SSR route
@@ -43,32 +41,17 @@ app.get('/categories/:slug', (req, res) => {
   res.sendFile(path.join(__dirname, 'category.html'));
 });
 
-// Handle /creator route explicitly (serves creator.html for client-side rendering)
+// Disable /creator route as well
 app.get('/creator', (req, res) => {
-  res.sendFile(path.join(__dirname, 'creator.html'));
+  res.redirect(302, '/');
 });
 
-// Mount the SSR creator profile handler at /:username as LAST route
-// This matches Vercel's rewrite: { "source": "/:username([a-zA-Z0-9_-]+)", "destination": "/api/creator/:username" }
-// IMPORTANT: This must come AFTER static files to avoid intercepting /index.html, /categories.html, etc.
-app.get('/:username([a-zA-Z0-9_.-]+)', async (req, res, next) => {
+// Catch username-like paths locally and redirect home to mirror production pause
+app.get('/:username([a-zA-Z0-9_.-]+)', (req, res, next) => {
   const username = req.params.username;
-  // Skip if the username matches a known static file extension (e.g., .js, .css, .png, etc.)
-  if (username.match(/\.(js|css|png|jpg|jpeg|svg|ico|webp|map|json)$/i)) {
-    return next();
-  }
-  // Skip known routes that should hit static files or other handlers
-  if (["index", "category", "creator", "static", "config", "api", "public", "tests"].includes(username)) {
-    return next();
-  }
-  try {
-    req.query = req.query || {};
-    req.query.params = [username]; // Emulate Vercel catch-all for SSR
-    await creatorHandler(req, res);
-  } catch (err) {
-    console.error('local creator handler error', err);
-    res.status(500).json({ error: 'local_handler_error', message: String(err) });
-  }
+  if (username.match(/\.(js|css|png|jpg|jpeg|svg|ico|webp|map|json)$/i)) return next();
+  if (["index", "category", "creator", "static", "config", "api", "public", "tests"].includes(username)) return next();
+  return res.redirect(302, '/');
 });
 
 const PORT = process.env.PORT || 3000;

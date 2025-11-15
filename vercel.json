@@ -5,11 +5,14 @@
     { "source": "/categories", "destination": "/categories.html" },
     { "source": "/categories/", "destination": "/categories.html" },
     { "source": "/categories/:slug", "destination": "/category.html" },
-    { "source": "/categories/:slug/", "destination": "/category.html" },
-    { "source": "/c/:id/:slug", "destination": "/creator.html" },
-    { "source": "/creator.html", "destination": "/creator.html" },
-    { "source": "/:username(.*\\..*)", "destination": "/api/creator/:username" },
-    { "source": "/:username([a-zA-Z0-9_-]+)", "destination": "/api/creator/:username" }
+    { "source": "/categories/:slug/", "destination": "/category.html" }
+  ],
+  "redirects": [
+    { "source": "/creator.html", "destination": "/", "permanent": false },
+    { "source": "/c/:id/:slug", "destination": "/", "permanent": false },
+    { "source": "/:username(.*\\..*)", "destination": "/", "permanent": false },
+    { "source": "/:username([a-zA-Z0-9_-]+)", "destination": "/", "permanent": false },
+    { "source": "/api/creator/:username", "destination": "/api/disabled", "permanent": false }
   ],
   "headers": [
     {
