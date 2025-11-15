@@ -8,7 +8,7 @@
     { "source": "/categories/:slug/", "destination": "/category.html" },
     { "source": "/c/:id/:slug", "destination": "/creator.html" },
     { "source": "/creator.html", "destination": "/creator.html" },
-    { "source": "/:username([a-zA-Z0-9_-]+)", "destination": "/api/creator/:username" }
+    { "source": "/:username([a-zA-Z0-9_.-]+)", "destination": "/api/creator/:username" }
   ],
   "headers": [
     {
