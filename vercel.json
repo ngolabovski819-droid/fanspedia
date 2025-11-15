@@ -12,8 +12,6 @@
   "redirects": [
     { "source": "/creator.html", "destination": "/", "permanent": false },
     { "source": "/c/:id/:slug", "destination": "/", "permanent": false },
-    { "source": "/:username(.*\\..*)", "destination": "/", "permanent": false },
-    { "source": "/:username([a-zA-Z0-9_-]+)", "destination": "/", "permanent": false },
     { "source": "/api/creator/:username", "destination": "/api/disabled", "permanent": false }
   ],
   "headers": [
