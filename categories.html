@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>OnlyFans Categories | FansPedia</title>
   <meta name="description" content="Browse OnlyFans categories and jump straight to results. Find creators by tags like MILF, cosplay, lesbian, ebony, big tits, and more." />
   <link rel="canonical" href="https://fanspedia.net/categories/" />
@@ -203,9 +206,12 @@
     .categories-hero h1 { color: #00aff0; font-weight: 800; letter-spacing: -0.4px; }
     .categories-hero p { color: var(--text-secondary); max-width: 800px; margin: 8px auto 0; }
     .chip-grid { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 18px auto 10px; }
-    .category-chip { display: inline-flex; align-items: center; padding: 10px 16px; background: var(--chip-bg); border: 1px solid var(--chip-border); border-radius: 9999px; box-shadow: 0 2px 8px var(--card-shadow); color: var(--text-primary); font-weight: 700; font-size: 14px; transition: transform .15s ease, box-shadow .15s ease, background .2s ease; }
-    .category-chip:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(0,175,240,0.25); background: #f8fdff; }
-    .category-chip i { margin-right: 8px; color: #00AFF0; }
+    .category-chip,
+    .chip { display: inline-flex; align-items: center; padding: 10px 16px; background: var(--chip-bg); border: 1px solid var(--chip-border); border-radius: 9999px; box-shadow: 0 2px 8px var(--card-shadow); color: var(--text-primary); font-weight: 700; font-size: 14px; transition: transform .15s ease, box-shadow .15s ease, background .2s ease; text-decoration: none; }
+    .category-chip:hover,
+    .chip:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(0,175,240,0.25); background: #f8fdff; color: var(--text-primary); }
+    .category-chip i,
+    .chip i { margin-right: 8px; color: #00AFF0; }
     .category-section { max-width: 1100px; margin: 0 auto; padding: 0 16px 40px; }
     .section-title { font-size: 20px; font-weight: 800; color: var(--text-primary); margin: 8px 0 6px; text-align: center; }
     .section-subtle { color: var(--text-secondary); font-size: 13px; text-align: center; margin-bottom: 8px; }
