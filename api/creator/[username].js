@@ -118,44 +118,61 @@ async function fetchCreator(username) {
     };
 
     const base = `${(SUPABASE_URL || '').replace(/\/+$/, '')}/rest/v1/onlyfans_profiles`;
-    // Pass 1: exact match (fast path)
-    {
-      const p1 = new URLSearchParams();
-      p1.set('select', '*,avatar_c50,avatar_c144,header_w480,header_w760');
-      p1.set('username', `eq.${username}`);
-      p1.set('limit', '1');
-      const url1 = `${base}?${p1.toString()}`;
-      console.log('[SSR] Supabase URL (exact):', url1);
+
+    // Build candidate variants to handle dotted and punctuation variants
+    const variants = [];
+    const u = String(username || '').trim();
+    if (u) variants.push(u);
+    const noDots = u.replace(/\./g, '');
+    if (noDots && noDots !== u) variants.push(noDots);
+    const noPunct = u.replace(/[._-]+/g, '');
+    if (noPunct && !variants.includes(noPunct)) variants.push(noPunct);
+
+    // Try exact eq for each variant
+    for (const v of variants) {
+      const p = new URLSearchParams();
+      p.set('select', '*,avatar_c50,avatar_c144,header_w480,header_w760');
+      p.set('username', `eq.${v}`);
+      p.set('limit', '1');
+      const url = `${base}?${p.toString()}`;
+      console.log('[SSR] Supabase URL (eq):', url);
       try {
-        const r1 = await fetch(url1, { headers });
-        if (r1.ok) {
-          const j1 = await r1.json();
-          if (Array.isArray(j1) && j1[0]) {
-            console.log('[SSR] Exact match hit');
-            return normalizeCreator(j1[0]);
+        const r = await fetch(url, { headers });
+        if (r.ok) {
+          const j = await r.json();
+          if (Array.isArray(j) && j[0]) {
+            console.log('[SSR] Exact variant match hit:', v);
+            return normalizeCreator(j[0]);
           }
         }
       } catch (e) {
-        console.warn('[SSR] Exact match fetch failed:', e?.message || e);
+        console.warn('[SSR] eq fetch failed for', v, ':', e?.message || e);
       }
     }
 
-    // Pass 2: ilike wildcard (fallback)
-    const p2 = new URLSearchParams();
-    p2.set('select', '*,avatar_c50,avatar_c144,header_w480,header_w760');
-    p2.set('username', `ilike.*${username}*`);
-    p2.set('limit', '1');
-    const url2 = `${base}?${p2.toString()}`;
-    console.log('[SSR] Supabase URL (ilike):', url2);
-    const r2 = await fetch(url2, { headers });
-    if (!r2.ok) {
-      console.warn('[SSR] ilike fetch not ok:', r2.status);
-      return null;
+    // Try ilike for each variant (broad fallback)
+    for (const v of variants) {
+      const p = new URLSearchParams();
+      p.set('select', '*,avatar_c50,avatar_c144,header_w480,header_w760');
+      p.set('username', `ilike.*${v}*`);
+      p.set('limit', '1');
+      const url = `${base}?${p.toString()}`;
+      console.log('[SSR] Supabase URL (ilike):', url);
+      try {
+        const r = await fetch(url, { headers });
+        if (r.ok) {
+          const j = await r.json();
+          if (Array.isArray(j) && j[0]) {
+            console.log('[SSR] ilike variant match hit:', v);
+            return normalizeCreator(j[0]);
+          }
+        }
+      } catch (e) {
+        console.warn('[SSR] ilike fetch failed for', v, ':', e?.message || e);
+      }
     }
-    const j2 = await r2.json();
-    console.log('[SSR] Supabase response (ilike):', j2);
-    if (!Array.isArray(j2) || j2.length === 0) return null;
-    return normalizeCreator(j2[0]);
+
+    return null;
   } catch (error) {
     console.error('Fetch creator error:', error);
     return null;
@@ -310,7 +327,7 @@ export default async function handler(req, res) {
     res.setHeader('Cache-Control', 'no-store, must-revalidate');
     return res.status(200).json({
       ok: true,
-      handler: 'api/creator/[...params].js',
+      handler: 'api/creator/[username].js',
       note: 'vercel.json rewrites may be bypassed; this catch-all handled /zz-redirect-test',
       timestamp: new Date().toISOString()
     });
