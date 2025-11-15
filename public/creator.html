@@ -6,46 +6,22 @@
   <title>Creator Profile - FansPedia</title>
   <meta name="description" content="View detailed OnlyFans creator profile with stats, pricing, and direct link">
   
-  <!-- Replace URL immediately for clean URLs -->
+  <!-- URL handling for creator profiles -->
   <script>
     (function() {
-      // Global cache-busting for creator.html to ensure latest JS
-      var VERSION = '20251114-2';
+      // Simple URL cleanup - just update the address bar if we have query params
       const params = new URLSearchParams(window.location.search);
       const username = params.get('u');
-      const url = new URL(window.location.href);
-      const path = window.location.pathname || '';
       
-      // If we're already on creator.html but missing or outdated version, reload with version
-      if (url.pathname === '/creator.html' && params.get('v') !== VERSION) {
-        params.set('v', VERSION);
-        url.search = params.toString();
-        try { window.location.replace(url.toString()); } catch (e) { window.location.href = url.toString(); }
-        return;
-      }
-      
-      // If we're on a clean URL like /fitbryceadams, force redirect to creator.html with version
-      if (url.pathname !== '/creator.html') {
-        var parts = path.split('/').filter(Boolean);
-        if (parts.length === 1 && !username) {
-          var uname = parts[0];
-          var target = '/creator.html?v=' + VERSION + '&u=' + encodeURIComponent(uname) + '&ssr=1&cleanUrl=' + encodeURIComponent('/' + uname);
-          try { window.location.replace(target); } catch (e) { window.location.href = target; }
-          return;
-        }
-      }
-      
-      // Case 1: Coming from SSR with cleanUrl param
-      const cleanUrl = params.get('cleanUrl') || window.__SSR_CLEAN_URL__;
-      if (params.get('ssr') === '1' && cleanUrl) {
+      // If we have a username param and we're on creator.html, update to clean URL
+      if (username && window.location.pathname === '/creator.html') {
+        const cleanUrl = '/' + username;
         if (window.history && window.history.replaceState) {
-          window.history.replaceState(null, '', cleanUrl);
-        }
-      }
-      // Case 2: Old URL format without SSR flag - redirect to clean URL
-      else if (username && !params.get('ssr')) {
-        if (window.history && window.history.replaceState) {
-          window.history.replaceState(null, '', '/' + username);
+          try {
+            window.history.replaceState(null, '', cleanUrl);
+          } catch(e) {
+            console.log('Could not update URL:', e);
+          }
         }
       }
     })();
