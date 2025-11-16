@@ -77,6 +77,59 @@
     .desktop-nav { position: relative; flex-shrink: 0; }
     .desktop-nav .nav-btn { display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.2); color:#fff; border:1px solid rgba(255,255,255,0.35); border-radius:9999px; padding:10px 14px; font-weight:800; font-size:14px; cursor:pointer; transition:all .2s ease; }
     .desktop-nav .nav-btn:hover { background: rgba(255,255,255,0.3); }
+    .desktop-nav .nav-btn i { font-size:12px; opacity:0.9; }
+    .desktop-nav .dropdown-menu { position:absolute; right:0; top:calc(100% + 8px); background:#fff; border-radius:12px; box-shadow:0 12px 32px rgba(0,0,0,0.15); padding:8px; min-width:240px; display:none; z-index:10000; }
+    .desktop-nav .dropdown-menu.open { display:block; }
+    .desktop-nav .dropdown-menu a { display:block; padding:10px 12px; color:#1d1d1f; font-weight:700; border-radius:8px; text-decoration:none; transition:background .15s ease, color .15s ease; }
+    .desktop-nav .dropdown-menu a:hover { background:#f5f5f7; color:#00AFF0; }
+    .desktop-nav .dropdown-menu .divider { height:1px; background:#eee; margin:6px 6px; }
+    .desktop-nav .dropdown-menu a.view-all { color:#00AFF0; }
+
+    /* Mobile drawer + overlay */
+    .drawer-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:10000; opacity:0; pointer-events:none; transition:opacity .3s ease; }
+    .drawer-overlay.open { opacity:1; pointer-events:auto; }
+    .mobile-drawer { position:fixed; top:0; right:-100%; width:82%; max-width:340px; height:100%; background:#fff; box-shadow:-8px 0 24px rgba(0,0,0,0.2); z-index:10001; padding:16px; display:flex; flex-direction:column; gap:6px; transition:right .3s ease; }
+    .mobile-drawer.open { right:0; }
+    .mobile-drawer .drawer-close { align-self:flex-end; background:none; border:none; font-size:28px; line-height:1; color:#1d1d1f; margin-bottom:4px; cursor:pointer; }
+    .mobile-drawer > a { display:block; padding:14px 12px; border-radius:8px; color:#1d1d1f; font-weight:700; text-decoration:none; margin:2px 0; font-size:16px; }
+    .mobile-drawer > a:hover { background:#f5f5f7; color:#00AFF0; }
+    .drawer-categories-toggle { display:flex; align-items:center; justify-content:space-between; padding:14px 12px; cursor:pointer; border-radius:8px; margin:2px 0; transition:background .2s ease; font-size:16px; font-weight:700; color:#1d1d1f; }
+    .drawer-categories-toggle:hover { background:#f5f5f7; }
+    .drawer-categories-toggle .icon-text { display:flex; align-items:center; gap:10px; }
+    .drawer-categories-toggle .icon-text i { font-size:18px; color:#1d1d1f; }
+    .drawer-categories-toggle .chevron { font-size:14px; transition:transform .3s ease; color:#666; }
+    .drawer-categories-toggle.open .chevron { transform:rotate(180deg); }
+    #drawerCategoriesSection { max-height:0; overflow:hidden; transition:max-height .3s ease, opacity .3s ease; opacity:0; }
+    #drawerCategoriesSection.open { max-height:800px; opacity:1; overflow-y:auto; }
+    .drawer-categories-label { color:#999; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.8px; padding:12px 16px 8px; margin:0; }
+    #drawerCategories { display:flex; flex-direction:column; gap:0; padding:0 4px; max-height:400px; overflow-y:auto; }
+    #drawerCategories::-webkit-scrollbar { width:4px; }
+    #drawerCategories::-webkit-scrollbar-thumb { background:#ddd; border-radius:4px; }
+    #drawerCategories a { display:block; padding:12px 12px; color:#555; font-weight:600; text-decoration:none; border-radius:6px; margin:1px 0; font-size:15px; transition:background .15s ease, color .15s ease; }
+    #drawerCategories a:hover { background:#f5f5f7; color:#00AFF0; }
+    .drawer-view-all-btn { display:block; margin:12px 8px 8px; padding:14px 20px; background:linear-gradient(135deg,#00AFF0 0%,#0099D6 100%); color:white; text-align:center; border-radius:12px; font-weight:800; text-decoration:none; font-size:15px; box-shadow:0 4px 12px rgba(0,175,240,0.3); transition:transform .2s ease, box-shadow .2s ease; }
+    .drawer-view-all-btn:hover { transform:translateY(-1px); box-shadow:0 6px 16px rgba(0,175,240,0.4); color:white; }
+
+    /* Safe Search styles */
+    body.safe-search-active .card img { filter:blur(20px) saturate(.7); opacity:.85; }
+    body.safe-search-active .card:hover img { filter:blur(8px) saturate(.85); opacity:.95; }
+    body.safe-search-active .card::before { content:'18+'; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(0,0,0,.75); color:white; padding:12px 24px; border-radius:12px; font-weight:800; font-size:24px; letter-spacing:2px; pointer-events:none; z-index:5; backdrop-filter:blur(10px); border:2px solid rgba(255,255,255,0.3); }
+    .safe-search-modal { position:fixed; inset:0; background:rgba(0,0,0,0.75); backdrop-filter:blur(10px); z-index:10002; display:none; align-items:center; justify-content:center; padding:20px; animation:fadeIn .3s ease; }
+    .safe-search-modal.show { display:flex; }
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+    .safe-search-modal-content { background:var(--bg-secondary); border-radius:24px; padding:40px; max-width:520px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,0.3); animation:slideUp .3s cubic-bezier(.4,0,.2,1); position:relative; }
+    @keyframes slideUp { from { transform:translateY(40px); opacity:0; } to { transform:translateY(0); opacity:1; } }
+    .safe-search-modal-icon { width:80px; height:80px; background:linear-gradient(135deg,#00AFF0 0%,#0099D6 100%); border-radius:20px; display:flex; align-items:center; justify-content:center; margin:0 auto 24px; font-size:36px; color:white; box-shadow:0 8px 24px rgba(0,175,240,0.4); }
+    .safe-search-modal h2 { font-size:28px; font-weight:800; color:var(--text-primary); margin-bottom:12px; text-align:center; }
+    .safe-search-modal p { color:var(--text-secondary); font-size:16px; line-height:1.6; text-align:center; margin-bottom:32px; }
+    .safe-search-modal-actions { display:flex; gap:12px; flex-direction:column; }
+    .safe-search-modal-btn { padding:16px 32px; border-radius:12px; font-weight:700; font-size:16px; cursor:pointer; transition:all .3s ease; border:none; text-align:center; }
+    .safe-search-modal-btn-primary { background:linear-gradient(135deg,#34c759 0%,#30b350 100%); color:white; box-shadow:0 6px 18px rgba(52,199,89,0.4); }
+    .safe-search-modal-btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(52,199,89,0.5); }
+    .safe-search-modal-btn-secondary { background:var(--bg-primary); color:var(--text-primary); border:2px solid var(--border-color); }
+    .safe-search-modal-btn-secondary:hover { background:var(--bg-secondary); border-color:var(--text-secondary); }
+    .safe-search-modal-footer { margin-top:24px; text-align:center; font-size:13px; color:var(--text-muted); }
+    @media (max-width:576px){ .safe-search-modal-content{ padding:32px 24px; } .safe-search-modal h2{ font-size:24px; } .safe-search-modal p{ font-size:15px; } }
 
     @media (max-width: 768px) {
       body { padding-top: 66px; }
@@ -148,77 +201,151 @@
     .sticky-bottom-nav .icon i{font-size:15px}
     .sticky-bottom-nav .label{font-size:11px;font-weight:700;color:var(--text-primary)}
     .sticky-bottom-nav .nav-item.active .icon{background:linear-gradient(135deg,#0099D6 0%,#0088C0 100%);box-shadow:0 6px 16px rgba(0,175,240,0.5)}
+    /* ===== Added for full header parity with homepage ===== */
+    .superior-header.scrolled { box-shadow: 0 8px 32px rgba(0,175,240,0.35); }
+    .header-main { backdrop-filter: blur(10px); }
+    .logo-icon { width:40px; height:40px; background:#fff; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:20px; box-shadow:0 4px 12px rgba(0,0,0,0.15); transition:transform .3s ease; }
+    .logo-icon:hover { transform:scale(1.05) rotate(5deg); }
+    .logo-icon i { color:#00AFF0; }
+    .logo-text { display:flex; flex-direction:column; }
+    .logo-text .brand { font-size:22px; font-weight:900; color:#fff; letter-spacing:.3px; line-height:1; text-shadow:0 2px 4px rgba(0,0,0,0.3),0 1px 2px rgba(0,0,0,0.2); filter:brightness(1.05); }
+    .logo-text .tagline { font-size:11px; color:rgba(255,255,255,0.95); font-weight:600; letter-spacing:.8px; margin-top:2px; text-shadow:0 1px 3px rgba(0,0,0,0.2); }
+    /* Override action button styles to match homepage (circular) */
+    .theme-toggle { background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.3); color:#fff; width:44px; height:44px; border-radius:50%; cursor:pointer; transition:all .3s ease; display:inline-flex; align-items:center; justify-content:center; font-size:18px; }
+    .theme-toggle:hover { background:rgba(255,255,255,0.3); transform:scale(1.05); }
+    .theme-toggle:active { transform:scale(0.95); }
+    .safe-search-toggle { background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.3); color:#fff; width:44px; height:44px; border-radius:50%; cursor:pointer; transition:all .3s ease; display:inline-flex; align-items:center; justify-content:center; font-size:18px; position:relative; }
+    .safe-search-toggle:hover { background:rgba(255,255,255,0.3); transform:scale(1.05); }
+    .safe-search-toggle:active { transform:scale(0.95); }
+    .safe-search-toggle.active { background:rgba(52,199,89,0.9); border-color:rgba(52,199,89,1); box-shadow:0 0 20px rgba(52,199,89,0.4); }
+    .safe-search-toggle.active:hover { background:rgba(52,199,89,1); }
+    .safe-search-toggle.active::after { content:''; position:absolute; top:2px; right:2px; width:10px; height:10px; background:#34c759; border:2px solid #fff; border-radius:50%; box-shadow:0 2px 8px rgba(52,199,89,0.6); }
+    /* Mobile search modal (parity) */
+    .mobile-search-modal { position:fixed; inset:0; background:#fff; z-index:10003; display:none; flex-direction:column; }
+    .mobile-search-modal.active { display:flex; }
+    .mobile-search-header { display:flex; align-items:center; gap:12px; padding:16px; background:linear-gradient(135deg,#00AFF0 0%,#0099D6 100%); box-shadow:0 4px 12px rgba(0,175,240,0.3); }
+    .mobile-search-back { background:none; border:none; color:#fff; font-size:24px; cursor:pointer; padding:8px; display:flex; align-items:center; justify-content:center; }
+    .mobile-search-input-wrapper { flex:1; position:relative; }
+    .mobile-search-input { width:100%; padding:12px 16px 12px 44px; border:2px solid rgba(255,255,255,0.3); border-radius:50px; background:rgba(255,255,255,0.95); font-size:16px; font-weight:500; color:#1d1d1f; }
+    .mobile-search-input:focus { outline:none; border-color:#fff; background:#fff; }
+    .mobile-search-icon { position:absolute; left:16px; top:50%; transform:translateY(-50%); color:#00AFF0; font-size:18px; pointer-events:none; }
+    .mobile-search-content { flex:1; overflow-y:auto; padding:20px 16px; }
+    .mobile-search-label { color:#999; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.8px; margin-bottom:12px; }
+    .mobile-search-suggestions { display:flex; flex-direction:column; gap:4px; }
+    .mobile-search-suggestion { display:flex; align-items:center; gap:12px; padding:14px 16px; background:#f5f5f7; border-radius:12px; text-decoration:none; color:#1d1d1f; font-weight:600; font-size:15px; transition:all .2s ease; }
+    .mobile-search-suggestion:hover, .mobile-search-suggestion:active { background:#e8e8ea; transform:translateX(4px); }
+    .mobile-search-suggestion i { color:#00AFF0; font-size:16px; }
   </style>
 </head>
 <body>
-  <!-- Header (same as homepage) -->
-  <header class="superior-header">
+  <!-- SUPERIOR STICKY HEADER (Exact copy from homepage) -->
+  <header class="superior-header" id="mainHeader">
     <div class="header-main">
       <div class="header-container">
+        <!-- Logo -->
         <a href="/" class="logo-section">
-          <svg width="340" height="90" viewBox="0 0 340 90" xmlns="http://www.w3.org/2000/svg" style="height: 50px; width: auto;">
-            <defs>
-              <linearGradient id="fp-bubble-grad-wl" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#18E5FF"/>
-                <stop offset="100%" stop-color="#006BFF"/>
-              </linearGradient>
-            </defs>
-            <g transform="translate(22 20)">
-              <path d="M18 6 h40 a14 14 0 0 1 14 14 v10 a14 14 0 0 1 -14 14 h-19 l-7 9 a3 3 0 0 1 -5 -1.9 v-7.1 h-9 a12 12 0 0 1 -12 -12 v-12 a14 14 0 0 1 14 -14 z"
-                    fill="#020617"
-                    stroke="url(#fp-bubble-grad-wl)"
-                    stroke-width="2"/>
-              <path d="M38 15 l2.9 6.5 7.1 0.6 -5.4 4.4 1.7 6.9 -6.3 -3.7 -6.3 3.7 1.7 -6.9 -5.4 -4.4 7.1 -0.6 z"
-                    fill="url(#fp-bubble-grad-wl)"/>
-              <circle cx="58" cy="32" r="6.5" fill="none" stroke="#E0F2FE" stroke-width="2"/>
-              <rect x="61" y="36" width="9" height="2.6" rx="1.3"
-                    transform="rotate(35 61 36)"
-                    fill="#E0F2FE"/>
-            </g>
-            <text x="115" y="48"
-                  font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
-                  font-size="36"
-                  font-weight="900"
-                  fill="#FFFFFF"
-                  style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));">
-              Fans<tspan dx="1" fill="#FFFFFF">Pedia</tspan>
-            </text>
-            <text x="117" y="68"
-                  font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
-                  font-size="17"
-                  font-weight="600"
-                  letter-spacing="0.02em"
-                  fill="#000000"
-                  style="filter: drop-shadow(0 1px 2px rgba(255,255,255,0.3));">
-              Smart OnlyFans Search
-            </text>
-          </svg>
+          <div class="logo-icon">
+            <i class="fas fa-fire"></i>
+          </div>
+          <div class="logo-text">
+            <div class="brand">FansPedia</div>
+            <div class="tagline">10k+ TOP Creators</div>
+          </div>
         </a>
+        <!-- Desktop categories dropdown trigger -->
         <div class="desktop-nav">
-          <a href="/categories/" class="nav-btn">
-            Categories <i class="fas fa-th"></i>
-          </a>
+          <button id="categoriesToggle" class="nav-btn" aria-haspopup="true" aria-expanded="false">
+            Categories <i class="fas fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div id="categoriesMenu" class="dropdown-menu" role="menu" aria-hidden="true"></div>
         </div>
+        <!-- Search -->
         <div class="header-search-section">
           <div class="header-search-wrapper">
             <i class="fas fa-search header-search-icon"></i>
-            <input id="headerSearch" type="text" class="header-search-input" placeholder="Search creators..." />
+            <input
+              type="text"
+              class="header-search-input"
+              placeholder="Search by name, location, category..."
+              id="headerSearch"
+              autocomplete="off"
+              autocapitalize="none"
+              spellcheck="false"
+            >
           </div>
         </div>
+        <!-- Header action buttons -->
         <div class="header-actions">
-          <button class="mobile-search-trigger" id="mobileSearchTrigger">
+          <button class="mobile-search-trigger" id="mobileSearchTrigger" aria-label="Search">
             <i class="fas fa-search"></i>
           </button>
-          <button class="theme-toggle" id="themeToggle">
-            <i class="fas fa-sun"></i>
+          <button class="safe-search-toggle" id="safeSearchToggle" aria-label="Toggle Safe Search (blur images)" title="Safe Search: Browse comfortably in public">
+            <i class="fas fa-eye-slash"></i>
           </button>
-          <button class="mobile-menu-toggle" id="mobileMenuToggle">
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+          </button>
+          <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
             <i class="fas fa-bars"></i>
           </button>
         </div>
       </div>
     </div>
   </header>
+
+  <!-- Mobile Search Modal -->
+  <div class="mobile-search-modal" id="mobileSearchModal">
+    <div class="mobile-search-header">
+      <button class="mobile-search-back" id="mobileSearchBack" aria-label="Close search">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div class="mobile-search-input-wrapper">
+        <i class="fas fa-search mobile-search-icon"></i>
+        <input type="text" class="mobile-search-input" id="mobileSearchInput" placeholder="Search by name, location, category..." autocomplete="off" autocapitalize="none" spellcheck="false">
+      </div>
+    </div>
+    <div class="mobile-search-content">
+      <div class="mobile-search-label">POPULAR SEARCHES</div>
+      <div class="mobile-search-suggestions" id="mobileSearchSuggestions"></div>
+    </div>
+  </div>
+
+  <!-- Safe Search Modal -->
+  <div id="safeSearchModal" class="safe-search-modal" role="dialog" aria-labelledby="safeSearchModalTitle" aria-modal="true">
+    <div class="safe-search-modal-content">
+      <div class="safe-search-modal-icon">
+        <i class="fas fa-shield-alt"></i>
+      </div>
+      <h2 id="safeSearchModalTitle">Browse Safely in Public?</h2>
+      <p>Enable <strong>Safe Search</strong> to blur images so you can comfortably browse at work, on the bus, or anywhere public. You can toggle this anytime using the shield icon in the header.</p>
+      <div class="safe-search-modal-actions">
+        <button class="safe-search-modal-btn safe-search-modal-btn-primary" id="enableSafeSearch">
+          <i class="fas fa-shield-alt"></i> Enable Safe Search
+        </button>
+        <button class="safe-search-modal-btn safe-search-modal-btn-secondary" id="dismissSafeSearch">No Thanks, I'm in Private</button>
+      </div>
+      <div class="safe-search-modal-footer">You can change this anytime via the <i class="fas fa-eye-slash"></i> icon.</div>
+    </div>
+  </div>
+
+  <!-- Mobile Drawer -->
+  <div id="drawerOverlay" class="drawer-overlay" tabindex="-1" aria-hidden="true"></div>
+  <nav id="mobileDrawer" class="mobile-drawer" aria-hidden="true" aria-labelledby="mobileMenuToggle">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">×</button>
+    <a href="/">Home</a>
+    <div class="drawer-categories-toggle" id="drawerCategoriesToggle">
+      <div class="icon-text">
+        <i class="fas fa-th"></i>
+        <span>Categories</span>
+      </div>
+      <i class="fas fa-chevron-down chevron"></i>
+    </div>
+    <div id="drawerCategoriesSection">
+      <div class="drawer-categories-label">MOST POPULAR CATEGORIES</div>
+      <div id="drawerCategories"></div>
+      <a href="/categories/" class="drawer-view-all-btn">View All Categories</a>
+    </div>
+  </nav>
 
   <!-- Wishlist hero -->
   <div class="wishlist-hero">
@@ -262,94 +389,188 @@
   </nav>
 
   <script type="module">
-    // Theme management
-    const theme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', theme);
-    const themeIcon = document.querySelector('#themeToggle i');
-    if (themeIcon) themeIcon.className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+    // Import categories to populate dropdowns (match homepage version)
+    import { popularCategories, categoryToSlug } from '/config/categories.js?v=20251108-1';
 
-    document.getElementById('themeToggle')?.addEventListener('click', () => {
-      const current = document.documentElement.getAttribute('data-theme');
-      const newTheme = current === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', newTheme);
-      localStorage.setItem('theme', newTheme);
-      if (themeIcon) themeIcon.className = newTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+    // Header scroll behavior parity
+    window.addEventListener('scroll', () => {
+      const header = document.getElementById('mainHeader');
+      if (!header) return;
+      if (window.pageYOffset > 50) header.classList.add('scrolled');
+      else header.classList.remove('scrolled');
     });
 
-    // Header search redirect
-    document.getElementById('headerSearch')?.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        const q = e.target.value.trim();
-        if (q) window.location.href = `/?q=${encodeURIComponent(q)}`;
-      }
-    });
-
-    // Load and render wishlist (favorites stored as usernames)
-    function getFavorites() {
-      try {
-        const raw = localStorage.getItem('favorites') || '[]';
-        const arr = JSON.parse(raw);
-        return Array.isArray(arr) ? arr : [];
-      } catch { return []; }
+    // Populate desktop categories menu
+    const catMenu = document.getElementById('categoriesMenu');
+    if (catMenu) {
+      catMenu.innerHTML = popularCategories.map(cat => {
+        const slug = categoryToSlug(cat);
+        const label = cat.split(' ').map(w => w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
+        return `<a role="menuitem" href="/categories/${slug}/">${label}</a>`;
+      }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Browse all categories →</a>';
     }
+
+    // Populate mobile drawer categories
+    const drawerCats = document.getElementById('drawerCategories');
+    if (drawerCats) {
+      drawerCats.innerHTML = popularCategories.map(cat => {
+        const slug = categoryToSlug(cat);
+        const label = cat.split(' ').map(w => w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
+        return `<a href="/categories/${slug}/">${label}</a>`;
+      }).join('');
+    }
+
+    // Categories drawer toggle
+    const drawerCategoriesToggle = document.getElementById('drawerCategoriesToggle');
+    const drawerCategoriesSection = document.getElementById('drawerCategoriesSection');
+    if (drawerCategoriesToggle && drawerCategoriesSection) {
+      drawerCategoriesToggle.addEventListener('click', () => {
+        drawerCategoriesSection.classList.toggle('open');
+      });
+    }
+
+    // Desktop categories dropdown
+    const catToggle = document.getElementById('categoriesToggle');
+    if (catToggle && catMenu) {
+      catToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = catMenu.classList.toggle('open');
+        catToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        catMenu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+      });
+      document.addEventListener('click', (e) => {
+        if (!catMenu.classList.contains('open')) return;
+        if (!catMenu.contains(e.target) && e.target !== catToggle) {
+          catMenu.classList.remove('open');
+          catToggle.setAttribute('aria-expanded','false');
+          catMenu.setAttribute('aria-hidden','true');
+        }
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          catMenu.classList.remove('open');
+          catToggle.setAttribute('aria-expanded','false');
+          catMenu.setAttribute('aria-hidden','true');
+        }
+      });
+    }
+
+    // Theme management (homepage parity)
+    const themeToggle = document.getElementById('themeToggle');
+    function getTheme(){ return localStorage.getItem('theme') || 'light'; }
+    function applyTheme(t){
+      document.documentElement.setAttribute('data-theme', t);
+      const icon = themeToggle?.querySelector('i');
+      if (icon) icon.className = t === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+      themeToggle?.setAttribute('aria-label', t === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+    }
+    applyTheme(getTheme());
+    themeToggle?.addEventListener('click', () => {
+      const next = getTheme() === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('theme', next); applyTheme(next);
+    });
+
+    // Safe Search (full homepage logic)
+    const safeSearchToggle = document.getElementById('safeSearchToggle');
+    const safeSearchModal = document.getElementById('safeSearchModal');
+    const enableSafeSearchBtn = document.getElementById('enableSafeSearch');
+    const dismissSafeSearchBtn = document.getElementById('dismissSafeSearch');
+
+    function getSafeSearchState(){ return localStorage.getItem('safeSearch') === 'true'; }
+    function hasSeenSafeSearchModal(){ return localStorage.getItem('safeSearchModalShown') === 'true'; }
+    function applySafeSearch(enabled){
+      document.body.classList.toggle('safe-search-active', enabled);
+      if (safeSearchToggle){
+        safeSearchToggle.classList.toggle('active', enabled);
+        const icon = safeSearchToggle.querySelector('i');
+        if (icon) icon.className = enabled ? 'fas fa-eye-slash' : 'fas fa-eye';
+        safeSearchToggle.setAttribute('aria-label', enabled ? 'Disable Safe Search (show images)' : 'Enable Safe Search (blur images)');
+        safeSearchToggle.setAttribute('title', enabled ? 'Safe Search: ON (images blurred)' : 'Safe Search: OFF (images visible)');
+      }
+      localStorage.setItem('safeSearch', enabled ? 'true' : 'false');
+    }
+    function toggleSafeSearch(){ applySafeSearch(!getSafeSearchState()); }
+    function showSafeSearchModal(){ if(safeSearchModal){ safeSearchModal.classList.add('show'); document.body.style.overflow='hidden'; setTimeout(()=>{ const firstBtn = safeSearchModal.querySelector('button'); firstBtn?.focus(); },100); } }
+    function hideSafeSearchModal(){ if(safeSearchModal){ safeSearchModal.classList.remove('show'); document.body.style.overflow=''; localStorage.setItem('safeSearchModalShown','true'); } }
+    function initSafeSearch(){
+      const saved = getSafeSearchState(); applySafeSearch(saved);
+      if(!hasSeenSafeSearchModal()){ setTimeout(showSafeSearchModal, 10000); }
+      const urlParams = new URLSearchParams(window.location.search); if(urlParams.has('safe')){ const forced = urlParams.get('safe') === '1'; applySafeSearch(forced); }
+    }
+    safeSearchToggle?.addEventListener('click', toggleSafeSearch);
+    enableSafeSearchBtn?.addEventListener('click', () => { applySafeSearch(true); hideSafeSearchModal(); });
+    dismissSafeSearchBtn?.addEventListener('click', () => { applySafeSearch(false); hideSafeSearchModal(); });
+    safeSearchModal?.addEventListener('click', e => { if(e.target === safeSearchModal){ applySafeSearch(false); hideSafeSearchModal(); } });
+    document.addEventListener('keydown', e => { if(e.altKey && e.key.toLowerCase()==='s'){ e.preventDefault(); toggleSafeSearch(); } if(e.key==='Escape' && safeSearchModal?.classList.contains('show')){ applySafeSearch(false); hideSafeSearchModal(); } });
+    initSafeSearch();
+
+    // Mobile drawer open/close
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const drawer = document.getElementById('mobileDrawer');
+    const overlay = document.getElementById('drawerOverlay');
+    const drawerClose = document.getElementById('drawerClose');
+    function openDrawer(){ drawer?.classList.add('open'); overlay?.classList.add('open'); drawer?.setAttribute('aria-hidden','false'); overlay?.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+    function closeDrawer(){ drawer?.classList.remove('open'); overlay?.classList.remove('open'); drawer?.setAttribute('aria-hidden','true'); overlay?.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+    mobileMenuToggle?.addEventListener('click', e => { e.preventDefault(); openDrawer(); });
+    overlay?.addEventListener('click', closeDrawer);
+    drawerClose?.addEventListener('click', closeDrawer);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+
+    // Mobile search modal
+    const mobileSearchTrigger = document.getElementById('mobileSearchTrigger');
+    const mobileSearchModal = document.getElementById('mobileSearchModal');
+    const mobileSearchBack = document.getElementById('mobileSearchBack');
+    const mobileSearchInput = document.getElementById('mobileSearchInput');
+    const mobileSearchSuggestions = document.getElementById('mobileSearchSuggestions');
+    const popularSearches = ['milf','asian','big tits','trans','mature','latina','big ass','bbw'];
+    function populateMobileSuggestions(){ if(mobileSearchSuggestions){ mobileSearchSuggestions.innerHTML = popularSearches.map(t => `<a href="/?q=${encodeURIComponent(t)}" class="mobile-search-suggestion"><i class=\"fas fa-fire\"></i><span>${t}</span></a>`).join(''); } }
+    populateMobileSuggestions();
+    function openMobileSearch(){ mobileSearchModal?.classList.add('active'); document.body.style.overflow='hidden'; setTimeout(()=> mobileSearchInput?.focus(),100); }
+    function closeMobileSearch(){ mobileSearchModal?.classList.remove('active'); document.body.style.overflow=''; if(mobileSearchInput) mobileSearchInput.value=''; }
+    mobileSearchTrigger?.addEventListener('click', openMobileSearch);
+    mobileSearchBack?.addEventListener('click', closeMobileSearch);
+    mobileSearchInput?.addEventListener('keypress', e => { if(e.key==='Enter'){ const q = mobileSearchInput.value.trim(); if(q) window.location.href = `/?q=${encodeURIComponent(q)}`; } });
+
+    // Header search redirect (desktop)
+    const headerSearch = document.getElementById('headerSearch');
+    headerSearch?.addEventListener('keypress', e => { if(e.key==='Enter'){ const q = headerSearch.value.trim(); if(q) window.location.href = `/?q=${encodeURIComponent(q)}`; }});
+
+    // ================= Wishlist Rendering =================
+    function getFavorites(){ try { const raw = localStorage.getItem('favorites') || '[]'; const arr = JSON.parse(raw); return Array.isArray(arr)?arr:[]; } catch { return []; } }
     let favorites = getFavorites();
     const resultsContainer = document.getElementById('wishlistResults');
     const emptyState = document.getElementById('emptyState');
-
-    if (!favorites.length) {
-      emptyState.style.display = 'block';
-    } else {
-      (async function renderWishlist(){
+    if (!favorites.length){ emptyState.style.display='block'; }
+    else {
+      (async () => {
         try {
           for (let i=0;i<favorites.length;i++) {
-            const username = favorites[i];
-            if (!username) continue;
+            const username = favorites[i]; if(!username) continue;
             const resp = await fetch(`/api/search?q=${encodeURIComponent(username)}&page=1&page_size=12`);
-            let data = [];
-            try { data = await resp.json(); } catch {}
-            if (!Array.isArray(data) || !data.length) continue;
+            let data=[]; try{ data = await resp.json(); } catch {}
+            if(!Array.isArray(data) || !data.length) continue;
             const creator = data.find(c => c.username === username) || data[0];
-            if (!creator || !creator.username) continue;
+            if(!creator || !creator.username) continue;
             const img = creator.avatar || creator.avatar_c144 || '/static/no-image.png';
             const priceNum = parseFloat(creator.subscribePrice || creator.subscribeprice);
             const priceLabel = !isNaN(priceNum) && priceNum>0 ? `$${priceNum.toFixed(2)}` : 'FREE';
-            const card = document.createElement('div');
-            card.className = 'col-sm-6 col-md-4 col-lg-3 mb-4';
-            const verifiedIcon = creator.isVerified || creator.isverified ? '✅ ' : '';
+            const card = document.createElement('div'); card.className='col-sm-6 col-md-4 col-lg-3 mb-4';
+            const verifiedIcon = (creator.isVerified || creator.isverified) ? '✅ ' : '';
             const safeUser = String(creator.username).replace(/'/g, "\\'");
-            card.innerHTML = `
-              <div class="card h-100" data-username="${safeUser}">
-                <button class="favorite-btn active" data-username="${safeUser}" onclick="event.preventDefault(); toggleFavoriteWishlist('${safeUser}', this);"><span>♥</span></button>
-                <img src="https://images.weserv.nl/?url=${encodeURIComponent(img)}&w=320&h=427&fit=cover&output=webp&q=85" alt="${creator.name || creator.username}" loading="${i===0?'eager':'lazy'}" ${i===0?'fetchpriority="high"':''}>
-                <div class="card-body">
-                  <h5>${verifiedIcon}${creator.name || creator.username}</h5>
-                  <p class="username">@${creator.username}</p>
-                  ${priceLabel==='FREE'?`<p class=\"price-free\">${priceLabel}</p>`:`<p class=\"price-tag\">${priceLabel}</p>`}
-                  ${creator.about?`<p class=\"bio-snippet\">${creator.about}</p>`:''}
-                  <a href="https://onlyfans.com/${creator.username}" class="view-profile-btn" target="_blank" rel="noopener noreferrer">View Profile</a>
-                </div>
-              </div>`;
+            card.innerHTML = `<div class=\"card h-100\" data-username=\"${safeUser}\">\n<button class=\"favorite-btn active\" data-username=\"${safeUser}\" onclick=\"event.preventDefault(); toggleFavoriteWishlist('${safeUser}', this);\"><span>♥</span></button>\n<img src=\"https://images.weserv.nl/?url=${encodeURIComponent(img)}&w=320&h=427&fit=cover&output=webp&q=85\" alt=\"${creator.name || creator.username}\" loading=\"${i===0?'eager':'lazy'}\" ${i===0?'fetchpriority=\"high\"':''}>\n<div class=\"card-body\">\n<h5>${verifiedIcon}${creator.name || creator.username}</h5>\n<p class=\"username\">@${creator.username}</p>${priceLabel==='FREE'?`<p class=\"price-free\">${priceLabel}</p>`:`<p class=\"price-tag\">${priceLabel}</p>`}${creator.about?`<p class=\"bio-snippet\">${creator.about}</p>`:''}\n<a href=\"https://onlyfans.com/${creator.username}\" class=\"view-profile-btn\" target=\"_blank\" rel=\"noopener noreferrer\">View Profile</a>\n</div></div>`;
             resultsContainer.appendChild(card);
           }
-          if (!resultsContainer.children.length) emptyState.style.display='block';
-        } catch(e){
-          console.error('Wishlist render error', e); emptyState.style.display='block';
-        }
+          if(!resultsContainer.children.length) emptyState.style.display='block';
+        } catch(err){ console.error('Wishlist render error', err); emptyState.style.display='block'; }
       })();
     }
 
-    function toggleFavoriteWishlist(username, btnEl){
+    window.toggleFavoriteWishlist = function(username, btnEl){
       if(!username) return; const set = new Set(getFavorites()); let active;
-      if(set.has(username)){set.delete(username); active=false;} else {set.add(username); active=true;}
-      try{localStorage.setItem('favorites', JSON.stringify(Array.from(set)));}catch{}
-      if(btnEl){btnEl.classList.toggle('active', active); const s=btnEl.querySelector('span'); if(s) s.textContent= active?'♥':'♡';}
-      if(!active){ // remove card
-        const card = btnEl.closest('.col-sm-6, .col-md-4, .col-lg-3, .mb-4');
-        const wrapper = btnEl.closest('.card').parentElement;
-        (wrapper||card).style.transition='opacity .3s ease, transform .3s ease';
-        (wrapper||card).style.opacity='0'; (wrapper||card).style.transform='scale(.95)';
-        setTimeout(()=>{(wrapper||card).remove(); if(!resultsContainer.children.length){emptyState.style.display='block';}},300);
-      }
+      if(set.has(username)){ set.delete(username); active=false; } else { set.add(username); active=true; }
+      try { localStorage.setItem('favorites', JSON.stringify(Array.from(set))); } catch {}
+      if(btnEl){ btnEl.classList.toggle('active', active); const span = btnEl.querySelector('span'); if(span) span.textContent = active ? '♥' : '♡'; }
+      if(!active){ const wrapper = btnEl.closest('.card')?.parentElement; if(wrapper){ wrapper.style.transition='opacity .3s ease, transform .3s ease'; wrapper.style.opacity='0'; wrapper.style.transform='scale(.95)'; setTimeout(()=>{ wrapper.remove(); if(!resultsContainer.children.length) emptyState.style.display='block'; },300); } }
     }
   </script>
 </body>
