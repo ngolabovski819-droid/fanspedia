@@ -688,8 +688,9 @@
   function saveFavoritesSet(set){ try { localStorage.setItem('favorites', JSON.stringify(Array.from(set))); } catch {} }
   function updateFavoriteButtons(username, active){ try{ const buttons = document.querySelectorAll(`.favorite-btn[data-username="${CSS.escape(username)}"]`); buttons.forEach(b=>{ b.classList.toggle('active', active); const s=b.querySelector('span'); if(s) s.textContent = active ? '♥' : '♡'; }); }catch{} }
   function renderFavoritesBar(){ if(!favoritesBar) return; const set=getFavoritesSet(); const list=Array.from(set); if(list.length===0){ favoritesBar.style.display='none'; favoritesBar.innerHTML=''; return; } favoritesBar.style.display='flex'; favoritesBar.innerHTML = list.map(u=>{ const safe=String(u).replace(/'/g, "\\'"); const url=`https://onlyfans.com/${encodeURIComponent(u)}`; return `<div class="favorite-chip" data-username="${safe}" onclick="window.open('${url}','_blank')"><span class='heart'>♥</span><a class='open' href='${url}' target='_blank' rel='noopener'>@${u}</a><button class='remove' aria-label='Remove' onclick="event.stopPropagation(); toggleFavorite('${safe}');">&times;</button></div>`; }).join(''); }
-  function toggleFavorite(username, btnEl){ if(!username) return; const set=getFavoritesSet(); let active; if(set.has(username)){ set.delete(username); active=false; } else { set.add(username); active=true; } saveFavoritesSet(set); if(btnEl){ btnEl.classList.toggle('active', active); const s=btnEl.querySelector('span'); if(s) s.textContent = active ? '♥' : '♡'; } updateFavoriteButtons(username, active); renderFavoritesBar(); }
+  function toggleFavorite(username, btnEl){ if(!username) return; const set=getFavoritesSet(); let active; if(set.has(username)){ set.delete(username); active=false; } else { set.add(username); active=true; } saveFavoritesSet(set); if(btnEl){ btnEl.classList.toggle('active', active); const s=btnEl.querySelector('span'); if(s) s.textContent = active ? '♥' : '♡'; } updateFavoriteButtons(username, active); renderFavoritesBar(); updateWishlistBadge(); window.dispatchEvent(new StorageEvent('storage',{key:'favorites',newValue:localStorage.getItem('favorites')})); }
   window.toggleFavorite = toggleFavorite;
+  function updateWishlistBadge(){ try{ const badge=document.querySelector('.sticky-bottom-nav .nav-item[data-nav="wishlist"] .badge'); if(!badge)return; const count=getFavoritesSet().size; badge.textContent=count; badge.style.display=count>0?'block':'none'; }catch{} }
 
     function updateLoadMoreButton(){
       const totalLoaded = resultsDiv.children.length;
@@ -887,6 +888,7 @@
     document.getElementById('status').textContent = label ? `Loading ${label} creators...` : 'Loading...';
   initBreadcrumbs();
   renderFavoritesBar();
+  updateWishlistBadge();
     performSearch(true);
 
   // ============================================
@@ -1611,8 +1613,11 @@
       <span class="icon"><i class="fa-solid fa-fire"></i></span>
       <span class="label">Hot!</span>
     </a>
-    <a href="#wishlist" class="nav-item" data-nav="wishlist">
-      <span class="icon"><i class="fa-solid fa-heart"></i></span>
+    <a href="/wishlist" class="nav-item" data-nav="wishlist">
+      <span class="icon">
+        <i class="fa-solid fa-heart"></i>
+        <span class="badge" style="position:absolute;top:-4px;right:-4px;background:#ff3b30;color:#fff;border-radius:10px;padding:2px 6px;font-size:10px;font-weight:700;min-width:18px;text-align:center;display:none;">0</span>
+      </span>
       <span class="label">Wishlist</span>
     </a>
   </nav>
