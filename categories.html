@@ -1287,7 +1287,23 @@
     .sticky-bottom-nav .label{font-size:11px;font-weight:700;color:var(--text-primary)}
   </style>
   <script>
-    (function(){try{var p=location.pathname;document.querySelectorAll('.sticky-bottom-nav .nav-item').forEach(function(a){var k=a.getAttribute('data-nav');if((k==='search'&&(p==='/'||p==='/index.html'))||(k==='categories'&&p.startsWith('/categories'))){a.classList.add('active');}});
+    (function(){try{
+      var p=location.pathname;
+      document.querySelectorAll('.sticky-bottom-nav .nav-item').forEach(function(a){
+        var k=a.getAttribute('data-nav');
+        if((k==='search'&&(p==='/'||p==='/index.html'))||(k==='categories'&&p.startsWith('/categories'))){a.classList.add('active');}
+      });
+      var searchLink=document.querySelector('.sticky-bottom-nav .nav-item[data-nav="search"]');
+      if(searchLink){
+        searchLink.addEventListener('click',function(ev){
+          ev.preventDefault();
+          try{
+            var inp=document.getElementById('headerSearch')||document.querySelector('.header-search-input');
+            window.scrollTo({top:0,behavior:'smooth'});
+            if(inp){setTimeout(function(){inp.focus({preventScroll:true});},220);}else{location.href='/';}
+          }catch(e){location.href='/';}
+        });
+      }
     }catch(e){}})();
   </script>
   <script src="/utils/wishlist-badge.js?v=20251116-1"></script>
