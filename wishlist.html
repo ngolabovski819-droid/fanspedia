@@ -645,35 +645,47 @@
     const headerSearch = document.getElementById('headerSearch');
     headerSearch?.addEventListener('keypress', e => { if(e.key==='Enter'){ const q = headerSearch.value.trim(); if(q) window.location.href = `/?q=${encodeURIComponent(q)}`; }});
 
-    // ================= Wishlist Rendering =================
-    function getFavorites(){ try { const raw = localStorage.getItem('favorites') || '[]'; const arr = JSON.parse(raw); return Array.isArray(arr)?arr:[]; } catch { return []; } }
-    let favorites = getFavorites();
+    // ================= Wishlist Rendering (Batch + Responsive Images) =================
+    function getFavorites(){ try { const raw = localStorage.getItem('favorites') || '[]'; const arr = JSON.parse(raw); return Array.isArray(arr)?arr.filter(Boolean):[]; } catch { return []; } }
+    const favorites = getFavorites();
     const resultsContainer = document.getElementById('wishlistResults');
     const emptyState = document.getElementById('emptyState');
-    if (!favorites.length){ emptyState.style.display='block'; }
-    else {
-      (async () => {
-        try {
-          for (let i=0;i<favorites.length;i++) {
-            const username = favorites[i]; if(!username) continue;
-            const resp = await fetch(`/api/search?q=${encodeURIComponent(username)}&page=1&page_size=12`);
-            let data=[]; try{ data = await resp.json(); } catch {}
-            if(!Array.isArray(data) || !data.length) continue;
-            const creator = data.find(c => c.username === username) || data[0];
-            if(!creator || !creator.username) continue;
-            const img = creator.avatar || creator.avatar_c144 || '/static/no-image.png';
-            const priceNum = parseFloat(creator.subscribePrice || creator.subscribeprice);
-            const priceLabel = !isNaN(priceNum) && priceNum>0 ? `$${priceNum.toFixed(2)}` : 'FREE';
-            const card = document.createElement('div'); card.className='col-sm-6 col-md-4 col-lg-3 mb-4';
-            const verifiedIcon = (creator.isVerified || creator.isverified) ? '✅ ' : '';
-            const safeUser = String(creator.username).replace(/'/g, "\\'");
-            card.innerHTML = `<div class=\"card h-100\" data-username=\"${safeUser}\">\n<button class=\"favorite-btn active\" data-username=\"${safeUser}\" onclick=\"event.preventDefault(); toggleFavoriteWishlist('${safeUser}', this);\"><span>♥</span></button>\n<img src=\"https://images.weserv.nl/?url=${encodeURIComponent(img)}&w=320&h=427&fit=cover&output=webp&q=85\" alt=\"${creator.name || creator.username}\" loading=\"${i===0?'eager':'lazy'}\" ${i===0?'fetchpriority=\"high\"':''}>\n<div class=\"card-body\">\n<h5>${verifiedIcon}${creator.name || creator.username}</h5>\n<p class=\"username\">@${creator.username}</p>${priceLabel==='FREE'?`<p class=\"price-free\">${priceLabel}</p>`:`<p class=\"price-tag\">${priceLabel}</p>`}${creator.about?`<p class=\"bio-snippet\">${creator.about}</p>`:''}\n<a href=\"https://onlyfans.com/${creator.username}\" class=\"view-profile-btn\" target=\"_blank\" rel=\"noopener noreferrer\">View Profile</a>\n</div></div>`;
-            resultsContainer.appendChild(card);
-          }
-          if(!resultsContainer.children.length) emptyState.style.display='block';
-        } catch(err){ console.error('Wishlist render error', err); emptyState.style.display='block'; }
-      })();
+
+    // Image proxy + responsive helpers
+    function proxyImg(originalUrl, w, h){
+      if(!originalUrl) return '/static/no-image.png';
+      return `https://images.weserv.nl/?url=${encodeURIComponent(originalUrl)}&w=${w}&h=${h}&fit=cover&output=webp&q=85`;
     }
+    function buildResponsiveSources(originalUrl){
+      const widths=[144,240,320,480,720];
+      const srcset=widths.map(w=>`${proxyImg(originalUrl,w,Math.round(w*4/3))} ${w}w`).join(', ');
+      const src=proxyImg(originalUrl,320,Math.round(320*4/3));
+      const sizes='(max-width: 480px) 144px, (max-width: 768px) 240px, 320px';
+      return {src,srcset,sizes};
+    }
+
+    async function renderWishlist(){
+      if(!favorites.length){ emptyState.style.display='block'; return; }
+      try {
+        const resp = await fetch(`/api/wishlist?users=${favorites.map(encodeURIComponent).join(',')}`);
+        let data=[]; try { data = await resp.json(); } catch {}
+        if(!Array.isArray(data) || !data.length){ emptyState.style.display='block'; return; }
+        data.forEach((creator,i)=>{
+          if(!creator || !creator.username) return;
+          const img = creator.avatar || creator.avatar_c144 || creator.avatar_c50 || '/static/no-image.png';
+          const {src,srcset,sizes} = buildResponsiveSources(img);
+          const priceNum = parseFloat(creator.subscribePrice || creator.subscribeprice);
+          const priceLabel = !isNaN(priceNum) && priceNum>0 ? `$${priceNum.toFixed(2)}` : 'FREE';
+          const card = document.createElement('div'); card.className='col-sm-6 col-md-4 col-lg-3 mb-4';
+          const verifiedIcon = (creator.isVerified || creator.isverified) ? '✅ ' : '';
+          const safeUser = String(creator.username).replace(/'/g, "\\'");
+          card.innerHTML = `<div class=\"card h-100\" data-username=\"${safeUser}\">\n<button class=\"favorite-btn active\" data-username=\"${safeUser}\" onclick=\"event.preventDefault(); toggleFavoriteWishlist('${safeUser}', this);\"><span>♥</span></button>\n<img src=\"${src}\" srcset=\"${srcset}\" sizes=\"${sizes}\" alt=\"${creator.name || creator.username}\" loading=\"${i===0?'eager':'lazy'}\" ${i===0?'fetchpriority=\"high\"':''}>\n<div class=\"card-body\">\n<h5>${verifiedIcon}${creator.name || creator.username}</h5>\n<p class=\"username\">@${creator.username}</p>${priceLabel==='FREE'?`<p class=\"price-free\">${priceLabel}</p>`:`<p class=\"price-tag\">${priceLabel}</p>`}${creator.about?`<p class=\"bio-snippet\">${creator.about}</p>`:''}\n<a href=\"https://onlyfans.com/${creator.username}\" class=\"view-profile-btn\" target=\"_blank\" rel=\"noopener noreferrer\">View Profile</a>\n</div></div>`;
+          resultsContainer.appendChild(card);
+        });
+        if(!resultsContainer.children.length) emptyState.style.display='block';
+      } catch(err){ console.error('Wishlist render error', err); emptyState.style.display='block'; }
+    }
+    renderWishlist();
 
     window.toggleFavoriteWishlist = function(username, btnEl){
       if(!username) return; const set = new Set(getFavorites()); let active;
