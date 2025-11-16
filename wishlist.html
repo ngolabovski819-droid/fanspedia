@@ -253,6 +253,26 @@
     .mobile-search-suggestion { display:flex; align-items:center; gap:12px; padding:14px 16px; background:#f5f5f7; border-radius:12px; text-decoration:none; color:#1d1d1f; font-weight:600; font-size:15px; transition:all .2s ease; }
     .mobile-search-suggestion:hover, .mobile-search-suggestion:active { background:#e8e8ea; transform:translateX(4px); }
     .mobile-search-suggestion i { color:#00AFF0; font-size:16px; }
+
+    /* Clear All Button */
+    .clear-all-btn { position:absolute; top:20px; right:20px; background:#dc3545; color:#fff; border:none; border-radius:8px; padding:10px 20px; font-weight:700; font-size:14px; cursor:pointer; transition:all .2s ease; display:flex; align-items:center; gap:8px; box-shadow:0 2px 8px rgba(220,53,69,0.3); }
+    .clear-all-btn:hover { background:#c82333; transform:translateY(-2px); box-shadow:0 4px 12px rgba(220,53,69,0.4); }
+    .clear-all-btn i { font-size:14px; }
+    @media(max-width:768px){ .clear-all-btn { position:static; margin:0 auto 16px; } .wishlist-hero { text-align:center; } }
+
+    /* Clear All Modal */
+    .clear-modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:10002; display:none; align-items:center; justify-content:center; }
+    .clear-modal-overlay.show { display:flex; }
+    .clear-modal { background:var(--bg-secondary); border-radius:16px; padding:32px; max-width:480px; width:90%; box-shadow:0 12px 48px rgba(0,0,0,0.2); animation:modalSlideIn .3s ease; }
+    @keyframes modalSlideIn { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+    .clear-modal h3 { color:var(--text-primary); font-weight:800; font-size:22px; margin:0 0 16px; }
+    .clear-modal p { color:var(--text-secondary); font-size:15px; line-height:1.6; margin:0 0 24px; }
+    .clear-modal-actions { display:flex; gap:12px; }
+    .clear-modal-btn { flex:1; padding:12px 24px; border:none; border-radius:8px; font-weight:700; font-size:14px; cursor:pointer; transition:all .2s ease; }
+    .clear-modal-btn-cancel { background:var(--border-color); color:var(--text-primary); }
+    .clear-modal-btn-cancel:hover { background:#c8c8c8; }
+    .clear-modal-btn-confirm { background:#dc3545; color:#fff; }
+    .clear-modal-btn-confirm:hover { background:#c82333; transform:translateY(-1px); box-shadow:0 4px 12px rgba(220,53,69,0.4); }
   </style>
 </head>
 <body>
@@ -366,9 +386,24 @@
   </nav>
 
   <!-- Wishlist hero -->
-  <div class="wishlist-hero">
+  <div class="wishlist-hero" style="position:relative;">
     <h1><i class="fas fa-heart"></i> My Wishlist</h1>
     <p>Your saved OnlyFans creators. Click the heart to remove from wishlist.</p>
+    <button id="clearAllBtn" class="clear-all-btn" style="display:none;">
+      <i class="fas fa-trash-alt"></i> Clear All
+    </button>
+  </div>
+
+  <!-- Clear All Confirmation Modal -->
+  <div id="clearAllModal" class="clear-modal-overlay">
+    <div class="clear-modal">
+      <h3>Clear all creators from your wishlist?</h3>
+      <p>All <strong id="modalCreatorCount">0</strong> creators in your wishlist will be permanently removed. This action is irreversible.</p>
+      <div class="clear-modal-actions">
+        <button class="clear-modal-btn clear-modal-btn-cancel" id="cancelClearAll">Cancel</button>
+        <button class="clear-modal-btn clear-modal-btn-confirm" id="confirmClearAll">Clear All</button>
+      </div>
+    </div>
   </div>
 
   <!-- Wishlist results -->
@@ -685,6 +720,11 @@
       const favorites = getFavorites(); // Get fresh favorites each time
       resultsContainer.innerHTML = ''; // Clear existing cards
       emptyState.style.display = 'none'; // Reset empty state
+      
+      // Show/hide Clear All button based on wishlist count
+      const clearBtn = document.getElementById('clearAllBtn');
+      if(clearBtn) clearBtn.style.display = favorites.length > 0 ? 'flex' : 'none';
+      
       if(!favorites.length){ emptyState.style.display='block'; return; }
       try {
         const resp = await fetch(`/api/wishlist?users=${favorites.map(encodeURIComponent).join(',')}`);
@@ -725,6 +765,49 @@
         } 
       }
     }
+
+    // Clear All functionality
+    const clearAllBtn = document.getElementById('clearAllBtn');
+    const clearAllModal = document.getElementById('clearAllModal');
+    const cancelClearAll = document.getElementById('cancelClearAll');
+    const confirmClearAll = document.getElementById('confirmClearAll');
+    const modalCreatorCount = document.getElementById('modalCreatorCount');
+
+    function openClearModal(){
+      const count = getFavorites().length;
+      if(modalCreatorCount) modalCreatorCount.textContent = count;
+      if(clearAllModal) clearAllModal.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeClearModal(){
+      if(clearAllModal) clearAllModal.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    function clearAllWishlist(){
+      try {
+        localStorage.setItem('favorites', '[]');
+        closeClearModal();
+        renderWishlist();
+        // Update badge if wishlist-badge.js loaded
+        if(window.fpUpdateWishlistBadge) window.fpUpdateWishlistBadge();
+      } catch(err) {
+        console.error('Failed to clear wishlist:', err);
+      }
+    }
+
+    clearAllBtn?.addEventListener('click', openClearModal);
+    cancelClearAll?.addEventListener('click', closeClearModal);
+    confirmClearAll?.addEventListener('click', clearAllWishlist);
+    clearAllModal?.addEventListener('click', e => {
+      if(e.target === clearAllModal) closeClearModal();
+    });
+    document.addEventListener('keydown', e => {
+      if(e.key === 'Escape' && clearAllModal?.classList.contains('show')){
+        closeClearModal();
+      }
+    });
   </script>
   <script src="/utils/wishlist-badge.js?v=20251116-1"></script>
 </body>
