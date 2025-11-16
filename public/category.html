@@ -248,7 +248,7 @@
     #backToTop.visible { opacity:1; pointer-events:auto; transform: translateY(0); }
 
     /* Favorites bar (same as homepage) */
-    .favorites-bar { display:none; gap:8px; align-items:center; overflow-x:auto; white-space:nowrap; padding:8px 0; margin-top:6px; scroll-snap-type:x proximity; overscroll-behavior-x:contain; -webkit-overflow-scrolling:touch; }
+    .favorites-bar { display:none !important; gap:8px; align-items:center; overflow-x:auto; white-space:nowrap; padding:8px 0; margin-top:6px; scroll-snap-type:x proximity; overscroll-behavior-x:contain; -webkit-overflow-scrolling:touch; }
     .favorite-chip { display:inline-flex; align-items:center; gap:8px; padding:6px 12px; background:var(--chip-bg); border:1px solid var(--chip-border); border-radius:9999px; color:var(--brand-color); font-weight:700; box-shadow:0 2px 6px rgba(0,175,240,0.12); transition:transform .2s ease, box-shadow .2s ease; scroll-snap-align:start; }
     .favorite-chip:hover { transform: translateY(-1px); box-shadow:0 6px 14px rgba(0,175,240,0.2); }
     .favorite-chip .heart { color:var(--brand-color); font-size:14px; }
