@@ -816,7 +816,7 @@
   </script>
   <!-- Sticky Bottom Navigation -->
   <nav class="sticky-bottom-nav" role="navigation" aria-label="Bottom navigation">
-    <a href="/#headerSearch" class="nav-item" data-nav="search">
+    <a href="#headerSearch" class="nav-item" data-nav="search">
       <span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span>
       <span class="label">Search</span>
     </a>
@@ -852,29 +852,28 @@
   <script src="/utils/wishlist-badge.js?v=20251116-1"></script>
   <script>
     (function(){try{
-      // Enhance bottom nav search: open mobile modal if header search hidden
       var searchLink=document.querySelector('.sticky-bottom-nav .nav-item[data-nav="search"]');
-      if(searchLink){
-        searchLink.addEventListener('click',function(ev){
-          ev.preventDefault();
-          try{
-            var isMobile=window.matchMedia('(max-width: 768px)').matches;
-            var headerInput=document.getElementById('headerSearch')||document.querySelector('.header-search-input');
-            var headerVisible=headerInput && headerInput.offsetParent!==null;
-            if(isMobile && !headerVisible){
-              var mobileTrigger=document.getElementById('mobileSearchTrigger');
-              if(mobileTrigger){mobileTrigger.click();return;}
-            }
-            window.scrollTo({top:0,behavior:'smooth'});
-            if(headerInput && headerVisible){
-              setTimeout(function(){headerInput.focus({preventScroll:true});},220);
-            }else if(!isMobile){
-              location.href='/';
-            }
-          }catch(err){location.href='/';}
-        });
-      }
-    }catch(e){}})();
+      if(!searchLink) return;
+      searchLink.addEventListener('click',function(ev){
+        ev.preventDefault();
+        try{
+          var isMobile=window.matchMedia('(max-width: 768px)').matches;
+          var headerInput=document.getElementById('headerSearch')||document.querySelector('.header-search-input');
+          var headerVisible=headerInput && headerInput.offsetParent!==null;
+          if(isMobile && !headerVisible){
+            var mobileTrigger=document.getElementById('mobileSearchTrigger');
+            if(mobileTrigger){mobileTrigger.click();return;}
+          }
+          window.scrollTo({top:0,behavior:'smooth'});
+          if(headerInput && headerVisible){
+            setTimeout(function(){headerInput.focus({preventScroll:true});},220);
+          }else if(!isMobile){
+            // Desktop fallback: stay on page but focus header if later becomes visible
+            if(headerInput){setTimeout(function(){if(headerInput.offsetParent!==null) headerInput.focus({preventScroll:true});},350);} else {location.href='/';}
+          }
+        }catch(err){/* swallow */}
+      });
+    }catch(e){/* swallow */}})();
   </script>
 </body>
 </html>
