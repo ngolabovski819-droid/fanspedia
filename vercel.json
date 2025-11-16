@@ -4,6 +4,8 @@
     { "source": "/", "destination": "/index.html" },
     { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
     { "source": "/robots.txt", "destination": "/robots.txt" },
+    { "source": "/wishlist", "destination": "/wishlist.html" },
+    { "source": "/wishlist/", "destination": "/wishlist.html" },
     { "source": "/categories", "destination": "/categories.html" },
     { "source": "/categories/", "destination": "/categories.html" },
     { "source": "/categories/:slug", "destination": "/category.html" },
@@ -29,6 +31,12 @@
     },
     {
       "source": "/category.html",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/wishlist.html",
       "headers": [
         { "key": "Cache-Control", "value": "no-store, must-revalidate" }
       ]

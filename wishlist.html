@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Wishlist | FansPedia</title>
+  <meta name="description" content="Your saved OnlyFans creators. Browse and manage your wishlist of favorite models and accounts." />
+  <link rel="canonical" href="https://fanspedia.net/wishlist/" />
+  <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg">
+
+  <!-- Preconnects -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preconnect" href="https://images.weserv.nl" crossorigin>
+
+  <!-- Bootstrap + Font Awesome -->
+  <link rel="preload" as="style" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"></noscript>
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+
+  <style>
+    /* Same CSS variables and styles as homepage */
+    :root {
+      --bg-primary: #f5f5f7;
+      --bg-secondary: #ffffff;
+      --text-primary: #1d1d1f;
+      --text-secondary: #666;
+      --text-muted: #888;
+      --border-color: #e0e0e0;
+      --card-shadow: rgba(0, 0, 0, 0.08);
+      --card-shadow-hover: rgba(0, 0, 0, 0.12);
+      --input-bg: #ffffff;
+      --brand-color: #0099D6;
+      --card-bg: #ffffff;
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: #1a1a1a;
+      --bg-secondary: #2a2a2a;
+      --text-primary: #e8e8e8;
+      --text-secondary: #b8b8b8;
+      --text-muted: #888;
+      --border-color: #404040;
+      --card-shadow: rgba(0, 0, 0, 0.3);
+      --card-shadow-hover: rgba(0, 0, 0, 0.5);
+      --input-bg: #2a2a2a;
+      --brand-color: #00AFF0;
+      --card-bg: #2a2a2a;
+    }
+
+    body { 
+      background-color: var(--bg-primary); 
+      color: var(--text-primary); 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; 
+      padding-top: 68px;
+      padding-bottom: 80px;
+      transition: background-color 0.3s ease, color 0.3s ease; 
+    }
+
+    /* Header styles (copy from homepage) */
+    .superior-header { position: fixed; top: 0; left: 0; right: 0; z-index: 9999; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); box-shadow: 0 4px 24px rgba(0, 175, 240, 0.25); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .header-main { padding: 10px 0; }
+    .header-container { max-width: 1400px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .logo-section { display: flex; align-items: center; gap: 12px; flex-shrink: 0; text-decoration: none; }
+    .header-search-section { flex: 1; max-width: 560px; position: relative; }
+    .header-search-wrapper { position: relative; display: flex; align-items: center; }
+    .header-search-input { width: 100%; padding: 10px 16px 10px 44px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50px; background: rgba(255,255,255,0.95); font-size: 15px; font-weight: 500; color: #1d1d1f; transition: all 0.3s ease; box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+    .header-search-input:focus { outline: none; border-color: #fff; background: #fff; box-shadow: 0 8px 32px rgba(0,0,0,0.15); transform: translateY(-1px); }
+    .header-search-icon { position: absolute; left: 16px; color: #00AFF0; font-size: 18px; pointer-events: none; }
+    .header-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .theme-toggle, .safe-search-toggle { width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.2); color: white; font-size: 20px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .theme-toggle:hover, .safe-search-toggle:hover { background: rgba(255, 255, 255, 0.3); transform: translateY(-1px); }
+    .mobile-menu-toggle, .mobile-search-trigger { display: none; background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.3); color: white; width: 44px; height: 44px; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; justify-content: center; align-items: center; }
+
+    /* Desktop nav */
+    .desktop-nav { position: relative; flex-shrink: 0; }
+    .desktop-nav .nav-btn { display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.2); color:#fff; border:1px solid rgba(255,255,255,0.35); border-radius:9999px; padding:10px 14px; font-weight:800; font-size:14px; cursor:pointer; transition:all .2s ease; }
+    .desktop-nav .nav-btn:hover { background: rgba(255,255,255,0.3); }
+
+    @media (max-width: 768px) {
+      body { padding-top: 66px; }
+      .header-search-section { display: none !important; }
+      .mobile-search-trigger { display: inline-flex; }
+      .desktop-nav { display: none; }
+      .mobile-menu-toggle { display: inline-flex; }
+    }
+
+    /* Wishlist content */
+    .wishlist-hero { text-align: center; padding: 40px 20px 20px; max-width: 900px; margin: 0 auto; }
+    .wishlist-hero h1 { color: #00aff0; font-weight: 800; letter-spacing: -0.4px; margin-bottom: 12px; font-size: 36px; }
+    .wishlist-hero p { color: var(--text-secondary); font-size: 16px; margin-bottom: 0; }
+
+    .container-fluid { max-width: 1400px; padding: 20px; }
+
+    /* Card styles (same as homepage) */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 4px 12px var(--card-shadow);
+      position: relative;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px var(--card-shadow-hover); }
+    .card img { width: 100%; height: 420px; object-fit: cover; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); }
+    .card-body { padding: 16px; }
+    .card-title { font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+    .verified-badge { color: #1DA1F2; font-size: 16px; }
+    .card-text { font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .card-footer { display: flex; justify-content: space-between; align-items: center; padding: 0; border-top: none; background: transparent; }
+    .btn-primary { background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); border: none; color: #fff; font-weight: 700; padding: 10px 20px; border-radius: 10px; transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0, 175, 240, 0.3); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0, 175, 240, 0.4); }
+
+    .favorite-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.95);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      z-index: 10;
+    }
+    .favorite-btn:hover { transform: scale(1.1); background: #fff; }
+    .favorite-btn i { font-size: 18px; color: #ff4757; }
+    .favorite-btn.active i { font-weight: 900; }
+
+    .empty-state { text-align: center; padding: 60px 20px; max-width: 500px; margin: 0 auto; }
+    .empty-state i { font-size: 64px; color: var(--brand-color); margin-bottom: 20px; opacity: 0.5; }
+    .empty-state h2 { color: var(--text-primary); font-weight: 700; margin-bottom: 12px; }
+    .empty-state p { color: var(--text-secondary); margin-bottom: 24px; }
+    .empty-state .btn { background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); color: white; padding: 12px 32px; border-radius: 50px; text-decoration: none; font-weight: 700; display: inline-block; transition: all 0.2s ease; }
+    .empty-state .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0, 175, 240, 0.4); }
+
+    /* Sticky bottom nav */
+    .sticky-bottom-nav{position:fixed;left:0;right:0;bottom:calc(0px + env(safe-area-inset-bottom));z-index:9999;display:flex;align-items:center;justify-content:space-between;padding:8px 16px;background:var(--bg-secondary);border-top:1px solid var(--border-color);box-shadow:0 -4px 12px rgba(0,0,0,0.06)}
+    .sticky-bottom-nav .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text-primary);text-decoration:none}
+    .sticky-bottom-nav .icon{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#00AFF0 0%,#0099D6 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,175,240,0.35);color:#fff}
+    .sticky-bottom-nav .icon i{font-size:15px}
+    .sticky-bottom-nav .label{font-size:11px;font-weight:700;color:var(--text-primary)}
+    .sticky-bottom-nav .nav-item.active .icon{background:linear-gradient(135deg,#0099D6 0%,#0088C0 100%);box-shadow:0 6px 16px rgba(0,175,240,0.5)}
+  </style>
+</head>
+<body>
+  <!-- Header (same as homepage) -->
+  <header class="superior-header">
+    <div class="header-main">
+      <div class="header-container">
+        <a href="/" class="logo-section">
+          <svg width="340" height="90" viewBox="0 0 340 90" xmlns="http://www.w3.org/2000/svg" style="height: 50px; width: auto;">
+            <defs>
+              <linearGradient id="fp-bubble-grad-wl" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#18E5FF"/>
+                <stop offset="100%" stop-color="#006BFF"/>
+              </linearGradient>
+            </defs>
+            <g transform="translate(22 20)">
+              <path d="M18 6 h40 a14 14 0 0 1 14 14 v10 a14 14 0 0 1 -14 14 h-19 l-7 9 a3 3 0 0 1 -5 -1.9 v-7.1 h-9 a12 12 0 0 1 -12 -12 v-12 a14 14 0 0 1 14 -14 z"
+                    fill="#020617"
+                    stroke="url(#fp-bubble-grad-wl)"
+                    stroke-width="2"/>
+              <path d="M38 15 l2.9 6.5 7.1 0.6 -5.4 4.4 1.7 6.9 -6.3 -3.7 -6.3 3.7 1.7 -6.9 -5.4 -4.4 7.1 -0.6 z"
+                    fill="url(#fp-bubble-grad-wl)"/>
+              <circle cx="58" cy="32" r="6.5" fill="none" stroke="#E0F2FE" stroke-width="2"/>
+              <rect x="61" y="36" width="9" height="2.6" rx="1.3"
+                    transform="rotate(35 61 36)"
+                    fill="#E0F2FE"/>
+            </g>
+            <text x="115" y="48"
+                  font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+                  font-size="36"
+                  font-weight="900"
+                  fill="#FFFFFF"
+                  style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));">
+              Fans<tspan dx="1" fill="#FFFFFF">Pedia</tspan>
+            </text>
+            <text x="117" y="68"
+                  font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+                  font-size="17"
+                  font-weight="600"
+                  letter-spacing="0.02em"
+                  fill="#000000"
+                  style="filter: drop-shadow(0 1px 2px rgba(255,255,255,0.3));">
+              Smart OnlyFans Search
+            </text>
+          </svg>
+        </a>
+        <div class="desktop-nav">
+          <a href="/categories/" class="nav-btn">
+            Categories <i class="fas fa-th"></i>
+          </a>
+        </div>
+        <div class="header-search-section">
+          <div class="header-search-wrapper">
+            <i class="fas fa-search header-search-icon"></i>
+            <input id="headerSearch" type="text" class="header-search-input" placeholder="Search creators..." />
+          </div>
+        </div>
+        <div class="header-actions">
+          <button class="mobile-search-trigger" id="mobileSearchTrigger">
+            <i class="fas fa-search"></i>
+          </button>
+          <button class="theme-toggle" id="themeToggle">
+            <i class="fas fa-sun"></i>
+          </button>
+          <button class="mobile-menu-toggle" id="mobileMenuToggle">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Wishlist hero -->
+  <div class="wishlist-hero">
+    <h1><i class="fas fa-heart"></i> My Wishlist</h1>
+    <p>Your saved OnlyFans creators. Click the heart to remove from wishlist.</p>
+  </div>
+
+  <!-- Wishlist results -->
+  <div class="container-fluid">
+    <div id="wishlistResults" class="row g-3 justify-content-center"></div>
+    <div id="emptyState" class="empty-state" style="display: none;">
+      <i class="far fa-heart"></i>
+      <h2>Your wishlist is empty</h2>
+      <p>Start adding your favorite creators by clicking the heart icon on their profile cards.</p>
+      <a href="/" class="btn">Browse Creators</a>
+    </div>
+  </div>
+
+  <!-- Sticky bottom nav -->
+  <nav class="sticky-bottom-nav" role="navigation">
+    <a href="/" class="nav-item" data-nav="search">
+      <span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+      <span class="label">Search</span>
+    </a>
+    <a href="/?near=me" class="nav-item" data-nav="near">
+      <span class="icon"><i class="fa-solid fa-location-arrow"></i></span>
+      <span class="label">Near Me</span>
+    </a>
+    <a href="/?sort=best" class="nav-item" data-nav="best">
+      <span class="icon"><i class="fa-solid fa-trophy"></i></span>
+      <span class="label">Best</span>
+    </a>
+    <a href="/?sort=hot" class="nav-item" data-nav="hot">
+      <span class="icon"><i class="fa-solid fa-fire"></i></span>
+      <span class="label">Hot!</span>
+    </a>
+    <a href="/wishlist/" class="nav-item active" data-nav="wishlist">
+      <span class="icon"><i class="fa-solid fa-heart"></i></span>
+      <span class="label">Wishlist</span>
+    </a>
+  </nav>
+
+  <script type="module">
+    // Theme management
+    const theme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+    const themeIcon = document.querySelector('#themeToggle i');
+    if (themeIcon) themeIcon.className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+
+    document.getElementById('themeToggle')?.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      const newTheme = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      if (themeIcon) themeIcon.className = newTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+    });
+
+    // Header search redirect
+    document.getElementById('headerSearch')?.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        const q = e.target.value.trim();
+        if (q) window.location.href = `/?q=${encodeURIComponent(q)}`;
+      }
+    });
+
+    // Load and render wishlist
+    let favorites = [];
+    try {
+      const saved = localStorage.getItem('favorites');
+      if (saved) favorites = JSON.parse(saved);
+    } catch (e) {
+      console.error('Failed to parse favorites:', e);
+    }
+
+    const resultsContainer = document.getElementById('wishlistResults');
+    const emptyState = document.getElementById('emptyState');
+
+    if (favorites.length === 0) {
+      emptyState.style.display = 'block';
+    } else {
+      // Fetch creator data from API
+      const fetchCreators = async () => {
+        try {
+          // Fetch all favorited creators
+          const promises = favorites.map(id => 
+            fetch(`/api/search?q=&page=1&page_size=1000`)
+              .then(r => r.json())
+              .then(data => data.find(c => String(c.id) === String(id)))
+          );
+          
+          const creators = (await Promise.all(promises)).filter(Boolean);
+          
+          if (creators.length === 0) {
+            emptyState.style.display = 'block';
+            return;
+          }
+
+          creators.forEach((creator, index) => {
+            const card = document.createElement('div');
+            card.className = 'col-6 col-sm-6 col-md-4 col-lg-3 col-xl-2';
+            
+            const avatar = creator.avatar || '/static/no-image.png';
+            const price = parseFloat(creator.subscribeprice) || 0;
+            const priceLabel = price === 0 ? 'FREE' : `$${price}`;
+            
+            card.innerHTML = `
+              <div class="card" data-id="${creator.id}">
+                <button class="favorite-btn active" data-id="${creator.id}" aria-label="Remove from wishlist">
+                  <i class="fas fa-heart"></i>
+                </button>
+                <img src="https://images.weserv.nl/?url=${encodeURIComponent(avatar)}&w=320&h=427&fit=cover&output=webp&q=85" 
+                     alt="${creator.name || creator.username}" 
+                     loading="${index === 0 ? 'eager' : 'lazy'}"
+                     ${index === 0 ? 'fetchpriority="high"' : ''}>
+                <div class="card-body">
+                  <h5 class="card-title">
+                    ${creator.name || creator.username}
+                    ${creator.isverified ? '<i class="fas fa-circle-check verified-badge"></i>' : ''}
+                  </h5>
+                  ${creator.about ? `<p class="card-text">${creator.about}</p>` : ''}
+                  <div class="card-footer">
+                    <span style="font-weight: 700; color: var(--brand-color);">${priceLabel}</span>
+                    <a href="https://onlyfans.com/${creator.username}" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+                      View Profile
+                    </a>
+                  </div>
+                </div>
+              </div>
+            `;
+            
+            resultsContainer.appendChild(card);
+          });
+
+          // Handle favorite button clicks
+          document.addEventListener('click', (e) => {
+            const btn = e.target.closest('.favorite-btn');
+            if (!btn) return;
+            
+            const id = btn.dataset.id;
+            const card = btn.closest('.col-6');
+            
+            // Remove from favorites
+            favorites = favorites.filter(f => String(f) !== String(id));
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            
+            // Remove card from DOM with animation
+            if (card) {
+              card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+              card.style.opacity = '0';
+              card.style.transform = 'scale(0.9)';
+              setTimeout(() => {
+                card.remove();
+                // Check if empty
+                if (resultsContainer.children.length === 0) {
+                  emptyState.style.display = 'block';
+                }
+              }, 300);
+            }
+          });
+          
+        } catch (error) {
+          console.error('Error fetching wishlist:', error);
+          emptyState.style.display = 'block';
+        }
+      };
+
+      fetchCreators();
+    }
+  </script>
+</body>
+</html>
