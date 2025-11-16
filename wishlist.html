@@ -665,7 +665,6 @@
 
     // ================= Wishlist Rendering (Batch + Responsive Images) =================
     function getFavorites(){ try { const raw = localStorage.getItem('favorites') || '[]'; const arr = JSON.parse(raw); return Array.isArray(arr)?arr.filter(Boolean):[]; } catch { return []; } }
-    const favorites = getFavorites();
     const resultsContainer = document.getElementById('wishlistResults');
     const emptyState = document.getElementById('emptyState');
 
@@ -683,6 +682,9 @@
     }
 
     async function renderWishlist(){
+      const favorites = getFavorites(); // Get fresh favorites each time
+      resultsContainer.innerHTML = ''; // Clear existing cards
+      emptyState.style.display = 'none'; // Reset empty state
       if(!favorites.length){ emptyState.style.display='block'; return; }
       try {
         const resp = await fetch(`/api/wishlist?users=${favorites.map(encodeURIComponent).join(',')}`);
@@ -712,7 +714,16 @@
       if(set.has(username)){ set.delete(username); active=false; } else { set.add(username); active=true; }
       try { localStorage.setItem('favorites', JSON.stringify(Array.from(set))); } catch {}
       if(btnEl){ btnEl.classList.toggle('active', active); const span = btnEl.querySelector('span'); if(span) span.textContent = active ? '♥' : '♡'; }
-      if(!active){ const wrapper = btnEl.closest('.card')?.parentElement; if(wrapper){ wrapper.style.transition='opacity .3s ease, transform .3s ease'; wrapper.style.opacity='0'; wrapper.style.transform='scale(.95)'; setTimeout(()=>{ wrapper.remove(); if(!resultsContainer.children.length) emptyState.style.display='block'; },300); } }
+      if(!active){ 
+        const wrapper = btnEl.closest('.card')?.parentElement; 
+        if(wrapper && !wrapper.dataset.removing){ 
+          wrapper.dataset.removing = 'true';
+          wrapper.style.transition='opacity .3s ease, transform .3s ease'; 
+          wrapper.style.opacity='0'; 
+          wrapper.style.transform='scale(.95)'; 
+          setTimeout(()=>{ renderWishlist(); },300); 
+        } 
+      }
     }
   </script>
 </body>
