@@ -2223,11 +2223,11 @@
           col.className = "col-sm-6 col-md-4 col-lg-3 mb-4";
           const safeUsername = String(username).replace(/'/g, "\\'");
           const favSet = getFavoritesSet();
-          const favActive = item.id && favSet.has(String(item.id));
+          const favActive = username !== "—" && favSet.has(username);
           const favChar = favActive ? '♥' : '♡';
           col.innerHTML = `
             <div class="card h-100">
-              <button class="favorite-btn ${favActive ? 'active' : ''}" data-id="${item.id}" data-username="${safeUsername}" onclick="event.preventDefault(); toggleFavorite('${item.id}', this);">
+              <button class="favorite-btn ${favActive ? 'active' : ''}" data-username="${safeUsername}" onclick="event.preventDefault(); toggleFavorite('${safeUsername}', this);">
                 <span>${favChar}</span>
               </button>
               <img src="${responsive.src}" 
@@ -2354,7 +2354,6 @@
   // Render on load
   renderRecentSearches();
   renderFavoritesBar();
-  updateWishlistCounter();
 
     // Favorites management (persist in localStorage)
     function getFavoritesSet() {
@@ -2367,13 +2366,12 @@
     function saveFavoritesSet(set) {
       try { localStorage.setItem('favorites', JSON.stringify(Array.from(set))); } catch {}
     }
-    function toggleFavorite(creatorId, btnEl) {
-      if (!creatorId) return;
+    function toggleFavorite(username, btnEl) {
+      if (!username) return;
       const set = getFavoritesSet();
-        const idStr = String(creatorId);
       let active;
-      if (set.has(idStr)) { set.delete(idStr); active = false; }
-      else { set.add(idStr); active = true; }
+      if (set.has(username)) { set.delete(username); active = false; }
+      else { set.add(username); active = true; }
       saveFavoritesSet(set);
       // reflect state in UI
       if (btnEl) {
@@ -2381,35 +2379,17 @@
         const s = btnEl.querySelector('span');
         if (s) s.textContent = active ? '♥' : '♡';
       }
-      updateFavoriteButtons(creatorId, active);
-      updateWishlistCounter();
+      updateFavoriteButtons(username, active);
       renderFavoritesBar();
     }
     window.toggleFavorite = toggleFavorite;
 
-    function updateFavoriteButtons(creatorId, active) {
+    function updateFavoriteButtons(username, active) {
       try {
-        const idStr = String(creatorId);
-        const buttons = document.querySelectorAll(`.favorite-btn[data-id="${CSS.escape(idStr)}"]`);
+        const buttons = document.querySelectorAll(`.favorite-btn[data-username="${CSS.escape(username)}"]`);
         buttons.forEach(b => {
           b.classList.toggle('active', active);
           const s = b.querySelector('span');
-
-              function updateWishlistCounter() {
-                try {
-                  const set = getFavoritesSet();
-                  const count = set.size;
-                  const badge = document.querySelector('.wishlist-count');
-                  if (badge) {
-                    if (count > 0) {
-                      badge.textContent = count > 99 ? '99+' : count;
-                      badge.style.display = 'flex';
-                    } else {
-                      badge.style.display = 'none';
-                    }
-                  }
-                } catch {}
-              }
           if (s) s.textContent = active ? '♥' : '♡';
         });
       } catch {}
@@ -3204,11 +3184,8 @@
       <span class="icon"><i class="fa-solid fa-fire"></i></span>
       <span class="label">Hot!</span>
     </a>
-    <a href="/wishlist/" class="nav-item" data-nav="wishlist">
-      <span class="icon position-relative">
-        <i class="fa-solid fa-heart"></i>
-        <span class="wishlist-count" style="display:none;">0</span>
-      </span>
+    <a href="#wishlist" class="nav-item" data-nav="wishlist">
+      <span class="icon"><i class="fa-solid fa-heart"></i></span>
       <span class="label">Wishlist</span>
     </a>
   </nav>
@@ -3218,7 +3195,6 @@
     .sticky-bottom-nav .icon{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#00AFF0 0%,#0099D6 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,175,240,0.35);color:#fff}
     .sticky-bottom-nav .icon i{font-size:15px}
     .sticky-bottom-nav .label{font-size:11px;font-weight:700;color:var(--text-primary)}
-    .wishlist-count{position:absolute;top:-6px;right:-6px;background:#ff3b30;color:#fff;font-size:10px;font-weight:700;border-radius:10px;min-width:18px;height:18px;display:flex;align-items:center;justify-content:center;padding:0 5px;border:2px solid var(--bg-secondary);box-shadow:0 2px 8px rgba(255,59,48,0.4)}
   </style>
   <script>
     (function(){try{var p=location.pathname;document.querySelectorAll('.sticky-bottom-nav .nav-item').forEach(function(a){var k=a.getAttribute('data-nav');if((k==='search'&&(p==='/'||p==='/index.html'))||(k==='categories'&&p.startsWith('/categories'))){a.classList.add('active');}});
