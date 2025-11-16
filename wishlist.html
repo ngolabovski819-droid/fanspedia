@@ -255,7 +255,8 @@
     .mobile-search-suggestion i { color:#00AFF0; font-size:16px; }
 
     /* Clear All Button */
-    .clear-all-btn { position:absolute; top:20px; right:20px; background:#dc3545; color:#fff; border:none; border-radius:8px; padding:10px 20px; font-weight:700; font-size:14px; cursor:pointer; transition:all .2s ease; display:flex; align-items:center; gap:8px; box-shadow:0 2px 8px rgba(220,53,69,0.3); }
+    .clear-all-btn { position:absolute; top:20px; right:20px; background:#dc3545; color:#fff; border:none; border-radius:8px; padding:10px 20px; font-weight:700; font-size:14px; cursor:pointer; transition:all .2s ease; display:none; align-items:center; gap:8px; box-shadow:0 2px 8px rgba(220,53,69,0.3); }
+    .clear-all-btn.show { display:flex; }
     .clear-all-btn:hover { background:#c82333; transform:translateY(-2px); box-shadow:0 4px 12px rgba(220,53,69,0.4); }
     .clear-all-btn i { font-size:14px; }
     @media(max-width:768px){ .clear-all-btn { position:static; margin:0 auto 16px; } .wishlist-hero { text-align:center; } }
@@ -389,7 +390,7 @@
   <div class="wishlist-hero" style="position:relative;">
     <h1><i class="fas fa-heart"></i> My Wishlist</h1>
     <p>Your saved OnlyFans creators. Click the heart to remove from wishlist.</p>
-    <button id="clearAllBtn" class="clear-all-btn" style="display:none;">
+    <button id="clearAllBtn" class="clear-all-btn">
       <i class="fas fa-trash-alt"></i> Clear All
     </button>
   </div>
@@ -723,7 +724,7 @@
       
       // Show/hide Clear All button based on wishlist count
       const clearBtn = document.getElementById('clearAllBtn');
-      if(clearBtn) clearBtn.style.display = favorites.length > 0 ? 'flex' : 'none';
+      if(clearBtn) clearBtn.classList.toggle('show', favorites.length > 0);
       
       if(!favorites.length){ emptyState.style.display='block'; return; }
       try {
