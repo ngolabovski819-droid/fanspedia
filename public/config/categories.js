@@ -121,7 +121,6 @@ export const popularCategories = [
   'big ass',
   'ebony',
   'asian',
-  'cosplay',
   'big tits',
   'redhead',
   'lesbian',
