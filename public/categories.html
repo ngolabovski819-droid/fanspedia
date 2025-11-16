@@ -1294,43 +1294,43 @@
       opacity: 0.7;
     }
   </style>
+  <!-- Anchor target for sticky nav: Wishlist -->
+  <section id="wishlist" aria-label="Wishlist" style="position: relative; top: -1px;"></section>
 
-  <!-- Sticky Bottom Navigation -->
-  <nav id="stickyBottomNav" aria-label="Primary" style="position:fixed;left:0;right:0;bottom:0;z-index:10000;background:var(--bg-secondary);border-top:1px solid var(--border-color);box-shadow:0 -4px 16px var(--card-shadow);">
-    <div style="max-width:900px;margin:0 auto;padding:6px 10px;display:flex;align-items:center;justify-content:space-between;gap:8px;">
-      <a href="/" aria-label="Home" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text-primary);text-decoration:none;font-weight:700;font-size:12px;">
-        <i class="fas fa-home" style="font-size:18px;color:#00AFF0;"></i>
-        <span>Home</span>
-      </a>
-      <a href="/categories/" aria-label="Categories" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text-primary);text-decoration:none;font-weight:700;font-size:12px;">
-        <i class="fas fa-th" style="font-size:18px;color:#00AFF0;"></i>
-        <span>Categories</span>
-      </a>
-      <button id="stickySearchBtn" type="button" aria-label="Search" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text-primary);background:none;border:none;font-weight:700;font-size:12px;cursor:pointer;">
-        <i class="fas fa-search" style="font-size:18px;color:#00AFF0;"></i>
-        <span>Search</span>
-      </button>
-      <a href="#top" aria-label="Top" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text-primary);text-decoration:none;font-weight:700;font-size:12px;">
-        <i class="fas fa-arrow-up" style="font-size:18px;color:#00AFF0;"></i>
-        <span>Top</span>
-      </a>
-    </div>
+  <nav class="sticky-bottom-nav" role="navigation" aria-label="Bottom navigation">
+    <a href="#headerSearch" class="nav-item" data-nav="search">
+      <span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+      <span class="label">Search</span>
+    </a>
+    <a href="/?near=me" class="nav-item" data-nav="near">
+      <span class="icon"><i class="fa-solid fa-location-arrow"></i></span>
+      <span class="label">Near Me</span>
+    </a>
+    <a href="/?sort=best" class="nav-item" data-nav="best">
+      <span class="icon"><i class="fa-solid fa-trophy"></i></span>
+      <span class="label">Best</span>
+    </a>
+    <a href="/?sort=hot" class="nav-item" data-nav="hot">
+      <span class="icon"><i class="fa-solid fa-fire"></i></span>
+      <span class="label">Hot!</span>
+    </a>
+    <a href="#wishlist" class="nav-item" data-nav="wishlist">
+      <span class="icon"><i class="fa-solid fa-heart"></i></span>
+      <span class="label">Wishlist</span>
+    </a>
   </nav>
-
+  <style>
+    .sticky-bottom-nav{position:fixed;left:0;right:0;bottom:calc(0px + env(safe-area-inset-bottom));z-index:9999;display:flex;align-items:center;justify-content:space-between;padding:8px 16px;background:var(--bg-secondary);border-top:1px solid var(--border-color);border-left:0;border-right:0;border-bottom:0;border-radius:0;box-shadow:0 -4px 12px rgba(0,0,0,0.06)}
+    .sticky-bottom-nav .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text-primary);text-decoration:none}
+    .sticky-bottom-nav .icon{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#00AFF0 0%,#0099D6 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,175,240,0.35);color:#fff}
+    .sticky-bottom-nav .icon i{font-size:15px}
+    .sticky-bottom-nav .label{font-size:11px;font-weight:700;color:var(--text-primary)}
+  </style>
   <script>
-    (function(){
-      const btn = document.getElementById('stickySearchBtn');
-      if (!btn) return;
-      btn.addEventListener('click', () => {
-        try {
-          const el = document.getElementById('headerSearch');
-          if (el) {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            setTimeout(() => { el.focus(); }, 250);
-          }
-        } catch(e) {}
-      });
-    })();
+    (function(){try{var p=location.pathname;document.querySelectorAll('.sticky-bottom-nav .nav-item').forEach(function(a){var k=a.getAttribute('data-nav');if((k==='search'&&(p==='/'||p==='/index.html'))||(k==='categories'&&p.startsWith('/categories'))){a.classList.add('active');}});
+      var searchLink=document.querySelector('.sticky-bottom-nav .nav-item[data-nav="search"]');
+      if(searchLink){searchLink.addEventListener('click',function(ev){ev.preventDefault();try{var inp=document.getElementById('headerSearch');window.scrollTo({top:0,behavior:'smooth'});if(inp){setTimeout(function(){inp.focus({preventScroll:true});},200);}else{location.href='/';}}catch(e){location.href='/'}});} 
+    }catch(e){}})();
   </script>
 </body>
 </html>
