@@ -6,3 +6,6 @@ __pycache__/
 *.log
 failed_*.json
 progress_*.json
+
+# Prevent public folder from interfering with vercel.json
+public/
