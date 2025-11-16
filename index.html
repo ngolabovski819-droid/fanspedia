@@ -3221,6 +3221,9 @@
       try{ if(typeof window.updateWishlistCounter==='function'){ window.updateWishlistCounter(); } }catch(_e){}
       // Keep in sync if favorites change in another tab
       window.addEventListener('storage', function(ev){ if(ev && ev.key==='favorites' && typeof window.updateWishlistCounter==='function'){ window.updateWishlistCounter(); }});
+      // Also refresh on pageshow (bfcache) and when tab becomes visible
+      window.addEventListener('pageshow', function(){ if(typeof window.updateWishlistCounter==='function'){ window.updateWishlistCounter(); }});
+      document.addEventListener('visibilitychange', function(){ if(!document.hidden && typeof window.updateWishlistCounter==='function'){ window.updateWishlistCounter(); }});
     }catch(e){}})();
   </script>
 </body>

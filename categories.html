@@ -1299,6 +1299,8 @@
       }
       updateWishlistBadge();
       window.addEventListener('storage', function(ev){ if(ev && ev.key==='favorites') updateWishlistBadge(); });
+      window.addEventListener('pageshow', function(){ updateWishlistBadge(); });
+      document.addEventListener('visibilitychange', function(){ if(!document.hidden) updateWishlistBadge(); });
     }catch(e){}})();
   </script>
 </body>

@@ -1646,6 +1646,8 @@
       }
       __updateWLBadge();
       window.addEventListener('storage', function(ev){ if(ev && ev.key==='favorites') __updateWLBadge(); });
+      window.addEventListener('pageshow', function(){ __updateWLBadge(); });
+      document.addEventListener('visibilitychange', function(){ if(!document.hidden) __updateWLBadge(); });
     }catch(e){}})();
   </script>
 </body>
