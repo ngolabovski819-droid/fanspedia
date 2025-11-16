@@ -3217,14 +3217,26 @@
     (function(){try{var p=location.pathname;document.querySelectorAll('.sticky-bottom-nav .nav-item').forEach(function(a){var k=a.getAttribute('data-nav');if((k==='search'&&(p==='/'||p==='/index.html'))||(k==='categories'&&p.startsWith('/categories'))){a.classList.add('active');}});
       var searchLink=document.querySelector('.sticky-bottom-nav .nav-item[data-nav="search"]');
       if(searchLink){searchLink.addEventListener('click',function(ev){ev.preventDefault();try{var inp=document.getElementById('headerSearch');window.scrollTo({top:0,behavior:'smooth'});if(inp){setTimeout(function(){inp.focus({preventScroll:true});},200);}else{location.href='/';}}catch(e){location.href='/'}});} 
+      // Fallback-local update to ensure badge is correct even if functions aren't ready yet
+      function __setWishlistBadgeNow(){
+        try{
+          var b=document.querySelector('.wishlist-count');
+          if(!b) return;
+          var arr=[]; try{ arr = JSON.parse(localStorage.getItem('favorites')||'[]')||[]; } catch(_e){ arr=[]; }
+          var count = (new Set(Array.isArray(arr)?arr:[])).size;
+          if(count>0){ b.textContent = count>99?'99+':String(count); b.style.display='flex'; }
+          else { b.style.display='none'; }
+        }catch(_e){}
+      }
+      __setWishlistBadgeNow();
       // Ensure wishlist badge reflects current favorites after DOM is ready
       try{ if(typeof window.updateWishlistCounter==='function'){ window.updateWishlistCounter(); } }catch(_e){}
       // Keep in sync if favorites change in another tab
-      window.addEventListener('storage', function(ev){ if(ev && ev.key==='favorites' && typeof window.updateWishlistCounter==='function'){ window.updateWishlistCounter(); }});
+      window.addEventListener('storage', function(ev){ if(ev && ev.key==='favorites'){ __setWishlistBadgeNow(); if(typeof window.updateWishlistCounter==='function'){ window.updateWishlistCounter(); } }});
       // Also refresh on pageshow (bfcache) and when tab becomes visible
-      window.addEventListener('pageshow', function(){ if(typeof window.updateWishlistCounter==='function'){ window.updateWishlistCounter(); }});
-      document.addEventListener('visibilitychange', function(){ if(!document.hidden && typeof window.updateWishlistCounter==='function'){ window.updateWishlistCounter(); }});
-      document.addEventListener('DOMContentLoaded', function(){ if(typeof window.updateWishlistCounter==='function'){ window.updateWishlistCounter(); }});
+      window.addEventListener('pageshow', function(){ __setWishlistBadgeNow(); if(typeof window.updateWishlistCounter==='function'){ window.updateWishlistCounter(); }});
+      document.addEventListener('visibilitychange', function(){ if(!document.hidden){ __setWishlistBadgeNow(); if(typeof window.updateWishlistCounter==='function'){ window.updateWishlistCounter(); } }});
+      document.addEventListener('DOMContentLoaded', function(){ __setWishlistBadgeNow(); if(typeof window.updateWishlistCounter==='function'){ window.updateWishlistCounter(); }});
     }catch(e){}})();
   </script>
 </body>
