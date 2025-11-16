@@ -284,108 +284,72 @@
       }
     });
 
-    // Load and render wishlist
-    let favorites = [];
-    try {
-      const saved = localStorage.getItem('favorites');
-      if (saved) favorites = JSON.parse(saved);
-    } catch (e) {
-      console.error('Failed to parse favorites:', e);
+    // Load and render wishlist (favorites stored as usernames)
+    function getFavorites() {
+      try {
+        const raw = localStorage.getItem('favorites') || '[]';
+        const arr = JSON.parse(raw);
+        return Array.isArray(arr) ? arr : [];
+      } catch { return []; }
     }
-
+    let favorites = getFavorites();
     const resultsContainer = document.getElementById('wishlistResults');
     const emptyState = document.getElementById('emptyState');
 
-    if (favorites.length === 0) {
+    if (!favorites.length) {
       emptyState.style.display = 'block';
     } else {
-      // Fetch creator data from API
-      const fetchCreators = async () => {
+      (async function renderWishlist(){
         try {
-          // Fetch all favorited creators
-          const promises = favorites.map(id => 
-            fetch(`/api/search?q=&page=1&page_size=1000`)
-              .then(r => r.json())
-              .then(data => data.find(c => String(c.id) === String(id)))
-          );
-          
-          const creators = (await Promise.all(promises)).filter(Boolean);
-          
-          if (creators.length === 0) {
-            emptyState.style.display = 'block';
-            return;
-          }
-
-          creators.forEach((creator, index) => {
+          for (let i=0;i<favorites.length;i++) {
+            const username = favorites[i];
+            if (!username) continue;
+            const resp = await fetch(`/api/search?q=${encodeURIComponent(username)}&page=1&page_size=12`);
+            let data = [];
+            try { data = await resp.json(); } catch {}
+            if (!Array.isArray(data) || !data.length) continue;
+            const creator = data.find(c => c.username === username) || data[0];
+            if (!creator || !creator.username) continue;
+            const img = creator.avatar || creator.avatar_c144 || '/static/no-image.png';
+            const priceNum = parseFloat(creator.subscribePrice || creator.subscribeprice);
+            const priceLabel = !isNaN(priceNum) && priceNum>0 ? `$${priceNum.toFixed(2)}` : 'FREE';
             const card = document.createElement('div');
-            card.className = 'col-6 col-sm-6 col-md-4 col-lg-3 col-xl-2';
-            
-            const avatar = creator.avatar || '/static/no-image.png';
-            const price = parseFloat(creator.subscribeprice) || 0;
-            const priceLabel = price === 0 ? 'FREE' : `$${price}`;
-            
+            card.className = 'col-sm-6 col-md-4 col-lg-3 mb-4';
+            const verifiedIcon = creator.isVerified || creator.isverified ? '✅ ' : '';
+            const safeUser = String(creator.username).replace(/'/g, "\\'");
             card.innerHTML = `
-              <div class="card" data-id="${creator.id}">
-                <button class="favorite-btn active" data-id="${creator.id}" aria-label="Remove from wishlist">
-                  <i class="fas fa-heart"></i>
-                </button>
-                <img src="https://images.weserv.nl/?url=${encodeURIComponent(avatar)}&w=320&h=427&fit=cover&output=webp&q=85" 
-                     alt="${creator.name || creator.username}" 
-                     loading="${index === 0 ? 'eager' : 'lazy'}"
-                     ${index === 0 ? 'fetchpriority="high"' : ''}>
+              <div class="card h-100" data-username="${safeUser}">
+                <button class="favorite-btn active" data-username="${safeUser}" onclick="event.preventDefault(); toggleFavoriteWishlist('${safeUser}', this);"><span>♥</span></button>
+                <img src="https://images.weserv.nl/?url=${encodeURIComponent(img)}&w=320&h=427&fit=cover&output=webp&q=85" alt="${creator.name || creator.username}" loading="${i===0?'eager':'lazy'}" ${i===0?'fetchpriority="high"':''}>
                 <div class="card-body">
-                  <h5 class="card-title">
-                    ${creator.name || creator.username}
-                    ${creator.isverified ? '<i class="fas fa-circle-check verified-badge"></i>' : ''}
-                  </h5>
-                  ${creator.about ? `<p class="card-text">${creator.about}</p>` : ''}
-                  <div class="card-footer">
-                    <span style="font-weight: 700; color: var(--brand-color);">${priceLabel}</span>
-                    <a href="https://onlyfans.com/${creator.username}" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
-                      View Profile
-                    </a>
-                  </div>
+                  <h5>${verifiedIcon}${creator.name || creator.username}</h5>
+                  <p class="username">@${creator.username}</p>
+                  ${priceLabel==='FREE'?`<p class=\"price-free\">${priceLabel}</p>`:`<p class=\"price-tag\">${priceLabel}</p>`}
+                  ${creator.about?`<p class=\"bio-snippet\">${creator.about}</p>`:''}
+                  <a href="https://onlyfans.com/${creator.username}" class="view-profile-btn" target="_blank" rel="noopener noreferrer">View Profile</a>
                 </div>
-              </div>
-            `;
-            
+              </div>`;
             resultsContainer.appendChild(card);
-          });
-
-          // Handle favorite button clicks
-          document.addEventListener('click', (e) => {
-            const btn = e.target.closest('.favorite-btn');
-            if (!btn) return;
-            
-            const id = btn.dataset.id;
-            const card = btn.closest('.col-6');
-            
-            // Remove from favorites
-            favorites = favorites.filter(f => String(f) !== String(id));
-            localStorage.setItem('favorites', JSON.stringify(favorites));
-            
-            // Remove card from DOM with animation
-            if (card) {
-              card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-              card.style.opacity = '0';
-              card.style.transform = 'scale(0.9)';
-              setTimeout(() => {
-                card.remove();
-                // Check if empty
-                if (resultsContainer.children.length === 0) {
-                  emptyState.style.display = 'block';
-                }
-              }, 300);
-            }
-          });
-          
-        } catch (error) {
-          console.error('Error fetching wishlist:', error);
-          emptyState.style.display = 'block';
+          }
+          if (!resultsContainer.children.length) emptyState.style.display='block';
+        } catch(e){
+          console.error('Wishlist render error', e); emptyState.style.display='block';
         }
-      };
+      })();
+    }
 
-      fetchCreators();
+    function toggleFavoriteWishlist(username, btnEl){
+      if(!username) return; const set = new Set(getFavorites()); let active;
+      if(set.has(username)){set.delete(username); active=false;} else {set.add(username); active=true;}
+      try{localStorage.setItem('favorites', JSON.stringify(Array.from(set)));}catch{}
+      if(btnEl){btnEl.classList.toggle('active', active); const s=btnEl.querySelector('span'); if(s) s.textContent= active?'♥':'♡';}
+      if(!active){ // remove card
+        const card = btnEl.closest('.col-sm-6, .col-md-4, .col-lg-3, .mb-4');
+        const wrapper = btnEl.closest('.card').parentElement;
+        (wrapper||card).style.transition='opacity .3s ease, transform .3s ease';
+        (wrapper||card).style.opacity='0'; (wrapper||card).style.transform='scale(.95)';
+        setTimeout(()=>{(wrapper||card).remove(); if(!resultsContainer.children.length){emptyState.style.display='block';}},300);
+      }
     }
   </script>
 </body>

@@ -2354,6 +2354,7 @@
   // Render on load
   renderRecentSearches();
   renderFavoritesBar();
+  updateWishlistCounter && updateWishlistCounter();
 
     // Favorites management (persist in localStorage)
     function getFavoritesSet() {
@@ -2381,6 +2382,7 @@
       }
       updateFavoriteButtons(username, active);
       renderFavoritesBar();
+      updateWishlistCounter && updateWishlistCounter();
     }
     window.toggleFavorite = toggleFavorite;
 
@@ -2414,6 +2416,21 @@
           <button class=\"remove\" aria-label=\"Remove\" onclick=\"event.stopPropagation(); toggleFavorite('${safe}');\">&times;</button>
         </div>`;
       }).join('');
+    }
+
+    function updateWishlistCounter() {
+      try {
+        const set = getFavoritesSet();
+        const badge = document.querySelector('.wishlist-count');
+        if (!badge) return;
+        const count = set.size;
+        if (count > 0) {
+          badge.textContent = count > 99 ? '99+' : String(count);
+          badge.style.display = 'flex';
+        } else {
+          badge.style.display = 'none';
+        }
+      } catch {}
     }
 
     // Load More Button functionality (replaces infinite scroll)
@@ -3184,8 +3201,8 @@
       <span class="icon"><i class="fa-solid fa-fire"></i></span>
       <span class="label">Hot!</span>
     </a>
-    <a href="#wishlist" class="nav-item" data-nav="wishlist">
-      <span class="icon"><i class="fa-solid fa-heart"></i></span>
+    <a href="/wishlist/" class="nav-item" data-nav="wishlist">
+      <span class="icon position-relative"><i class="fa-solid fa-heart"></i><span class="wishlist-count" style="display:none;position:absolute;top:-6px;right:-6px;background:#ff3b30;color:#fff;font-size:10px;font-weight:700;border-radius:10px;min-width:18px;height:18px;display:flex;align-items:center;justify-content:center;padding:0 5px;border:2px solid var(--bg-secondary);box-shadow:0 2px 8px rgba(255,59,48,0.4)">0</span></span>
       <span class="label">Wishlist</span>
     </a>
   </nav>
