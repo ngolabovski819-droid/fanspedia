@@ -1292,7 +1292,7 @@
           if(!badge) return;
           var raw=localStorage.getItem('favorites')||'[]';
           var arr=[]; try{arr=JSON.parse(raw)||[];}catch(_e){arr=[];}
-          var count=Array.isArray(arr)?arr.length:0;
+          var count=(function(a){ try { return (new Set(Array.isArray(a)?a:[])).size; } catch { return 0; } })(arr);
           if(count>0){ badge.textContent=(count>99?'99+':String(count)); badge.style.display='flex'; }
           else{ badge.style.display='none'; }
         }catch(_e){}

@@ -3224,6 +3224,7 @@
       // Also refresh on pageshow (bfcache) and when tab becomes visible
       window.addEventListener('pageshow', function(){ if(typeof window.updateWishlistCounter==='function'){ window.updateWishlistCounter(); }});
       document.addEventListener('visibilitychange', function(){ if(!document.hidden && typeof window.updateWishlistCounter==='function'){ window.updateWishlistCounter(); }});
+      document.addEventListener('DOMContentLoaded', function(){ if(typeof window.updateWishlistCounter==='function'){ window.updateWishlistCounter(); }});
     }catch(e){}})();
   </script>
 </body>
