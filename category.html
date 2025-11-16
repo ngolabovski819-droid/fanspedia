@@ -1645,10 +1645,22 @@
         searchLink.addEventListener('click',function(ev){
           ev.preventDefault();
           try{
-            var inp=document.getElementById('headerSearch')||document.querySelector('.header-search-input');
+            var isMobile=window.matchMedia('(max-width: 768px)').matches;
+            var headerInput=document.getElementById('headerSearch')||document.querySelector('.header-search-input');
+            var headerVisible=headerInput && headerInput.offsetParent!==null; // not display:none
+            if(isMobile && !headerVisible){
+              // Use mobile search trigger if header search hidden
+              var mobileTrigger=document.getElementById('mobileSearchTrigger');
+              if(mobileTrigger){mobileTrigger.click();return;} // its listener opens modal & focuses
+            }
             window.scrollTo({top:0,behavior:'smooth'});
-            if(inp){setTimeout(function(){inp.focus({preventScroll:true});},220);}else{location.href='/';}
-          }catch(e){location.href='/';}
+            if(headerInput && headerVisible){
+              setTimeout(function(){headerInput.focus({preventScroll:true});},220);
+            }else if(!isMobile){
+              // Desktop fallback: navigate to home for global search
+              location.href='/';
+            }
+          }catch(err){location.href='/';}
         });
       }
     }catch(e){}})();
