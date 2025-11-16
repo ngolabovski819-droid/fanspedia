@@ -275,144 +275,62 @@ try {
 
 ### Search UX Patterns
 - **Debouncing**: Header search has 300ms debounce to avoid excessive API calls
-- **Active filters**: Visual chips show current filters, removable via click
-- **Reset behavior**: "Reset filters" button clears all inputs AND re-triggers search
-- **Scroll preservation**: `lockScroll()` / `restoreScroll()` for sticky filter interactions
+# FansPedia (OnlyFans Search) — Copilot Guide
 
-## Python Scraping Patterns
+Quick links: [PATTERNS.md](./PATTERNS.md) • [CHECKLISTS.md](./CHECKLISTS.md) • [ARCHITECTURE.md](./ARCHITECTURE.md) • [QUICKSTART.md](./QUICKSTART.md) • [TROUBLESHOOTING.md](./TROUBLESHOOTING.md)
 
-### Response Interception
-All scrapers use Playwright's `page.on("response", handler)` to capture API data:
-```python
-async def handle_response(response):
-    if "/api2/v2/users/" in response.url:
-        json_data = await response.json()
-        row = extract_fields(json_data)
-        rows.append(row)
-```
+## Big Picture
+- Production codebase for fanspedia.net. Search and categories are active; creator profiles are temporarily disabled (redirects to home; API returns 410 via `api/disabled.js`).
+- Same stack as sibling repo: vanilla JS frontend, Vercel serverless backend, Supabase PostgreSQL, Python Playwright scrapers (V1 CSV, V2 direct upsert + snapshots).
 
-### Error Handling & Retries
-- **Retry pattern**: 3 attempts with exponential backoff (`wait * 2`)
-- **Failed URLs**: Appended to `failed_urls` list, written to `failed_batch.json`
-- **CSV append**: Use `open("temp.csv", "a")` to preserve data on crashes
-- **Async context**: Always `async with async_playwright()` for proper cleanup
+## Key Architecture
+- Pages: `index.html`, `categories.html`, `category.html`. Categories are the single source of truth in `config/categories.js` and must be imported with a version: `.../categories.js?v=YYYYMMDD-N`. Bump `?v=` on every change.
+- Infinite scroll uses `currentPage,isLoading,hasMore` and a “Load More” button. Images use `images.weserv.nl`, first card eager/high priority.
+- API (`api/`): `search.js` (main), `health.js`, `analytics.js`, and `disabled.js` (returns 410 for creator routes). `api/creator/[username].js` SSR exists but is not mounted in production while profiles are disabled.
+- Supabase via REST only. Headers: `apikey`, `Authorization: Bearer`, `Prefer: count=exact`. 60s Map cache in `search.js`.
+- Search splits `q` by `|` or `,` and OR‑matches across `username,name,about` (exclude `location`). Example: `q=goth|gothic|alt`.
 
-### Data Cleaning (load_csv_to_supabase.py)
-- **NaN handling**: `pandas.replace({np.nan: None})` before JSON serialization
-- **Infinity handling**: Replace `±inf` with `None` to avoid JSON errors
-- **Float→Int conversion**: Numbers like `563461.0` sent as `563461` (int type)
-- **Timestamp normalization**: Convert `+0000` → `+00:00` for PostgreSQL compatibility
-- **Column exclusions**: Use `--exclude-columns` for problematic fields (raw_json, timestamp)
+## Database Shape (essentials)
+- `onlyfans_profiles` (lowercase columns): identity, metrics, flags, bundles, and V2 tracking fields (`first_seen_at,last_seen_at,last_refreshed_at,next_refresh_at,status`).
+- `onlyfans_profile_snapshots`, `scan_progress`, `crawl_runs`, `crawl_jobs` used by V2 scrapers.
 
-## Debugging Workflows
-
-### Frontend Debugging
+## Local Dev & Debug
+- Start server and test:
 ```powershell
-# Test API directly in browser
-http://localhost:3000/api/search?q=goth&verified=true&page=1&page_size=10
-
-# Check categories cache
-# Open DevTools → Application → Local Storage → see 'theme', 'favorites'
-
-# Force refresh categories.js
-# Increment version: /config/categories.js?v=20251107-2
+npm start
+curl "http://127.0.0.1:3000/api/search?q=test&page=1&page_size=10"
 ```
-
-### Backend Debugging
-```javascript
-// api/search.js has console-friendly cache logging
-console.log('Cache hit:', cacheKey);
-console.log('Fetching:', url);
-
-// Check Supabase REST directly
-curl "${SUPABASE_URL}/rest/v1/onlyfans_profiles?select=id,username&limit=5" \
-  -H "apikey: ${SUPABASE_KEY}" \
-  -H "Authorization: Bearer ${SUPABASE_KEY}"
-```
-
-### Python Debugging
+- While profiles are disabled, requests to `/creator.html` or `/c/:id/:slug` redirect to `/` in local `server.js` (mirrors production) and `/api/creator/*` returns 410 (see `api/disabled.js`).
+- Supabase REST quick check:
 ```powershell
-# Test single profile scrape
+curl "$env:SUPABASE_URL/rest/v1/onlyfans_profiles?select=id,username&limit=5" -H "apikey: $env:SUPABASE_KEY" -H "Authorization: Bearer $env:SUPABASE_KEY"
+```
+
+## Scraping Workflows
+- V1 (CSV pipeline):
+```powershell
+python scripts/mega_onlyfans_scraper_full.py --urls urls.txt --output temp.csv --cookies cookies.json
+python scripts/load_csv_to_supabase.py --csv temp.csv --table onlyfans_profiles --batch-size 200 --upsert --on-conflict id --exclude-columns raw_json,timestamp
+```
+- V2 (direct upsert + snapshots): run migration `scripts/migrations/001_v2_snapshots_and_tracking.sql`, then:
+```powershell
+python scripts/v2_id_scanner.py --cookies cookies.json --end-id 100000 --concurrency 2 --rate 0.5
+python scripts/v2_incremental_discovery.py --cookies cookies.json --buffer-size 5000
+python scripts/v2_refresh_orchestrator.py --cookies cookies.json --batch-size 1000
+```
+
+## Deploy & Routing
+- Deploys to fanspedia.net on push to `main`. Set `SUPABASE_URL` and `SUPABASE_KEY` (service role) in Vercel.
+- Creator routes are disabled via `vercel.json` (redirects) and `api/disabled.js`. To re‑enable later, update `vercel.json`, mount `api/creator/[username].js` in `server.js`, and restore `creator.html` rewrite.
+- Category rewrites handled in `vercel.json`. Build sitemaps before deploy: `npm run build:sitemaps` (writes multiple sitemap files in repo root).
+- If rewrites are ignored in production, follow `VERCEL_FIX_INSTRUCTIONS.md` (Framework Preset “Other”, no Output Directory override, redeploy fresh).
+
+## Conventions & Gotchas
+- Do not hardcode categories; import from `config/categories.js` and bump `?v=` across `index.html`, `category.html`, `categories.html`.
+- Keep search to `username,name,about`. Use lowercase keys for PostgREST.
+- Never commit secrets/data: `.env`, `cookies.json`, `*.csv`, `failed_batch.json`, `failed_ids_v2.json`, `progress_urls.json`.
+
+## Pointers
+- Start with `api/search.js`, `config/categories.js`, and `server.js` (creator route behavior).
+- Copy patterns from PATTERNS: Supabase REST query, debounce + pagination, responsive images.
 python scripts/mega_onlyfans_from_urls.py --urls test_urls.txt --output test.csv --cookies cookies.json --limit 1
-
-# Validate CSV structure
-python scripts/verify_counts.py temp.csv
-
-# Test upload with 1 row
-python scripts/load_csv_to_supabase.py --csv temp.csv --table onlyfans_profiles --limit 1 --batch-size 1
-
-# Check failed batch details
-cat failed_batch.json | python -m json.tool
-```
-
-## SEO & Performance
-
-### Sitemap Management
-- **Command**: `npm run build:sitemaps` - generates comprehensive sitemap suite
-- **Scripts available**:
-  - `build-sitemaps.cjs` (recommended) - Fetches all creators from Supabase, chunks into 40k URL files
-  - `generate-sitemap.cjs` (legacy) - Simple category-only sitemap
-- **Update frequency**: Run after adding/removing categories or bulk creator imports
-- **Output files**: `sitemap.xml` (index), `sitemap-index.xml`, `sitemap_creators_*.xml` (chunked)
-- **URLs included**: Homepage, /categories/, category pages, creator profiles (when enabled)
-- **Priority levels**: Homepage (1.0), Categories hub (0.9), Category pages (0.8), Creator profiles (0.7)
-
-### Meta Tags Pattern
-Each page needs:
-- Canonical URL (`<link rel="canonical">`)
-- OG tags for social sharing (og:title, og:description, og:image, og:url)
-- Twitter card meta tags
-- Structured title: "[Topic] - Best OnlyFans Search Engine | FansPedia"
-- Description with keyword density (verified, free, subscription, price, search engine)
-- Google Analytics (gtag.js) with ID `G-3XB30HS12L`
-- Preconnect hints for external domains: `cdn.jsdelivr.net`, `images.weserv.nl`, `public.onlyfans.com`
-
-### Cache Headers (vercel.json)
-- **Dynamic pages**: `no-store, must-revalidate` (index.html, category.html)
-- **Static assets**: `public, max-age=86400` (robots.txt)
-- **Categories config**: `no-store` to ensure version param works
-
-## Security Notes
-- **Never commit**: `.env`, `cookies.json`, `*.csv`, `*.log`, `failed_batch.json`, `failed_ids_v2.json`, `progress_urls.json`, `onlyfans_urls.txt`
-- **Gitignore patterns**: Verify includes `node_modules/`, `__pycache__/`, `venv/`, `.venv/`, `.vercel/`, `dist/`, `build/`, all CSV/log files
-- **Supabase keys**: Use service role key (NOT anon key) for backend - broader permissions needed for upserts
-- **Python virtual environment**: Use `.venv/` for isolation - activate with `& .\.venv\Scripts\Activate.ps1` on Windows
-- **Domain**: Production DNS for `fanspedia.net` configured via Cloudflare
-- **V2 Scraper**: Rate limiting critical to avoid IP bans - use `--rate 0.5` (0.5 req/sec) for safety
-- **Session cookies**: `cookies.json` must be refreshed regularly - OnlyFans sessions expire after inactivity
-
-## Common Gotchas
-
-### ❌ Don't
-- Hardcode categories in HTML (use `config/categories.js`)
-- Use `location` column in search (causes false positives like "Gotham")
-- Forget to increment cache version after category changes
-- Use `@supabase/supabase-js` client (we use direct REST API)
-- Commit CSV files or cookies.json
-- Run V2 scrapers without migration (check with `test_v2_setup.py` first)
-- Use anon key for Supabase - V2 requires service role key for direct inserts
-- Set concurrency >3 for V2 scrapers (risks rate limiting/bans)
-
-### ✅ Do
-- Import categories with versioned URLs: `?v=20251107-1`
-- Test search with multi-term syntax: `q=goth|gothic|alt`
-- Use `--exclude-columns` for problematic timestamp fields
-- Check `failed_batch.json` after CSV uploads
-- Run sitemap generator after category changes
-- Use `--dry-run` flag when testing V2 scrapers
-- Monitor `scan_progress` table to track V2 scraper resume state
-- Check `failed_ids_v2.json` for V2 scraping errors
-
-## Additional Resources
-
-- **[PATTERNS.md](./PATTERNS.md)** - Copy-paste code examples for common patterns
-- **[CHECKLISTS.md](./CHECKLISTS.md)** - Step-by-step guides for all major tasks
-- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Design decisions and trade-offs explained
-- **[QUICKSTART.md](./QUICKSTART.md)** - Fast setup and common workflows
-- **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)** - Solutions to common errors
-- **[README.md](./README.md)** - Documentation overview and navigation
-
-**For implementing features**: Reference PATTERNS.md for reusable code
-**For debugging issues**: Check TROUBLESHOOTING.md for solutions
-**For step-by-step tasks**: Follow CHECKLISTS.md workflows
-**For understanding design**: Read ARCHITECTURE.md rationale

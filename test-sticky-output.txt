@@ -1,0 +1,30 @@
+﻿bottom sticky bar */
+    body { padding-bottom: 72px; }
+    
+    /* ============================================
+       SUPERIOR STICKY HEADER - OnlyFans Theme
+       ============================================ */
+    .superior-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
+      box-shadow: 0 4px 24px rgba(0, 175, 240, 0.25);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .superior-header.scrolled {
+      box-shadow: 0 8px 32px rgba(0, 175, 240, 0.35);
+    }
+
+    /* Main header container */
+    .header-main {
+      padding: 10px 0;
+      backdrop-filter: blur(10px);
+    }
+
+    .header-container {
+      max-width: 1400px;
+      margin: 0 

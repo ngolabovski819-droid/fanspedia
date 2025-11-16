@@ -391,7 +391,7 @@
       <p id="catSubtitle" class="subtitle">Explore top creators in this category. Use filters below to refine your results.</p>
 
       <!-- Filters (same as index) -->
-      <div class="filters-container">
+      <div id="filters" class="filters-container">
         <div class="d-flex justify-content-center align-items-center flex-wrap gap-3 filters">
           <div class="form-check form-switch">
             <input id="verified" type="checkbox" class="form-check-input me-2">
@@ -414,7 +414,9 @@
       <div id="activeFilters" class="recent-searches" aria-live="polite"></div>
 
   <!-- Favorites bar -->
-  <div id="favoritesBar" class="favorites-bar" aria-label="Favorites" aria-live="polite"></div>
+  <section id="wishlist" aria-label="Wishlist">
+    <div id="favoritesBar" class="favorites-bar" aria-label="Favorites" aria-live="polite"></div>
+  </section>
 
       <!-- Results -->
       <div id="results" class="row g-3 justify-content-center"></div>
@@ -441,6 +443,13 @@
       </section>
     </div>
   </main>
+
+  <script>
+    (function(){try{
+      var searchLink=document.querySelector('.sticky-bottom-nav .nav-item[data-nav="search"]');
+      if(searchLink){searchLink.addEventListener('click',function(ev){ev.preventDefault();try{var inp=document.getElementById('headerSearch');window.scrollTo({top:0,behavior:'smooth'});if(inp){setTimeout(function(){inp.focus({preventScroll:true});},200);}else{location.href='/';}}catch(e){location.href='/'}});}
+    }catch(e){}})();
+  </script>
 
   <script type="module">
     // ============================================
@@ -1586,7 +1595,7 @@
     }
   </style>
   <nav class="sticky-bottom-nav" role="navigation" aria-label="Bottom navigation">
-    <a href="/" class="nav-item" data-nav="search">
+    <a href="#headerSearch" class="nav-item" data-nav="search">
       <span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span>
       <span class="label">Search</span>
     </a>
@@ -1608,11 +1617,11 @@
     </a>
   </nav>
   <style>
-    .sticky-bottom-nav{position:fixed;left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom));z-index:9999;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,0.08)}
-    .sticky-bottom-nav .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--text-primary);text-decoration:none}
-    .sticky-bottom-nav .icon{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,#00AFF0 0%,#0099D6 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,175,240,0.35);color:#fff}
-    .sticky-bottom-nav .icon i{font-size:16px}
-    .sticky-bottom-nav .label{font-size:12px;font-weight:700;color:var(--text-primary)}
+    .sticky-bottom-nav{position:fixed;left:0;right:0;bottom:calc(0px + env(safe-area-inset-bottom));z-index:9999;display:flex;align-items:center;justify-content:space-between;padding:8px 16px;background:var(--bg-secondary);border-top:1px solid var(--border-color);border-left:0;border-right:0;border-bottom:0;border-radius:0;box-shadow:0 -4px 12px rgba(0,0,0,0.06)}
+    .sticky-bottom-nav .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text-primary);text-decoration:none}
+    .sticky-bottom-nav .icon{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#00AFF0 0%,#0099D6 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,175,240,0.35);color:#fff}
+    .sticky-bottom-nav .icon i{font-size:15px}
+    .sticky-bottom-nav .label{font-size:11px;font-weight:700;color:var(--text-primary)}
   </style>
   <script>
     (function(){try{var p=location.pathname;document.querySelectorAll('.sticky-bottom-nav .nav-item').forEach(function(a){var k=a.getAttribute('data-nav');if((k==='search'&&(p==='/'||p==='/index.html'))||(k==='categories'&&p.startsWith('/categories'))){a.classList.add('active');}});}catch(e){}})();
