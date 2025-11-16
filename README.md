@@ -355,3 +355,5 @@ The authors assume no liability for misuse of this software.
 ## 📞 Support
 
 For issues, questions, or contributions, please open an issue on GitHub.
+
+<!-- Deploy trigger 2025-11-16 13:13:46 -->
