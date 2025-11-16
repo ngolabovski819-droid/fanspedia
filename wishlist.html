@@ -158,7 +158,12 @@
     }
     .card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px var(--card-shadow-hover); }
     .card img { width: 100%; height: 420px; object-fit: cover; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); }
-    .card-body { padding: 16px; }
+    .card img { height: 360px; }
+    .card-body { padding: 20px; }
+    .card h5 { font-size:20px; font-weight:700; margin-bottom:4px; color: var(--text-primary); }
+    .username { color: var(--text-secondary); font-size:14px; margin-bottom:8px; }
+    .view-profile-btn { background: linear-gradient(135deg,#00AFF0 0%,#0099D6 100%); color:white; border:none; padding:14px 28px; border-radius:12px; font-weight:800; font-size:16px; cursor:pointer; transition:all .25s ease; text-decoration:none; display:block; width:100%; text-align:center; margin-top:16px; box-shadow:0 6px 18px rgba(0,175,240,0.35); }
+    .view-profile-btn:hover { background:linear-gradient(135deg,#0099D6 0%,#0088C0 100%); transform:translateY(-1px); box-shadow:0 8px 22px rgba(0,175,240,0.45); color:#fff; }
     .card-title { font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
     .verified-badge { color: #1DA1F2; font-size: 16px; }
     .card-text { font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
@@ -693,7 +698,9 @@
           const card = document.createElement('div'); card.className='col-sm-6 col-md-4 col-lg-3 mb-4';
           const verifiedIcon = (creator.isVerified || creator.isverified) ? '✅ ' : '';
           const safeUser = String(creator.username).replace(/'/g, "\\'");
-          card.innerHTML = `<div class=\"card h-100\" data-username=\"${safeUser}\">\n<button class=\"favorite-btn active\" data-username=\"${safeUser}\" onclick=\"event.preventDefault(); toggleFavoriteWishlist('${safeUser}', this);\"><span>♥</span></button>\n<img src=\"${src}\" srcset=\"${srcset}\" sizes=\"${sizes}\" alt=\"${creator.name || creator.username}\" width=\"270\" height=\"360\" style=\"aspect-ratio:3/4;\" ${i===0?'loading=\"eager\" fetchpriority=\"high\"':'loading=\"lazy\" fetchpriority=\"low\"'} decoding=\"async\" referrerpolicy=\"no-referrer\" onerror=\"if(this.src!='/static/no-image.png'){this.removeAttribute('srcset');this.removeAttribute('sizes');this.src='${img}';}\">\n<div class=\"card-body\">\n<h5>${verifiedIcon}${creator.name || creator.username}</h5>\n<p class=\"username\">@${creator.username}</p>${priceLabel==='FREE'?`<p class=\"price-free\">${priceLabel}</p>`:`<p class=\"price-tag\">${priceLabel}</p>`}${creator.about?`<p class=\"bio-snippet\">${creator.about}</p>`:''}\n<a href=\"https://onlyfans.com/${creator.username}\" class=\"view-profile-btn\" target=\"_blank\" rel=\"noopener noreferrer\">View Profile</a>\n</div></div>`;
+          const isFirst = i===0;
+          if(isFirst){ try { const link=document.createElement('link'); link.rel='preload'; link.as='image'; link.href=src; link.setAttribute('imagesrcset',srcset); link.setAttribute('imagesizes',sizes); document.head.appendChild(link); } catch{} }
+          card.innerHTML = `<div class=\"card h-100\" data-username=\"${safeUser}\">\n<button class=\"favorite-btn active\" data-username=\"${safeUser}\" onclick=\"event.preventDefault(); toggleFavoriteWishlist('${safeUser}', this);\"><span>♥</span></button>\n<img src=\"${src}\" srcset=\"${srcset}\" sizes=\"${sizes}\" alt=\"${creator.name || creator.username}\" width=\"270\" height=\"360\" style=\"aspect-ratio:3/4;\" ${isFirst?'loading=\"eager\" fetchpriority=\"high\"':'loading=\"lazy\" fetchpriority=\"low\"'} decoding=\"async\" referrerpolicy=\"no-referrer\" onerror=\"if(this.src!='/static/no-image.png'){this.removeAttribute('srcset');this.removeAttribute('sizes');this.src='${img}';}\">\n<div class=\"card-body\">\n<h5>${verifiedIcon}${creator.name || creator.username}</h5>\n<p class=\"username\">@${creator.username}</p>${priceLabel==='FREE'?`<p class=\"price-free\">${priceLabel}</p>`:`<p class=\"price-tag\">${priceLabel}</p>`}${creator.about?`<p class=\"bio-snippet\">${creator.about}</p>`:''}\n<a href=\"https://onlyfans.com/${creator.username}\" class=\"view-profile-btn\" target=\"_blank\" rel=\"noopener noreferrer\">View Profile</a>\n</div></div>`;
           resultsContainer.appendChild(card);
         });
         if(!resultsContainer.children.length) emptyState.style.display='block';
