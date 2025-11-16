@@ -13,8 +13,8 @@
       if(!badges || badges.length === 0) return;
       const text = count > 99 ? '99+' : String(count);
       badges.forEach(badge => {
-        badge.textContent = text;
         if(count > 0){
+          badge.textContent = text;
           badge.style.display = 'flex';
         } else {
           badge.style.display = 'none';

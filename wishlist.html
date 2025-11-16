@@ -713,7 +713,6 @@
       if(!username) return; const set = new Set(getFavorites()); let active;
       if(set.has(username)){ set.delete(username); active=false; } else { set.add(username); active=true; }
       try { localStorage.setItem('favorites', JSON.stringify(Array.from(set))); } catch {}
-      if(typeof window.fpUpdateWishlistBadge === 'function') window.fpUpdateWishlistBadge();
       if(btnEl){ btnEl.classList.toggle('active', active); const span = btnEl.querySelector('span'); if(span) span.textContent = active ? '♥' : '♡'; }
       if(!active){ 
         const wrapper = btnEl.closest('.card')?.parentElement; 
@@ -727,41 +726,6 @@
       }
     }
   </script>
-  <!-- Sticky Bottom Navigation -->
-  <nav class="sticky-bottom-nav" role="navigation" aria-label="Bottom navigation">
-    <a href="/#headerSearch" class="nav-item" data-nav="search">
-      <span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span>
-      <span class="label">Search</span>
-    </a>
-    <a href="/?near=me" class="nav-item" data-nav="near">
-      <span class="icon"><i class="fa-solid fa-location-arrow"></i></span>
-      <span class="label">Near Me</span>
-    </a>
-    <a href="/?sort=best" class="nav-item" data-nav="best">
-      <span class="icon"><i class="fa-solid fa-trophy"></i></span>
-      <span class="label">Best</span>
-    </a>
-    <a href="/?sort=hot" class="nav-item" data-nav="hot">
-      <span class="icon"><i class="fa-solid fa-fire"></i></span>
-      <span class="label">Hot!</span>
-    </a>
-    <a href="/wishlist/" class="nav-item active" data-nav="wishlist">
-      <span class="icon position-relative">
-        <i class="fa-solid fa-heart"></i>
-        <span class="wishlist-count" style="display:none;position:absolute;top:-6px;right:-6px;background:#ff3b30;color:#fff;font-size:10px;font-weight:700;border-radius:10px;min-width:18px;height:18px;align-items:center;justify-content:center;padding:0 5px;border:2px solid var(--bg-secondary);box-shadow:0 2px 8px rgba(255,59,48,0.4)">0</span>
-      </span>
-      <span class="label">Wishlist</span>
-    </a>
-  </nav>
-  <style>
-    .sticky-bottom-nav{position:fixed;left:0;right:0;bottom:calc(0px + env(safe-area-inset-bottom));z-index:9999;display:flex;align-items:center;justify-content:space-between;padding:8px 16px;background:var(--bg-secondary);border-top:1px solid var(--border-color);box-shadow:0 -4px 12px rgba(0,0,0,0.06)}
-    .sticky-bottom-nav .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text-primary);text-decoration:none;transition:all 0.2s ease}
-    .sticky-bottom-nav .nav-item.active .icon{background:linear-gradient(135deg,#00AFF0 0%,#0099D6 100%);box-shadow:0 4px 12px rgba(0,175,240,0.35)}
-    .sticky-bottom-nav .icon{width:32px;height:32px;border-radius:10px;background:var(--chip-bg);display:flex;align-items:center;justify-content:center;color:var(--text-primary);position:relative}
-    .sticky-bottom-nav .icon i{font-size:15px}
-    .sticky-bottom-nav .label{font-size:11px;font-weight:700;color:var(--text-primary)}
-    .position-relative{position:relative}
-  </style>
   <script src="/utils/wishlist-badge.js?v=20251116-1"></script>
 </body>
 </html>
