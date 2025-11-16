@@ -1242,5 +1242,37 @@
       opacity: 0.7;
     }
   </style>
+  <nav class="sticky-bottom-nav" role="navigation" aria-label="Bottom navigation">
+    <a href="/" class="nav-item" data-nav="search">
+      <span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+      <span class="label">Search</span>
+    </a>
+    <a href="/?near=me" class="nav-item" data-nav="near">
+      <span class="icon"><i class="fa-solid fa-location-arrow"></i></span>
+      <span class="label">Near Me</span>
+    </a>
+    <a href="/?sort=best" class="nav-item" data-nav="best">
+      <span class="icon"><i class="fa-solid fa-trophy"></i></span>
+      <span class="label">Best</span>
+    </a>
+    <a href="/?sort=hot" class="nav-item" data-nav="hot">
+      <span class="icon"><i class="fa-solid fa-fire"></i></span>
+      <span class="label">Hot!</span>
+    </a>
+    <a href="#wishlist" class="nav-item" data-nav="wishlist">
+      <span class="icon"><i class="fa-solid fa-heart"></i></span>
+      <span class="label">Wishlist</span>
+    </a>
+  </nav>
+  <style>
+    .sticky-bottom-nav{position:fixed;left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom));z-index:9999;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,0.08)}
+    .sticky-bottom-nav .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--text-primary);text-decoration:none}
+    .sticky-bottom-nav .icon{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,#00AFF0 0%,#0099D6 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,175,240,0.35);color:#fff}
+    .sticky-bottom-nav .icon i{font-size:16px}
+    .sticky-bottom-nav .label{font-size:12px;font-weight:700;color:var(--text-primary)}
+  </style>
+  <script>
+    (function(){try{var p=location.pathname;document.querySelectorAll('.sticky-bottom-nav .nav-item').forEach(function(a){var k=a.getAttribute('data-nav');if((k==='search'&&(p==='/'||p==='/index.html'))||(k==='categories'&&p.startsWith('/categories'))){a.classList.add('active');}});}catch(e){}})();
+  </script>
 </body>
 </html>
