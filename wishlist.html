@@ -850,5 +850,31 @@
     .position-relative{position:relative}
   </style>
   <script src="/utils/wishlist-badge.js?v=20251116-1"></script>
+  <script>
+    (function(){try{
+      // Enhance bottom nav search: open mobile modal if header search hidden
+      var searchLink=document.querySelector('.sticky-bottom-nav .nav-item[data-nav="search"]');
+      if(searchLink){
+        searchLink.addEventListener('click',function(ev){
+          ev.preventDefault();
+          try{
+            var isMobile=window.matchMedia('(max-width: 768px)').matches;
+            var headerInput=document.getElementById('headerSearch')||document.querySelector('.header-search-input');
+            var headerVisible=headerInput && headerInput.offsetParent!==null;
+            if(isMobile && !headerVisible){
+              var mobileTrigger=document.getElementById('mobileSearchTrigger');
+              if(mobileTrigger){mobileTrigger.click();return;}
+            }
+            window.scrollTo({top:0,behavior:'smooth'});
+            if(headerInput && headerVisible){
+              setTimeout(function(){headerInput.focus({preventScroll:true});},220);
+            }else if(!isMobile){
+              location.href='/';
+            }
+          }catch(err){location.href='/';}
+        });
+      }
+    }catch(e){}})();
+  </script>
 </body>
 </html>
