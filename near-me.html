@@ -17,11 +17,138 @@
   <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
   <style>
-    :root { --bg-primary:#f5f9fc; --bg-secondary:#ffffff; --text-primary:#0d1d29; --text-secondary:#4d5d6a; --brand:#00AFF0; --brand-d:#0099D6; --border:#d9e3eb; }
-    [data-theme="dark"] { --bg-primary:#14181b; --bg-secondary:#1f2529; --text-primary:#e6eef3; --text-secondary:#9fb1bf; --border:#2e3a42; }
-    body { margin:0; font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Ubuntu,sans-serif; background:var(--bg-primary); color:var(--text-primary); }
-    header.simple-header { padding:14px 20px; background:linear-gradient(135deg,var(--brand) 0%,var(--brand-d) 100%); color:#fff; position:sticky; top:0; z-index:1000; }
-    header .logo { font-weight:700; font-size:22px; text-decoration:none; color:#fff; }
+    :root {
+      --bg-primary: #f5f5f7;
+      --bg-secondary: #ffffff;
+      --text-primary: #1d1d1f;
+      --text-secondary: #666;
+      --text-muted: #888;
+      --border-color: #e0e0e0;
+      --card-shadow: rgba(0, 0, 0, 0.08);
+      --card-shadow-hover: rgba(0, 0, 0, 0.12);
+      --input-bg: #ffffff;
+      --chip-bg: #ffffff;
+      --chip-border: #e7eef6;
+      --chip-hover-bg: #007aff;
+      --chip-hover-text: #ffffff;
+      --brand-color: #0099D6;
+      --placeholder-color: #999;
+      --heading-color: #1d1d1f;
+      --brand:#00AFF0;
+      --brand-d:#0099D6;
+      --border:#d9e3eb;
+    }
+    [data-theme="dark"] {
+      --bg-primary: #1a1a1a;
+      --bg-secondary: #2a2a2a;
+      --text-primary: #e8e8e8;
+      --text-secondary: #c8c8c8;
+      --text-muted: #888;
+      --border-color: #404040;
+      --card-shadow: rgba(0, 0, 0, 0.3);
+      --card-shadow-hover: rgba(0, 0, 0, 0.5);
+      --input-bg: #2a2a2a;
+      --chip-bg: #2a2a2a;
+      --chip-border: #404040;
+      --chip-hover-bg: #00AFF0;
+      --chip-hover-text: #ffffff;
+      --brand-color: #00AFF0;
+      --placeholder-color: #888;
+      --heading-color: #e8e8e8;
+      --border:#2e3a42;
+    }
+    body { margin:0; padding-top:70px; font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Ubuntu,sans-serif; background:var(--bg-primary); color:var(--text-primary); }
+    
+    /* SUPERIOR STICKY HEADER */
+    .superior-header { position:fixed; top:0; left:0; right:0; z-index:9999; background:linear-gradient(135deg,#00AFF0 0%,#0099D6 100%); box-shadow:0 4px 24px rgba(0,175,240,0.25); transition:all .3s cubic-bezier(0.4,0,0.2,1); }
+    .superior-header.scrolled { box-shadow:0 8px 32px rgba(0,175,240,0.35); }
+    .header-main { padding:10px 0; backdrop-filter:blur(10px); }
+    .header-container { max-width:1400px; margin:0 auto; padding:0 16px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+    .logo-section { display:flex; align-items:center; gap:12px; flex-shrink:0; text-decoration:none; }
+    .logo-icon { width:40px; height:40px; background:#fff; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:20px; box-shadow:0 4px 12px rgba(0,0,0,0.15); transition:transform .3s ease; }
+    .logo-icon:hover { transform:scale(1.05) rotate(5deg); }
+    .logo-icon i { color:#00AFF0; }
+    .logo-text { display:flex; flex-direction:column; }
+    .logo-text .brand { font-size:22px; font-weight:900; color:#fff; letter-spacing:.3px; line-height:1; text-shadow:0 2px 4px rgba(0,0,0,0.3),0 1px 2px rgba(0,0,0,0.2); filter:brightness(1.05); }
+    .logo-text .tagline { font-size:11px; color:rgba(255,255,255,0.95); font-weight:600; letter-spacing:.8px; margin-top:2px; text-shadow:0 1px 3px rgba(0,0,0,0.2); }
+    .header-search-section { flex:1; max-width:560px; position:relative; }
+    .header-search-wrapper { position:relative; display:flex; align-items:center; }
+    .header-search-input { width:100%; padding:10px 16px 10px 44px; border:2px solid rgba(255,255,255,0.3); border-radius:50px; background:rgba(255,255,255,0.95); font-size:15px; font-weight:500; color:#1d1d1f; transition:all .3s ease; box-shadow:0 4px 16px rgba(0,0,0,0.1); }
+    .header-search-input:focus { outline:none; border-color:#fff; background:#fff; box-shadow:0 8px 32px rgba(0,0,0,0.15); transform:translateY(-1px); }
+    .header-search-input::placeholder { color:var(--placeholder-color); }
+    .header-search-icon { position:absolute; left:16px; color:#00AFF0; font-size:18px; pointer-events:none; }
+    .header-actions { display:flex; align-items:center; gap:12px; flex-shrink:0; }
+    .theme-toggle,.safe-search-toggle { background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.3); color:#fff; width:44px; height:44px; border-radius:12px; cursor:pointer; transition:all .3s ease; display:inline-flex; align-items:center; justify-content:center; font-size:20px; }
+    .theme-toggle:hover,.safe-search-toggle:hover { background:rgba(255,255,255,0.3); transform:translateY(-1px); }
+    .safe-search-toggle.active { background:rgba(52,199,89,0.9); border-color:rgba(52,199,89,1); box-shadow:0 0 20px rgba(52,199,89,0.4); }
+    .safe-search-toggle.active::after { content:''; position:absolute; top:2px; right:2px; width:10px; height:10px; background:#34c759; border:2px solid #fff; border-radius:50%; box-shadow:0 2px 8px rgba(52,199,89,0.6); }
+    .mobile-menu-toggle { display:none; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.3); color:#fff; width:44px; height:44px; border-radius:12px; cursor:pointer; transition:all .3s ease; justify-content:center; align-items:center; font-size:18px; }
+    .mobile-menu-toggle:hover { background:rgba(255,255,255,0.3); transform:translateY(-1px); }
+    .desktop-nav { position:relative; flex-shrink:0; }
+    .desktop-nav .nav-btn { display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.2); color:#fff; border:1px solid rgba(255,255,255,0.35); border-radius:9999px; padding:10px 14px; font-weight:800; font-size:14px; cursor:pointer; transition:all .2s ease; }
+    .desktop-nav .nav-btn:hover { background:rgba(255,255,255,0.3); }
+    .desktop-nav .nav-btn i { font-size:12px; opacity:0.9; }
+    .desktop-nav .dropdown-menu { position:absolute; right:0; top:calc(100% + 8px); background:#fff; border-radius:12px; box-shadow:0 12px 32px rgba(0,0,0,0.15); padding:8px; min-width:240px; display:none; z-index:10000; }
+    .desktop-nav .dropdown-menu.open { display:block; }
+    .desktop-nav .dropdown-menu a { display:block; padding:10px 12px; color:#1d1d1f; font-weight:700; border-radius:8px; text-decoration:none; transition:background .15s ease,color .15s ease; }
+    .desktop-nav .dropdown-menu a:hover { background:#f5f5f7; color:#00AFF0; }
+    .desktop-nav .dropdown-menu .divider { height:1px; background:#eee; margin:6px 6px; }
+    .desktop-nav .dropdown-menu a.view-all { color:#00AFF0; }
+    .drawer-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:10000; opacity:0; pointer-events:none; transition:opacity .3s ease; }
+    .drawer-overlay.open { opacity:1; pointer-events:auto; }
+    .mobile-drawer { position:fixed; top:0; right:-100%; width:82%; max-width:340px; height:100%; background:#fff; box-shadow:-8px 0 24px rgba(0,0,0,0.2); z-index:10001; padding:16px; display:flex; flex-direction:column; gap:6px; transition:right .3s ease; }
+    .mobile-drawer.open { right:0; }
+    .mobile-drawer .drawer-close { align-self:flex-end; background:none; border:none; font-size:28px; line-height:1; color:#1d1d1f; margin-bottom:4px; cursor:pointer; }
+    .mobile-drawer > a { display:block; padding:14px 12px; border-radius:8px; color:#1d1d1f; font-weight:700; text-decoration:none; margin:2px 0; font-size:16px; }
+    .mobile-drawer > a:hover { background:#f5f5f7; color:#00AFF0; }
+    .drawer-categories-toggle { display:flex; align-items:center; justify-content:space-between; padding:14px 12px; cursor:pointer; border-radius:8px; margin:2px 0; transition:background .2s ease; font-size:16px; font-weight:700; color:#1d1d1f; }
+    .drawer-categories-toggle:hover { background:#f5f5f7; }
+    .drawer-categories-toggle .icon-text { display:flex; align-items:center; gap:10px; }
+    .drawer-categories-toggle .icon-text i { font-size:18px; color:#1d1d1f; }
+    .drawer-categories-toggle .chevron { font-size:14px; transition:transform .3s ease; color:#666; }
+    .drawer-categories-toggle.open .chevron { transform:rotate(180deg); }
+    #drawerCategoriesSection { max-height:0; overflow:hidden; transition:max-height .3s ease,opacity .3s ease; opacity:0; }
+    #drawerCategoriesSection.open { max-height:800px; opacity:1; overflow-y:auto; }
+    .drawer-categories-label { color:#999; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.8px; padding:12px 16px 8px; margin:0; }
+    #drawerCategories { display:flex; flex-direction:column; gap:0; padding:0 4px; max-height:400px; overflow-y:auto; }
+    #drawerCategories a { display:block; padding:12px 12px; color:#555; font-weight:600; text-decoration:none; border-radius:6px; margin:1px 0; font-size:15px; transition:background .15s ease,color .15s ease; }
+    #drawerCategories a:hover { background:#f5f5f7; color:#00AFF0; }
+    .drawer-view-all-btn { display:block; margin:12px 8px 8px; padding:14px 20px; background:linear-gradient(135deg,#00AFF0 0%,#0099D6 100%); color:#fff; text-align:center; border-radius:12px; font-weight:800; text-decoration:none; font-size:15px; box-shadow:0 4px 12px rgba(0,175,240,0.3); transition:transform .2s ease,box-shadow .2s ease; }
+    .drawer-view-all-btn:hover { transform:translateY(-1px); box-shadow:0 6px 16px rgba(0,175,240,0.4); color:#fff; }
+    .mobile-search-modal { position:fixed; inset:0; background:var(--bg-secondary); z-index:10003; display:none; flex-direction:column; color:var(--text-primary); }
+    .mobile-search-modal.active { display:flex; }
+    .mobile-search-header { display:flex; align-items:center; gap:12px; padding:16px; background:linear-gradient(135deg,#00AFF0 0%,#0099D6 100%); box-shadow:0 4px 12px rgba(0,175,240,0.3); }
+    .mobile-search-back { background:none; border:none; color:#fff; font-size:24px; cursor:pointer; padding:8px; display:flex; align-items:center; justify-content:center; }
+    .mobile-search-input-wrapper { flex:1; position:relative; }
+    .mobile-search-input { width:100%; padding:12px 16px 12px 44px; border:2px solid var(--border-color); border-radius:50px; background:var(--input-bg); font-size:16px; font-weight:500; color:var(--text-primary); transition:background .25s ease,border-color .25s ease,box-shadow .25s ease; }
+    .mobile-search-input:focus { outline:none; border-color:var(--brand-color); background:var(--bg-secondary); box-shadow:0 0 0 3px rgba(0,175,240,0.25); }
+    .mobile-search-icon { position:absolute; left:16px; top:50%; transform:translateY(-50%); color:#00AFF0; font-size:18px; pointer-events:none; }
+    .mobile-search-content { flex:1; overflow-y:auto; padding:20px 16px; }
+    .mobile-search-label { color:var(--text-secondary); font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.8px; margin-bottom:12px; }
+    .mobile-search-suggestions { display:flex; flex-direction:column; gap:4px; }
+    .mobile-search-suggestion { display:flex; align-items:center; gap:12px; padding:14px 16px; background:var(--bg-primary); border-radius:12px; text-decoration:none; color:var(--text-primary); font-weight:600; font-size:15px; transition:all .2s ease; }
+    .mobile-search-suggestion:hover,.mobile-search-suggestion:active { background:var(--bg-secondary); transform:translateX(4px); }
+    .mobile-search-suggestion i { color:#00AFF0; font-size:16px; }
+    .mobile-search-trigger { display:none; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.3); color:#fff; width:44px; height:44px; border-radius:12px; cursor:pointer; justify-content:center; align-items:center; font-size:20px; transition:all .3s ease; }
+    .mobile-search-trigger:hover { background:rgba(255,255,255,0.3); transform:translateY(-1px); }
+    .safe-search-modal { position:fixed; inset:0; background:rgba(0,0,0,0.75); backdrop-filter:blur(10px); z-index:10002; display:none; align-items:center; justify-content:center; padding:20px; animation:fadeIn .3s ease; }
+    .safe-search-modal.show { display:flex; }
+    @keyframes fadeIn { from{opacity:0;}to{opacity:1;} }
+    .safe-search-modal-content { background:var(--bg-secondary); border-radius:24px; padding:40px; max-width:520px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,0.3); animation:slideUp .3s cubic-bezier(0.4,0,0.2,1); position:relative; }
+    @keyframes slideUp { from{transform:translateY(40px);opacity:0;}to{transform:translateY(0);opacity:1;} }
+    .safe-search-modal-icon { width:80px; height:80px; background:linear-gradient(135deg,#00AFF0 0%,#0099D6 100%); border-radius:20px; display:flex; align-items:center; justify-content:center; margin:0 auto 24px; font-size:36px; color:#fff; box-shadow:0 8px 24px rgba(0,175,240,0.4); }
+    .safe-search-modal h2 { font-size:28px; font-weight:800; color:var(--text-primary); margin-bottom:12px; text-align:center; }
+    .safe-search-modal p { color:var(--text-secondary); font-size:16px; line-height:1.6; text-align:center; margin-bottom:32px; }
+    .safe-search-modal-actions { display:flex; gap:12px; flex-direction:column; }
+    .safe-search-modal-btn { padding:16px 32px; border-radius:12px; font-weight:700; font-size:16px; cursor:pointer; transition:all .3s ease; border:none; text-align:center; }
+    .safe-search-modal-btn-primary { background:linear-gradient(135deg,#34c759 0%,#30b350 100%); color:#fff; box-shadow:0 6px 18px rgba(52,199,89,0.4); }
+    .safe-search-modal-btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(52,199,89,0.5); }
+    .safe-search-modal-btn-secondary { background:var(--bg-primary); color:var(--text-primary); border:2px solid var(--border-color); }
+    .safe-search-modal-btn-secondary:hover { background:var(--bg-secondary); border-color:var(--text-secondary); }
+    .safe-search-modal-footer { margin-top:24px; text-align:center; font-size:13px; color:var(--text-muted); }
+    @media (max-width:768px) { body{padding-top:66px;} .header-container{flex-wrap:nowrap;gap:12px;} .logo-text .tagline{display:none;} .header-search-section{display:none !important;} .mobile-search-trigger{display:inline-flex;} .desktop-nav{display:none;} .mobile-menu-toggle{display:inline-flex;} .header-main{padding:8px 0;} }
+    @media (max-width:480px) { body{padding-top:62px;} .logo-icon{width:40px;height:40px;font-size:20px;} .logo-text .brand{font-size:16px;} .header-main{padding:6px 0;} }
+    
     main { max-width:1140px; margin:0 auto; padding:48px 24px 64px; }
 
     .hero { text-align:center; padding:16px 0 40px; }
@@ -103,9 +230,88 @@
   </style>
 </head>
 <body>
-  <header class="simple-header">
-    <a href="/" class="logo" aria-label="FansPedia Home">FansPedia</a>
+  <!-- SUPERIOR STICKY HEADER -->
+  <header class="superior-header" id="mainHeader">
+    <div class="header-main">
+      <div class="header-container">
+        <!-- Logo -->
+        <a href="/" class="logo-section">
+          <svg width="140" height="42" viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+            <g transform="translate(10,8)">
+              <path d="M48 4 C31 4 18 17.5 18 34.5 C18 48.5 30.1 62.9 42.4 79.1 C45.0 82.7 51.0 82.7 53.6 79.1 C65.9 62.9 78 48.5 78 34.5 C78 17.5 65 4 48 4 Z" fill="#FFFFFF"/>
+              <text x="48" y="40" text-anchor="middle" dominant-baseline="middle" font-family="Poppins, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="34" font-weight="700" fill="#000000">F</text>
+            </g>
+            <text x="115" y="64" font-family="Poppins, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="40" font-weight="500" fill="#FFFFFF">FansPedia</text>
+          </svg>
+        </a>
+        <!-- Desktop categories -->
+        <div class="desktop-nav">
+          <button id="categoriesToggle" class="nav-btn" aria-haspopup="true" aria-expanded="false">Categories <i class="fas fa-chevron-down" aria-hidden="true"></i></button>
+          <div id="categoriesMenu" class="dropdown-menu" role="menu" aria-hidden="true"></div>
+        </div>
+        <!-- Search -->
+        <div class="header-search-section">
+          <div class="header-search-wrapper">
+            <i class="fas fa-search header-search-icon"></i>
+            <input type="text" class="header-search-input" placeholder="Search by name, location, category..." id="headerSearch" autocomplete="off" autocapitalize="none" spellcheck="false">
+          </div>
+        </div>
+        <!-- Actions -->
+        <div class="header-actions">
+          <button class="mobile-search-trigger" id="mobileSearchTrigger" aria-label="Search"><i class="fas fa-search"></i></button>
+          <button class="safe-search-toggle" id="safeSearchToggle" aria-label="Toggle Safe Search (blur images)" title="Safe Search: Browse comfortably in public"><i class="fas fa-eye-slash"></i></button>
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><i class="fas fa-moon"></i></button>
+          <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
+        </div>
+      </div>
+    </div>
   </header>
+  
+  <!-- Mobile Search Modal -->
+  <div class="mobile-search-modal" id="mobileSearchModal">
+    <div class="mobile-search-header">
+      <button class="mobile-search-back" id="mobileSearchBack" aria-label="Close search"><i class="fas fa-arrow-left"></i></button>
+      <div class="mobile-search-input-wrapper">
+        <i class="fas fa-search mobile-search-icon"></i>
+        <input type="text" class="mobile-search-input" id="mobileSearchInput" placeholder="Search by name, location, category..." autocomplete="off" autocapitalize="none" spellcheck="false">
+      </div>
+    </div>
+    <div class="mobile-search-content">
+      <div class="mobile-search-label">POPULAR SEARCHES</div>
+      <div class="mobile-search-suggestions" id="mobileSearchSuggestions"></div>
+    </div>
+  </div>
+  
+  <!-- Safe Search Modal -->
+  <div id="safeSearchModal" class="safe-search-modal" role="dialog" aria-labelledby="safeSearchModalTitle" aria-modal="true">
+    <div class="safe-search-modal-content">
+      <div class="safe-search-modal-icon"><i class="fas fa-shield-alt"></i></div>
+      <h2 id="safeSearchModalTitle">Browse Safely in Public?</h2>
+      <p>Enable <strong>Safe Search</strong> to blur images so you can comfortably browse at work, on the bus, or anywhere public. You can toggle this anytime using the shield icon in the header.</p>
+      <div class="safe-search-modal-actions">
+        <button class="safe-search-modal-btn safe-search-modal-btn-primary" id="enableSafeSearch"><i class="fas fa-shield-alt"></i> Enable Safe Search</button>
+        <button class="safe-search-modal-btn safe-search-modal-btn-secondary" id="dismissSafeSearch">No Thanks, I'm in Private</button>
+      </div>
+      <div class="safe-search-modal-footer">You can change this setting anytime by clicking the <i class="fas fa-eye-slash"></i> icon in the header</div>
+    </div>
+  </div>
+  
+  <!-- Mobile Drawer -->
+  <div id="drawerOverlay" class="drawer-overlay" tabindex="-1" aria-hidden="true"></div>
+  <nav id="mobileDrawer" class="mobile-drawer" aria-hidden="true" aria-labelledby="mobileMenuToggle">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">×</button>
+    <a href="/">Home</a>
+    <div class="drawer-categories-toggle" id="drawerCategoriesToggle">
+      <div class="icon-text"><i class="fas fa-th"></i><span>Categories</span></div>
+      <i class="fas fa-chevron-down chevron"></i>
+    </div>
+    <div id="drawerCategoriesSection">
+      <div class="drawer-categories-label">MOST POPULAR CATEGORIES</div>
+      <div id="drawerCategories"></div>
+      <a href="/categories/" class="drawer-view-all-btn">View All Categories</a>
+    </div>
+  </nav>
+  
   <main>
     <section class="hero" aria-labelledby="heroTitle">
       <h1 id="heroTitle">OnlyFans Nearby: Find & Connect With Local Creators</h1>
@@ -149,6 +355,231 @@
   </div>
 
   <script type="module">
+    // Import categories for dropdowns
+    import { popularCategories, categoryToSlug } from '/config/categories.js?v=20251118-1';
+    
+    // Populate desktop categories dropdown
+    const catMenuEl = document.getElementById('categoriesMenu');
+    if (catMenuEl && popularCategories) {
+      const menuHTML = popularCategories.map(cat => 
+        `<a href="/categories/${categoryToSlug(cat)}/">${cat}</a>`
+      ).join('') + '<div class="divider"></div><a href="/categories/" class="view-all">View All Categories</a>';
+      catMenuEl.innerHTML = menuHTML;
+    }
+    
+    // Populate mobile drawer categories
+    const drawerCategories = document.getElementById('drawerCategories');
+    if (drawerCategories && popularCategories) {
+      const drawerHTML = popularCategories.map(cat => 
+        `<a href="/categories/${categoryToSlug(cat)}/">${cat}</a>`
+      ).join('');
+      drawerCategories.innerHTML = drawerHTML;
+    }
+    
+    // Mobile drawer categories toggle
+    const drawerCategoriesToggle = document.getElementById('drawerCategoriesToggle');
+    const drawerCategoriesSection = document.getElementById('drawerCategoriesSection');
+    if (drawerCategoriesToggle && drawerCategoriesSection) {
+      drawerCategoriesToggle.addEventListener('click', () => {
+        drawerCategoriesToggle.classList.toggle('open');
+        drawerCategoriesSection.classList.toggle('open');
+      });
+    }
+    
+    // ============================================
+    // HOMEPAGE HEADER FUNCTIONALITY
+    // ============================================
+    
+    // Dark mode toggle
+    const themeToggle = document.getElementById('themeToggle');
+    function getCurrentTheme() {
+      const savedTheme = localStorage.getItem('theme');
+      return savedTheme || 'light';
+    }
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      const icon = themeToggle.querySelector('i');
+      if (theme === 'dark') {
+        icon.className = 'fas fa-sun';
+        themeToggle.setAttribute('aria-label', 'Switch to light mode');
+      } else {
+        icon.className = 'fas fa-moon';
+        themeToggle.setAttribute('aria-label', 'Switch to dark mode');
+      }
+    }
+    function toggleTheme() {
+      const currentTheme = getCurrentTheme();
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('theme', newTheme);
+      applyTheme(newTheme);
+    }
+    applyTheme(getCurrentTheme());
+    if (themeToggle) {
+      themeToggle.addEventListener('click', toggleTheme);
+    }
+    
+    // Safe Search functionality
+    const safeSearchToggle = document.getElementById('safeSearchToggle');
+    const safeSearchModal = document.getElementById('safeSearchModal');
+    const enableSafeSearchBtn = document.getElementById('enableSafeSearch');
+    const dismissSafeSearchBtn = document.getElementById('dismissSafeSearch');
+    function getSafeSearchState() { const saved = localStorage.getItem('safeSearch'); return saved === 'true'; }
+    function hasSeenSafeSearchModal() { return localStorage.getItem('safeSearchModalShown') === 'true'; }
+    function applySafeSearch(enabled) {
+      if (enabled) {
+        document.body.classList.add('safe-search-active');
+        safeSearchToggle.classList.add('active');
+        safeSearchToggle.querySelector('i').className = 'fas fa-eye-slash';
+      } else {
+        document.body.classList.remove('safe-search-active');
+        safeSearchToggle.classList.remove('active');
+        safeSearchToggle.querySelector('i').className = 'fas fa-eye';
+      }
+      localStorage.setItem('safeSearch', enabled.toString());
+    }
+    function toggleSafeSearch() { applySafeSearch(!getSafeSearchState()); }
+    function showSafeSearchModal() {
+      if (safeSearchModal) {
+        safeSearchModal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+    function hideSafeSearchModal() {
+      if (safeSearchModal) {
+        safeSearchModal.classList.remove('show');
+        document.body.style.overflow = '';
+        localStorage.setItem('safeSearchModalShown', 'true');
+      }
+    }
+    function initSafeSearch() {
+      applySafeSearch(getSafeSearchState());
+      if (!hasSeenSafeSearchModal()) {
+        setTimeout(showSafeSearchModal, 10000);
+      }
+    }
+    if (safeSearchToggle) safeSearchToggle.addEventListener('click', toggleSafeSearch);
+    if (enableSafeSearchBtn) enableSafeSearchBtn.addEventListener('click', () => { applySafeSearch(true); hideSafeSearchModal(); });
+    if (dismissSafeSearchBtn) dismissSafeSearchBtn.addEventListener('click', () => { applySafeSearch(false); hideSafeSearchModal(); });
+    if (safeSearchModal) {
+      safeSearchModal.addEventListener('click', (e) => {
+        if (e.target === safeSearchModal) { applySafeSearch(false); hideSafeSearchModal(); }
+      });
+    }
+    document.addEventListener('keydown', (e) => {
+      if (e.altKey && e.key.toLowerCase() === 's') { e.preventDefault(); toggleSafeSearch(); }
+      if (e.key === 'Escape' && safeSearchModal && safeSearchModal.classList.contains('show')) {
+        applySafeSearch(false); hideSafeSearchModal();
+      }
+    });
+    initSafeSearch();
+    
+    // Mobile Search Modal
+    const mobileSearchModal = document.getElementById('mobileSearchModal');
+    const mobileSearchTrigger = document.getElementById('mobileSearchTrigger');
+    const mobileSearchBack = document.getElementById('mobileSearchBack');
+    const mobileSearchInput = document.getElementById('mobileSearchInput');
+    const mobileSearchSuggestions = document.getElementById('mobileSearchSuggestions');
+    const popularSearches = ['milf', 'asian', 'big tits', 'trans', 'mature', 'latina', 'big ass', 'bbw'];
+    function populateMobileSuggestions() {
+      if (mobileSearchSuggestions) {
+        const suggestionsHTML = popularSearches.map(term => 
+          `<a href="/?q=${encodeURIComponent(term)}" class="mobile-search-suggestion"><i class="fas fa-fire"></i><span>${term}</span></a>`
+        ).join('');
+        mobileSearchSuggestions.innerHTML = suggestionsHTML;
+      }
+    }
+    function openMobileSearch() {
+      if (mobileSearchModal) {
+        mobileSearchModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => { if (mobileSearchInput) mobileSearchInput.focus(); }, 100);
+      }
+    }
+    function closeMobileSearch() {
+      if (mobileSearchModal) {
+        mobileSearchModal.classList.remove('active');
+        document.body.style.overflow = '';
+        if (mobileSearchInput) mobileSearchInput.value = '';
+      }
+    }
+    if (mobileSearchTrigger) mobileSearchTrigger.addEventListener('click', openMobileSearch);
+    if (mobileSearchBack) mobileSearchBack.addEventListener('click', closeMobileSearch);
+    if (mobileSearchInput) {
+      mobileSearchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          const query = mobileSearchInput.value.trim();
+          if (query) window.location.href = `/?q=${encodeURIComponent(query)}`;
+        }
+      });
+    }
+    populateMobileSuggestions();
+    
+    // Header scroll effect
+    window.addEventListener('scroll', () => {
+      const header = document.getElementById('mainHeader');
+      if (header) {
+        if (window.pageYOffset > 50) header.classList.add('scrolled');
+        else header.classList.remove('scrolled');
+      }
+    });
+    
+    // Desktop Categories dropdown
+    const catToggle = document.getElementById('categoriesToggle');
+    // catMenuEl already declared above for population
+    if (catToggle && catMenuEl) {
+      catToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = catMenuEl.classList.toggle('open');
+        catToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        catMenuEl.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+      });
+      document.addEventListener('click', (e) => {
+        if (!catMenuEl.classList.contains('open')) return;
+        if (!catMenuEl.contains(e.target) && e.target !== catToggle) {
+          catMenuEl.classList.remove('open');
+          catToggle.setAttribute('aria-expanded', 'false');
+          catMenuEl.setAttribute('aria-hidden', 'true');
+        }
+      });
+    }
+    
+    // Mobile drawer
+    const mobileToggle = document.getElementById('mobileMenuToggle');
+    const drawer = document.getElementById('mobileDrawer');
+    const overlay = document.getElementById('drawerOverlay');
+    const drawerClose = document.getElementById('drawerClose');
+    function openDrawer(){
+      if (!drawer || !overlay) return;
+      drawer.classList.add('open'); overlay.classList.add('open');
+      drawer.setAttribute('aria-hidden','false'); overlay.setAttribute('aria-hidden','false');
+      document.body.style.overflow='hidden';
+    }
+    function closeDrawer(){
+      if (!drawer || !overlay) return;
+      drawer.classList.remove('open'); overlay.classList.remove('open');
+      drawer.setAttribute('aria-hidden','true'); overlay.setAttribute('aria-hidden','true');
+      document.body.style.overflow='';
+    }
+    if (mobileToggle) mobileToggle.addEventListener('click', (e)=>{ e.preventDefault(); openDrawer(); });
+    if (overlay) overlay.addEventListener('click', closeDrawer);
+    if (drawerClose) drawerClose.addEventListener('click', closeDrawer);
+    document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeDrawer(); });
+    
+    // Header search redirect to homepage
+    const headerSearch = document.getElementById('headerSearch');
+    if (headerSearch) {
+      headerSearch.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          const query = headerSearch.value.trim();
+          if (query) window.location.href = `/?q=${encodeURIComponent(query)}`;
+        }
+      });
+    }
+    
+    // ============================================
+    // NEAR-ME PAGE LOGIC
+    // ============================================
+    
     // Country data (Tier-1 prioritized at top)
     const tier1 = [
       ['US','United States'],['GB','United Kingdom'],['CA','Canada'],['AU','Australia'],['DE','Germany'],['FR','France'],['IT','Italy'],['ES','Spain'],['NL','Netherlands'],['SE','Sweden'],['NO','Norway'],['DK','Denmark'],['CH','Switzerland'],['AT','Austria'],['BE','Belgium'],['IE','Ireland'],['NZ','New Zealand']
