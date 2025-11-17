@@ -658,7 +658,12 @@
       if(set.has(username)){ set.delete(username); btn.classList.remove('active'); btn.querySelector('span').textContent='♡'; }
       else { set.add(username); btn.classList.add('active'); btn.querySelector('span').textContent='♥'; }
       persistFavorites(set);
+      try { if (window.fpUpdateWishlistBadge) window.fpUpdateWishlistBadge(); } catch {}
     }
+    // Expose for inline handlers and cross-script usage
+    window.getFavoritesSet = getFavoritesSet;
+    window.persistFavorites = persistFavorites;
+    window.toggleFavorite = toggleFavorite;
 
     // Responsive image sources
     function buildResponsiveSources(originalUrl){
