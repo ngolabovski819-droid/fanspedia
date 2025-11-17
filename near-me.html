@@ -665,6 +665,16 @@
     window.persistFavorites = persistFavorites;
     window.toggleFavorite = toggleFavorite;
 
+    // Ensure hearts work via event delegation (robust across dynamic cards)
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.favorite-btn');
+      if (!btn) return;
+      e.preventDefault();
+      const username = btn.getAttribute('data-username');
+      if (!username) return;
+      toggleFavorite(username, btn);
+    });
+
     // Responsive image sources
     function buildResponsiveSources(originalUrl){
       if(!originalUrl) return { src:'/static/no-image.png', srcset:'', sizes:'(max-width:600px) 50vw, 25vw' };
