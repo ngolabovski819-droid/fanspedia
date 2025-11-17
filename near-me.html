@@ -73,7 +73,7 @@
     .favorite-btn.active { background:linear-gradient(135deg,#00AFF0 0%,#0099D6 100%); box-shadow:0 6px 16px rgba(0,175,240,.35); }
     .favorite-btn.active span { color:#fff !important; }
     .card-body { padding:20px; }
-    .card h5 { font-size:20px; font-weight:700; margin:0 0 4px; }
+    .card h5 { font-size:20px; font-weight:700; margin:0 0 4px; color:var(--text-primary); }
     .username { color:var(--text-secondary); font-size:14px; margin:0 0 8px; }
     .price-free { color:#34c759; font-weight:700; font-size:16px; text-transform:uppercase; }
     .price-tag { color:#34c759; font-weight:700; font-size:18px; }
@@ -258,33 +258,62 @@
       if(!Array.isArray(data)) data=[];
       if(data.length===0){ els.resultsPlaceholder.innerHTML=`No results found.`; isLoading=false; updateLoadMore(); return; }
       // Render
-      data.forEach((item, idx)=>{
-        const img=item.avatar || item.avatar_c144 || '';
-        const responsive=buildResponsiveSources(img);
-        const name=item.name||'Unknown';
-        const username=item.username||'—';
-        const priceText=(item.subscribePrice && !isNaN(item.subscribePrice))?`$${parseFloat(item.subscribePrice).toFixed(2)}`:'FREE';
-        const verifiedIcon=item.isVerified? '✅ ' : '';
-        const bio=item.about||'';
-        const profileUrl=username!=="—" ? `https://onlyfans.com/${encodeURIComponent(username)}` : '#';
-        const favSet=getFavoritesSet();
-        const favActive=username!=='—' && favSet.has(username);
-        const favChar=favActive?'♥':'♡';
-        const isFirst=els.resultsContainer.children.length===0 && currentPage===1;
-        const safeUsername=String(username).replace(/'/g,"\\'");
-        const col=document.createElement('div');
-        col.className='col-sm-6 col-md-4 col-lg-3 mb-4';
-        col.innerHTML=`<div class="card h-100">
-          <button class="favorite-btn ${favActive?'active':''}" data-username="${safeUsername}" onclick="event.preventDefault(); toggleFavorite('${safeUsername}', this);"><span>${favChar}</span></button>
-          <img src="${responsive.src}" srcset="${responsive.srcset}" sizes="${responsive.sizes}" alt="${name}" width="270" height="360" style="aspect-ratio:3/4;" ${isFirst? 'loading="eager" fetchpriority="high"':'loading="lazy" fetchpriority="low"'} decoding="async" referrerpolicy="no-referrer" onerror="if(this.src!='/static/no-image.png'){this.removeAttribute('srcset'); this.removeAttribute('sizes'); this.src='${responsive.src}';}" />
-          <div class="card-body">
-            <h5>${verifiedIcon}${name}</h5>
-            <p class="username">@${username}</p>
-            ${priceText==='FREE'?`<p class="price-free">${priceText}</p>`:`<p class="price-tag">${priceText}</p>`}
-            ${bio?`<p class="bio-snippet">${bio}</p>`:''}
-            <a href="${profileUrl}" class="view-profile-btn" target="_blank" rel="noopener noreferrer">View Profile</a>
-          </div>
-        </div>`;
+      data.forEach((item, idx) => {
+        const img = item.avatar || item.avatar_c144 || "";
+        const imgSrc = img && img.startsWith("http") ? img : "/static/no-image.png";
+        const responsive = buildResponsiveSources(imgSrc);
+        const name = item.name || "Unknown";
+        const username = item.username || "—";
+        const priceText = (item.subscribePrice && !isNaN(item.subscribePrice)) ? `$${parseFloat(item.subscribePrice).toFixed(2)}` : "FREE";
+        const verifiedIcon = item.isVerified ? "✅ " : "";
+        const bio = item.about || "";
+        const profileUrl = username !== "—" ? `https://onlyfans.com/${encodeURIComponent(username)}` : "#";
+        const favSet = getFavoritesSet();
+        const favActive = username !== "—" && favSet.has(username);
+        const favChar = favActive ? '♥' : '♡';
+        const isFirstCard = els.resultsContainer.children.length === 0 && currentPage === 1;
+        if (isFirstCard) {
+          try {
+            const link = document.createElement('link');
+            link.rel = 'preload';
+            link.as = 'image';
+            link.href = responsive.src;
+            link.setAttribute('imagesrcset', responsive.srcset);
+            link.setAttribute('imagesizes', responsive.sizes);
+            document.head.appendChild(link);
+          } catch {}
+        }
+        const col = document.createElement("div");
+        col.className = "col-sm-6 col-md-4 col-lg-3 mb-4";
+        const safeUsername = String(username).replace(/'/g, "\\'");
+        col.innerHTML = `
+          <div class="card h-100">
+            <button class="favorite-btn ${favActive ? 'active' : ''}" data-username="${safeUsername}" onclick="event.preventDefault(); toggleFavorite('${safeUsername}', this);">
+              <span>${favChar}</span>
+            </button>
+            <img src="${responsive.src}" 
+                 srcset="${responsive.srcset}"
+                 sizes="${responsive.sizes}"
+                 alt="${name}" 
+                 width="270" 
+                 height="360"
+                 style="aspect-ratio: 3 / 4;"
+                 ${isFirstCard ? 'loading="eager" fetchpriority="high"' : 'loading="lazy" fetchpriority="low"'} decoding="async"
+                 referrerpolicy="no-referrer" 
+                 onerror="if(this.src!='/static/no-image.png'){this.removeAttribute('srcset'); this.removeAttribute('sizes'); this.src='${imgSrc}';}"
+                 onload="if(this.naturalWidth<=10||this.naturalHeight<=10){this.parentElement.parentElement.remove();}">
+            <div class="card-body">
+              <h5>${verifiedIcon}${name}</h5>
+              <p class="username">@${username}</p>
+              ${priceText === "FREE" 
+                ? `<p class="price-free">${priceText}</p>` 
+                : `<p class="price-tag">${priceText}</p>`}
+              ${bio ? `<p class="bio-snippet">${bio}</p>` : ''}
+              <a href="${profileUrl}" class="view-profile-btn" target="_blank" rel="noopener noreferrer">
+                View Profile
+              </a>
+            </div>
+          </div>`;
         els.resultsContainer.appendChild(col);
       });
       els.resultsPlaceholder.style.display='none';
