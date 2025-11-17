@@ -58,15 +58,14 @@
 
     .results-section { max-width:1120px; margin:60px auto 0; }
     .results-placeholder { text-align:center; padding:60px 20px 20px; color:var(--text-secondary); font-size:18px; }
-    .cards-grid { display:flex; flex-wrap:wrap; margin-top:20px; }
-    .cards-grid > .col { width:100%; padding:0 14px; box-sizing:border-box; }
-    @media (min-width:576px){ .cards-grid > .col { width:50%; } }
-    @media (min-width:768px){ .cards-grid > .col { width:33.333%; } }
-    @media (min-width:992px){ .cards-grid > .col { width:25%; } }
+    /* Homepage card styles */
     .card { background:var(--bg-secondary); color:var(--text-primary); border:none; border-radius:20px; transition:.3s ease; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.08); position:relative; }
     .card:hover { transform:translateY(-4px); box-shadow:0 8px 24px rgba(0,0,0,.12); }
     .card img { border-radius:20px 20px 0 0; height:360px; min-height:360px; object-fit:cover; width:100%; background:linear-gradient(90deg,#e8e8e8 25%,#f0f0f0 50%,#e8e8e8 75%); background-size:200% 100%; animation:shimmer 1.5s infinite; transition:filter .3s ease,opacity .3s ease; }
     @keyframes shimmer { 0%{background-position:200% 0;}100%{background-position:-200% 0;} }
+    body.safe-search-active .card img { filter: blur(20px) saturate(0.7); opacity:0.85; }
+    body.safe-search-active .card:hover img { filter: blur(8px) saturate(0.85); opacity:0.95; }
+    body.safe-search-active .card::before { content:'18+'; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(0,0,0,0.75); color:#fff; padding:12px 24px; border-radius:12px; font-weight:800; font-size:24px; letter-spacing:2px; pointer-events:none; z-index:5; backdrop-filter:blur(10px); border:2px solid rgba(255,255,255,0.3); }
     .favorite-btn { position:absolute; top:12px; right:12px; background:#fff; border:none; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,.15); transition:.2s ease; z-index:10; font-size:20px; }
     .favorite-btn span { color:#ccc; }
     .favorite-btn:hover { transform:scale(1.1); background:linear-gradient(135deg,#00AFF0 0%,#0099D6 100%); box-shadow:0 6px 16px rgba(0,175,240,.35); }
@@ -117,7 +116,7 @@
     </div>
     <section id="nearbyResults" class="results-section">
       <div class="results-placeholder" id="resultsPlaceholder">Select or detect a location to load nearby creators.</div>
-      <div id="resultsContainer" class="cards-grid"></div>
+      <div id="resultsContainer" class="row"></div>
       <div class="load-more-wrapper" style="display:none;" id="loadMoreWrapper">
         <button class="load-more-btn" id="loadMoreBtn">Load More</button>
       </div>
@@ -260,23 +259,29 @@
       if(data.length===0){ els.resultsPlaceholder.innerHTML=`No results found.`; isLoading=false; updateLoadMore(); return; }
       // Render
       data.forEach((item, idx)=>{
-        const img=item.avatar || item.avatar_c144 || ''; const responsive=buildResponsiveSources(img);
-        const name=item.name||'Unknown'; const username=item.username||'—';
+        const img=item.avatar || item.avatar_c144 || '';
+        const responsive=buildResponsiveSources(img);
+        const name=item.name||'Unknown';
+        const username=item.username||'—';
         const priceText=(item.subscribePrice && !isNaN(item.subscribePrice))?`$${parseFloat(item.subscribePrice).toFixed(2)}`:'FREE';
         const verifiedIcon=item.isVerified? '✅ ' : '';
         const bio=item.about||'';
-        const profileUrl=username!=='—'?`https://onlyfans.com/${encodeURIComponent(username)}`:'#';
-        const favSet=getFavoritesSet(); const favActive=username!=='—' && favSet.has(username); const favChar=favActive?'♥':'♡';
+        const profileUrl=username!=="—" ? `https://onlyfans.com/${encodeURIComponent(username)}` : '#';
+        const favSet=getFavoritesSet();
+        const favActive=username!=='—' && favSet.has(username);
+        const favChar=favActive?'♥':'♡';
         const isFirst=els.resultsContainer.children.length===0 && currentPage===1;
-        const col=document.createElement('div'); col.className='col';
+        const safeUsername=String(username).replace(/'/g,"\\'");
+        const col=document.createElement('div');
+        col.className='col-sm-6 col-md-4 col-lg-3 mb-4';
         col.innerHTML=`<div class="card h-100">
-          <button class="favorite-btn ${favActive?'active':''}" data-username="${username}" onclick="event.preventDefault(); toggleFavorite('${username}', this);"><span>${favChar}</span></button>
+          <button class="favorite-btn ${favActive?'active':''}" data-username="${safeUsername}" onclick="event.preventDefault(); toggleFavorite('${safeUsername}', this);"><span>${favChar}</span></button>
           <img src="${responsive.src}" srcset="${responsive.srcset}" sizes="${responsive.sizes}" alt="${name}" width="270" height="360" style="aspect-ratio:3/4;" ${isFirst? 'loading="eager" fetchpriority="high"':'loading="lazy" fetchpriority="low"'} decoding="async" referrerpolicy="no-referrer" onerror="if(this.src!='/static/no-image.png'){this.removeAttribute('srcset'); this.removeAttribute('sizes'); this.src='${responsive.src}';}" />
           <div class="card-body">
             <h5>${verifiedIcon}${name}</h5>
             <p class="username">@${username}</p>
-            ${priceText==='FREE'?`<p class='price-free'>FREE</p>`:`<p class='price-tag'>${priceText}</p>`}
-            ${bio?`<p class='bio-snippet'>${bio}</p>`:''}
+            ${priceText==='FREE'?`<p class="price-free">${priceText}</p>`:`<p class="price-tag">${priceText}</p>`}
+            ${bio?`<p class="bio-snippet">${bio}</p>`:''}
             <a href="${profileUrl}" class="view-profile-btn" target="_blank" rel="noopener noreferrer">View Profile</a>
           </div>
         </div>`;
