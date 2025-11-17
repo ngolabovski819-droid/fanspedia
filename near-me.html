@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OnlyFans Nearby: Find & Connect With Local Creators | FansPedia</title>
+  <meta name="description" content="Discover nearby OnlyFans creators based on your location. Browse and connect with local talent on FansPedia." />
+  <link rel="canonical" href="https://fanspedia.net/near-me/" />
+  <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg" />
+  <link rel="preconnect" href="https://images.weserv.nl" crossorigin>
+  <link rel="preconnect" href="https://nominatim.openstreetmap.org" crossorigin>
+  <link rel="preconnect" href="https://ipapi.co" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+  <style>
+    :root { --bg-primary:#f5f9fc; --bg-secondary:#ffffff; --text-primary:#0d1d29; --text-secondary:#4d5d6a; --brand:#00AFF0; --brand-d:#0099D6; --border:#d9e3eb; }
+    [data-theme="dark"] { --bg-primary:#14181b; --bg-secondary:#1f2529; --text-primary:#e6eef3; --text-secondary:#9fb1bf; --border:#2e3a42; }
+    body { margin:0; font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Ubuntu,sans-serif; background:var(--bg-primary); color:var(--text-primary); }
+    header.simple-header { padding:14px 20px; background:linear-gradient(135deg,var(--brand) 0%,var(--brand-d) 100%); color:#fff; position:sticky; top:0; z-index:1000; }
+    header .logo { font-weight:700; font-size:22px; text-decoration:none; color:#fff; }
+    main { max-width:1140px; margin:0 auto; padding:48px 24px 64px; }
+
+    .hero { text-align:center; padding:16px 0 40px; }
+    .hero h1 { font-size: clamp(2.2rem,5.5vw,3.4rem); line-height:1.1; margin:0 0 16px; font-weight:800; color:var(--brand-d); }
+    .hero h2 { font-size: clamp(1.05rem,2.4vw,1.4rem); font-weight:500; margin:0; color:var(--text-secondary); }
+
+    .location-box { background:var(--bg-secondary); border:1px solid var(--border); border-radius:20px; padding:28px 32px; max-width:640px; margin:32px auto 32px; box-shadow:0 8px 28px rgba(0,0,0,0.08); display:flex; flex-direction:column; gap:10px; }
+    .location-box-label { font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:.5px; color:var(--text-secondary); }
+    .current-location { display:flex; align-items:center; gap:12px; font-size:18px; font-weight:600; }
+    .current-location i { color:var(--brand); }
+    .location-actions { display:flex; flex-wrap:wrap; gap:18px; justify-content:center; margin-top:18px; }
+    .btn { border:none; cursor:pointer; font-size:16px; font-weight:600; padding:18px 34px; border-radius:14px; display:inline-flex; align-items:center; gap:10px; transition:.25s background,color,box-shadow,transform; }
+    .btn-primary { background:var(--brand); color:#fff; box-shadow:0 4px 18px rgba(0,175,240,.35); }
+    .btn-primary:hover { background:var(--brand-d); transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,175,240,.4); }
+    .btn-outline { background:transparent; color:var(--brand-d); border:2px solid var(--brand); }
+    .btn-outline:hover { background:var(--brand); color:#fff; }
+
+    /* Modal */
+    .modal-overlay { position:fixed; inset:0; background:rgba(13,29,41,.55); display:none; align-items:flex-start; justify-content:center; padding:60px 20px 40px; z-index:2000; overflow-y:auto; }
+    .modal-overlay.open { display:flex; }
+    .modal { background:var(--bg-secondary); width:100%; max-width:560px; border-radius:20px; box-shadow:0 12px 40px rgba(0,0,0,.25); border:1px solid var(--border); display:flex; flex-direction:column; }
+    .modal-header { padding:20px 24px 16px; background:linear-gradient(135deg,var(--brand) 0%,var(--brand-d) 100%); color:#fff; border-radius:20px 20px 0 0; position:sticky; top:0; }
+    .modal-header h3 { margin:0 0 4px; font-size:20px; font-weight:700; }
+    .modal-header p { margin:0; font-size:13px; opacity:.9; }
+    .modal-close { position:absolute; top:14px; right:16px; background:rgba(255,255,255,.2); border:none; color:#fff; width:34px; height:34px; border-radius:10px; cursor:pointer; font-size:18px; }
+    .modal-close:hover { background:rgba(255,255,255,.28); }
+
+    .country-search-wrapper { padding:14px 24px 10px; }
+    .country-search { width:100%; padding:14px 16px; font-size:15px; border:1px solid var(--border); border-radius:12px; background:#fff; }
+    [data-theme="dark"] .country-search { background:#2b3339; color:var(--text-primary); border-color:#3d4a52; }
+
+    .country-list { list-style:none; margin:0; padding:0 0 10px; }
+    .country-item { padding:14px 24px; display:flex; align-items:center; gap:18px; cursor:pointer; border-bottom:1px solid var(--border); font-weight:600; font-size:15px; }
+    .country-item:hover { background:#f2f9fc; }
+    [data-theme="dark"] .country-item:hover { background:#263036; }
+    .country-code { font-size:14px; font-weight:700; color:var(--brand-d); width:34px; }
+
+    .results-section { max-width:1120px; margin:60px auto 0; }
+    .results-placeholder { text-align:center; padding:60px 20px 80px; color:var(--text-secondary); font-size:18px; }
+
+    .loading-inline { display:inline-flex; align-items:center; gap:6px; font-size:14px; color:var(--text-secondary); }
+    .spinner { width:16px; height:16px; border:3px solid var(--border); border-top-color:var(--brand); border-radius:50%; animation:spin 1s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    @media (max-width:640px) {
+      .location-box { padding:24px 24px; margin:24px auto; }
+      .btn { width:100%; justify-content:center; }
+      .hero h1 { font-size:2.4rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="simple-header">
+    <a href="/" class="logo" aria-label="FansPedia Home">FansPedia</a>
+  </header>
+  <main>
+    <section class="hero" aria-labelledby="heroTitle">
+      <h1 id="heroTitle">OnlyFans Nearby: Find & Connect With Local Creators</h1>
+      <h2>Discover Nearby OnlyFans Talent Today</h2>
+    </section>
+    <div class="location-box" aria-live="polite">
+      <div class="location-box-label">Current Location</div>
+      <div class="current-location" id="currentLocation"><i class="fas fa-map-marker-alt"></i><span>Detecting...</span></div>
+      <div class="location-actions">
+        <button class="btn btn-primary" id="useLocationBtn"><i class="fas fa-location-arrow"></i>Use My Location</button>
+        <button class="btn btn-outline" id="changeLocationBtn"><i class="fas fa-globe"></i>Change Location</button>
+      </div>
+      <div id="locationStatus" class="loading-inline" style="display:none;"></div>
+    </div>
+    <section id="nearbyResults" class="results-section">
+      <div class="results-placeholder" id="resultsPlaceholder">Select or detect a location to load nearby creators.</div>
+      <div id="resultsContainer" class="results-container"></div>
+    </section>
+  </main>
+
+  <!-- Country selection modal -->
+  <div class="modal-overlay" id="countryModal" aria-hidden="true" role="dialog" aria-labelledby="countryModalTitle">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="countryModalTitle">Select Your Location</h3>
+        <p>Choose location to find models nearby</p>
+        <button class="modal-close" id="countryModalClose" aria-label="Close">×</button>
+      </div>
+      <div class="country-search-wrapper">
+        <input type="text" id="countrySearch" class="country-search" placeholder="Search country..." aria-label="Search country" autocomplete="off" />
+      </div>
+      <ol class="country-list" id="countryList" role="listbox" aria-label="Country list"></ol>
+    </div>
+  </div>
+
+  <script type="module">
+    // Country data (Tier-1 prioritized at top)
+    const tier1 = [
+      ['US','United States'],['GB','United Kingdom'],['CA','Canada'],['AU','Australia'],['DE','Germany'],['FR','France'],['IT','Italy'],['ES','Spain'],['NL','Netherlands'],['SE','Sweden'],['NO','Norway'],['DK','Denmark'],['CH','Switzerland'],['AT','Austria'],['BE','Belgium'],['IE','Ireland'],['NZ','New Zealand']
+    ];
+    const restCountries = [
+      ['AR','Argentina'],['BG','Bulgaria'],['BR','Brazil'],['CL','Chile'],['CN','China'],['CO','Colombia'],['CZ','Czech Republic'],['EE','Estonia'],['FI','Finland'],['GR','Greece'],['HK','Hong Kong'],['HU','Hungary'],['IN','India'],['JP','Japan'],['KR','South Korea'],['LT','Lithuania'],['LV','Latvia'],['MX','Mexico'],['MY','Malaysia'],['PH','Philippines'],['PL','Poland'],['PT','Portugal'],['RO','Romania'],['RU','Russia'],['SG','Singapore'],['SK','Slovakia'],['SI','Slovenia'],['TH','Thailand'],['TR','Turkey'],['UA','Ukraine'],['ZA','South Africa']
+    ];
+    const countries = [...tier1, ...restCountries];
+
+    const els = {
+      currentLocation: document.getElementById('currentLocation'),
+      useLocationBtn: document.getElementById('useLocationBtn'),
+      changeLocationBtn: document.getElementById('changeLocationBtn'),
+      locationStatus: document.getElementById('locationStatus'),
+      resultsPlaceholder: document.getElementById('resultsPlaceholder'),
+      resultsContainer: document.getElementById('resultsContainer'),
+      countryModal: document.getElementById('countryModal'),
+      countryModalClose: document.getElementById('countryModalClose'),
+      countryList: document.getElementById('countryList'),
+      countrySearch: document.getElementById('countrySearch')
+    };
+
+    function renderCountryList(filter='') {
+      els.countryList.innerHTML = '';
+      const normalized = filter.trim().toLowerCase();
+      const subset = countries.filter(([code,name]) => !normalized || name.toLowerCase().includes(normalized) || code.toLowerCase().includes(normalized));
+      subset.forEach(([code,name], idx) => {
+        const li = document.createElement('li');
+        li.className = 'country-item';
+        li.setAttribute('role','option');
+        li.dataset.code = code;
+        li.innerHTML = `<span class="country-code">${code}</span><span>${name}</span>`;
+        li.addEventListener('click', () => {
+          saveLocation({ countryCode: code, countryName: name });
+          closeCountryModal();
+        });
+        els.countryList.appendChild(li);
+      });
+    }
+
+    function openCountryModal() {
+      els.countryModal.classList.add('open');
+      els.countryModal.setAttribute('aria-hidden','false');
+      renderCountryList();
+      els.countrySearch.value='';
+      els.countrySearch.focus();
+    }
+    function closeCountryModal() {
+      els.countryModal.classList.remove('open');
+      els.countryModal.setAttribute('aria-hidden','true');
+    }
+
+    els.countryModalClose.addEventListener('click', closeCountryModal);
+    els.changeLocationBtn.addEventListener('click', openCountryModal);
+    els.countrySearch.addEventListener('input', (e)=> renderCountryList(e.target.value));
+
+    function saveLocation(loc) {
+      localStorage.setItem('nearMeLocation', JSON.stringify(loc));
+      updateCurrentLocationDisplay(loc);
+      fetchNearby(loc);
+    }
+
+    function updateCurrentLocationDisplay(loc) {
+      const span = els.currentLocation.querySelector('span');
+      span.textContent = loc.city ? `${loc.city}, ${loc.countryName}` : loc.countryName;
+    }
+
+    async function fetchNearby(loc) {
+      // Placeholder: In future this will query backend for creators filtered by location
+      els.resultsPlaceholder.style.display = 'block';
+      els.resultsPlaceholder.innerHTML = `<div class='loading-inline'><div class='spinner'></div>Loading creators near <strong>${loc.countryName}</strong>...</div>`;
+      els.resultsContainer.innerHTML = '';
+      // Simulate async load
+      await new Promise(r=>setTimeout(r,1200));
+      els.resultsPlaceholder.innerHTML = `No localized index yet. Showing placeholder for <strong>${loc.countryName}</strong>.`;
+    }
+
+    async function detectLocation() {
+      els.locationStatus.style.display='inline-flex';
+      els.locationStatus.innerHTML = `<div class='spinner'></div><span>Detecting location...</span>`;
+      try {
+        // Try precise geolocation first
+        const geo = await new Promise((resolve,reject)=> {
+          if(!('geolocation' in navigator)) return reject(new Error('geolocation unsupported'));
+          navigator.geolocation.getCurrentPosition(resolve, reject, { timeout:8000 });
+        });
+        const { latitude, longitude } = geo.coords;
+        const reverse = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=jsonv2`).then(r=>r.json());
+        const countryName = reverse.address?.country || 'Unknown';
+        const city = reverse.address?.city || reverse.address?.town || reverse.address?.village || reverse.address?.state || '';
+        const countryCode = reverse.address?.country_code?.toUpperCase() || '';
+        const loc = { countryCode, countryName, city };
+        saveLocation(loc);
+        els.locationStatus.style.display='none';
+      } catch (err) {
+        // Fallback: IP-based
+        try {
+          const ipData = await fetch('https://ipapi.co/json').then(r=>r.json());
+          const loc = { countryCode: ipData.country, countryName: ipData.country_name, city: ipData.city };
+          saveLocation(loc);
+        } catch (e2) {
+          updateCurrentLocationDisplay({ countryName: 'Location Unavailable' });
+        } finally {
+          els.locationStatus.style.display='none';
+        }
+      }
+    }
+
+    els.useLocationBtn.addEventListener('click', detectLocation);
+
+    // Load saved location if exists
+    const saved = localStorage.getItem('nearMeLocation');
+    if (saved) {
+      try { updateCurrentLocationDisplay(JSON.parse(saved)); } catch {}
+    } else {
+      // attempt passive detection via IP quickly (non-blocking)
+      fetch('https://ipapi.co/json').then(r=>r.json()).then(d=>{
+        const loc = { countryCode:d.country, countryName:d.country_name, city:d.city };
+        updateCurrentLocationDisplay(loc);
+      }).catch(()=>{});
+    }
+  </script>
+</body>
+</html>

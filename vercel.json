@@ -9,7 +9,9 @@
     { "source": "/categories", "destination": "/categories.html" },
     { "source": "/categories/", "destination": "/categories.html" },
     { "source": "/categories/:slug", "destination": "/category.html" },
-    { "source": "/categories/:slug/", "destination": "/category.html" }
+    { "source": "/categories/:slug/", "destination": "/category.html" },
+    { "source": "/near-me", "destination": "/near-me.html" },
+    { "source": "/near-me/", "destination": "/near-me.html" }
   ],
   "redirects": [
     { "source": "/creator.html", "destination": "/", "permanent": false },
