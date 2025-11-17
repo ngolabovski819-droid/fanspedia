@@ -60,6 +60,9 @@
     .country-code { font-size:14px; font-weight:700; color:var(--brand-d); width:34px; }
 
     .results-section { max-width:1120px; margin:60px auto 0; }
+    .results-header { text-align:center; margin-bottom:32px; }
+    .results-header h2 { font-size:clamp(1.8rem,4vw,2.4rem); font-weight:700; color:var(--brand-d); margin:0 0 8px; }
+    .results-header p { font-size:16px; color:var(--text-secondary); margin:0; }
     .results-placeholder { text-align:center; padding:60px 20px 20px; color:var(--text-secondary); font-size:18px; }
     /* Homepage card styles */
     .card { background:var(--bg-secondary); color:var(--text-primary); border:none; border-radius:20px; transition:.3s ease; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.08); position:relative; }
@@ -118,6 +121,10 @@
       <div id="locationStatus" class="loading-inline" style="display:none;"></div>
     </div>
     <section id="nearbyResults" class="results-section">
+      <div class="results-header" id="resultsHeader" style="display:none;">
+        <h2>Creators Near You</h2>
+        <p id="resultsLocation">Showing results in <strong id="resultsLocationName"></strong></p>
+      </div>
       <div class="results-placeholder" id="resultsPlaceholder">Select or detect a location to load nearby creators.</div>
       <div id="resultsContainer" class="row g-3 justify-content-center"></div>
       <div class="load-more-wrapper" style="display:none;" id="loadMoreWrapper">
@@ -260,6 +267,14 @@
       }
       if(!Array.isArray(data)) data=[];
       if(data.length===0){ els.resultsPlaceholder.innerHTML=`No results found.`; isLoading=false; updateLoadMore(); return; }
+      // Show results header with location
+      const resultsHeader = document.getElementById('resultsHeader');
+      const resultsLocationName = document.getElementById('resultsLocationName');
+      if(resultsHeader && resultsLocationName) {
+        const displayLoc = loc.city ? `${loc.city}, ${loc.countryName}` : loc.countryName;
+        resultsLocationName.textContent = displayLoc;
+        resultsHeader.style.display = 'block';
+      }
       // Render
       data.forEach((item, idx) => {
         const img = item.avatar || item.avatar_c144 || "";
