@@ -2464,33 +2464,6 @@
     })();
   </script>
 
-  <!-- Cleanup leaked SSR content -->
-  <script>
-    // Remove only text nodes (leaked script content) that appear after the footer
-    (function() {
-      window.addEventListener('DOMContentLoaded', function() {
-        setTimeout(function() {
-          const footer = document.querySelector('footer');
-          if (!footer) return;
-          
-          let sibling = footer.nextSibling;
-          while (sibling) {
-            const next = sibling.nextSibling;
-            // Only remove TEXT nodes (leaked script), keep element nodes (like section#similarCreatorsSection)
-            if (sibling.nodeType === Node.TEXT_NODE) {
-              const text = sibling.textContent.trim();
-              // Remove if it contains JavaScript code
-              if (text.length > 0 && (text.includes('function') || text.includes('var ') || text.includes('if(') || text.includes('return'))) {
-                sibling.parentNode.removeChild(sibling);
-              }
-            }
-            sibling = next;
-          }
-        }, 100);
-      });
-    })();
-  </script>
-
   <!-- Header Interaction Scripts -->
   <script>
     // ============================================
