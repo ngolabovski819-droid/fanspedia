@@ -302,10 +302,10 @@ async function renderCreatorHtmlFromOrigin(req, creator, username) {
           'if(es){try{es.innerHTML=engStats.join("");}catch(e){console.error("engagementStats error:",e);}}' +
           'var prices=[];' +
           'var subPrice=c.subscribePrice||c.subscribeprice;' +
-          'if(subPrice!==null&&subPrice!==undefined){prices.push({label:"Monthly Subscription",value:fmtPrice(subPrice),duration:"per month"});}' +
-          'if(c.promotion1_price){prices.push({label:"Promotion Offer",value:fmtPrice(c.promotion1_price),discount:(c.promotion1_discount?(c.promotion1_discount+"% OFF"):null)});}' +
+          'if(subPrice!==null&&subPrice!==undefined){var priceVal=fmtPrice(subPrice);var isFree=subPrice===0||subPrice==="0";prices.push({label:"Monthly Subscription",value:priceVal,duration:"per month",isFree:isFree});}' +
+          'if(c.promotion1_price){prices.push({label:"Promotion Offer",value:fmtPrice(c.promotion1_price),discount:(c.promotion1_discount?(c.promotion1_discount+"% OFF"):null),isFree:false});}' +
           'var pg=document.getElementById("pricingGrid");' +
-          'if(pg){if(prices.length){try{pg.innerHTML=prices.map(function(p){return"<div class=\\"price-card\\"><div class=\\"price-card-label\\">"+p.label+"</div><div class=\\"price-card-value\\">"+p.value+"</div>"+(p.duration?("<div class=\\"price-card-duration\\">"+p.duration+"</div>"):"")+(p.discount?("<div class=\\"price-card-discount\\">"+p.discount+"</div>"):"")+"</div>";}).join("");}catch(e){console.error("pricingGrid error:",e);}}else{try{pg.innerHTML="";}catch(e){}}}' +
+          'if(pg){if(prices.length){try{pg.innerHTML=prices.map(function(p){var cardClass=p.isFree?"price-card price-card-free":"price-card";return"<div class=\\""+cardClass+"\\"><div class=\\"price-card-label\\">"+p.label+"</div><div class=\\"price-card-value\\">"+(p.isFree?("<span style=\\"color:#00AFF0;\\">"+p.value+"</span>"):p.value)+"</div>"+(p.duration?("<div class=\\"price-card-duration\\">"+p.duration+"</div>"):"")+(p.discount?("<div class=\\"price-card-discount\\">"+p.discount+"</div>"):"")+"</div>";}).join("");}catch(e){console.error("pricingGrid error:",e);}}else{try{pg.innerHTML="";}catch(e){}}}' +
           'var bundles=[];' +
           'if(c.bundle1_price){bundles.push({duration:(c.bundle1_duration||"")+" months",price:fmtPrice(c.bundle1_price),discount:c.bundle1_discount?(c.bundle1_discount+"% OFF"):null});}' +
           'if(c.bundle2_price){bundles.push({duration:(c.bundle2_duration||"")+" months",price:fmtPrice(c.bundle2_price),discount:c.bundle2_discount?(c.bundle2_discount+"% OFF"):null});}' +
