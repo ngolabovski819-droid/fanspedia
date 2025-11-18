@@ -2128,7 +2128,13 @@
     }
 
     // Load on page ready
-    loadCreatorProfile();
+    // Skip if SSR already populated the page (DOMContentLoaded ensures SSR script ran first)
+    if (!window.__CREATOR_SSR__ || !window.__SSR_USERNAME__) {
+      loadCreatorProfile();
+    } else {
+      console.log('SSR data detected, skipping client-side load. Storing for similarity:', window.__CREATOR_SSR__);
+      window.currentCreator = window.__CREATOR_SSR__;
+    }
     
     // Load similar creators with smart similarity scoring
   async function loadSimilarCreators(retryCount = 0) {
