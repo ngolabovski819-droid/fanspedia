@@ -248,6 +248,17 @@ async function renderCreatorHtmlFromOrigin(req, creator, username) {
     } else {
       html = inject + html;
     }
+    // Also force-show content for SSR: hide loading, show profileContent
+    try {
+      html = html.replace(/id="loadingState"([^>]*?)>/i, (m, attrs) => {
+        if (/style=/i.test(m)) return m.replace(/style="[^"]*"/i, 'style="display:none;"');
+        return `id="loadingState"${attrs} style="display:none;">`;
+      });
+      html = html.replace(/id="profileContent"([^>]*?)>/i, (m, attrs) => {
+        if (/style=/i.test(m)) return m.replace(/style="[^"]*"/i, 'style="display:block;"');
+        return `id="profileContent"${attrs} style="display:block;">`;
+      });
+    } catch {}
     return html;
   } catch (e) {
     // Fallback to minimal SEO + redirect if template fetch fails
