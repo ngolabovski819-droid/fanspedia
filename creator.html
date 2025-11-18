@@ -1150,20 +1150,13 @@
       overflow: hidden;
     }
     
-    /* Hide any leaked SSR script text that appears as visible content after footer */
-    footer ~ * {
-      display: none !important;
-      visibility: hidden !important;
-      position: absolute !important;
-      left: -9999px !important;
-    }
     /* Ensure footer is visible and prevent overflow scroll */
     footer {
       display: block !important;
       margin-bottom: 0 !important;
       padding-bottom: 40px !important;
     }
-    /* Prevent body from showing content after footer */
+    /* Prevent body from showing horizontal overflow */
     body {
       overflow-x: hidden;
     }
@@ -2473,7 +2466,7 @@
 
   <!-- Cleanup leaked SSR content -->
   <script>
-    // Remove any text nodes that appear after the footer
+    // Remove only text nodes (leaked script content) that appear after the footer
     (function() {
       window.addEventListener('DOMContentLoaded', function() {
         setTimeout(function() {
@@ -2483,8 +2476,13 @@
           let sibling = footer.nextSibling;
           while (sibling) {
             const next = sibling.nextSibling;
-            if (sibling.nodeType === Node.TEXT_NODE || sibling.nodeType === Node.ELEMENT_NODE) {
-              sibling.parentNode.removeChild(sibling);
+            // Only remove TEXT nodes (leaked script), keep element nodes (like section#similarCreatorsSection)
+            if (sibling.nodeType === Node.TEXT_NODE) {
+              const text = sibling.textContent.trim();
+              // Remove if it contains JavaScript code
+              if (text.length > 0 && (text.includes('function') || text.includes('var ') || text.includes('if(') || text.includes('return'))) {
+                sibling.parentNode.removeChild(sibling);
+              }
             }
             sibling = next;
           }
