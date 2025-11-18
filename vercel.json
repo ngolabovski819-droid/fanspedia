@@ -6,8 +6,8 @@
     { "source": "/robots.txt", "destination": "/robots.txt" },
     { "source": "/_templates/creator", "destination": "/creator.html" },
     { "source": "/_templates/creator/", "destination": "/creator.html" },
-    { "source": "/selinacutie", "destination": "/api/creator_public/selinacutie" },
-    { "source": "/selinacutie/", "destination": "/api/creator_public/selinacutie" },
+    { "source": "/:username", "destination": "/api/creator_public/:username" },
+    { "source": "/:username/", "destination": "/api/creator_public/:username" },
     { "source": "/wishlist", "destination": "/wishlist.html" },
     { "source": "/wishlist/", "destination": "/wishlist.html" },
     { "source": "/categories", "destination": "/categories.html" },
@@ -19,8 +19,7 @@
   ],
   "redirects": [
     { "source": "/creator.html", "destination": "/", "permanent": false },
-    { "source": "/c/:id/:slug", "destination": "/", "permanent": false },
-    { "source": "/api/creator/:username", "destination": "/api/disabled", "permanent": false }
+    { "source": "/c/:id/:slug", "destination": "/", "permanent": false }
   ],
   "headers": [
     {
