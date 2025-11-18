@@ -244,6 +244,13 @@ async function renderCreatorHtmlFromOrigin(req, creator, username) {
 }
 
 export default async function handler(req, res) {
+  let buildSSRTemplate;
+  try {
+    ({ buildSSRTemplate } = await import('../creator/ssr-template.js'));
+  } catch (e) {
+    // If import fails, we'll fall back to the minimal HTML builder below
+    buildSSRTemplate = null;
+  }
   let username = req.query?.params ?? req.query?.username ?? null;
   if (Array.isArray(username)) username = username.join('/');
   if (!username && typeof req.url === 'string') {
@@ -274,10 +281,38 @@ export default async function handler(req, res) {
       return res.send(`<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Creator Not Found</title></head><body><p>Creator not found.</p></body></html>`);
     }
 
-    let html = await renderCreatorHtmlFromOrigin(req, creator, username);
+    let html = null;
+    if (buildSSRTemplate) {
+      const displayName = escapeHtml(creator.name || creator.username);
+      const usernameEsc = escapeHtml(creator.username);
+      const bioRaw = creator.about || '';
+      const bioEscaped = escapeHtml(bioRaw).replace(/&lt;br\s*\/?&gt;/gi, '<br>').replace(/\n+/g, '<br>');
+      const price = (creator.subscribePrice === 0 || creator.subscribePrice === '0' || creator.subscribePrice === null || creator.subscribePrice === undefined)
+        ? 'Free'
+        : `$${Number(creator.subscribePrice || 0)}/month`;
+      const stats = `${creator.postsCount || 0} posts • ${creator.photosCount || 0} photos • ${creator.videosCount || 0} videos`;
+      const bioPreview = (bioRaw || '').replace(/<[^>]*>/g, '').substring(0, 155);
+      const metaDesc = `${displayName} OnlyFans profile. ${stats}. Subscribe for ${price}. ${bioPreview}`;
+      const ogImage = proxyImage(creator.avatar, 1200, 630);
+      const avatarThumb = proxyImage(creator.avatar, 400, 400);
+      const canonicalUrl = `${BASE_URL}/${creator.username}`;
+      const jsonLd = generateJsonLd(creator);
+      html = buildSSRTemplate({
+        creator,
+        displayName,
+        username: usernameEsc,
+        bio: bioEscaped,
+        metaDesc,
+        ogImage,
+        avatarThumb,
+        canonicalUrl,
+        jsonLd
+      });
+    }
     if (!html) {
-      // Fallback path (still 200 + meta) if template couldn't be fetched
-      html = buildRedirectHtml(creator, username);
+      // If SSR template not available, try fetching static creator.html; if that fails, minimal redirect SEO
+      html = await renderCreatorHtmlFromOrigin(req, creator, username);
+      if (!html) html = buildRedirectHtml(creator, username);
     }
     // Set headers BEFORE sending body; send exactly once
     res.setHeader('X-SSR-Handler', 'creator-public');
