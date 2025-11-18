@@ -225,7 +225,8 @@ async function renderCreatorHtmlFromOrigin(req, creator, username) {
   // Fetch the deployed creator.html, inject SSR globals, and return complete HTML
   const origin = getOrigin(req);
   const version = '20251114-1';
-  const templateUrl = `${origin}/creator.html?v=${version}`;
+  // Use internal template path that rewrites to creator.html (since /creator.html redirects to /)
+  const templateUrl = `${origin}/_templates/creator?v=${version}`;
   try {
     const r = await fetch(templateUrl, { headers: { 'accept': 'text/html' } });
     if (!r.ok) throw new Error(`template_fetch_${r.status}`);
@@ -281,8 +282,9 @@ export default async function handler(req, res) {
       return res.send(`<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Creator Not Found</title></head><body><p>Creator not found.</p></body></html>`);
     }
 
-    let html = null;
-    if (buildSSRTemplate) {
+    // Prefer fetching the full static template first for perfect styling
+    let html = await renderCreatorHtmlFromOrigin(req, creator, username);
+    if (!html && buildSSRTemplate) {
       const displayName = escapeHtml(creator.name || creator.username);
       const usernameEsc = escapeHtml(creator.username);
       const bioRaw = creator.about || '';
@@ -310,9 +312,8 @@ export default async function handler(req, res) {
       });
     }
     if (!html) {
-      // If SSR template not available, try fetching static creator.html; if that fails, minimal redirect SEO
-      html = await renderCreatorHtmlFromOrigin(req, creator, username);
-      if (!html) html = buildRedirectHtml(creator, username);
+      // Last resort: minimal SEO + redirect
+      html = buildRedirectHtml(creator, username);
     }
     // Set headers BEFORE sending body; send exactly once
     res.setHeader('X-SSR-Handler', 'creator-public');
