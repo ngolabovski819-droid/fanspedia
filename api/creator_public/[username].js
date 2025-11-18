@@ -279,13 +279,13 @@ export default async function handler(req, res) {
       // Fallback path (still 200 + meta) if template couldn't be fetched
       html = buildRedirectHtml(creator, username);
     }
+    // Set headers BEFORE sending body; send exactly once
     res.setHeader('X-SSR-Handler', 'creator-public');
-      res.status(200).send(html);
     if (debug && debug.match) res.setHeader('X-SSR-Match', `${debug.match.type}:${debug.match.v}`);
     if (debug && debug.variants) res.setHeader('X-SSR-Variants', debug.variants.join('|'));
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('Cache-Control', 'no-store, must-revalidate');
-    res.status(200).send(html || `<!DOCTYPE html><html><head><meta charset="utf-8"><title>${escapeHtml(username)}</title></head><body><p>Loading...</p></body></html>`);
+    return res.status(200).send(html);
   } catch (error) {
     res.status(500).send('Internal error');
   }
