@@ -210,6 +210,39 @@ function buildRedirectHtml(creator, username) {
   </html>`;
 }
 
+function getOrigin(req) {
+  try {
+    const host = (req.headers['x-forwarded-host'] || req.headers['host'] || '').toString();
+    const proto = (req.headers['x-forwarded-proto'] || 'https').toString();
+    if (!host) return BASE_URL;
+    return `${proto}://${host}`;
+  } catch {
+    return BASE_URL;
+  }
+}
+
+async function renderCreatorHtmlFromOrigin(req, creator, username) {
+  // Fetch the deployed creator.html, inject SSR globals, and return complete HTML
+  const origin = getOrigin(req);
+  const version = '20251114-1';
+  const templateUrl = `${origin}/creator.html?v=${version}`;
+  try {
+    const r = await fetch(templateUrl, { headers: { 'accept': 'text/html' } });
+    if (!r.ok) throw new Error(`template_fetch_${r.status}`);
+    let html = await r.text();
+    const inject = `\n<script>\n  window.__CREATOR_SSR__ = ${JSON.stringify(creator)};\n  window.__SSR_USERNAME__ = ${JSON.stringify(username)};\n  window.__SSR_CLEAN_URL__ = ${JSON.stringify('/' + username)};\n</script>\n`;
+    if (html.includes('</head>')) {
+      html = html.replace('</head>', `${inject}</head>`);
+    } else {
+      html = inject + html;
+    }
+    return html;
+  } catch (e) {
+    // Fallback to minimal SEO + redirect if template fetch fails
+    return null;
+  }
+}
+
 export default async function handler(req, res) {
   let username = req.query?.params ?? req.query?.username ?? null;
   if (Array.isArray(username)) username = username.join('/');
@@ -241,7 +274,11 @@ export default async function handler(req, res) {
       return res.send(`<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Creator Not Found</title></head><body><p>Creator not found.</p></body></html>`);
     }
 
-    const html = buildRedirectHtml(creator, username);
+    let html = await renderCreatorHtmlFromOrigin(req, creator, username);
+    if (!html) {
+      // Fallback path (still 200 + meta) if template couldn't be fetched
+      html = buildRedirectHtml(creator, username);
+    }
     res.setHeader('X-SSR-Handler', 'creator-public');
       res.status(200).send(html);
     if (debug && debug.match) res.setHeader('X-SSR-Match', `${debug.match.type}:${debug.match.v}`);
