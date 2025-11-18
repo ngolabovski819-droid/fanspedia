@@ -231,13 +231,19 @@ async function renderCreatorHtmlFromOrigin(req, creator, username) {
     const r = await fetch(templateUrl, { headers: { 'accept': 'text/html' } });
     if (!r.ok) throw new Error(`template_fetch_${r.status}`);
     let html = await r.text();
+    // Guard: treat empty or malformed template as failure
+    const looksMalformed = !html || html.length < 1000 || (!html.includes('<html') && !html.includes('</head>'));
+    if (looksMalformed) {
+      throw new Error('template_malformed');
+    }
     const inject = `\n<script>\n  window.__CREATOR_SSR__ = ${JSON.stringify(creator)};\n  window.__SSR_USERNAME__ = ${JSON.stringify(username)};\n  window.__SSR_CLEAN_URL__ = ${JSON.stringify('/' + username)};\n</script>\n`;
     if (html.includes('</head>')) {
       html = html.replace('</head>', `${inject}</head>`);
     } else {
       html = inject + html;
     }
-    return html;
+    // Add debug marker to help diagnose which path rendered
+    return `<!-- SSR: origin-template -->\n${html}`;
   } catch (e) {
     // Fallback to minimal SEO + redirect if template fetch fails
     return null;
@@ -310,6 +316,10 @@ export default async function handler(req, res) {
         canonicalUrl,
         jsonLd
       });
+      // Add debug marker
+      if (typeof html === 'string') {
+        html = `<!-- SSR: ssr-template -->\n${html}`;
+      }
     }
     if (!html) {
       // Last resort: minimal SEO + redirect
