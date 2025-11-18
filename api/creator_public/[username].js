@@ -285,24 +285,25 @@ async function renderCreatorHtmlFromOrigin(req, creator, username) {
           'if(c.isVerified){var vb=document.getElementById("verifiedBadge");if(vb){vb.style.display="block";}}' +
           'if(c.location){setText("location",c.location);var lc=document.getElementById("locationContainer");if(lc){lc.style.display="block";}}' +
           'var contentStats=[' +
-          '{icon:"fa-image",label:"Photos",value:fmtNum(c.photoscount)},' +
-          '{icon:"fa-video",label:"Videos",value:fmtNum(c.videoscount)},' +
-          '{icon:"fa-file-alt",label:"Posts",value:fmtNum(c.postscount)},' +
-          '{icon:"fa-archive",label:"Archived Posts",value:fmtNum(c.archivedpostscount)},' +
-          '{icon:"fa-broadcast-tower",label:"Finished Streams",value:fmtNum(c.finishedstreamscount)},' +
-          '{icon:"fa-music",label:"Audios",value:fmtNum(c.audioscount)}' +
+          '{icon:"fa-image",label:"Photos",value:fmtNum(c.photoscount||c.photosCount||0)},' +
+          '{icon:"fa-video",label:"Videos",value:fmtNum(c.videoscount||c.videosCount||0)},' +
+          '{icon:"fa-file-alt",label:"Posts",value:fmtNum(c.postscount||c.postsCount||0)},' +
+          '{icon:"fa-archive",label:"Archived Posts",value:fmtNum(c.archivedpostscount||c.archivedPostsCount||0)},' +
+          '{icon:"fa-broadcast-tower",label:"Finished Streams",value:fmtNum(c.finishedstreamscount||c.finishedStreamsCount||0)},' +
+          '{icon:"fa-music",label:"Audios",value:fmtNum(c.audioscount||c.audiosCount||0)}' +
           '];' +
           'var cs=document.getElementById("contentStats");' +
-          'if(cs){cs.innerHTML=contentStats.map(function(s){return"<div class=\\"stat-card\\"><div class=\\"stat-card-header\\"><div class=\\"stat-card-icon\\"><i class=\\"fas "+s.icon+"\\"></i></div></div><div class=\\"stat-card-label\\">"+s.label+"</div><div class=\\"stat-card-value\\">"+s.value+"</div></div>";}).join("");}' +
-          'var likes=fmtNum(c.favoritedcount);' +
-          'var subs=(c.showsubscriberscount?fmtNum(c.subscriberscount):"Hidden");' +
+          'if(cs){try{cs.innerHTML=contentStats.map(function(s){return"<div class=\\"stat-card\\"><div class=\\"stat-card-header\\"><div class=\\"stat-card-icon\\"><i class=\\"fas "+s.icon+"\\"></i></div></div><div class=\\"stat-card-label\\">"+s.label+"</div><div class=\\"stat-card-value\\">"+s.value+"</div></div>";}).join("");}catch(e){console.error("contentStats error:",e);}}' +
+          'var likes=fmtNum(c.favoritedcount||c.favoritedCount||0);' +
+          'var subs=(c.showsubscriberscount||c.showSubscribersCount)?fmtNum(c.subscriberscount||c.subscribersCount||0):"Hidden";' +
           'var es=document.getElementById("engagementStats");' +
-          'if(es){es.innerHTML=["<div class=\\"stat-card\\"><div class=\\"stat-card-header\\"><div class=\\"stat-card-icon\\"><i class=\\"fas fa-users\\"></i></div></div><div class=\\"stat-card-label\\">Subscribers</div><div class=\\"stat-card-value\\">"+subs+"</div></div>","<div class=\\"stat-card\\"><div class=\\"stat-card-header\\"><div class=\\"stat-card-icon\\"><i class=\\"fas fa-heart\\"></i></div></div><div class=\\"stat-card-label\\">Likes</div><div class=\\"stat-card-value\\">"+likes+"</div></div>"].join("");}' +
+          'if(es){try{es.innerHTML=["<div class=\\"stat-card\\"><div class=\\"stat-card-header\\"><div class=\\"stat-card-icon\\"><i class=\\"fas fa-users\\"></i></div></div><div class=\\"stat-card-label\\">Subscribers</div><div class=\\"stat-card-value\\">"+subs+"</div></div>","<div class=\\"stat-card\\"><div class=\\"stat-card-header\\"><div class=\\"stat-card-icon\\"><i class=\\"fas fa-heart\\"></i></div></div><div class=\\"stat-card-label\\">Likes</div><div class=\\"stat-card-value\\">"+likes+"</div></div>"].join("");}catch(e){console.error("engagementStats error:",e);}}' +
           'var prices=[];' +
-          'if(c.subscribePrice!==null&&c.subscribePrice!==undefined){prices.push({label:"Monthly Subscription",value:fmtPrice(c.subscribePrice),duration:"per month"});}' +
+          'var subPrice=c.subscribePrice||c.subscribeprice;' +
+          'if(subPrice!==null&&subPrice!==undefined){prices.push({label:"Monthly Subscription",value:fmtPrice(subPrice),duration:"per month"});}' +
           'if(c.promotion1_price){prices.push({label:"Promotion Offer",value:fmtPrice(c.promotion1_price),discount:(c.promotion1_discount?(c.promotion1_discount+"% OFF"):null)});}' +
           'var pg=document.getElementById("pricingGrid");' +
-          'if(pg&&prices.length){pg.innerHTML=prices.map(function(p){return"<div class=\\"price-card\\"><div class=\\"price-card-label\\">"+p.label+"</div><div class=\\"price-card-value\\">"+p.value+"</div>"+(p.duration?("<div class=\\"price-card-duration\\">"+p.duration+"</div>"):"")+(p.discount?("<div class=\\"price-card-discount\\">"+p.discount+"</div>"):"")+"</div>";}).join("");}' +
+          'if(pg&&prices.length){try{pg.innerHTML=prices.map(function(p){return"<div class=\\"price-card\\"><div class=\\"price-card-label\\">"+p.label+"</div><div class=\\"price-card-value\\">"+p.value+"</div>"+(p.duration?("<div class=\\"price-card-duration\\">"+p.duration+"</div>"):"")+(p.discount?("<div class=\\"price-card-discount\\">"+p.discount+"</div>"):"")+"</div>";}).join("");}catch(e){console.error("pricingGrid error:",e);}}' +
           'try{if(c&&(c.name||c.username)){document.title=(c.name||c.username)+" • OnlyFans Profile • FansPedia";}}catch(_){}' +
           '}catch(e){}' +
           '})();' +
