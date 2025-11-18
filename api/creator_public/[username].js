@@ -173,22 +173,41 @@ async function fetchCreator(username) {
   }
 }
 
-async function renderCreatorHtmlWithSSR(creator, username) {
-  try {
-    const fs = await import('fs/promises');
-    const path = await import('path');
-    const filePath = path.resolve(process.cwd(), 'creator.html');
-    let html = await fs.readFile(filePath, 'utf8');
-    const inject = `\n<script>\n  window.__CREATOR_SSR__ = ${JSON.stringify(creator)};\n  window.__SSR_USERNAME__ = ${JSON.stringify(username)};\n  window.__SSR_CLEAN_URL__ = ${JSON.stringify('/' + username)};\n</script>\n`;
-    if (html.includes('</head>')) {
-      html = html.replace('</head>', `${inject}</head>`);
-    } else {
-      html = inject + html;
-    }
-    return html;
-  } catch (e) {
-    return null;
-  }
+function buildRedirectHtml(creator, username) {
+  const displayName = escapeHtml(creator.name || creator.username || username);
+  const bioPreview = (creator.about || '').toString().replace(/<[^>]*>/g, '').substring(0, 155);
+  const ogImage = proxyImage(creator.avatar, 1200, 630);
+  const canonicalUrl = `${BASE_URL}/${encodeURIComponent(username)}`;
+  const jsonLd = generateJsonLd({ ...creator, username });
+  const v = '20251114-1';
+  const target = `/creator.html?v=${v}&u=${encodeURIComponent(username)}&ssr=1&cleanUrl=${encodeURIComponent('/' + username)}`;
+  return `<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>${displayName} (@${escapeHtml(username)}) OnlyFans Profile • FansPedia</title>
+  <meta name="description" content="${escapeHtml(bioPreview)}">
+  <link rel="canonical" href="${canonicalUrl}">
+  <meta property="og:type" content="profile">
+  <meta property="og:url" content="${canonicalUrl}">
+  <meta property="og:title" content="${displayName} OnlyFans Profile">
+  <meta property="og:description" content="${escapeHtml(bioPreview)}">
+  <meta property="og:image" content="${ogImage}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="${canonicalUrl}">
+  <meta name="twitter:title" content="${displayName} OnlyFans Profile">
+  <meta name="twitter:description" content="${escapeHtml(bioPreview)}">
+  <meta name="twitter:image" content="${ogImage}">
+  <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+  <script>(function(){try{window.location.replace('${target}')}catch(e){window.location.href='${target}'}})();</script>
+  <noscript><meta http-equiv="refresh" content="0;url=${target}"></noscript>
+  <style>body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:60px 20px;text-align:center}</style>
+  </head>
+  <body>
+    <p>Loading ${displayName}'s profile...</p>
+  </body>
+  </html>`;
 }
 
 export default async function handler(req, res) {
@@ -222,8 +241,9 @@ export default async function handler(req, res) {
       return res.send(`<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Creator Not Found</title></head><body><p>Creator not found.</p></body></html>`);
     }
 
-    const html = await renderCreatorHtmlWithSSR(creator, username);
+    const html = buildRedirectHtml(creator, username);
     res.setHeader('X-SSR-Handler', 'creator-public');
+      res.status(200).send(html);
     if (debug && debug.match) res.setHeader('X-SSR-Match', `${debug.match.type}:${debug.match.v}`);
     if (debug && debug.variants) res.setHeader('X-SSR-Variants', debug.variants.join('|'));
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
