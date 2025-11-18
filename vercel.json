@@ -4,6 +4,8 @@
     { "source": "/", "destination": "/index.html" },
     { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
     { "source": "/robots.txt", "destination": "/robots.txt" },
+    { "source": "/selinacutie", "destination": "/api/creator_public/selinacutie" },
+    { "source": "/selinacutie/", "destination": "/api/creator_public/selinacutie" },
     { "source": "/wishlist", "destination": "/wishlist.html" },
     { "source": "/wishlist/", "destination": "/wishlist.html" },
     { "source": "/categories", "destination": "/categories.html" },
