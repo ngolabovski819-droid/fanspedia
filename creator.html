@@ -1168,6 +1168,57 @@
       }
     })();
   </script>
+
+  <header class="superior-header" id="mainHeader">
+    <!-- Main header -->
+    <div class="header-main">
+      <div class="header-container">
+        <!-- Logo -->
+        <a href="/" class="logo-section">
+          <svg width="140" height="42" viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+            <!-- Pin + F -->
+            <g transform="translate(10,8)">
+              <!-- Map pin -->
+              <path
+                d="M48 4
+                   C31 4 18 17.5 18 34.5
+                   C18 48.5 30.1 62.9 42.4 79.1
+                   C45.0 82.7 51.0 82.7 53.6 79.1
+                   C65.9 62.9 78 48.5 78 34.5
+                   C78 17.5 65 4 48 4
+                   Z"
+                fill="#FFFFFF"
+              />
+              <!-- Centered large F -->
+              <text
+                x="48"
+                y="40"
+                text-anchor="middle"
+                dominant-baseline="middle"
+                font-family="Poppins, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+                font-size="34"
+                font-weight="700"
+                fill="#000000">
+                F
+              </text>
+            </g>
+
+            <!-- Wordmark -->
+            <text
+              x="115"
+              y="64"
+              font-family="Poppins, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+              font-size="40"
+              font-weight="500"
+              fill="#FFFFFF">
+              FansPedia
+            </text>
+          </svg>
+        </a>
+
+        <!-- Desktop categories (moved next to logo) -->
+        <div class="desktop-nav">
+          <button id="categoriesToggle" class="nav-btn" aria-haspopup="true" aria-expanded="false">
             Categories <i class="fas fa-chevron-down" aria-hidden="true"></i>
           </button>
           <div id="categoriesMenu" class="dropdown-menu" role="menu" aria-hidden="true">
@@ -1175,23 +1226,41 @@
           </div>
         </div>
 
-        <!-- Search positioned in middle (flex grows) -->
+        <!-- Search - THE CENTERPIECE -->
         <div class="header-search-section">
           <div class="header-search-wrapper">
             <i class="fas fa-search header-search-icon"></i>
-            <input type="text" class="header-search-input" placeholder="Search by name, location, category..." id="headerSearch" autocomplete="off" autocapitalize="none" spellcheck="false">
+            <input 
+              type="text" 
+              class="header-search-input" 
+              placeholder="Search by name, location, category..."
+              id="headerSearch"
+              autocomplete="off"
+              autocapitalize="none"
+              spellcheck="false"
+            >
           </div>
+          
         </div>
-        <!-- Actions: safe search + theme + burger on the right -->
+
+        <!-- Actions -->
         <div class="header-actions">
+          <!-- Mobile Search Trigger (visible only on mobile) -->
           <button class="mobile-search-trigger" id="mobileSearchTrigger" aria-label="Search">
             <i class="fas fa-search"></i>
           </button>
+          <!-- Safe Search toggle -->
           <button class="safe-search-toggle" id="safeSearchToggle" aria-label="Toggle Safe Search (blur images)" title="Safe Search: Browse comfortably in public">
             <i class="fas fa-eye-slash"></i>
           </button>
-          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><i class="fas fa-moon"></i></button>
-          <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
+          <!-- Dark mode toggle -->
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+          </button>
+          <!-- Mobile menu toggle only -->
+          <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
+            <i class="fas fa-bars"></i>
+          </button>
         </div>
       </div>
     </div>
@@ -1205,33 +1274,38 @@
       </button>
       <div class="mobile-search-input-wrapper">
         <i class="fas fa-search mobile-search-icon"></i>
-        <input type="text" class="mobile-search-input" id="mobileSearchInput" placeholder="Search creators..." autocomplete="off" />
+        <input type="text" class="mobile-search-input" id="mobileSearchInput" placeholder="Search by name, location, category..." autocomplete="off" autocapitalize="none" spellcheck="false">
       </div>
     </div>
     <div class="mobile-search-content">
-      <div class="mobile-search-label">Popular Searches</div>
-      <div class="mobile-search-suggestions" id="mobileSearchSuggestionsContainer"></div>
+      <div class="mobile-search-label">POPULAR SEARCHES</div>
+      <div class="mobile-search-suggestions" id="mobileSearchSuggestions">
+        <!-- Populated dynamically -->
+      </div>
     </div>
   </div>
 
-  <!-- Safe Search Modal -->
-  <div class="safe-search-modal" id="safeSearchModal" role="dialog" aria-labelledby="safeSearchModalTitle" aria-modal="true">
+  <!-- Safe Search Modal (First-Time Consent) -->
+  <div id="safeSearchModal" class="safe-search-modal" role="dialog" aria-labelledby="safeSearchModalTitle" aria-modal="true">
     <div class="safe-search-modal-content">
       <div class="safe-search-modal-icon">
         <i class="fas fa-shield-alt"></i>
       </div>
-      <h2 id="safeSearchModalTitle">Enable Safe Search?</h2>
-      <p>Safe Search blurs potentially NSFW content, making browsing more comfortable in public spaces. You can toggle it anytime using the shield button in the header or pressing <strong>Alt+S</strong>.</p>
+      <h2 id="safeSearchModalTitle">Browse Safely in Public?</h2>
+      <p>
+        Enable <strong>Safe Search</strong> to blur images so you can comfortably browse at work, on the bus, or anywhere public. 
+        You can toggle this anytime using the shield icon in the header.
+      </p>
       <div class="safe-search-modal-actions">
-        <button class="safe-search-modal-btn safe-search-modal-btn-primary" id="enableSafeSearchBtn">
-          <i class="fas fa-check"></i> Enable Safe Search
+        <button class="safe-search-modal-btn safe-search-modal-btn-primary" id="enableSafeSearch">
+          <i class="fas fa-shield-alt"></i> Enable Safe Search
         </button>
-        <button class="safe-search-modal-btn safe-search-modal-btn-secondary" id="dismissSafeSearchBtn">
-          No Thanks, I'll Enable It Later
+        <button class="safe-search-modal-btn safe-search-modal-btn-secondary" id="dismissSafeSearch">
+          No Thanks, I'm in Private
         </button>
       </div>
       <div class="safe-search-modal-footer">
-        Safe Search is OFF by default. Your choice is saved locally.
+        You can change this setting anytime by clicking the <i class="fas fa-eye-slash"></i> icon in the header
       </div>
     </div>
   </div>
@@ -1241,7 +1315,7 @@
   <nav id="mobileDrawer" class="mobile-drawer" aria-hidden="true" aria-labelledby="mobileMenuToggle">
     <button class="drawer-close" id="drawerClose" aria-label="Close menu">×</button>
     <a href="/">Home</a>
-
+    
     <!-- Categories collapsible section -->
     <div class="drawer-categories-toggle" id="drawerCategoriesToggle">
       <div class="icon-text">
@@ -1252,7 +1326,9 @@
     </div>
     <div id="drawerCategoriesSection">
       <div class="drawer-categories-label">MOST POPULAR CATEGORIES</div>
-      <div id="drawerCategories"><!-- populated dynamically --></div>
+      <div id="drawerCategories">
+        <!-- Populated dynamically from config/categories.js -->
+      </div>
       <a href="/categories/" class="drawer-view-all-btn">View All Categories</a>
     </div>
   </nav>
