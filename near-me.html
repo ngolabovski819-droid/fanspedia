@@ -665,15 +665,7 @@
     window.persistFavorites = persistFavorites;
     window.toggleFavorite = toggleFavorite;
 
-    // Ensure hearts work via event delegation (robust across dynamic cards)
-    document.addEventListener('click', (e) => {
-      const btn = e.target.closest('.favorite-btn');
-      if (!btn) return;
-      e.preventDefault();
-      const username = btn.getAttribute('data-username');
-      if (!username) return;
-      toggleFavorite(username, btn);
-    });
+    // Note: We rely on inline onclick on the button (same as homepage)
 
     // Responsive image sources
     function buildResponsiveSources(originalUrl){
@@ -752,7 +744,7 @@
         const safeUsername = String(username).replace(/'/g, "\\'");
         col.innerHTML = `
           <div class="card h-100">
-            <button class="favorite-btn ${favActive ? 'active' : ''}" data-username="${safeUsername}" type="button">
+            <button class="favorite-btn ${favActive ? 'active' : ''}" data-username="${safeUsername}" type="button" onclick="event.preventDefault(); toggleFavorite('${safeUsername}', this);">
               <span>${favChar}</span>
             </button>
             <img src="${responsive.src}" 
