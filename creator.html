@@ -1150,10 +1150,13 @@
       overflow: hidden;
     }
     
-    /* Hide any leaked SSR script text that appears as visible content */
-    body > script[type="application/json"],
-    body > script:not([src]):not([type="module"]):last-of-type {
+    /* Hide any leaked SSR script text that appears as visible content after footer */
+    footer ~ * {
       display: none !important;
+    }
+    /* Ensure footer is visible */
+    footer {
+      display: block !important;
     }
   </style>
 </head>
