@@ -1151,12 +1151,21 @@
     }
     
     /* Hide any leaked SSR script text that appears as visible content after footer */
-    footer ~ * {
+    footer ~ *,
+    body::after {
       display: none !important;
     }
     /* Ensure footer is visible */
     footer {
       display: block !important;
+    }
+    /* Hide text nodes after footer */
+    body {
+      overflow: hidden;
+    }
+    footer {
+      margin-bottom: 0 !important;
+      padding-bottom: 40px !important;
     }
   </style>
 </head>
