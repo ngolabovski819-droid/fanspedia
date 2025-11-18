@@ -254,9 +254,11 @@ async function renderCreatorHtmlFromOrigin(req, creator, username) {
         const jsonScript = '<script id="__CREATOR_SSR__" type="application/json">' + safeJson + '<\/script>';
         
         // SSR logic script - use <\/script> to avoid breaking the script tag
+        // Wrap in DOMContentLoaded to ensure elements exist
         const ssrScript = '<script>' +
           'window.__SSR_USERNAME__=' + JSON.stringify(username) + ';' +
           'window.__SSR_CLEAN_URL__=' + JSON.stringify('/' + username) + ';' +
+          'document.addEventListener("DOMContentLoaded",function(){' +
           '(function(){' +
           'try{' +
           'var dataEl=document.getElementById("__CREATOR_SSR__");' +
@@ -302,6 +304,7 @@ async function renderCreatorHtmlFromOrigin(req, creator, username) {
           'try{if(c&&(c.name||c.username)){document.title=(c.name||c.username)+" • OnlyFans Profile • FansPedia";}}catch(_){}' +
           '}catch(e){}' +
           '})();' +
+          '});' +
           '<\/script>';
         
         const inject = '\n' + iconLink + '\n' + visibilityStyle + '\n' + jsonScript + '\n' + ssrScript + '\n';
