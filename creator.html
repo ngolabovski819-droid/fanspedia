@@ -2471,6 +2471,28 @@
     })();
   </script>
 
+  <!-- Cleanup leaked SSR content -->
+  <script>
+    // Remove any text nodes that appear after the footer
+    (function() {
+      window.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+          const footer = document.querySelector('footer');
+          if (!footer) return;
+          
+          let sibling = footer.nextSibling;
+          while (sibling) {
+            const next = sibling.nextSibling;
+            if (sibling.nodeType === Node.TEXT_NODE || sibling.nodeType === Node.ELEMENT_NODE) {
+              sibling.parentNode.removeChild(sibling);
+            }
+            sibling = next;
+          }
+        }, 100);
+      });
+    })();
+  </script>
+
   <!-- Header Interaction Scripts -->
   <script>
     // ============================================
