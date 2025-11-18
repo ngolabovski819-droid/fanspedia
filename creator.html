@@ -1149,6 +1149,12 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
+    
+    /* Hide any leaked SSR script text that appears as visible content */
+    body > script[type="application/json"],
+    body > script:not([src]):not([type="module"]):last-of-type {
+      display: none !important;
+    }
   </style>
 </head>
 <body>
