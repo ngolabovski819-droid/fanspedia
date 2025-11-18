@@ -236,7 +236,7 @@ async function renderCreatorHtmlFromOrigin(req, creator, username) {
     if (looksMalformed) {
       throw new Error('template_malformed');
     }
-    const inject = `\n<script>\n  window.__CREATOR_SSR__ = ${JSON.stringify(creator)};\n  window.__SSR_USERNAME__ = ${JSON.stringify(username)};\n  window.__SSR_CLEAN_URL__ = ${JSON.stringify('/' + username)};\n</script>\n`;
+    const inject = `\n<script>\n  window.__CREATOR_SSR__ = ${JSON.stringify(creator)};\n  window.__SSR_USERNAME__ = ${JSON.stringify(username)};\n  window.__SSR_CLEAN_URL__ = ${JSON.stringify('/' + username)};\n  try {\n    var ls = document.getElementById('loadingState'); if (ls) ls.style.display = 'none';\n    var pc = document.getElementById('profileContent'); if (pc) pc.style.display = 'block';\n  } catch(e){}\n</script>\n`;
     if (html.includes('</head>')) {
       html = html.replace('</head>', `${inject}</head>`);
     } else if (html.includes('<head')) {
