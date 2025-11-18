@@ -118,7 +118,7 @@ async function fetchCreator(username) {
       'Prefer': 'count=exact'
     };
 
-    const base = `${(SUPABASE_URL || '').replace(/\/+$, '')}/rest/v1/onlyfans_profiles`;
+    const base = `${(SUPABASE_URL || '').replace(/\/+$/, '')}/rest/v1/onlyfans_profiles`;
 
     const variants = [];
     const u = String(username || '').trim();
