@@ -2450,6 +2450,336 @@
     })();
   </script>
 
+  <!-- Header Interaction Scripts -->
+  <script>
+    // ============================================
+    // DARK MODE TOGGLE
+    // ============================================
+    const themeToggle = document.getElementById('themeToggle');
+    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+    
+    // Get saved theme or use system preference
+    function getCurrentTheme() {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) return savedTheme;
+      // Default to light mode
+      return 'light';
+    }
+    
+    // Apply theme
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      const icon = themeToggle.querySelector('i');
+      if (theme === 'dark') {
+        icon.className = 'fas fa-sun';
+        themeToggle.setAttribute('aria-label', 'Switch to light mode');
+      } else {
+        icon.className = 'fas fa-moon';
+        themeToggle.setAttribute('aria-label', 'Switch to dark mode');
+      }
+    }
+    
+    // Toggle theme
+    function toggleTheme() {
+      const currentTheme = getCurrentTheme();
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('theme', newTheme);
+      applyTheme(newTheme);
+    }
+    
+    // Initialize theme on load
+    applyTheme(getCurrentTheme());
+    
+    // Listen for toggle clicks
+    if (themeToggle) {
+      themeToggle.addEventListener('click', toggleTheme);
+    }
+    
+    // Listen for system theme changes
+    prefersDarkScheme.addEventListener('change', (e) => {
+      if (!localStorage.getItem('theme')) {
+        applyTheme(e.matches ? 'dark' : 'light');
+      }
+    });
+
+    // ============================================
+    // SAFE SEARCH FUNCTIONALITY
+    // ============================================
+    const safeSearchToggle = document.getElementById('safeSearchToggle');
+    const safeSearchModal = document.getElementById('safeSearchModal');
+    const enableSafeSearchBtn = document.getElementById('enableSafeSearch');
+    const dismissSafeSearchBtn = document.getElementById('dismissSafeSearch');
+    
+    // Get saved Safe Search preference (default OFF for new users)
+    function getSafeSearchState() {
+      const saved = localStorage.getItem('safeSearch');
+      return saved === 'true'; // Returns false by default
+    }
+    
+    // Check if user has seen the modal before
+    function hasSeenSafeSearchModal() {
+      return localStorage.getItem('safeSearchModalShown') === 'true';
+    }
+    
+    // Apply Safe Search state to UI
+    function applySafeSearch(enabled) {
+      if (enabled) {
+        document.body.classList.add('safe-search-active');
+        safeSearchToggle.classList.add('active');
+        safeSearchToggle.querySelector('i').className = 'fas fa-eye-slash';
+        safeSearchToggle.setAttribute('aria-label', 'Disable Safe Search (show images)');
+        safeSearchToggle.setAttribute('title', 'Safe Search: ON (images blurred)');
+      } else {
+        document.body.classList.remove('safe-search-active');
+        safeSearchToggle.classList.remove('active');
+        safeSearchToggle.querySelector('i').className = 'fas fa-eye';
+        safeSearchToggle.setAttribute('aria-label', 'Enable Safe Search (blur images)');
+        safeSearchToggle.setAttribute('title', 'Safe Search: OFF (images visible)');
+      }
+      localStorage.setItem('safeSearch', enabled.toString());
+    }
+    
+    // Toggle Safe Search
+    function toggleSafeSearch() {
+      const current = getSafeSearchState();
+      applySafeSearch(!current);
+    }
+    
+    // Initialize Safe Search on page load
+    function initSafeSearch() {
+      // Apply saved preference
+      const savedState = getSafeSearchState();
+      applySafeSearch(savedState);
+      
+      // Check URL parameter for forced state (?safe=1)
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('safe')) {
+        const forcedState = urlParams.get('safe') === '1';
+        applySafeSearch(forcedState);
+      }
+    }
+    
+    // Event listeners
+    if (safeSearchToggle) {
+      safeSearchToggle.addEventListener('click', toggleSafeSearch);
+    }
+    
+    if (enableSafeSearchBtn) {
+      enableSafeSearchBtn.addEventListener('click', () => {
+        applySafeSearch(true);
+        if (safeSearchModal) {
+          safeSearchModal.classList.remove('show');
+          document.body.style.overflow = '';
+        }
+      });
+    }
+    
+    if (dismissSafeSearchBtn) {
+      dismissSafeSearchBtn.addEventListener('click', () => {
+        applySafeSearch(false);
+        if (safeSearchModal) {
+          safeSearchModal.classList.remove('show');
+          document.body.style.overflow = '';
+        }
+      });
+    }
+    
+    // Close modal on overlay click
+    if (safeSearchModal) {
+      safeSearchModal.addEventListener('click', (e) => {
+        if (e.target === safeSearchModal) {
+          applySafeSearch(false);
+          safeSearchModal.classList.remove('show');
+          document.body.style.overflow = '';
+        }
+      });
+    }
+    
+    // Keyboard shortcut: Alt+S to toggle
+    document.addEventListener('keydown', (e) => {
+      if (e.altKey && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        toggleSafeSearch();
+      }
+      
+      // Escape key closes modal
+      if (e.key === 'Escape' && safeSearchModal && safeSearchModal.classList.contains('show')) {
+        applySafeSearch(false);
+        safeSearchModal.classList.remove('show');
+        document.body.style.overflow = '';
+      }
+    });
+    
+    // Initialize Safe Search
+    initSafeSearch();
+
+    /* ============================================
+       MOBILE SEARCH MODAL
+       ============================================ */
+    const mobileSearchModal = document.getElementById('mobileSearchModal');
+    const mobileSearchTrigger = document.getElementById('mobileSearchTrigger');
+    const mobileSearchBack = document.getElementById('mobileSearchBack');
+    const mobileSearchInput = document.getElementById('mobileSearchInput');
+    const mobileSearchSuggestions = document.getElementById('mobileSearchSuggestions');
+
+    // Popular searches
+    const popularSearches = ['milf', 'asian', 'big tits', 'trans', 'mature', 'latina', 'big ass', 'bbw'];
+
+    // Populate suggestions
+    function populateMobileSuggestions() {
+      if (mobileSearchSuggestions) {
+        const suggestionsHTML = popularSearches.map(term => 
+          `<a href="/?q=${encodeURIComponent(term)}" class="mobile-search-suggestion">
+            <i class="fas fa-fire"></i>
+            <span>${term}</span>
+          </a>`
+        ).join('');
+        mobileSearchSuggestions.innerHTML = suggestionsHTML;
+      }
+    }
+
+    // Open mobile search
+    function openMobileSearch() {
+      if (mobileSearchModal) {
+        mobileSearchModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => {
+          if (mobileSearchInput) mobileSearchInput.focus();
+        }, 100);
+      }
+    }
+
+    // Close mobile search
+    function closeMobileSearch() {
+      if (mobileSearchModal) {
+        mobileSearchModal.classList.remove('active');
+        document.body.style.overflow = '';
+        if (mobileSearchInput) mobileSearchInput.value = '';
+      }
+    }
+
+    // Event listeners
+    if (mobileSearchTrigger) {
+      mobileSearchTrigger.addEventListener('click', openMobileSearch);
+    }
+
+    if (mobileSearchBack) {
+      mobileSearchBack.addEventListener('click', closeMobileSearch);
+    }
+
+    // Handle search submission
+    if (mobileSearchInput) {
+      mobileSearchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          const query = mobileSearchInput.value.trim();
+          if (query) {
+            window.location.href = `/?q=${encodeURIComponent(query)}`;
+          }
+        }
+      });
+    }
+
+    // Initialize suggestions
+    populateMobileSuggestions();
+
+    // ============================================
+    // HEADER FUNCTIONALITY
+    // ============================================
+
+    // Add scrolled class to header
+    window.addEventListener('scroll', () => {
+      const header = document.getElementById('mainHeader');
+      if (header) {
+        if (window.pageYOffset > 50) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+      }
+    });
+
+    // Desktop Categories dropdown
+    const catToggle = document.getElementById('categoriesToggle');
+    const catMenuEl = document.getElementById('categoriesMenu');
+    if (catToggle && catMenuEl) {
+      catToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = catMenuEl.classList.toggle('open');
+        catToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        catMenuEl.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+      });
+      document.addEventListener('click', (e) => {
+        if (!catMenuEl.classList.contains('open')) return;
+        if (!catMenuEl.contains(e.target) && e.target !== catToggle) {
+          catMenuEl.classList.remove('open');
+          catToggle.setAttribute('aria-expanded', 'false');
+          catMenuEl.setAttribute('aria-hidden', 'true');
+        }
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          catMenuEl.classList.remove('open');
+          catToggle.setAttribute('aria-expanded', 'false');
+          catMenuEl.setAttribute('aria-hidden', 'true');
+        }
+      });
+    }
+
+    // Mobile drawer
+    const mobileToggle = document.getElementById('mobileMenuToggle');
+    const drawer = document.getElementById('mobileDrawer');
+    const overlay = document.getElementById('drawerOverlay');
+    const drawerClose = document.getElementById('drawerClose');
+    function openDrawer(){
+      if (!drawer || !overlay) return;
+      drawer.classList.add('open'); overlay.classList.add('open');
+      drawer.setAttribute('aria-hidden','false'); overlay.setAttribute('aria-hidden','false');
+      document.body.style.overflow='hidden';
+    }
+    function closeDrawer(){ if (!drawer || !overlay) return; drawer.classList.remove('open'); overlay.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); overlay.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+    if (mobileToggle){ mobileToggle.addEventListener('click', (e)=>{ e.preventDefault(); openDrawer(); }); }
+    if (overlay){ overlay.addEventListener('click', closeDrawer); }
+    if (drawerClose){ drawerClose.addEventListener('click', closeDrawer); }
+    document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeDrawer(); });
+
+    // Mobile drawer categories accordion
+    const drawerCategoriesToggle = document.getElementById('drawerCategoriesToggle');
+    const drawerCategoriesSection = document.getElementById('drawerCategoriesSection');
+    if (drawerCategoriesToggle && drawerCategoriesSection) {
+      drawerCategoriesToggle.addEventListener('click', () => {
+        drawerCategoriesSection.classList.toggle('open');
+      });
+    }
+
+    // Header search submit (redirect to homepage with query)
+    const headerSearch = document.getElementById('headerSearch');
+    const headerSearchBtn = document.getElementById('headerSearchBtn');
+    if (headerSearchBtn) {
+      headerSearchBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const query = headerSearch ? headerSearch.value.trim() : '';
+        if (query) {
+          window.location.href = `/?q=${encodeURIComponent(query)}`;
+        } else {
+          window.location.href = '/';
+        }
+      });
+    }
+    if (headerSearch) {
+      headerSearch.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          const query = headerSearch.value.trim();
+          if (query) {
+            window.location.href = `/?q=${encodeURIComponent(query)}`;
+          } else {
+            window.location.href = '/';
+          }
+        }
+      });
+    }
+  </script>
+
   <!-- Similar Creators Section -->
   <section id="similarCreatorsSection" style="display: none;">
     <div class="container">
