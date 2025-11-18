@@ -288,7 +288,9 @@ async function renderCreatorHtmlFromOrigin(req, creator, username) {
           '{icon:"fa-image",label:"Photos",value:fmtNum(c.photoscount)},' +
           '{icon:"fa-video",label:"Videos",value:fmtNum(c.videoscount)},' +
           '{icon:"fa-file-alt",label:"Posts",value:fmtNum(c.postscount)},' +
-          '{icon:"fa-archive",label:"Archived Posts",value:fmtNum(c.archivedpostscount)}' +
+          '{icon:"fa-archive",label:"Archived Posts",value:fmtNum(c.archivedpostscount)},' +
+          '{icon:"fa-broadcast-tower",label:"Finished Streams",value:fmtNum(c.finishedstreamscount)},' +
+          '{icon:"fa-music",label:"Audios",value:fmtNum(c.audioscount)}' +
           '];' +
           'var cs=document.getElementById("contentStats");' +
           'if(cs){cs.innerHTML=contentStats.map(function(s){return"<div class=\\"stat-card\\"><div class=\\"stat-card-header\\"><div class=\\"stat-card-icon\\"><i class=\\"fas "+s.icon+"\\"></i></div></div><div class=\\"stat-card-label\\">"+s.label+"</div><div class=\\"stat-card-value\\">"+s.value+"</div></div>";}).join("");}' +
