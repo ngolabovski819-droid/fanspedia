@@ -752,7 +752,7 @@
         const safeUsername = String(username).replace(/'/g, "\\'");
         col.innerHTML = `
           <div class="card h-100">
-            <button class="favorite-btn ${favActive ? 'active' : ''}" data-username="${safeUsername}" onclick="event.preventDefault(); toggleFavorite('${safeUsername}', this);">
+            <button class="favorite-btn ${favActive ? 'active' : ''}" data-username="${safeUsername}" type="button">
               <span>${favChar}</span>
             </button>
             <img src="${responsive.src}" 
