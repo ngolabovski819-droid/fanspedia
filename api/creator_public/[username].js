@@ -239,11 +239,16 @@ async function renderCreatorHtmlFromOrigin(req, creator, username) {
     const inject = `\n<script>\n  window.__CREATOR_SSR__ = ${JSON.stringify(creator)};\n  window.__SSR_USERNAME__ = ${JSON.stringify(username)};\n  window.__SSR_CLEAN_URL__ = ${JSON.stringify('/' + username)};\n</script>\n`;
     if (html.includes('</head>')) {
       html = html.replace('</head>', `${inject}</head>`);
+    } else if (html.includes('<head')) {
+      // Insert right after <head>
+      html = html.replace(/<head[^>]*>/i, (m) => `${m}${inject}`);
+    } else if (html.startsWith('<!DOCTYPE html>')) {
+      // Insert after doctype as last resort
+      html = '<!DOCTYPE html>' + inject + html.substring('<!DOCTYPE html>'.length);
     } else {
       html = inject + html;
     }
-    // Add debug marker to help diagnose which path rendered
-    return `<!-- SSR: origin-template -->\n${html}`;
+    return html;
   } catch (e) {
     // Fallback to minimal SEO + redirect if template fetch fails
     return null;
@@ -316,10 +321,7 @@ export default async function handler(req, res) {
         canonicalUrl,
         jsonLd
       });
-      // Add debug marker
-      if (typeof html === 'string') {
-        html = `<!-- SSR: ssr-template -->\n${html}`;
-      }
+      // No debug marker in output; keep HTML starting at doctype
     }
     if (!html) {
       // Last resort: minimal SEO + redirect
