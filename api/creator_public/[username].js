@@ -248,7 +248,63 @@ async function renderCreatorHtmlFromOrigin(req, creator, username) {
           .replace(/\u2028/g, '\\u2028')
           .replace(/\u2029/g, '\\u2029')
           .replace(/<\/script/gi, '<\\/script');
-        const inject = `\n<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='14' font-size='14'%3E★%3C/text%3E%3C/svg%3E">\n<style id="ssr-visibility">#loadingState{display:none!important} #profileContent{display:block!important}</style>\n<script id="__CREATOR_SSR__" type="application/json">${safeJson}</script>\n<script>\n  window.__SSR_USERNAME__ = ${JSON.stringify(username)};\n  window.__SSR_CLEAN_URL__ = ${JSON.stringify('/' + username)};\n  (function(){\n    try {\n      var dataEl = document.getElementById('__CREATOR_SSR__');\n      var c = {};\n      if (dataEl) { try { c = JSON.parse(dataEl.textContent || '{}'); } catch(e) { c = {}; } }\n      window.__CREATOR_SSR__ = c;\n      // Quick helpers\n      function fmtNum(n){ n = Number(n); if(!isFinite(n)) return 'N/A'; if(n>=1e6) return (n/1e6).toFixed(1)+'M'; if(n>=1e3) return (n/1e3).toFixed(1)+'K'; return n.toLocaleString(); }\n      function fmtPrice(p){ p = Number(p); if(!isFinite(p)) return 'N/A'; return p===0 ? 'Free' : ('$'+p.toFixed(2)); }\n      function fmtDate(s){ try{ var d=new Date(s); return d.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}); }catch(e){ return s||''; } }\n      function setText(id, val){ var el=document.getElementById(id); if(el && val!=null) el.textContent = String(val); }\n      function setHTML(id, html){ var el=document.getElementById(id); if(el && html!=null) el.innerHTML = String(html); }\n      function show(id){ var el=document.getElementById(id); if(el){ el.style.display='block'; } }\n      function hide(id){ var el=document.getElementById(id); if(el){ el.style.display='none'; } }\n\n      // Hide loading, show content\n      hide('loadingState'); show('profileContent');\n\n      // Basic fields\n      setText('breadcrumbName', c.name || c.username);\n      var avatar = (c.avatar) || '/static/no-image.png';\n      var img = document.getElementById('profileAvatar');\n      if(img){ img.src = avatar; img.alt = (c.name || c.username || '') + ' avatar'; }\n      var a = document.getElementById('onlyfansLink'); if(a){ a.href = 'https://onlyfans.com/' + (c.username||''); }\n      setText('profileName', (c.name || c.username) + ' OnlyFans profile');\n      setText('profileUsername', '@' + (c.username||''));\n      setText('joinDate', fmtDate(c.firstPublishedPostDate || c.joinDate));\n      if(c.lastSeen){ setText('lastSeen', fmtDate(c.lastSeen)); var li=document.getElementById('lastSeenItem'); if(li){ li.style.display='flex'; } }\n      if(c.isVerified){ var vb=document.getElementById('verifiedBadge'); if(vb){ vb.style.display='block'; } }\n      if(c.location){ setText('location', c.location); var lc=document.getElementById('locationContainer'); if(lc){ lc.style.display='block'; } }\n\n      // Content stats\n      var contentStats = [\n        { icon: 'fa-image', label: 'Photos', value: fmtNum(c.photoscount) },\n        { icon: 'fa-video', label: 'Videos', value: fmtNum(c.videoscount) },\n        { icon: 'fa-file-alt', label: 'Posts', value: fmtNum(c.postscount) },\n        { icon: 'fa-archive', label: 'Archived Posts', value: fmtNum(c.archivedpostscount) }\n      ];\n      var cs=document.getElementById('contentStats');\n      if(cs){ cs.innerHTML = contentStats.map(function(s){ return '<div class=\"stat-card\"><div class=\"stat-card-header\"><div class=\"stat-card-icon\"><i class=\"fas ' + s.icon + '\"></i></div></div><div class=\"stat-card-label\">' + s.label + '</div><div class=\"stat-card-value\">' + s.value + '</div></div>'; }).join(''); }\n\n      // Engagement stats\n      var likes = fmtNum(c.favoritedcount);\n      var subs = (c.showsubscriberscount ? fmtNum(c.subscriberscount) : 'Hidden');\n      var es=document.getElementById('engagementStats');\n      if(es){ es.innerHTML = ['<div class=\"stat-card\"><div class=\"stat-card-header\"><div class=\"stat-card-icon\"><i class=\"fas fa-users\"></i></div></div><div class=\"stat-card-label\">Subscribers</div><div class=\"stat-card-value\">' + subs + '</div></div>','<div class=\"stat-card\"><div class=\"stat-card-header\"><div class=\"stat-card-icon\"><i class=\"fas fa-heart\"></i></div></div><div class=\"stat-card-label\">Likes</div><div class=\"stat-card-value\">' + likes + '</div></div>'].join(''); }\n\n      // Pricing\n      var prices = [];\n      if(c.subscribePrice !== null && c.subscribePrice !== undefined){ prices.push({ label: 'Monthly Subscription', value: fmtPrice(c.subscribePrice), duration: 'per month' }); }\n      if(c.promotion1_price){ prices.push({ label: 'Promotion Offer', value: fmtPrice(c.promotion1_price), discount: (c.promotion1_discount ? (c.promotion1_discount + '% OFF') : null) }); }\n      var pg=document.getElementById('pricingGrid');\n      if(pg && prices.length){ pg.innerHTML = prices.map(function(p){ return '<div class=\"price-card\"><div class=\"price-card-label\">' + p.label + '</div><div class=\"price-card-value\">' + p.value + '</div>' + (p.duration ? ('<div class=\"price-card-duration\">' + p.duration + '</div>') : '') + '' + (p.discount ? ('<div class=\"price-card-discount\">' + p.discount + '</div>') : '') + '</div>'; }).join(''); }\n\n      // Optional: SEO title\n      try { if(c && (c.name || c.username)) { document.title = (c.name || c.username) + ' • OnlyFans Profile • FansPedia'; } } catch(_){}\n    } catch(e){}\n  })();\n</script>\n`;
+        // Split inject into separate parts to avoid script parsing issues
+        const iconLink = '<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 16 16\'%3E%3Ctext y=\'14\' font-size=\'14\'%3E★%3C/text%3E%3C/svg%3E">';
+        const visibilityStyle = '<style id="ssr-visibility">#loadingState{display:none!important} #profileContent{display:block!important}</style>';
+        const jsonScript = '<script id="__CREATOR_SSR__" type="application/json">' + safeJson + '<\/script>';
+        
+        // SSR logic script - use <\/script> to avoid breaking the script tag
+        const ssrScript = '<script>' +
+          'window.__SSR_USERNAME__=' + JSON.stringify(username) + ';' +
+          'window.__SSR_CLEAN_URL__=' + JSON.stringify('/' + username) + ';' +
+          '(function(){' +
+          'try{' +
+          'var dataEl=document.getElementById("__CREATOR_SSR__");' +
+          'var c={};' +
+          'if(dataEl){try{c=JSON.parse(dataEl.textContent||"{}");}catch(e){c={};}}' +
+          'window.__CREATOR_SSR__=c;' +
+          'function fmtNum(n){n=Number(n);if(!isFinite(n))return"N/A";if(n>=1e6)return(n/1e6).toFixed(1)+"M";if(n>=1e3)return(n/1e3).toFixed(1)+"K";return n.toLocaleString();}' +
+          'function fmtPrice(p){p=Number(p);if(!isFinite(p))return"N/A";return p===0?"Free":("$"+p.toFixed(2));}' +
+          'function fmtDate(s){try{var d=new Date(s);return d.toLocaleDateString("en-US",{year:"numeric",month:"short",day:"numeric"});}catch(e){return s||"";}}' +
+          'function setText(id,val){var el=document.getElementById(id);if(el&&val!=null)el.textContent=String(val);}' +
+          'function setHTML(id,html){var el=document.getElementById(id);if(el&&html!=null)el.innerHTML=String(html);}' +
+          'function show(id){var el=document.getElementById(id);if(el){el.style.display="block";}}' +
+          'function hide(id){var el=document.getElementById(id);if(el){el.style.display="none";}}' +
+          'hide("loadingState");show("profileContent");' +
+          'setText("breadcrumbName",c.name||c.username);' +
+          'var avatar=(c.avatar)||"/static/no-image.png";' +
+          'var img=document.getElementById("profileAvatar");' +
+          'if(img){img.src=avatar;img.alt=(c.name||c.username||"")+" avatar";}' +
+          'var a=document.getElementById("onlyfansLink");if(a){a.href="https://onlyfans.com/"+(c.username||"");}' +
+          'setText("profileName",(c.name||c.username)+" OnlyFans profile");' +
+          'setText("profileUsername","@"+(c.username||""));' +
+          'setText("joinDate",fmtDate(c.firstPublishedPostDate||c.joinDate));' +
+          'if(c.lastSeen){setText("lastSeen",fmtDate(c.lastSeen));var li=document.getElementById("lastSeenItem");if(li){li.style.display="flex";}}' +
+          'if(c.isVerified){var vb=document.getElementById("verifiedBadge");if(vb){vb.style.display="block";}}' +
+          'if(c.location){setText("location",c.location);var lc=document.getElementById("locationContainer");if(lc){lc.style.display="block";}}' +
+          'var contentStats=[' +
+          '{icon:"fa-image",label:"Photos",value:fmtNum(c.photoscount)},' +
+          '{icon:"fa-video",label:"Videos",value:fmtNum(c.videoscount)},' +
+          '{icon:"fa-file-alt",label:"Posts",value:fmtNum(c.postscount)},' +
+          '{icon:"fa-archive",label:"Archived Posts",value:fmtNum(c.archivedpostscount)}' +
+          '];' +
+          'var cs=document.getElementById("contentStats");' +
+          'if(cs){cs.innerHTML=contentStats.map(function(s){return"<div class=\\"stat-card\\"><div class=\\"stat-card-header\\"><div class=\\"stat-card-icon\\"><i class=\\"fas "+s.icon+"\\"></i></div></div><div class=\\"stat-card-label\\">"+s.label+"</div><div class=\\"stat-card-value\\">"+s.value+"</div></div>";}).join("");}' +
+          'var likes=fmtNum(c.favoritedcount);' +
+          'var subs=(c.showsubscriberscount?fmtNum(c.subscriberscount):"Hidden");' +
+          'var es=document.getElementById("engagementStats");' +
+          'if(es){es.innerHTML=["<div class=\\"stat-card\\"><div class=\\"stat-card-header\\"><div class=\\"stat-card-icon\\"><i class=\\"fas fa-users\\"></i></div></div><div class=\\"stat-card-label\\">Subscribers</div><div class=\\"stat-card-value\\">"+subs+"</div></div>","<div class=\\"stat-card\\"><div class=\\"stat-card-header\\"><div class=\\"stat-card-icon\\"><i class=\\"fas fa-heart\\"></i></div></div><div class=\\"stat-card-label\\">Likes</div><div class=\\"stat-card-value\\">"+likes+"</div></div>"].join("");}' +
+          'var prices=[];' +
+          'if(c.subscribePrice!==null&&c.subscribePrice!==undefined){prices.push({label:"Monthly Subscription",value:fmtPrice(c.subscribePrice),duration:"per month"});}' +
+          'if(c.promotion1_price){prices.push({label:"Promotion Offer",value:fmtPrice(c.promotion1_price),discount:(c.promotion1_discount?(c.promotion1_discount+"% OFF"):null)});}' +
+          'var pg=document.getElementById("pricingGrid");' +
+          'if(pg&&prices.length){pg.innerHTML=prices.map(function(p){return"<div class=\\"price-card\\"><div class=\\"price-card-label\\">"+p.label+"</div><div class=\\"price-card-value\\">"+p.value+"</div>"+(p.duration?("<div class=\\"price-card-duration\\">"+p.duration+"</div>"):"")+(p.discount?("<div class=\\"price-card-discount\\">"+p.discount+"</div>"):"")+"</div>";}).join("");}' +
+          'try{if(c&&(c.name||c.username)){document.title=(c.name||c.username)+" • OnlyFans Profile • FansPedia";}}catch(_){}' +
+          '}catch(e){}' +
+          '})();' +
+          '<\/script>';
+        
+        const inject = '\n' + iconLink + '\n' + visibilityStyle + '\n' + jsonScript + '\n' + ssrScript + '\n';
     if (html.includes('</head>')) {
       html = html.replace('</head>', `${inject}</head>`);
     } else if (html.includes('<head')) {
