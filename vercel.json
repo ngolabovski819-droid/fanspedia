@@ -6,8 +6,6 @@
     { "source": "/robots.txt", "destination": "/robots.txt" },
     { "source": "/_templates/creator", "destination": "/creator.html" },
     { "source": "/_templates/creator/", "destination": "/creator.html" },
-    { "source": "/:username", "destination": "/api/creator_public/:username" },
-    { "source": "/:username/", "destination": "/api/creator_public/:username" },
     { "source": "/wishlist", "destination": "/wishlist.html" },
     { "source": "/wishlist/", "destination": "/wishlist.html" },
     { "source": "/categories", "destination": "/categories.html" },
@@ -15,7 +13,10 @@
     { "source": "/categories/:slug", "destination": "/category.html" },
     { "source": "/categories/:slug/", "destination": "/category.html" },
     { "source": "/near-me", "destination": "/near-me.html" },
-    { "source": "/near-me/", "destination": "/near-me.html" }
+    { "source": "/near-me/", "destination": "/near-me.html" },
+    
+    { "source": "/:username([A-Za-z0-9_-]+)", "destination": "/api/creator_public/:username" },
+    { "source": "/:username([A-Za-z0-9_-]+)/", "destination": "/api/creator_public/:username" }
   ],
   "redirects": [
     { "source": "/creator.html", "destination": "/", "permanent": false },
