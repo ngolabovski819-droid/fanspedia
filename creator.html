@@ -2991,5 +2991,71 @@
       }, true);
     })();
   </script>
+
+  <!-- Sticky Bottom Navigation -->
+  <nav class="sticky-bottom-nav" role="navigation" aria-label="Bottom navigation">
+    <a href="/" class="nav-item" data-nav="search">
+      <span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+      <span class="label">Search</span>
+    </a>
+    <a href="/near-me/" class="nav-item" data-nav="near">
+      <span class="icon"><i class="fa-solid fa-location-arrow"></i></span>
+      <span class="label">Near Me</span>
+    </a>
+    <a href="/?sort=best" class="nav-item" data-nav="best">
+      <span class="icon"><i class="fa-solid fa-trophy"></i></span>
+      <span class="label">Best</span>
+    </a>
+    <a href="/?sort=hot" class="nav-item" data-nav="hot">
+      <span class="icon"><i class="fa-solid fa-fire"></i></span>
+      <span class="label">Hot!</span>
+    </a>
+    <a href="/wishlist/" class="nav-item" data-nav="wishlist">
+      <span class="icon position-relative"><i class="fa-solid fa-heart"></i><span class="wishlist-count" style="display:none;position:absolute;top:-6px;right:-6px;background:#ff3b30;color:#fff;font-size:10px;font-weight:700;border-radius:10px;min-width:18px;height:18px;align-items:center;justify-content:center;padding:0 5px;border:2px solid var(--bg-secondary);box-shadow:0 2px 8px rgba(255,59,48,0.4)">0</span></span>
+      <span class="label">Wishlist</span>
+    </a>
+  </nav>
+  <style>
+    .sticky-bottom-nav{position:fixed;left:0;right:0;bottom:calc(0px + env(safe-area-inset-bottom));z-index:9999;display:flex;align-items:center;justify-content:space-between;padding:8px 16px;background:var(--bg-secondary);border-top:1px solid var(--border-color);border-left:0;border-right:0;border-bottom:0;border-radius:0;box-shadow:0 -4px 12px rgba(0,0,0,0.06)}
+    .sticky-bottom-nav .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text-primary);text-decoration:none}
+    .sticky-bottom-nav .icon{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#00AFF0 0%,#0099D6 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,175,240,0.35);color:#fff;position:relative;transition:box-shadow .35s ease, transform .3s ease}
+    .sticky-bottom-nav .nav-item:hover .icon{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,175,240,0.55)}
+    .sticky-bottom-nav .nav-item.active .icon{background:linear-gradient(135deg,#0099D6 0%,#0088C0 100%);box-shadow:0 6px 16px rgba(0,175,240,0.55)}
+    .sticky-bottom-nav .nav-item.active .icon::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:0 0 0 0 rgba(0,175,240,.55);animation:pulseGlow 3.2s ease-in-out infinite;pointer-events:none}
+    @keyframes pulseGlow{0%,65%{box-shadow:0 0 0 0 rgba(0,175,240,.55)}80%{box-shadow:0 0 0 10px rgba(0,175,240,0)}100%{box-shadow:0 0 0 0 rgba(0,175,240,0)}}
+    .sticky-bottom-nav .icon i{font-size:15px}
+    .sticky-bottom-nav .label{font-size:11px;font-weight:700;color:var(--text-primary)}
+  </style>
+  <script>
+    (function(){try{
+      var p=location.pathname;
+      document.querySelectorAll('.sticky-bottom-nav .nav-item').forEach(function(a){
+        var k=a.getAttribute('data-nav');
+        if((k==='search'&&(p==='/'||p==='/index.html'))||(k==='categories'&&p.startsWith('/categories'))){a.classList.add('active');}
+      });
+      var searchLink=document.querySelector('.sticky-bottom-nav .nav-item[data-nav="search"]');
+      if(searchLink){
+        searchLink.addEventListener('click',function(ev){
+          ev.preventDefault();
+          try{
+            var isMobile=window.matchMedia('(max-width: 768px)').matches;
+            var headerInput=document.getElementById('headerSearch')||document.querySelector('.header-search-input');
+            var headerVisible=headerInput && headerInput.offsetParent!==null;
+            if(isMobile && !headerVisible){
+              var mobileTrigger=document.getElementById('mobileSearchTrigger');
+              if(mobileTrigger){mobileTrigger.click();return;}
+            }
+            window.scrollTo({top:0,behavior:'smooth'});
+            if(headerInput && headerVisible){
+              setTimeout(function(){headerInput.focus({preventScroll:true});},220);
+            }else if(!isMobile){
+              location.href='/';
+            }
+          }catch(err){location.href='/';}
+        });
+      }
+    }catch(e){}})();
+  </script>
+  <script src="/utils/wishlist-badge.js?v=20251116-1"></script>
 </body>
 </html>
