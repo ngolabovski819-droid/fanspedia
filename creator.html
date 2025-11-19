@@ -1997,6 +1997,13 @@
       }
       
       saveFavorites(favSet);
+      
+      // Update wishlist badge in sticky navigation
+      if (typeof window.fpUpdateWishlistBadge === 'function') {
+        window.fpUpdateWishlistBadge();
+      } else if (typeof window.updateWishlistBadge === 'function') {
+        window.updateWishlistBadge();
+      }
     };
     
     // Load similar creators with smart similarity scoring
