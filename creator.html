@@ -1739,6 +1739,7 @@
     const popularSearches = ['milf', 'asian', 'big tits', 'trans', 'mature', 'latina', 'big ass', 'bbw'];
 
     function populateMobileSuggestions() {
+      if (!mobileSearchSuggestionsContainer) return;
       mobileSearchSuggestionsContainer.innerHTML = popularSearches.map(term => `
         <a href="/?q=${encodeURIComponent(term)}" class="mobile-search-suggestion">
           <i class="fas fa-search"></i>
@@ -1748,15 +1749,21 @@
     }
 
     function openMobileSearch() {
+      if (!mobileSearchModal) return;
       mobileSearchModal.classList.add('active');
       document.body.style.overflow = 'hidden';
-      setTimeout(() => mobileSearchInput.focus(), 100);
+      if (mobileSearchInput) {
+        setTimeout(() => mobileSearchInput.focus(), 100);
+      }
     }
 
     function closeMobileSearch() {
+      if (!mobileSearchModal) return;
       mobileSearchModal.classList.remove('active');
       document.body.style.overflow = '';
-      mobileSearchInput.value = '';
+      if (mobileSearchInput) {
+        mobileSearchInput.value = '';
+      }
     }
 
     // Event listeners
