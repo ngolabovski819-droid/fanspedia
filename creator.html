@@ -2841,14 +2841,14 @@
     (function(){
       // Initialize on load
       document.addEventListener('DOMContentLoaded', function(){
-
-      // Event delegation to catch clicks even if header is re-rendered
-      document.addEventListener('click', function(e){
-        const themeBtn = e.target.closest && e.target.closest('.theme-toggle');
-        if (themeBtn){ e.preventDefault(); toggleTheme(); return; }
-        const safeBtn = e.target.closest && e.target.closest('.safe-search-toggle');
-        if (safeBtn){ e.preventDefault(); toggleSafe(); return; }
-      }, true);
+        // Event delegation to catch clicks even if header is re-rendered
+        document.addEventListener('click', function(e){
+          const themeBtn = e.target.closest && e.target.closest('.theme-toggle');
+          if (themeBtn){ e.preventDefault(); toggleTheme(); return; }
+          const safeBtn = e.target.closest && e.target.closest('.safe-search-toggle');
+          if (safeBtn){ e.preventDefault(); toggleSafe(); return; }
+        }, true);
+      });
     })();
   </script>
 
