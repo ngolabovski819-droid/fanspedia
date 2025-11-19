@@ -2712,36 +2712,27 @@
     const drawerClose = document.getElementById('drawerClose');
     function openDrawer(){
       if (!drawer || !overlay) return;
-      drawer.classList.add('open'); overlay.classList.add('open');
-      drawer.setAttribute('aria-hidden','false'); overlay.setAttribute('aria-hidden','false');
+      drawer.classList.add('open');
+      overlay.classList.add('open');
+      // Keep aria-hidden only on the overlay to avoid hiding focused drawer content
+      overlay.setAttribute('aria-hidden','false');
       document.body.style.overflow='hidden';
     }
-    function closeDrawer(){ if (!drawer || !overlay) return; drawer.classList.remove('open'); overlay.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); overlay.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+    function closeDrawer(){
+      if (!drawer || !overlay) return;
+      drawer.classList.remove('open');
+      overlay.classList.remove('open');
+      overlay.setAttribute('aria-hidden','true');
+      document.body.style.overflow='';
+    }
     if (mobileToggle){ mobileToggle.addEventListener('click', (e)=>{ e.preventDefault(); openDrawer(); }); }
     if (overlay){ overlay.addEventListener('click', closeDrawer); }
     if (drawerClose){ drawerClose.addEventListener('click', closeDrawer); }
     document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeDrawer(); });
 
-    // Mobile drawer categories accordion (ensure visible with inline styles)
-    const drawerCategoriesToggle = document.getElementById('drawerCategoriesToggle');
-    const drawerCategoriesSection = document.getElementById('drawerCategoriesSection');
-    if (drawerCategoriesToggle && drawerCategoriesSection) {
-      drawerCategoriesToggle.addEventListener('click', (e) => {
-        e.preventDefault();
-        const isOpen = drawerCategoriesSection.classList.toggle('open');
-        drawerCategoriesToggle.classList.toggle('open', isOpen);
-        if (isOpen) {
-          const h = drawerCategoriesSection.scrollHeight;
-          drawerCategoriesSection.style.maxHeight = h + 'px';
-          drawerCategoriesSection.style.opacity = '1';
-          drawerCategoriesSection.style.overflowY = 'auto';
-        } else {
-          drawerCategoriesSection.style.maxHeight = '0px';
-          drawerCategoriesSection.style.opacity = '0';
-          drawerCategoriesSection.style.overflowY = 'hidden';
-        }
-      });
-    }
+    // Mobile drawer categories accordion
+    // Handler is attached earlier in the page (with inline max-height/opacity updates).
+    // Avoid double-binding here to prevent toggle flicker.
 
     // Header search submit (redirect to homepage with query)
     const headerSearch = document.getElementById('headerSearch');
