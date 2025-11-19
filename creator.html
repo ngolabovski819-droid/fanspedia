@@ -324,7 +324,7 @@
     .profile-grid { display: grid; grid-template-columns: 350px 1fr; gap: 40px; }
     
     /* Left Column - Image & CTA */
-    .profile-sidebar { position: sticky; top: 80px; height: fit-content; }
+    .profile-sidebar { position: -webkit-sticky; position: sticky; top: 80px; height: fit-content; z-index: 10; }
     .profile-image-wrapper {
       background: var(--bg-card);
       border-radius: 16px;
