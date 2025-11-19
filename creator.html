@@ -2006,14 +2006,17 @@
       // Header info
       document.getElementById('profileName').textContent = (c.name || c.username) + ' OnlyFans profile';
       document.getElementById('profileUsername').textContent = '@' + c.username;
-      document.getElementById('joinDate').textContent = formatDate(c.firstPublishedPostDate || c.joinDate);
+      // Handle both camelCase and lowercase DB fields for dates
+      const joinedRaw = c.firstPublishedPostDate || c.firstpublishedpostdate || c.joinDate || c.joindate;
+      document.getElementById('joinDate').textContent = formatDate(joinedRaw);
       
-      if (c.lastSeen) {
-        document.getElementById('lastSeen').textContent = formatDate(c.lastSeen);
+      const lastSeenRaw = c.lastSeen || c.lastseen;
+      if (lastSeenRaw) {
+        document.getElementById('lastSeen').textContent = formatDate(lastSeenRaw);
         document.getElementById('lastSeenItem').style.display = 'flex';
       }
 
-      if (c.isVerified) {
+      if (c.isVerified || c.isverified) {
         document.getElementById('verifiedBadge').style.display = 'block';
       }
 
@@ -2069,10 +2072,12 @@
 
       // Pricing
       const prices = [];
-      if (c.subscribePrice !== null && c.subscribePrice !== undefined) {
+      // Accept both camelCase and lowercase, and include 0 (Free)
+      const subPriceRaw = (c.subscribePrice !== undefined && c.subscribePrice !== null) ? c.subscribePrice : c.subscribeprice;
+      if (subPriceRaw !== null && subPriceRaw !== undefined) {
         prices.push({
           label: 'Monthly Subscription',
-          value: formatPrice(c.subscribePrice),
+          value: formatPrice(subPriceRaw),
           duration: 'per month'
         });
       }
