@@ -1560,10 +1560,23 @@
     });
 
     // Toggle categories section inside drawer
+    console.log('🔧 Setting up drawer categories toggle...');
+    console.log('🎯 drawerCategoriesToggle:', drawerCategoriesToggle);
+    console.log('🎯 drawerCategoriesSection:', drawerCategoriesSection);
+    
     if (drawerCategoriesToggle && drawerCategoriesSection) {
+      console.log('✅ Both elements found, adding click listener');
       drawerCategoriesToggle.addEventListener('click', () => {
+        console.log('🖱️ Categories toggle clicked!');
         const isOpen = drawerCategoriesSection.classList.toggle('open');
         drawerCategoriesToggle.classList.toggle('open', isOpen);
+        console.log('📂 Categories section is now:', isOpen ? 'OPEN' : 'CLOSED');
+        console.log('📋 Section classes:', drawerCategoriesSection.className);
+      });
+    } else {
+      console.error('❌ Missing elements:', {
+        toggle: !!drawerCategoriesToggle,
+        section: !!drawerCategoriesSection
       });
     }
 
