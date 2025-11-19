@@ -1566,12 +1566,33 @@
     
     if (drawerCategoriesToggle && drawerCategoriesSection) {
       console.log('✅ Both elements found, adding click listener');
-      drawerCategoriesToggle.addEventListener('click', () => {
+      
+      // Log computed styles to debug
+      const computedStyle = window.getComputedStyle(drawerCategoriesSection);
+      console.log('📐 Initial computed styles:', {
+        maxHeight: computedStyle.maxHeight,
+        opacity: computedStyle.opacity,
+        overflow: computedStyle.overflow,
+        display: computedStyle.display
+      });
+      
+      drawerCategoriesToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         console.log('🖱️ Categories toggle clicked!');
         const isOpen = drawerCategoriesSection.classList.toggle('open');
         drawerCategoriesToggle.classList.toggle('open', isOpen);
         console.log('📂 Categories section is now:', isOpen ? 'OPEN' : 'CLOSED');
         console.log('📋 Section classes:', drawerCategoriesSection.className);
+        
+        // Log computed styles after toggle
+        const newStyle = window.getComputedStyle(drawerCategoriesSection);
+        console.log('📐 After toggle computed styles:', {
+          maxHeight: newStyle.maxHeight,
+          opacity: newStyle.opacity,
+          overflow: newStyle.overflow,
+          display: newStyle.display
+        });
       });
     } else {
       console.error('❌ Missing elements:', {
