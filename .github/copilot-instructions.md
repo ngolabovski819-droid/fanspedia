@@ -3,13 +3,13 @@
 Quick links: [PATTERNS.md](./PATTERNS.md)  [CHECKLISTS.md](./CHECKLISTS.md)  [ARCHITECTURE.md](./ARCHITECTURE.md)  [QUICKSTART.md](./QUICKSTART.md)  [TROUBLESHOOTING.md](./TROUBLESHOOTING.md)
 
 ## Big Picture
-- Production codebase for fanspedia.net. Full-featured OnlyFans search with active creator profiles, categories, and Similar Creators recommendations.
+- Production codebase for fanspedia.net. Search and categories are active; creator profiles are temporarily disabled (redirects to home; API returns 410 via `api/disabled.js`).
 - Same stack as sibling repo: vanilla JS frontend, Vercel serverless backend, Supabase PostgreSQL, Python Playwright scrapers (V1 CSV, V2 direct upsert + snapshots).
 
 ## Key Architecture
-- Pages: `index.html`, `categories.html`, `category.html`, `creator.html`. Categories are the single source of truth in `config/categories.js` and must be imported with a version: `.../categories.js?v=YYYYMMDD-N`. Bump `?v=` on every change.
+- Pages: `index.html`, `categories.html`, `category.html`. Categories are the single source of truth in `config/categories.js` and must be imported with a version: `.../categories.js?v=YYYYMMDD-N`. Bump `?v=` on every change.
 - Infinite scroll uses `currentPage,isLoading,hasMore` and a "Load More" button. Images use `images.weserv.nl`, first card eager/high priority.
-- API (`api/`): `search.js` (main), `health.js`, `analytics.js`. Creator profiles fully functional with Similar Creators section and heart button favorites.
+- API (`api/`): `search.js` (main), `health.js`, `analytics.js`, and `disabled.js` (returns 410 for creator routes). `api/creator/[username].js` SSR exists but is not mounted in production while profiles are disabled.
 - Supabase via REST only. Headers: `apikey`, `Authorization: Bearer`, `Prefer: count=exact`. 60s Map cache in `search.js`.
 - Search splits `q` by `|` or `,` and ORmatches across `username,name,about` (exclude `location`). Example: `q=goth|gothic|alt`.
 
@@ -23,7 +23,7 @@ Quick links: [PATTERNS.md](./PATTERNS.md)  [CHECKLISTS.md](./CHECKLISTS.md)  [AR
 npm start
 curl "http://127.0.0.1:3000/api/search?q=test&page=1&page_size=10"
 ```
-- Creator profiles accessible via `/creator.html?u=username` with full functionality including Similar Creators section.
+- While profiles are disabled, requests to `/creator.html` or `/c/:id/:slug` redirect to `/` in local `server.js` (mirrors production) and `/api/creator/*` returns 410 (see `api/disabled.js`).
 - Supabase REST quick check:
 ```powershell
 curl "$env:SUPABASE_URL/rest/v1/onlyfans_profiles?select=id,username&limit=5" -H "apikey: $env:SUPABASE_KEY" -H "Authorization: Bearer $env:SUPABASE_KEY"
@@ -44,7 +44,8 @@ python scripts/v2_refresh_orchestrator.py --cookies cookies.json --batch-size 10
 
 ## Deploy & Routing
 - Deploys to fanspedia.net on push to `main`. Set `SUPABASE_URL` and `SUPABASE_KEY` (service role) in Vercel.
-- Creator profiles fully enabled and functional. Category rewrites handled in `vercel.json`. Build sitemaps before deploy: `npm run build:sitemaps` (writes multiple sitemap files in repo root).
+- Creator routes are disabled via `vercel.json` (redirects) and `api/disabled.js`. To reenable later, update `vercel.json`, mount `api/creator/[username].js` in `server.js`, and restore `creator.html` rewrite.
+- Category rewrites handled in `vercel.json`. Build sitemaps before deploy: `npm run build:sitemaps` (writes multiple sitemap files in repo root).
 - If rewrites are ignored in production, follow `VERCEL_FIX_INSTRUCTIONS.md` (Framework Preset "Other", no Output Directory override, redeploy fresh).
 
 ## Conventions & Gotchas
