@@ -18,10 +18,7 @@
     { "source": "/:username([A-Za-z0-9_-]+)", "destination": "/api/creator_public/:username" },
     { "source": "/:username([A-Za-z0-9_-]+)/", "destination": "/api/creator_public/:username" }
   ],
-  "redirects": [
-    { "source": "/creator.html", "destination": "/", "permanent": false },
-    { "source": "/c/:id/:slug", "destination": "/", "permanent": false }
-  ],
+  "redirects": [],
   "headers": [
     {
       "source": "/index.html",
