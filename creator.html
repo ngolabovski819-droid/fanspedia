@@ -1326,7 +1326,7 @@
 
   <!-- Mobile Drawer -->
   <div id="drawerOverlay" class="drawer-overlay" tabindex="-1" aria-hidden="true"></div>
-  <nav id="mobileDrawer" class="mobile-drawer" aria-hidden="true" aria-labelledby="mobileMenuToggle">
+  <nav id="mobileDrawer" class="mobile-drawer" aria-labelledby="mobileMenuToggle">
     <button class="drawer-close" id="drawerClose" aria-label="Close menu">×</button>
     <a href="/">Home</a>
     
@@ -1519,7 +1519,6 @@
       if (!mobileDrawer || !drawerOverlay) return;
       mobileDrawer.classList.add('open');
       drawerOverlay.classList.add('open');
-      mobileDrawer.setAttribute('aria-hidden', 'false');
       drawerOverlay.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
     }
@@ -1528,12 +1527,15 @@
       if (!mobileDrawer || !drawerOverlay) return;
       mobileDrawer.classList.remove('open');
       drawerOverlay.classList.remove('open');
-      mobileDrawer.setAttribute('aria-hidden', 'true');
       drawerOverlay.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
     }
 
     // Populate drawer categories (popular only)
+    console.log('🔧 Populating drawer categories...');
+    console.log('📦 popularCategories:', popularCategories);
+    console.log('🎯 drawerCategories element:', drawerCategories);
+    
     if (drawerCategories) {
       const drawerHTML = popularCategories.map(cat => {
         const slug = categoryToSlug(cat);
@@ -1541,6 +1543,9 @@
         return `<a href="/categories/${slug}/">${label}</a>`;
       }).join('');
       drawerCategories.innerHTML = drawerHTML;
+      console.log('✅ Drawer categories populated:', drawerCategories.children.length, 'categories');
+    } else {
+      console.error('❌ drawerCategories element not found!');
     }
 
     if (mobileMenuToggle) mobileMenuToggle.addEventListener('click', openDrawer);
@@ -1549,7 +1554,7 @@
 
     // ESC to close
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && mobileDrawer && mobileDrawer.classList.contains('active')) {
+      if (e.key === 'Escape' && mobileDrawer && mobileDrawer.classList.contains('open')) {
         closeDrawer();
       }
     });
