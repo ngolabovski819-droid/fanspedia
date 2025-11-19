@@ -1754,6 +1754,9 @@
         renderProfile(window.__CREATOR_SSR__);
         loadingState.style.display = 'none';
         profileContent.style.display = 'block';
+        
+        // Load similar creators after SSR render
+        loadSimilarCreators();
         return;
       }
 
@@ -1788,6 +1791,9 @@
         
         loadingState.style.display = 'none';
         profileContent.style.display = 'block';
+        
+        // Load similar creators after API render
+        loadSimilarCreators();
       } catch (error) {
         console.error('Error loading profile:', error);
         loadingState.style.display = 'none';
@@ -1955,10 +1961,15 @@
     // Load on page ready
     // Skip if SSR already populated the page (DOMContentLoaded ensures SSR script ran first)
     if (!window.__CREATOR_SSR__ || !window.__SSR_USERNAME__) {
-      loadCreatorProfile();
+      loadCreatorProfile().then(() => {
+        // Load similar creators after profile loads
+        loadSimilarCreators();
+      });
     } else {
       console.log('SSR data detected, skipping client-side load. Storing for similarity:', window.__CREATOR_SSR__);
       window.currentCreator = window.__CREATOR_SSR__;
+      // Load similar creators after SSR data is set
+      setTimeout(() => loadSimilarCreators(), 100);
     }
     
     // Favorites helper functions
@@ -2318,9 +2329,6 @@
       // Show the section
       document.getElementById('similarCreatorsSection').style.display = 'block';
     }
-    
-    // Load similar creators after main profile loads (with retry mechanism)
-    setTimeout(loadSimilarCreators, 100);
 
     // Event delegation for favorite buttons in Similar Creators section
     document.addEventListener('click', function(e) {
