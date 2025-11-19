@@ -1,51 +1,27 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Creator Profile - BestOFGirls</title>
+  <title>Creator Profile - FansPedia</title>
   <meta name="description" content="View detailed OnlyFans creator profile with stats, pricing, and direct link">
   
-  <!-- Replace URL immediately for clean URLs -->
+  <!-- URL handling for creator profiles -->
   <script>
     (function() {
-      // Global cache-busting for creator.html to ensure latest JS
-      var VERSION = '20251114-2';
+      // Simple URL cleanup - just update the address bar if we have query params
       const params = new URLSearchParams(window.location.search);
       const username = params.get('u');
-      const url = new URL(window.location.href);
-      const path = window.location.pathname || '';
       
-      // If we're already on creator.html but missing or outdated version, reload with version
-      if (url.pathname === '/creator.html' && params.get('v') !== VERSION) {
-        params.set('v', VERSION);
-        url.search = params.toString();
-        try { window.location.replace(url.toString()); } catch (e) { window.location.href = url.toString(); }
-        return;
-      }
-      
-      // If we're on a clean URL like /fitbryceadams, force redirect to creator.html with version
-      if (url.pathname !== '/creator.html') {
-        var parts = path.split('/').filter(Boolean);
-        if (parts.length === 1 && !username) {
-          var uname = parts[0];
-          var target = '/creator.html?v=' + VERSION + '&u=' + encodeURIComponent(uname) + '&ssr=1&cleanUrl=' + encodeURIComponent('/' + uname);
-          try { window.location.replace(target); } catch (e) { window.location.href = target; }
-          return;
-        }
-      }
-      
-      // Case 1: Coming from SSR with cleanUrl param
-      const cleanUrl = params.get('cleanUrl') || window.__SSR_CLEAN_URL__;
-      if (params.get('ssr') === '1' && cleanUrl) {
+      // If we have a username param and we're on creator.html, update to clean URL
+      if (username && window.location.pathname === '/creator.html') {
+        const cleanUrl = '/' + username;
         if (window.history && window.history.replaceState) {
-          window.history.replaceState(null, '', cleanUrl);
-        }
-      }
-      // Case 2: Old URL format without SSR flag - redirect to clean URL
-      else if (username && !params.get('ssr')) {
-        if (window.history && window.history.replaceState) {
-          window.history.replaceState(null, '', '/' + username);
+          try {
+            window.history.replaceState(null, '', cleanUrl);
+          } catch(e) {
+            console.log('Could not update URL:', e);
+          }
         }
       }
     })();
@@ -1173,6 +1149,23 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
+    
+    /* Ensure footer is visible and prevent overflow scroll */
+    footer {
+      display: block !important;
+      margin-bottom: 0 !important;
+      padding-bottom: 40px !important;
+    }
+    /* Prevent body from showing horizontal overflow */
+    body {
+      overflow-x: hidden;
+    }
+    html {
+      overflow-x: hidden;
+    }
+  </style>
+</head>
+<body>
   <script type="module">
     import { slugify, toCreatorUrl } from '/utils/creatorUrl.js';
     (async () => {
@@ -1189,6 +1182,57 @@
       }
     })();
   </script>
+
+  <header class="superior-header" id="mainHeader">
+    <!-- Main header -->
+    <div class="header-main">
+      <div class="header-container">
+        <!-- Logo -->
+        <a href="/" class="logo-section">
+          <svg width="140" height="42" viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+            <!-- Pin + F -->
+            <g transform="translate(10,8)">
+              <!-- Map pin -->
+              <path
+                d="M48 4
+                   C31 4 18 17.5 18 34.5
+                   C18 48.5 30.1 62.9 42.4 79.1
+                   C45.0 82.7 51.0 82.7 53.6 79.1
+                   C65.9 62.9 78 48.5 78 34.5
+                   C78 17.5 65 4 48 4
+                   Z"
+                fill="#FFFFFF"
+              />
+              <!-- Centered large F -->
+              <text
+                x="48"
+                y="40"
+                text-anchor="middle"
+                dominant-baseline="middle"
+                font-family="Poppins, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+                font-size="34"
+                font-weight="700"
+                fill="#000000">
+                F
+              </text>
+            </g>
+
+            <!-- Wordmark -->
+            <text
+              x="115"
+              y="64"
+              font-family="Poppins, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+              font-size="40"
+              font-weight="500"
+              fill="#FFFFFF">
+              FansPedia
+            </text>
+          </svg>
+        </a>
+
+        <!-- Desktop categories (moved next to logo) -->
+        <div class="desktop-nav">
+          <button id="categoriesToggle" class="nav-btn" aria-haspopup="true" aria-expanded="false">
             Categories <i class="fas fa-chevron-down" aria-hidden="true"></i>
           </button>
           <div id="categoriesMenu" class="dropdown-menu" role="menu" aria-hidden="true">
@@ -1196,23 +1240,41 @@
           </div>
         </div>
 
-        <!-- Search positioned in middle (flex grows) -->
+        <!-- Search - THE CENTERPIECE -->
         <div class="header-search-section">
           <div class="header-search-wrapper">
             <i class="fas fa-search header-search-icon"></i>
-            <input type="text" class="header-search-input" placeholder="Search by name, location, category..." id="headerSearch" autocomplete="off" autocapitalize="none" spellcheck="false">
+            <input 
+              type="text" 
+              class="header-search-input" 
+              placeholder="Search by name, location, category..."
+              id="headerSearch"
+              autocomplete="off"
+              autocapitalize="none"
+              spellcheck="false"
+            >
           </div>
+          
         </div>
-        <!-- Actions: safe search + theme + burger on the right -->
+
+        <!-- Actions -->
         <div class="header-actions">
+          <!-- Mobile Search Trigger (visible only on mobile) -->
           <button class="mobile-search-trigger" id="mobileSearchTrigger" aria-label="Search">
             <i class="fas fa-search"></i>
           </button>
+          <!-- Safe Search toggle -->
           <button class="safe-search-toggle" id="safeSearchToggle" aria-label="Toggle Safe Search (blur images)" title="Safe Search: Browse comfortably in public">
             <i class="fas fa-eye-slash"></i>
           </button>
-          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><i class="fas fa-moon"></i></button>
-          <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
+          <!-- Dark mode toggle -->
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+          </button>
+          <!-- Mobile menu toggle only -->
+          <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
+            <i class="fas fa-bars"></i>
+          </button>
         </div>
       </div>
     </div>
@@ -1226,33 +1288,38 @@
       </button>
       <div class="mobile-search-input-wrapper">
         <i class="fas fa-search mobile-search-icon"></i>
-        <input type="text" class="mobile-search-input" id="mobileSearchInput" placeholder="Search creators..." autocomplete="off" />
+        <input type="text" class="mobile-search-input" id="mobileSearchInput" placeholder="Search by name, location, category..." autocomplete="off" autocapitalize="none" spellcheck="false">
       </div>
     </div>
     <div class="mobile-search-content">
-      <div class="mobile-search-label">Popular Searches</div>
-      <div class="mobile-search-suggestions" id="mobileSearchSuggestionsContainer"></div>
+      <div class="mobile-search-label">POPULAR SEARCHES</div>
+      <div class="mobile-search-suggestions" id="mobileSearchSuggestions">
+        <!-- Populated dynamically -->
+      </div>
     </div>
   </div>
 
-  <!-- Safe Search Modal -->
-  <div class="safe-search-modal" id="safeSearchModal" role="dialog" aria-labelledby="safeSearchModalTitle" aria-modal="true">
+  <!-- Safe Search Modal (First-Time Consent) -->
+  <div id="safeSearchModal" class="safe-search-modal" role="dialog" aria-labelledby="safeSearchModalTitle" aria-modal="true">
     <div class="safe-search-modal-content">
       <div class="safe-search-modal-icon">
         <i class="fas fa-shield-alt"></i>
       </div>
-      <h2 id="safeSearchModalTitle">Enable Safe Search?</h2>
-      <p>Safe Search blurs potentially NSFW content, making browsing more comfortable in public spaces. You can toggle it anytime using the shield button in the header or pressing <strong>Alt+S</strong>.</p>
+      <h2 id="safeSearchModalTitle">Browse Safely in Public?</h2>
+      <p>
+        Enable <strong>Safe Search</strong> to blur images so you can comfortably browse at work, on the bus, or anywhere public. 
+        You can toggle this anytime using the shield icon in the header.
+      </p>
       <div class="safe-search-modal-actions">
-        <button class="safe-search-modal-btn safe-search-modal-btn-primary" id="enableSafeSearchBtn">
-          <i class="fas fa-check"></i> Enable Safe Search
+        <button class="safe-search-modal-btn safe-search-modal-btn-primary" id="enableSafeSearch">
+          <i class="fas fa-shield-alt"></i> Enable Safe Search
         </button>
-        <button class="safe-search-modal-btn safe-search-modal-btn-secondary" id="dismissSafeSearchBtn">
-          No Thanks, I'll Enable It Later
+        <button class="safe-search-modal-btn safe-search-modal-btn-secondary" id="dismissSafeSearch">
+          No Thanks, I'm in Private
         </button>
       </div>
       <div class="safe-search-modal-footer">
-        Safe Search is OFF by default. Your choice is saved locally.
+        You can change this setting anytime by clicking the <i class="fas fa-eye-slash"></i> icon in the header
       </div>
     </div>
   </div>
@@ -1262,7 +1329,7 @@
   <nav id="mobileDrawer" class="mobile-drawer" aria-hidden="true" aria-labelledby="mobileMenuToggle">
     <button class="drawer-close" id="drawerClose" aria-label="Close menu">×</button>
     <a href="/">Home</a>
-
+    
     <!-- Categories collapsible section -->
     <div class="drawer-categories-toggle" id="drawerCategoriesToggle">
       <div class="icon-text">
@@ -1273,7 +1340,9 @@
     </div>
     <div id="drawerCategoriesSection">
       <div class="drawer-categories-label">MOST POPULAR CATEGORIES</div>
-      <div id="drawerCategories"><!-- populated dynamically --></div>
+      <div id="drawerCategories">
+        <!-- Populated dynamically from config/categories.js -->
+      </div>
       <a href="/categories/" class="drawer-view-all-btn">View All Categories</a>
     </div>
   </nav>
@@ -1670,6 +1739,7 @@
     const popularSearches = ['milf', 'asian', 'big tits', 'trans', 'mature', 'latina', 'big ass', 'bbw'];
 
     function populateMobileSuggestions() {
+      if (!mobileSearchSuggestionsContainer) return;
       mobileSearchSuggestionsContainer.innerHTML = popularSearches.map(term => `
         <a href="/?q=${encodeURIComponent(term)}" class="mobile-search-suggestion">
           <i class="fas fa-search"></i>
@@ -1679,15 +1749,21 @@
     }
 
     function openMobileSearch() {
+      if (!mobileSearchModal) return;
       mobileSearchModal.classList.add('active');
       document.body.style.overflow = 'hidden';
-      setTimeout(() => mobileSearchInput.focus(), 100);
+      if (mobileSearchInput) {
+        setTimeout(() => mobileSearchInput.focus(), 100);
+      }
     }
 
     function closeMobileSearch() {
+      if (!mobileSearchModal) return;
       mobileSearchModal.classList.remove('active');
       document.body.style.overflow = '';
-      mobileSearchInput.value = '';
+      if (mobileSearchInput) {
+        mobileSearchInput.value = '';
+      }
     }
 
     // Event listeners
@@ -2059,7 +2135,13 @@
     }
 
     // Load on page ready
-    loadCreatorProfile();
+    // Skip if SSR already populated the page (DOMContentLoaded ensures SSR script ran first)
+    if (!window.__CREATOR_SSR__ || !window.__SSR_USERNAME__) {
+      loadCreatorProfile();
+    } else {
+      console.log('SSR data detected, skipping client-side load. Storing for similarity:', window.__CREATOR_SSR__);
+      window.currentCreator = window.__CREATOR_SSR__;
+    }
     
     // Load similar creators with smart similarity scoring
   async function loadSimilarCreators(retryCount = 0) {
@@ -2395,6 +2477,347 @@
     })();
   </script>
 
+  <!-- Header Interaction Scripts -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    console.log('🎯 Header scripts DOMContentLoaded fired');
+    // ============================================
+    // DARK MODE TOGGLE
+    // ============================================
+    const themeToggle = document.getElementById('themeToggle');
+    console.log('🎨 Theme toggle element:', themeToggle);
+    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+    
+    // Get saved theme or use system preference
+    function getCurrentTheme() {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) return savedTheme;
+      // Default to light mode
+      return 'light';
+    }
+    
+    // Apply theme
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      const icon = themeToggle.querySelector('i');
+      if (theme === 'dark') {
+        icon.className = 'fas fa-sun';
+        themeToggle.setAttribute('aria-label', 'Switch to light mode');
+      } else {
+        icon.className = 'fas fa-moon';
+        themeToggle.setAttribute('aria-label', 'Switch to dark mode');
+      }
+    }
+    
+    // Toggle theme
+    function toggleTheme() {
+      const currentTheme = getCurrentTheme();
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('theme', newTheme);
+      applyTheme(newTheme);
+    }
+    
+    // Initialize theme on load
+    applyTheme(getCurrentTheme());
+    
+    // Listen for toggle clicks
+    if (themeToggle) {
+      console.log('✅ Theme toggle found, adding click listener');
+      themeToggle.addEventListener('click', toggleTheme);
+    } else {
+      console.error('❌ Theme toggle NOT found in DOM');
+    }
+    
+    // Listen for system theme changes
+    prefersDarkScheme.addEventListener('change', (e) => {
+      if (!localStorage.getItem('theme')) {
+        applyTheme(e.matches ? 'dark' : 'light');
+      }
+    });
+
+    // ============================================
+    // SAFE SEARCH FUNCTIONALITY
+    // ============================================
+    const safeSearchToggle = document.getElementById('safeSearchToggle');
+    console.log('🔍 Safe search toggle element:', safeSearchToggle);
+    const safeSearchModal = document.getElementById('safeSearchModal');
+    const enableSafeSearchBtn = document.getElementById('enableSafeSearch');
+    const dismissSafeSearchBtn = document.getElementById('dismissSafeSearch');
+    
+    // Get saved Safe Search preference (default OFF for new users)
+    function getSafeSearchState() {
+      const saved = localStorage.getItem('safeSearch');
+      return saved === 'true'; // Returns false by default
+    }
+    
+    // Check if user has seen the modal before
+    function hasSeenSafeSearchModal() {
+      return localStorage.getItem('safeSearchModalShown') === 'true';
+    }
+    
+    // Apply Safe Search state to UI
+    function applySafeSearch(enabled) {
+      if (enabled) {
+        document.body.classList.add('safe-search-active');
+        safeSearchToggle.classList.add('active');
+        safeSearchToggle.querySelector('i').className = 'fas fa-eye-slash';
+        safeSearchToggle.setAttribute('aria-label', 'Disable Safe Search (show images)');
+        safeSearchToggle.setAttribute('title', 'Safe Search: ON (images blurred)');
+      } else {
+        document.body.classList.remove('safe-search-active');
+        safeSearchToggle.classList.remove('active');
+        safeSearchToggle.querySelector('i').className = 'fas fa-eye';
+        safeSearchToggle.setAttribute('aria-label', 'Enable Safe Search (blur images)');
+        safeSearchToggle.setAttribute('title', 'Safe Search: OFF (images visible)');
+      }
+      localStorage.setItem('safeSearch', enabled.toString());
+    }
+    
+    // Toggle Safe Search
+    function toggleSafeSearch() {
+      const current = getSafeSearchState();
+      applySafeSearch(!current);
+    }
+    
+    // Initialize Safe Search on page load
+    function initSafeSearch() {
+      // Apply saved preference
+      const savedState = getSafeSearchState();
+      applySafeSearch(savedState);
+      
+      // Check URL parameter for forced state (?safe=1)
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('safe')) {
+        const forcedState = urlParams.get('safe') === '1';
+        applySafeSearch(forcedState);
+      }
+    }
+    
+    // Event listeners
+    if (safeSearchToggle) {
+      console.log('✅ Safe search toggle found, adding click listener');
+      safeSearchToggle.addEventListener('click', toggleSafeSearch);
+    } else {
+      console.error('❌ Safe search toggle NOT found in DOM');
+    }
+    
+    if (enableSafeSearchBtn) {
+      enableSafeSearchBtn.addEventListener('click', () => {
+        applySafeSearch(true);
+        if (safeSearchModal) {
+          safeSearchModal.classList.remove('show');
+          document.body.style.overflow = '';
+        }
+      });
+    }
+    
+    if (dismissSafeSearchBtn) {
+      dismissSafeSearchBtn.addEventListener('click', () => {
+        applySafeSearch(false);
+        if (safeSearchModal) {
+          safeSearchModal.classList.remove('show');
+          document.body.style.overflow = '';
+        }
+      });
+    }
+    
+    // Close modal on overlay click
+    if (safeSearchModal) {
+      safeSearchModal.addEventListener('click', (e) => {
+        if (e.target === safeSearchModal) {
+          applySafeSearch(false);
+          safeSearchModal.classList.remove('show');
+          document.body.style.overflow = '';
+        }
+      });
+    }
+    
+    // Keyboard shortcut: Alt+S to toggle
+    document.addEventListener('keydown', (e) => {
+      if (e.altKey && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        toggleSafeSearch();
+      }
+      
+      // Escape key closes modal
+      if (e.key === 'Escape' && safeSearchModal && safeSearchModal.classList.contains('show')) {
+        applySafeSearch(false);
+        safeSearchModal.classList.remove('show');
+        document.body.style.overflow = '';
+      }
+    });
+    
+    // Initialize Safe Search
+    initSafeSearch();
+
+    /* ============================================
+       MOBILE SEARCH MODAL
+       ============================================ */
+    const mobileSearchModal = document.getElementById('mobileSearchModal');
+    const mobileSearchTrigger = document.getElementById('mobileSearchTrigger');
+    const mobileSearchBack = document.getElementById('mobileSearchBack');
+    const mobileSearchInput = document.getElementById('mobileSearchInput');
+    const mobileSearchSuggestions = document.getElementById('mobileSearchSuggestions');
+
+    // Popular searches
+    const popularSearches = ['milf', 'asian', 'big tits', 'trans', 'mature', 'latina', 'big ass', 'bbw'];
+
+    // Populate suggestions
+    function populateMobileSuggestions() {
+      if (mobileSearchSuggestions) {
+        const suggestionsHTML = popularSearches.map(term => 
+          `<a href="/?q=${encodeURIComponent(term)}" class="mobile-search-suggestion">
+            <i class="fas fa-fire"></i>
+            <span>${term}</span>
+          </a>`
+        ).join('');
+        mobileSearchSuggestions.innerHTML = suggestionsHTML;
+      }
+    }
+
+    // Open mobile search
+    function openMobileSearch() {
+      if (mobileSearchModal) {
+        mobileSearchModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => {
+          if (mobileSearchInput) mobileSearchInput.focus();
+        }, 100);
+      }
+    }
+
+    // Close mobile search
+    function closeMobileSearch() {
+      if (mobileSearchModal) {
+        mobileSearchModal.classList.remove('active');
+        document.body.style.overflow = '';
+        if (mobileSearchInput) mobileSearchInput.value = '';
+      }
+    }
+
+    // Event listeners
+    if (mobileSearchTrigger) {
+      mobileSearchTrigger.addEventListener('click', openMobileSearch);
+    }
+
+    if (mobileSearchBack) {
+      mobileSearchBack.addEventListener('click', closeMobileSearch);
+    }
+
+    // Handle search submission
+    if (mobileSearchInput) {
+      mobileSearchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          const query = mobileSearchInput.value.trim();
+          if (query) {
+            window.location.href = `/?q=${encodeURIComponent(query)}`;
+          }
+        }
+      });
+    }
+
+    // Initialize suggestions
+    populateMobileSuggestions();
+
+    // ============================================
+    // HEADER FUNCTIONALITY
+    // ============================================
+
+    // Add scrolled class to header
+    window.addEventListener('scroll', () => {
+      const header = document.getElementById('mainHeader');
+      if (header) {
+        if (window.pageYOffset > 50) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+      }
+    });
+
+    // Desktop Categories dropdown
+    const catToggle = document.getElementById('categoriesToggle');
+    const catMenuEl = document.getElementById('categoriesMenu');
+    if (catToggle && catMenuEl) {
+      catToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = catMenuEl.classList.toggle('open');
+        catToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        catMenuEl.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+      });
+      document.addEventListener('click', (e) => {
+        if (!catMenuEl.classList.contains('open')) return;
+        if (!catMenuEl.contains(e.target) && e.target !== catToggle) {
+          catMenuEl.classList.remove('open');
+          catToggle.setAttribute('aria-expanded', 'false');
+          catMenuEl.setAttribute('aria-hidden', 'true');
+        }
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          catMenuEl.classList.remove('open');
+          catToggle.setAttribute('aria-expanded', 'false');
+          catMenuEl.setAttribute('aria-hidden', 'true');
+        }
+      });
+    }
+
+    // Mobile drawer
+    const mobileToggle = document.getElementById('mobileMenuToggle');
+    const drawer = document.getElementById('mobileDrawer');
+    const overlay = document.getElementById('drawerOverlay');
+    const drawerClose = document.getElementById('drawerClose');
+    function openDrawer(){
+      if (!drawer || !overlay) return;
+      drawer.classList.add('open'); overlay.classList.add('open');
+      drawer.setAttribute('aria-hidden','false'); overlay.setAttribute('aria-hidden','false');
+      document.body.style.overflow='hidden';
+    }
+    function closeDrawer(){ if (!drawer || !overlay) return; drawer.classList.remove('open'); overlay.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); overlay.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+    if (mobileToggle){ mobileToggle.addEventListener('click', (e)=>{ e.preventDefault(); openDrawer(); }); }
+    if (overlay){ overlay.addEventListener('click', closeDrawer); }
+    if (drawerClose){ drawerClose.addEventListener('click', closeDrawer); }
+    document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeDrawer(); });
+
+    // Mobile drawer categories accordion
+    const drawerCategoriesToggle = document.getElementById('drawerCategoriesToggle');
+    const drawerCategoriesSection = document.getElementById('drawerCategoriesSection');
+    if (drawerCategoriesToggle && drawerCategoriesSection) {
+      drawerCategoriesToggle.addEventListener('click', () => {
+        drawerCategoriesSection.classList.toggle('open');
+      });
+    }
+
+    // Header search submit (redirect to homepage with query)
+    const headerSearch = document.getElementById('headerSearch');
+    const headerSearchBtn = document.getElementById('headerSearchBtn');
+    if (headerSearchBtn) {
+      headerSearchBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const query = headerSearch ? headerSearch.value.trim() : '';
+        if (query) {
+          window.location.href = `/?q=${encodeURIComponent(query)}`;
+        } else {
+          window.location.href = '/';
+        }
+      });
+    }
+    if (headerSearch) {
+      headerSearch.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          const query = headerSearch.value.trim();
+          if (query) {
+            window.location.href = `/?q=${encodeURIComponent(query)}`;
+          } else {
+            window.location.href = '/';
+          }
+        }
+      });
+    }
+    }); // End DOMContentLoaded
+  </script>
+
   <!-- Similar Creators Section -->
   <section id="similarCreatorsSection" style="display: none;">
     <div class="container">
@@ -2420,7 +2843,7 @@
               </svg>
             </div>
             <div class="footer-logo-text">
-              <span class="footer-logo-main">BestOnlyFansGirls</span>
+              <span class="footer-logo-main">FansPedia</span>
               <span class="footer-logo-sub">Your Premium Creator Directory</span>
             </div>
           </div>
@@ -2488,7 +2911,7 @@
       <div class="footer-bottom">
         <div class="footer-bottom-content">
           <p class="footer-copyright">
-            © 2025 BestOnlyFansGirls.net - All rights reserved
+            © 2025 FansPedia.net - All rights reserved
           </p>
           <div class="footer-stats">
             <span class="stat-badge">
