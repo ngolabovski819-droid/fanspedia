@@ -2473,10 +2473,12 @@
   <!-- Header Interaction Scripts -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+    console.log('🎯 Header scripts DOMContentLoaded fired');
     // ============================================
     // DARK MODE TOGGLE
     // ============================================
     const themeToggle = document.getElementById('themeToggle');
+    console.log('🎨 Theme toggle element:', themeToggle);
     const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
     
     // Get saved theme or use system preference
@@ -2513,7 +2515,10 @@
     
     // Listen for toggle clicks
     if (themeToggle) {
+      console.log('✅ Theme toggle found, adding click listener');
       themeToggle.addEventListener('click', toggleTheme);
+    } else {
+      console.error('❌ Theme toggle NOT found in DOM');
     }
     
     // Listen for system theme changes
@@ -2527,6 +2532,7 @@
     // SAFE SEARCH FUNCTIONALITY
     // ============================================
     const safeSearchToggle = document.getElementById('safeSearchToggle');
+    console.log('🔍 Safe search toggle element:', safeSearchToggle);
     const safeSearchModal = document.getElementById('safeSearchModal');
     const enableSafeSearchBtn = document.getElementById('enableSafeSearch');
     const dismissSafeSearchBtn = document.getElementById('dismissSafeSearch');
@@ -2582,7 +2588,10 @@
     
     // Event listeners
     if (safeSearchToggle) {
+      console.log('✅ Safe search toggle found, adding click listener');
       safeSearchToggle.addEventListener('click', toggleSafeSearch);
+    } else {
+      console.error('❌ Safe search toggle NOT found in DOM');
     }
     
     if (enableSafeSearchBtn) {
