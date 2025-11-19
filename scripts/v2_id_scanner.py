@@ -155,6 +155,11 @@ def extract_fields(json_data: Dict) -> Dict[str, Any]:
         else:
             fields[f] = v
     
+    # BUGFIX: OnlyFans API sometimes returns 'abouut' (typo) instead of 'about'
+    # Map the typo to the correct field name
+    if 'abouut' in json_data and not fields.get('about'):
+        fields['about'] = safe_get(json_data, 'abouut', '')
+    
     # Avatar thumbs
     a_thumbs = flatten_thumb_dict(safe_get(json_data, "avatarThumbs", {}))
     fields["avatar_c50"] = a_thumbs["c50"]
