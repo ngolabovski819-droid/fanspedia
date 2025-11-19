@@ -877,7 +877,7 @@
           const priceText = (item.subscribePrice && !isNaN(item.subscribePrice)) ? `$${parseFloat(item.subscribePrice).toFixed(2)}` : 'FREE';
           const verifiedIcon = item.isVerified ? '✅ ' : '';
           const bio = item.about || '';
-          const profileUrl = username !== '—' ? `https://onlyfans.com/${encodeURIComponent(username)}` : '#';
+          const profileUrl = username !== '—' ? `/creator.html?v=20251119-1&u=${encodeURIComponent(username)}` : '#';
           const col = document.createElement('div');
           col.className = 'col-sm-6 col-md-4 col-lg-3 mb-4';
           const safeUsername = String(username).replace(/'/g, "\\'");
@@ -895,7 +895,7 @@
                 <p class=\"username\">@${username}</p>
                 ${priceText === 'FREE' ? `<p class='price-free' style='color:#34c759;font-weight:700;font-size:16px;text-transform:uppercase;'>${priceText}</p>` : `<p class='price-tag' style='color:#34c759;font-weight:700;font-size:18px;'>${priceText}</p>`}
                 ${bio ? `<p class='bio-snippet' style='color:#666;font-size:13px;line-height:1.4;margin-top:8px;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;'>${bio}</p>` : ''}
-                <a href=\"${profileUrl}\" class=\"view-profile-btn\" target=\"_blank\" rel=\"noopener noreferrer\">View Profile</a>
+                <a href=\"${profileUrl}\" class=\"view-profile-btn\">View Profile</a>
               </div>
             </div>`;
           resultsDiv.appendChild(col);

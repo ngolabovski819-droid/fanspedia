@@ -2240,8 +2240,8 @@
           const verifiedIcon = item.isVerified ? "✅ " : "";
           const location = item.location || "";
           const bio = item.about || "";
-          // Link directly to OnlyFans profile
-          const profileUrl = username !== "—" ? `https://onlyfans.com/${encodeURIComponent(username)}` : "#";
+          // Link to internal creator page (cache-busted)
+          const profileUrl = username !== "—" ? `/creator.html?v=20251119-1&u=${encodeURIComponent(username)}` : "#";
 
           const isFirstCard = resultsDiv.children.length === 0 && currentPage === 1;
           // Preload the first, above-the-fold image to help LCP
@@ -2286,7 +2286,7 @@
                   ? `<p class="price-free">${priceText}</p>` 
                   : `<p class="price-tag">${priceText}</p>`}
                 ${bio ? `<p class="bio-snippet">${bio}</p>` : ''}
-                <a href="${profileUrl}" class="view-profile-btn" target="_blank" rel="noopener noreferrer">
+                <a href="${profileUrl}" class="view-profile-btn">
                   View Profile
                 </a>
               </div>
