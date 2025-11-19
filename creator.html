@@ -321,7 +321,7 @@
 
     /* Profile Container */
   .profile-container { max-width: 1200px; margin: 40px auto 0; padding: 0 20px 60px; }
-    .profile-grid { display: grid; grid-template-columns: 350px 1fr; gap: 40px; }
+    .profile-grid { display: grid; grid-template-columns: 350px 1fr; gap: 40px; position: relative; }
     
     /* Left Column - Image & CTA */
     .profile-sidebar { position: sticky; top: 80px; height: fit-content; }
@@ -2696,6 +2696,44 @@
       });
     }
     }); // End DOMContentLoaded
+
+    // ============================================
+    // STICKY SIDEBAR - STOP AT SIMILAR CREATORS
+    // ============================================
+    function initStickyStop() {
+      const sidebar = document.querySelector('.profile-sidebar');
+      const similarSection = document.getElementById('similarCreatorsSection');
+      
+      if (!sidebar || !similarSection) return;
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            // Similar Creators is in view - stop sticky
+            sidebar.style.position = 'absolute';
+            sidebar.style.bottom = '0';
+            sidebar.style.top = 'auto';
+          } else {
+            // Similar Creators is out of view - restore sticky
+            sidebar.style.position = 'sticky';
+            sidebar.style.top = '80px';
+            sidebar.style.bottom = 'auto';
+          }
+        });
+      }, {
+        threshold: 0,
+        rootMargin: '-80px 0px 0px 0px' // Account for header height
+      });
+      
+      observer.observe(similarSection);
+    }
+    
+    // Initialize after page loads
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initStickyStop);
+    } else {
+      initStickyStop();
+    }
   </script>
 
   <!-- Similar Creators Section -->
