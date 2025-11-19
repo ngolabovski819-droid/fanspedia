@@ -1582,16 +1582,32 @@
         console.log('🖱️ Categories toggle clicked!');
         const isOpen = drawerCategoriesSection.classList.toggle('open');
         drawerCategoriesToggle.classList.toggle('open', isOpen);
+
+        // Force visible state with inline styles to bypass any cascade conflicts
+        if (isOpen) {
+          // Set to auto height by measuring scrollHeight
+          const h = drawerCategoriesSection.scrollHeight;
+          drawerCategoriesSection.style.maxHeight = h + 'px';
+          drawerCategoriesSection.style.opacity = '1';
+          drawerCategoriesSection.style.overflowY = 'auto';
+        } else {
+          drawerCategoriesSection.style.maxHeight = '0px';
+          drawerCategoriesSection.style.opacity = '0';
+          drawerCategoriesSection.style.overflowY = 'hidden';
+        }
+
         console.log('📂 Categories section is now:', isOpen ? 'OPEN' : 'CLOSED');
         console.log('📋 Section classes:', drawerCategoriesSection.className);
-        
-        // Log computed styles after toggle
-        const newStyle = window.getComputedStyle(drawerCategoriesSection);
-        console.log('📐 After toggle computed styles:', {
-          maxHeight: newStyle.maxHeight,
-          opacity: newStyle.opacity,
-          overflow: newStyle.overflow,
-          display: newStyle.display
+
+        // Log computed styles after toggle (next frame to reflect updates)
+        requestAnimationFrame(() => {
+          const newStyle = window.getComputedStyle(drawerCategoriesSection);
+          console.log('📐 After toggle computed styles:', {
+            maxHeight: newStyle.maxHeight,
+            opacity: newStyle.opacity,
+            overflow: newStyle.overflow,
+            display: newStyle.display
+          });
         });
       });
     } else {
@@ -2706,12 +2722,24 @@
     if (drawerClose){ drawerClose.addEventListener('click', closeDrawer); }
     document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeDrawer(); });
 
-    // Mobile drawer categories accordion
+    // Mobile drawer categories accordion (ensure visible with inline styles)
     const drawerCategoriesToggle = document.getElementById('drawerCategoriesToggle');
     const drawerCategoriesSection = document.getElementById('drawerCategoriesSection');
     if (drawerCategoriesToggle && drawerCategoriesSection) {
-      drawerCategoriesToggle.addEventListener('click', () => {
-        drawerCategoriesSection.classList.toggle('open');
+      drawerCategoriesToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        const isOpen = drawerCategoriesSection.classList.toggle('open');
+        drawerCategoriesToggle.classList.toggle('open', isOpen);
+        if (isOpen) {
+          const h = drawerCategoriesSection.scrollHeight;
+          drawerCategoriesSection.style.maxHeight = h + 'px';
+          drawerCategoriesSection.style.opacity = '1';
+          drawerCategoriesSection.style.overflowY = 'auto';
+        } else {
+          drawerCategoriesSection.style.maxHeight = '0px';
+          drawerCategoriesSection.style.opacity = '0';
+          drawerCategoriesSection.style.overflowY = 'hidden';
+        }
       });
     }
 
