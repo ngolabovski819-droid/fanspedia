@@ -2148,6 +2148,44 @@
       window.currentCreator = window.__CREATOR_SSR__;
     }
     
+    // Favorites helper functions
+    function getFavoritesSet() {
+      try {
+        const saved = localStorage.getItem('favorites');
+        return saved ? new Set(JSON.parse(saved)) : new Set();
+      } catch (e) {
+        console.error('Failed to parse favorites:', e);
+        return new Set();
+      }
+    }
+
+    function saveFavorites(favSet) {
+      try {
+        localStorage.setItem('favorites', JSON.stringify([...favSet]));
+      } catch (e) {
+        console.error('Failed to save favorites:', e);
+      }
+    }
+
+    window.toggleFavorite = function(username, btn) {
+      if (!username || username === '—') return;
+      
+      const favSet = getFavoritesSet();
+      const isActive = favSet.has(username);
+      
+      if (isActive) {
+        favSet.delete(username);
+        btn.classList.remove('active');
+        btn.querySelector('span').textContent = '♡';
+      } else {
+        favSet.add(username);
+        btn.classList.add('active');
+        btn.querySelector('span').textContent = '♥';
+      }
+      
+      saveFavorites(favSet);
+    };
+    
     // Load similar creators with smart similarity scoring
   async function loadSimilarCreators(retryCount = 0) {
       try {
@@ -2440,7 +2478,7 @@
         return `
           <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
             <div class="card h-100">
-              <button class="favorite-btn ${favActive ? 'active' : ''}" data-username="${safeUsername}" onclick="event.preventDefault(); toggleFavorite('${safeUsername}', this);">
+              <button class="favorite-btn ${favActive ? 'active' : ''}" data-username="${safeUsername}">
                 <span>${favChar}</span>
               </button>
               <img src="${responsive.src}" srcset="${responsive.srcset}" sizes="${responsive.sizes}" alt="${name}" width="270" height="360" style="aspect-ratio: 3 / 4;" loading="lazy" fetchpriority="low" decoding="async" referrerpolicy="no-referrer" onerror="if(this.src!='/static/no-image.png'){this.removeAttribute('srcset'); this.removeAttribute('sizes'); this.src='${imgSrc}';}">
@@ -2463,6 +2501,23 @@
     
     // Load similar creators after main profile loads (with retry mechanism)
     setTimeout(loadSimilarCreators, 100);
+
+    // Event delegation for favorite buttons in Similar Creators section
+    document.addEventListener('click', function(e) {
+      const btn = e.target.closest('.favorite-btn');
+      if (!btn) return;
+      
+      // Only handle buttons in Similar Creators section
+      if (!btn.closest('#similarCreatorsSection')) return;
+      
+      const username = btn.getAttribute('data-username');
+      if (!username || username === '—') return;
+      
+      e.preventDefault();
+      e.stopPropagation();
+      
+      window.toggleFavorite(username, btn);
+    }, true);
   </script>
   <!-- Back to top button -->
   <button id="backToTop" aria-label="Back to top" title="Back to top">↑</button>
