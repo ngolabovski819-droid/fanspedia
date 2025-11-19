@@ -1821,38 +1821,6 @@
       return { src, srcset, sizes };
     }
     
-    // Get favorites from localStorage
-    function getFavoritesSet() {
-      try {
-        const saved = localStorage.getItem('favorites');
-        if (saved) return new Set(JSON.parse(saved));
-      } catch (e) {
-        console.error('Failed to parse favorites:', e);
-      }
-      return new Set();
-    }
-    
-    // Toggle favorite
-    function toggleFavorite(username, btn) {
-      let favorites = [];
-      try {
-        const saved = localStorage.getItem('favorites');
-        if (saved) favorites = JSON.parse(saved);
-      } catch (e) {}
-      
-      if (favorites.includes(username)) {
-        favorites = favorites.filter(f => f !== username);
-        btn.classList.remove('active');
-        btn.querySelector('span').textContent = '♡';
-      } else {
-        favorites.push(username);
-        btn.classList.add('active');
-        btn.querySelector('span').textContent = '♥';
-      }
-      
-      localStorage.setItem('favorites', JSON.stringify(favorites));
-    }
-
     // Format number
     function formatNumber(num) {
       if (num === null || num === undefined || num === '') return 'N/A';
