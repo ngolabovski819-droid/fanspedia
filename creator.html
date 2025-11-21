@@ -5,6 +5,24 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Creator Profile - FansPedia</title>
   <meta name="description" content="View detailed OnlyFans creator profile with stats, pricing, and direct link">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YV9QD82K7G"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);} 
+    gtag('js', new Date());
+    gtag('config', 'G-YV9QD82K7G', { 'anonymize_ip': true, 'debug_mode': true });
+    window.addEventListener('load', () => {
+      const params = new URLSearchParams(location.search);
+      const u = params.get('u');
+      if (typeof gtag === 'function') {
+        gtag('event', 'page_visible', { page_path: location.pathname, creator_username: u || null });
+        console.log('[GA4] page_visible sent');
+      } else {
+        console.warn('[GA4] gtag not available');
+      }
+    });
+  </script>
   
   <!-- URL handling for creator profiles -->
   <script>

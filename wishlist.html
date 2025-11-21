@@ -7,6 +7,22 @@
   <meta name="description" content="Your saved OnlyFans creators. Browse and manage your wishlist of favorite models and accounts." />
   <link rel="canonical" href="https://fanspedia.net/wishlist/" />
   <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YV9QD82K7G"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);} 
+    gtag('js', new Date());
+    gtag('config', 'G-YV9QD82K7G', { 'anonymize_ip': true, 'debug_mode': true });
+    window.addEventListener('load', () => {
+      if (typeof gtag === 'function') {
+        gtag('event', 'page_visible', { page_path: location.pathname });
+        console.log('[GA4] page_visible sent');
+      } else {
+        console.warn('[GA4] gtag not available');
+      }
+    });
+  </script>
 
   <!-- Preconnects -->
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
