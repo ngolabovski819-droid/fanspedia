@@ -193,7 +193,12 @@ async function fetchCreator(username) {
 }
 
 function generateHtml(creator) {
-  const displayName = escapeHtml(creator.name || creator.username);
+  // Special case for justmakayla to use full name
+  let rawDisplayName = creator.name || creator.username;
+  if (creator.username && creator.username.toLowerCase() === 'justmakayla') {
+    rawDisplayName = 'Makayla Samountry';
+  }
+  const displayName = escapeHtml(rawDisplayName);
   const username = escapeHtml(creator.username);
   const bioRaw = creator.about || '';
   const bioEscaped = escapeHtml(bioRaw)
