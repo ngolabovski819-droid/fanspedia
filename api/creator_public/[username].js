@@ -83,12 +83,7 @@ function proxyImage(url, width, height) {
 }
 
 function generateJsonLd(creator) {
-  // Special case for justmakayla to use full name
-  let rawDisplayName = creator.name || creator.username;
-  if (creator.username && creator.username.toLowerCase() === 'justmakayla') {
-    rawDisplayName = 'Makayla Samountry';
-  }
-  const displayName = escapeHtml(rawDisplayName);
+  const displayName = escapeHtml(creator.name || creator.username);
   const bio = creator.about ? escapeHtml(creator.about.substring(0, 280)) : '';
   const avatarUrl = proxyImage(creator.avatar, 400, 400);
   return {
@@ -179,12 +174,7 @@ async function fetchCreator(username) {
 }
 
 function buildRedirectHtml(creator, username) {
-  // Special case for justmakayla to use full name
-  let rawDisplayName = creator.name || creator.username || username;
-  if (creator.username && creator.username.toLowerCase() === 'justmakayla') {
-    rawDisplayName = 'Makayla Samountry';
-  }
-  const displayName = escapeHtml(rawDisplayName);
+  const displayName = escapeHtml(creator.name || creator.username || username);
   const bioPreview = (creator.about || '').toString().replace(/<[^>]*>/g, '').substring(0, 155);
   const ogImage = proxyImage(creator.avatar, 1200, 630);
   const canonicalUrl = `${BASE_URL}/${encodeURIComponent(username)}`;

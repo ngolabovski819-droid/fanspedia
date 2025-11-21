@@ -83,12 +83,7 @@ function proxyImage(url, width, height) {
 }
 
 function generateJsonLd(creator) {
-  // Special case for justmakayla to use full name
-  let rawDisplayName = creator.name || creator.username;
-  if (creator.username && creator.username.toLowerCase() === 'justmakayla') {
-    rawDisplayName = 'Makayla Samountry';
-  }
-  const displayName = escapeHtml(rawDisplayName);
+  const displayName = escapeHtml(creator.name || creator.username);
   const bio = creator.about ? escapeHtml(creator.about.substring(0, 280)) : '';
   const avatarUrl = proxyImage(creator.avatar, 400, 400);
   return {
@@ -198,12 +193,7 @@ async function fetchCreator(username) {
 }
 
 function generateHtml(creator) {
-  // Special case for justmakayla to use full name
-  let rawDisplayName = creator.name || creator.username;
-  if (creator.username && creator.username.toLowerCase() === 'justmakayla') {
-    rawDisplayName = 'Makayla Samountry';
-  }
-  const displayName = escapeHtml(rawDisplayName);
+  const displayName = escapeHtml(creator.name || creator.username);
   const username = escapeHtml(creator.username);
   const bioRaw = creator.about || '';
   const bioEscaped = escapeHtml(bioRaw)

@@ -1906,12 +1906,7 @@
       document.getElementById('onlyfansLink').href = `https://onlyfans.com/${c.username}`;
 
       // Header info
-      // Special case for justmakayla to use full name
-      let displayName = c.name || c.username;
-      if (c.username && c.username.toLowerCase() === 'justmakayla') {
-        displayName = 'Makayla Samountry';
-      }
-      document.getElementById('profileName').textContent = displayName + ' OnlyFans profile';
+      document.getElementById('profileName').textContent = (c.name || c.username) + ' OnlyFans profile';
       document.getElementById('profileUsername').textContent = '@' + c.username;
       // Handle both camelCase and lowercase DB fields for dates
       const joinedRaw = c.firstPublishedPostDate || c.firstpublishedpostdate || c.joinDate || c.joindate;
