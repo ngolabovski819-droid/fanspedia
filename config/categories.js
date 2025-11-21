@@ -5,11 +5,13 @@
  */
 
 export const categories = [
-  'nude', 'reddit', 'models', 'sex', 'gay', 'anal', 'feet', 'twitter', 'asian', 'trans', 'indian',
-  'lesbian', 'squirt', 'korean', 'couple', 'milf', 'tiktok', 'girl', 'big tits', 'blowjobs', 'boobs',
+  // NOTE: Location/nationality terms (indian, japanese, korean, scottish, asian) removed.
+  // Future geo taxonomy will live separately (e.g. /locations/<country>) to avoid mixing topical vs geographic facets.
+  'nude', 'reddit', 'models', 'sex', 'gay', 'anal', 'feet', 'twitter', 'trans',
+  'lesbian', 'squirt', 'couple', 'milf', 'tiktok', 'girl', 'big tits', 'blowjobs', 'boobs',
   'sextape', 'creampie', 'joi', 'threesome', 'teen (18+)', 'shemale', 'bbc', 'tits', 'ebony', 'pornhub',
-  'footjob', 'foot fetish', 'dick ratings', 'bbw', 'mature', 'teacher', 'pussy', 'scottish', 'cuckold', 'big ass', 'squirting', 'hottest',
-  'amateur', 'blonde', 'japanese', 'instagram', 'pawg', 'gangbang', 'redhead', 'male', 'vip', 'famous',
+  'footjob', 'foot fetish', 'dick ratings', 'bbw', 'mature', 'teacher', 'pussy', 'cuckold', 'big ass', 'squirting', 'hottest',
+  'amateur', 'blonde', 'instagram', 'pawg', 'gangbang', 'redhead', 'male', 'vip', 'famous',
   'twins', 'ass', 'deepthroat', 'pregnant', 'handjob', 'facial', 'asmr', 'pegging', 'no ppv', 'nurse', 'smoking fetish', 'goth-free',
   'big natural boobs', 'olympian'
 ];
@@ -39,9 +41,7 @@ const synonymsOverrides = {
   'milf': ['milf','mom','hot mom','mature mom','cougar'],
   'mature': ['mature','cougar','older'],
   'ebony': ['ebony','black','melanin'],
-  'asian': ['asian','korean','japanese','chinese','thai','pinay','filipina'],
-  'korean': ['korean','korea','hangul'],
-  'japanese': ['japanese','japan','jp'],
+  // 'asian' override removed with category; will live under future geo taxonomy.
   'redhead': ['redhead','ginger','red hair'],
   'blonde': ['blonde','blond','blonde hair'],
   'lesbian': ['lesbian','girls only','wlw','sapphic'],
@@ -120,7 +120,6 @@ export const popularCategories = [
   'milf',
   'big ass',
   'ebony',
-  'asian',
   'big tits',
   'redhead',
   'lesbian',

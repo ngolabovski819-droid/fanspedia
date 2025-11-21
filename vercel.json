@@ -18,7 +18,13 @@
     { "source": "/:username([A-Za-z0-9_-]+)", "destination": "/api/creator_public/:username" },
     { "source": "/:username([A-Za-z0-9_-]+)/", "destination": "/api/creator_public/:username" }
   ],
-  "redirects": [],
+  "redirects": [
+    { "source": "/categories/indian", "destination": "/categories", "statusCode": 301 },
+    { "source": "/categories/japanese", "destination": "/categories", "statusCode": 301 },
+    { "source": "/categories/korean", "destination": "/categories", "statusCode": 301 },
+    { "source": "/categories/scottish", "destination": "/categories", "statusCode": 301 },
+    { "source": "/categories/asian", "destination": "/categories", "statusCode": 301 }
+  ],
   "headers": [
     {
       "source": "/index.html",
