@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
   <title>Creator Profile - FansPedia</title>
   <meta name="description" content="View detailed OnlyFans creator profile with stats, pricing, and direct link">
   <!-- Google tag (gtag.js) -->
@@ -591,6 +592,157 @@
       .stat-card { padding: 16px; }
       .stat-card-value { font-size: 24px; }
       .pricing-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Story Feature */
+    .story-indicator {
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .story-indicator:hover {
+      transform: scale(1.05);
+    }
+    .story-indicator.has-story::before {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      right: -4px;
+      bottom: -4px;
+      border-radius: inherit;
+      background: linear-gradient(45deg, #00AFF0, #FF0080, #FFCC00, #00AFF0);
+      background-size: 300% 300%;
+      animation: storyGradient 3s ease infinite;
+      z-index: -1;
+    }
+    @keyframes storyGradient {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    .story-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: linear-gradient(135deg, #FF0080, #FF4500);
+      color: white;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(255, 0, 128, 0.4);
+      border: 3px solid white;
+    }
+
+    /* Story Modal */
+    .story-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+    }
+    .story-modal.active {
+      display: flex;
+    }
+    .story-content {
+      position: relative;
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      background: #000;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 175, 240, 0.3);
+    }
+    .story-video {
+      width: 100%;
+      height: auto;
+      max-height: 85vh;
+      display: block;
+      background: #000;
+    }
+    .story-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 44px;
+      height: 44px;
+      background: rgba(0, 0, 0, 0.7);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10001;
+      transition: all 0.3s ease;
+    }
+    .story-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+    .story-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 20px;
+      background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, transparent 100%);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .story-header-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+    .story-header-info {
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .story-controls {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      z-index: 10000;
+    }
+    .story-btn {
+      width: 48px;
+      height: 48px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+    .story-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
     }
 
     /* Loading State */
@@ -1905,8 +2057,28 @@
 
       // Avatar
       const avatar = c.avatar || '/static/no-image.png';
-      document.getElementById('profileAvatar').src = proxyImg(avatar, 350, 467);
-      document.getElementById('profileAvatar').alt = `${c.name || c.username} avatar`;
+      const avatarEl = document.getElementById('profileAvatar');
+      avatarEl.src = proxyImg(avatar, 350, 467);
+      avatarEl.alt = `${c.name || c.username} avatar`;
+      
+      // Story indicator
+      const hasStory = c.stories || c.stories_preview;
+      if (hasStory) {
+        avatarEl.parentElement.classList.add('story-indicator', 'has-story');
+        avatarEl.parentElement.style.cursor = 'pointer';
+        avatarEl.parentElement.title = 'View Story';
+        
+        // Add story badge
+        const badge = document.createElement('div');
+        badge.className = 'story-badge';
+        badge.innerHTML = '<i class="fas fa-play"></i>';
+        avatarEl.parentElement.appendChild(badge);
+        
+        // Add click handler
+        avatarEl.parentElement.addEventListener('click', () => {
+          openStoryModal(c);
+        });
+      }
 
       // OnlyFans link
       document.getElementById('onlyfansLink').href = `https://onlyfans.com/${c.username}`;
@@ -2046,6 +2218,108 @@
         `).join('');
       }
     }
+
+    // Story modal functions
+    function openStoryModal(creator) {
+      const storyUrl = creator.stories || creator.stories_preview;
+      if (!storyUrl) return;
+      
+      // Create modal if not exists
+      let modal = document.getElementById('storyModal');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'storyModal';
+        modal.className = 'story-modal';
+        modal.innerHTML = `
+          <div class="story-content">
+            <div class="story-close" onclick="closeStoryModal()">
+              <i class="fas fa-times"></i>
+            </div>
+            <div class="story-header">
+              <img class="story-header-avatar" src="" alt="Avatar">
+              <div class="story-header-info"></div>
+            </div>
+            <video class="story-video" id="storyVideo" controls autoplay playsinline>
+              <source src="" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <div class="story-controls">
+              <div class="story-btn" onclick="document.getElementById('storyVideo').currentTime = 0">
+                <i class="fas fa-redo"></i>
+              </div>
+              <div class="story-btn" onclick="toggleStoryPlay()">
+                <i class="fas fa-pause" id="playPauseIcon"></i>
+              </div>
+              <div class="story-btn" onclick="toggleStoryMute()">
+                <i class="fas fa-volume-up" id="muteIcon"></i>
+              </div>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(modal);
+        
+        // Close on backdrop click
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) closeStoryModal();
+        });
+        
+        // ESC key to close
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeStoryModal();
+          }
+        });
+      }
+      
+      // Update modal content
+      const headerAvatar = modal.querySelector('.story-header-avatar');
+      const headerInfo = modal.querySelector('.story-header-info');
+      const video = document.getElementById('storyVideo');
+      const source = video.querySelector('source');
+      
+      headerAvatar.src = proxyImg(creator.avatar || '/static/no-image.png', 80, 80);
+      headerInfo.textContent = creator.name || creator.username;
+      source.src = storyUrl;
+      video.load();
+      
+      // Show modal
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      
+      // Update play/pause icon based on video state
+      video.addEventListener('play', () => {
+        document.getElementById('playPauseIcon').className = 'fas fa-pause';
+      });
+      video.addEventListener('pause', () => {
+        document.getElementById('playPauseIcon').className = 'fas fa-play';
+      });
+    }
+    
+    window.closeStoryModal = function() {
+      const modal = document.getElementById('storyModal');
+      const video = document.getElementById('storyVideo');
+      if (modal) {
+        modal.classList.remove('active');
+        if (video) video.pause();
+        document.body.style.overflow = '';
+      }
+    };
+    
+    window.toggleStoryPlay = function() {
+      const video = document.getElementById('storyVideo');
+      if (video.paused) {
+        video.play();
+      } else {
+        video.pause();
+      }
+    };
+    
+    window.toggleStoryMute = function() {
+      const video = document.getElementById('storyVideo');
+      const icon = document.getElementById('muteIcon');
+      video.muted = !video.muted;
+      icon.className = video.muted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
+    };
 
     // Load on page ready
     // Skip if SSR already populated the page (DOMContentLoaded ensures SSR script ran first)
@@ -2387,7 +2661,7 @@
           : "FREE";
         const verifiedIcon = item.isVerified ? "✅ " : "";
         const bio = item.about || "";
-  const profileUrl = username !== "—" ? `/creator.html?v=20251119-1&u=${encodeURIComponent(username)}` : "#";
+  const profileUrl = username !== "—" ? `https://onlyfans.com/${encodeURIComponent(username)}` : "#";
   // Removed onlyfansUrl and Visit OnlyFans link
 
         const safeUsername = String(username).replace(/'/g, "\\'");

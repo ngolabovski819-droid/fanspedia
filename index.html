@@ -1164,6 +1164,338 @@
     }
     
     /* ============================================
+       TRENDING REELS SECTION
+       ============================================ */
+    .trending-reels-section {
+      margin: 40px auto 60px;
+      max-width: 1400px;
+      padding: 0 16px;
+    }
+    
+    .trending-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 24px;
+      text-align: left;
+    }
+    
+    .reels-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    
+    .reel-card {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      aspect-ratio: 9/16;
+      background: #000;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .reel-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 175, 240, 0.3);
+    }
+    
+    .reel-card video,
+    .reel-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .reel-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 20px;
+      background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
+      color: white;
+    }
+    
+    .reel-play-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: #000;
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+    
+    .reel-card:hover .reel-play-icon {
+      transform: translate(-50%, -50%) scale(1.1);
+      background: rgba(0, 175, 240, 1);
+      color: white;
+    }
+    
+    .reel-stats {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+    
+    .reel-stat {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .reel-username {
+      font-weight: 600;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    
+    .reel-caption {
+      font-size: 13px;
+      opacity: 0.9;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .reel-onlyfans-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(0, 175, 240, 0.95);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      backdrop-filter: blur(10px);
+    }
+    
+    /* Reel Modal (TikTok-style) */
+    .reel-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+    }
+    
+    .reel-modal.active {
+      display: flex;
+    }
+    
+    .reel-modal-content {
+      position: relative;
+      max-width: 420px;
+      width: 90%;
+      max-height: 85vh;
+      background: #000;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 175, 240, 0.5);
+    }
+    
+    .reel-modal-video {
+      width: 100%;
+      height: 85vh;
+      max-height: 85vh;
+      display: block;
+      background: #000;
+      object-fit: cover;
+    }
+    
+    .reel-modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 44px;
+      height: 44px;
+      background: rgba(0, 0, 0, 0.7);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10001;
+      transition: all 0.3s ease;
+    }
+    
+    .reel-modal-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+    
+    .reel-nav-btn {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 44px;
+      height: 44px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10001;
+      transition: all 0.3s ease;
+      opacity: 0.7;
+    }
+    
+    .reel-nav-btn:hover {
+      background: rgba(0, 175, 240, 0.9);
+      opacity: 1;
+      transform: translateX(-50%) scale(1.1);
+    }
+    
+    .reel-nav-up {
+      top: 80px;
+    }
+    
+    .reel-nav-down {
+      bottom: 20px;
+    }
+    
+    .reel-modal-sidebar {
+      position: absolute;
+      right: 16px;
+      bottom: 100px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      z-index: 10000;
+    }
+    
+    .reel-modal-btn {
+      width: 56px;
+      height: 56px;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    
+    .reel-modal-btn:hover {
+      background: rgba(0, 175, 240, 0.9);
+      transform: scale(1.15);
+      box-shadow: 0 6px 20px rgba(0, 175, 240, 0.4);
+    }
+    
+    .reel-modal-btn-label {
+      font-size: 11px;
+      margin-top: 4px;
+      font-weight: 700;
+      text-align: center;
+    }
+    
+    .reel-modal-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 70px;
+      padding: 24px 20px;
+      background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.85) 40%, rgba(0, 0, 0, 0.95) 100%);
+      color: white;
+      z-index: 9999;
+    }
+    
+    .reel-modal-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    
+    .reel-modal-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 2px solid white;
+      object-fit: cover;
+    }
+    
+    .reel-modal-username {
+      font-weight: 700;
+      font-size: 16px;
+      color: white;
+    }
+    
+    .reel-modal-caption {
+      font-size: 14px;
+      line-height: 1.5;
+      margin-top: 8px;
+      color: rgba(255, 255, 255, 0.95);
+    }
+    
+    @media (max-width: 768px) {
+      .reels-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 12px;
+      }
+      
+      .trending-title {
+        font-size: 26px;
+        text-align: center;
+      }
+      
+      .reel-modal-content {
+        width: 100%;
+        max-width: 100%;
+        height: 100%;
+        max-height: 100vh;
+        border-radius: 0;
+      }
+      
+      .reel-modal-video {
+        max-height: 100vh;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .reels-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+    }
+    
+    /* ============================================
        SAFE SEARCH MODAL (First-Time Consent)
        ============================================ */
     .safe-search-modal {
@@ -1603,6 +1935,14 @@
     <!-- Active filters chips -->
     <div id="activeFilters" class="recent-searches" aria-live="polite"></div>
 
+    <!-- Trending Reels Section -->
+    <section id="trendingReels" class="trending-reels-section">
+      <h2 class="trending-title">Trending <span style="color: #00AFF0;">Reels</span></h2>
+      <div class="reels-grid" id="reelsGrid">
+        <!-- Reels will be populated here -->
+      </div>
+    </section>
+
     <!-- Results -->
     <div id="results" class="row g-3 justify-content-center"></div>
     <p id="error" class="error"></p>
@@ -1743,6 +2083,340 @@
         applyTheme(e.matches ? 'dark' : 'light');
       }
     });
+
+    // ============================================
+    // TRENDING REELS FUNCTIONALITY
+    // ============================================
+    const reelsData = [
+      {
+        id: 1,
+        username: 'marciereves69',
+        avatar: 'https://images.weserv.nl/?url=https://public.onlyfans.com/files/thumbs/w480/e/eh/ehq/ehq1rhmhupuhhvfqw5ohpxf3jrvdp5u41653685098/header.jpg&w=120&h=120&fit=cover',
+        videoUrl: 'https://cdn2.onlyfans.com/files/9/90/90e0408557508b628319ff6bc7526596/885x1571_6a360c0cc2ddba71e70ecded493f8fa3.jpg?Tag=2&u=453503686&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6XC9cL2NkbjIub25seWZhbnMuY29tXC9maWxlc1wvOVwvOTBcLzkwZTA0MDg1NTc1MDhiNjI4MzE5ZmY2YmM3NTI2NTk2XC84ODV4MTU3MV82YTM2MGMwY2MyZGRiYTcxZTcwZWNkZWQ0OTNmOGZhMy5qcGc~VGFnPTImdT00NTM1MDM2ODYiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3NjQzNzgwMDB9LCJJcEFkZHJlc3MiOnsiQVdTOlNvdXJjZUlwIjoiNzcuMjkuMTQzLjIzNFwvMzIifX19XX0_&Signature=EUv6y87mUysZ4Tf5jAJQ0LASyQZECvSK4x4p9gbY9-Tthi2LRfVJ63EwkHtnjakj-lyTF1qCbVoXTthMN9JaQyj1DbeiAYZJJa~MdgJgxFtEcoTvbf~SquS5npsyWRaDSznCqX5pdWNK2vOHsp2x88~7~rU83K84C62iDKZiAD-vu65s0Ty-3IN0~ewqrSKUzqGb26LyetQ5B4uWkhlMSOWyEMBJsZIVebzdQmexpIEwL3RYM6QXX-ud8J8so2ujzX3pIKvJ7LmIHPx3ZDmYm3XN5Lh0HJyEo4-5BPCZkduzM5iKyLIDEDuEd4ImaQ9DG8NW3R~ZYauREoiAaWu72A__&Key-Pair-Id=APKAUSX4CWPPATFK2DGD',
+        thumbnail: 'https://cdn2.onlyfans.com/files/3/3c/3cb7ff480f8a298c5bc465b8d0919702/796x1413_4c0543e90c60962baf768da3b7a650eb.jpg?Tag=2&u=453503686&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6XC9cL2NkbjIub25seWZhbnMuY29tXC9maWxlc1wvM1wvM2NcLzNjYjdmZjQ4MGY4YTI5OGM1YmM0NjViOGQwOTE5NzAyXC83OTZ4MTQxM180YzA1NDNlOTBjNjA5NjJiYWY3NjhkYTNiN2E2NTBlYi5qcGc~VGFnPTImdT00NTM1MDM2ODYiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3NjQzNzgwMDB9LCJJcEFkZHJlc3MiOnsiQVdTOlNvdXJjZUlwIjoiNzcuMjkuMTQzLjIzNFwvMzIifX19XX0_&Signature=QQ1gPskh~GRVxwdKg4dO4St2C7YU-MzMjxOf-q1iW8uV6onEhImIXokeDK6XzSwDzBXCmjRX1y0WynUtE8hWVPMya-p6CCtvEKpPq5VgVPi4E81WDUAEdHe6InBk~A-MzdNzyIN6hP4FH4otKkofUdveD3A7qI9B3xHzlTIe6HbDvOU4OhF~Md4kUGw6qLTwePp4tl4sC3n7dFuQhjT6gbzjQaKi7q42av312qxhzJVlLAyPmFe8JtxbTrFtH6r9iB2Txxd2UuHcLZID09FqIejELAW1B0Klj8Qf9R~~MSMEQZt59VZiSeZfKM5T0W3sB38D7LDuix5RNdKSJpm4ow__&Key-Pair-Id=APKAUSX4CWPPATFK2DGD',
+        caption: 'Your friend paid for your food and now it\'s time to say thank you 💕',
+        likes: '5k',
+        creatorId: 402490649
+      },
+      {
+        id: 2,
+        username: 'sarahillustratesvip',
+        avatar: 'https://images.weserv.nl/?url=https://public.onlyfans.com/files/thumbs/w480/x/xm/xmk/xmk1dtj4f2dmhmhvfqw5ohpxf3jrvdp/header.jpg&w=120&h=120&fit=cover',
+        videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+        thumbnail: 'https://images.weserv.nl/?url=https://public.onlyfans.com/files/thumbs/w480/x/xm/xmk/xmk1dtj4f2dmhmhvfqw5ohpxf3jrvdp/header.jpg&w=320&h=568&fit=cover',
+        caption: 'Sshhhh.... #reels #sarahillustrates 🔥',
+        likes: '264k',
+        creatorId: 123456
+      },
+      {
+        id: 3,
+        username: 'lisa.ann',
+        avatar: 'https://images.weserv.nl/?url=https://public.onlyfans.com/files/thumbs/w480/a/ab/abc/abc123def456/header.jpg&w=120&h=120&fit=cover',
+        videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+        thumbnail: 'https://images.weserv.nl/?url=https://public.onlyfans.com/files/thumbs/w480/a/ab/abc/abc123def456/header.jpg&w=320&h=568&fit=cover',
+        caption: 'RATE MY OUTFIT 1-10 ✨',
+        likes: '107k',
+        creatorId: 789012
+      },
+      {
+        id: 4,
+        username: 'miaumad',
+        avatar: 'https://images.weserv.nl/?url=https://public.onlyfans.com/files/thumbs/w480/m/mi/mia/mia987xyz/header.jpg&w=120&h=120&fit=cover',
+        videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+        thumbnail: 'https://images.weserv.nl/?url=https://public.onlyfans.com/files/thumbs/w480/m/mi/mia/mia987xyz/header.jpg&w=320&h=568&fit=cover',
+        caption: 'Which one do you choose? 👀',
+        likes: '107k',
+        creatorId: 345678
+      }
+    ];
+    
+    function renderReels() {
+      const reelsGrid = document.getElementById('reelsGrid');
+      if (!reelsGrid) return;
+      
+      const reelsHTML = reelsData.map(reel => `
+        <div class="reel-card" onclick="openReelModal(${reel.id})">
+          <img src="${reel.thumbnail}" alt="${reel.username}" />
+          <div class="reel-play-icon">
+            <i class="fas fa-play"></i>
+          </div>
+          <div class="reel-onlyfans-badge">
+            <i class="fas fa-check-circle"></i>
+            <span>OnlyFans</span>
+          </div>
+          <div class="reel-overlay">
+            <div class="reel-username">@${reel.username}</div>
+            <div class="reel-caption">${reel.caption}</div>
+            <div class="reel-stats">
+              <div class="reel-stat">
+                <i class="fas fa-heart"></i>
+                <span>${reel.likes}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      
+      reelsGrid.innerHTML = reelsHTML;
+    }
+    
+    let currentReelIndex = 0;
+    
+    function openReelModal(reelId) {
+      const reel = reelsData.find(r => r.id === reelId);
+      if (!reel) return;
+      
+      // Store current index
+      currentReelIndex = reelsData.findIndex(r => r.id === reelId);
+      
+      // Create modal if it doesn't exist
+      let modal = document.getElementById('reelModal');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'reelModal';
+        modal.className = 'reel-modal';
+        modal.innerHTML = `
+          <div class="reel-modal-content">
+            <button class="reel-modal-close" onclick="closeReelModal()">
+              <i class="fas fa-times"></i>
+            </button>
+            <button class="reel-nav-btn reel-nav-up" onclick="prevReel()" title="Previous reel (↑)">
+              <i class="fas fa-chevron-up"></i>
+            </button>
+            <button class="reel-nav-btn reel-nav-down" onclick="nextReel()" title="Next reel (↓)">
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div id="reelMediaContainer" style="width: 100%; height: 85vh; background: #000; display: flex; align-items: center; justify-content: center;">
+              <video id="reelVideo" class="reel-modal-video" autoplay loop muted playsinline style="display: none;">
+                <source src="" type="video/mp4">
+              </video>
+              <img id="reelImage" class="reel-modal-video" style="display: none;" />
+            </div>
+            <div class="reel-modal-sidebar">
+              <button class="reel-modal-btn" onclick="toggleReelLike()" title="Like">
+                <i class="fas fa-heart"></i>
+                <span class="reel-modal-btn-label" id="reelLikes"></span>
+              </button>
+              <button class="reel-modal-btn" onclick="viewProfile()" title="OnlyFans">
+                <i class="fas fa-check-circle"></i>
+                <span class="reel-modal-btn-label">OnlyFans</span>
+              </button>
+              <button class="reel-modal-btn" onclick="shareReel()" title="Share">
+                <i class="fas fa-share"></i>
+                <span class="reel-modal-btn-label">Share</span>
+              </button>
+            </div>
+            <div class="reel-modal-info">
+              <div class="reel-modal-header">
+                <img src="" alt="" class="reel-modal-avatar" id="reelAvatar" />
+                <div style="flex: 1;">
+                  <div class="reel-modal-username" id="reelUsername"></div>
+                  <button onclick="viewProfile()" style="margin-top: 6px; padding: 6px 16px; font-size: 13px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); border-radius: 6px; color: white; font-weight: 600; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='rgba(0,175,240,0.9)'; this.style.borderColor='transparent';" onmouseout="this.style.background='rgba(255,255,255,0.2)'; this.style.borderColor='rgba(255,255,255,0.3)';">
+                    View Profile
+                  </button>
+                </div>
+              </div>
+              <div class="reel-modal-caption" id="reelCaption"></div>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(modal);
+      }
+      
+      // Detect if URL is image or video
+      const url = reel.videoUrl;
+      const isImage = /\.(jpg|jpeg|png|gif|webp)/i.test(url);
+      
+      const videoEl = document.getElementById('reelVideo');
+      const imageEl = document.getElementById('reelImage');
+      
+      if (isImage) {
+        // Show image, hide video
+        videoEl.style.display = 'none';
+        imageEl.style.display = 'block';
+        imageEl.src = url;
+      } else {
+        // Show video, hide image
+        imageEl.style.display = 'none';
+        videoEl.style.display = 'block';
+        videoEl.src = url;
+      }
+      
+      // Update modal content
+      document.getElementById('reelAvatar').src = reel.avatar;
+      document.getElementById('reelUsername').textContent = '@' + reel.username;
+      document.getElementById('reelCaption').textContent = reel.caption;
+      document.getElementById('reelLikes').textContent = reel.likes;
+      
+      // Store current reel data
+      window.currentReel = reel;
+      
+      // Show modal
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeReelModal() {
+      const modal = document.getElementById('reelModal');
+      if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+        const video = document.getElementById('reelVideo');
+        const image = document.getElementById('reelImage');
+        if (video) {
+          video.pause();
+          video.src = '';
+        }
+        if (image) {
+          image.src = '';
+        }
+      }
+    }
+    
+    function toggleReelLike() {
+      alert('Like functionality - connect to your favorites system');
+    }
+    
+    function shareReel() {
+      if (window.currentReel) {
+        const url = `https://onlyfans.com/${encodeURIComponent(window.currentReel.username)}`;
+        if (navigator.share) {
+          navigator.share({
+            title: `Check out @${window.currentReel.username} on OnlyFans`,
+            text: window.currentReel.caption,
+            url: url
+          }).catch(err => console.log('Share cancelled'));
+        } else {
+          navigator.clipboard.writeText(url);
+          alert('Link copied to clipboard!');
+        }
+      }
+    }
+    
+    function viewProfile() {
+      if (window.currentReel) {
+        window.location.href = `https://onlyfans.com/${encodeURIComponent(window.currentReel.username)}`;
+      }
+    }
+    
+    function nextReel() {
+      if (currentReelIndex < reelsData.length - 1) {
+        currentReelIndex++;
+        loadReelContent(reelsData[currentReelIndex]);
+      }
+    }
+    
+    function prevReel() {
+      if (currentReelIndex > 0) {
+        currentReelIndex--;
+        loadReelContent(reelsData[currentReelIndex]);
+      }
+    }
+    
+    function loadReelContent(reel) {
+      if (!reel) return;
+      
+      // Detect if URL is image or video
+      const url = reel.videoUrl;
+      const isImage = /\.(jpg|jpeg|png|gif|webp)/i.test(url);
+      
+      const videoEl = document.getElementById('reelVideo');
+      const imageEl = document.getElementById('reelImage');
+      
+      if (isImage) {
+        videoEl.style.display = 'none';
+        imageEl.style.display = 'block';
+        imageEl.src = url;
+      } else {
+        imageEl.style.display = 'none';
+        videoEl.style.display = 'block';
+        videoEl.src = url;
+      }
+      
+      document.getElementById('reelAvatar').src = reel.avatar;
+      document.getElementById('reelUsername').textContent = '@' + reel.username;
+      document.getElementById('reelCaption').textContent = reel.caption;
+      document.getElementById('reelLikes').textContent = reel.likes;
+      window.currentReel = reel;
+    }
+    
+    // Touch/swipe support
+    let touchStartY = 0;
+    let touchEndY = 0;
+    
+    document.addEventListener('touchstart', (e) => {
+      const modal = document.getElementById('reelModal');
+      if (modal && modal.classList.contains('active')) {
+        touchStartY = e.touches[0].clientY;
+      }
+    });
+    
+    document.addEventListener('touchend', (e) => {
+      const modal = document.getElementById('reelModal');
+      if (modal && modal.classList.contains('active')) {
+        touchEndY = e.changedTouches[0].clientY;
+        handleSwipe();
+      }
+    });
+    
+    function handleSwipe() {
+      const swipeDistance = touchStartY - touchEndY;
+      const minSwipeDistance = 50;
+      
+      if (Math.abs(swipeDistance) > minSwipeDistance) {
+        if (swipeDistance > 0) {
+          // Swiped up - next reel
+          nextReel();
+        } else {
+          // Swiped down - previous reel
+          prevReel();
+        }
+      }
+    }
+    
+    // Mouse wheel support
+    document.addEventListener('wheel', (e) => {
+      const modal = document.getElementById('reelModal');
+      if (modal && modal.classList.contains('active')) {
+        e.preventDefault();
+        if (e.deltaY > 0) {
+          nextReel();
+        } else {
+          prevReel();
+        }
+      }
+    }, { passive: false });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      const modal = document.getElementById('reelModal');
+      if (modal && modal.classList.contains('active')) {
+        if (e.key === 'Escape') {
+          closeReelModal();
+        } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+          e.preventDefault();
+          nextReel();
+        } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+          e.preventDefault();
+          prevReel();
+        }
+      }
+    });
+    
+    // Close modal on background click
+    document.addEventListener('click', (e) => {
+      const modal = document.getElementById('reelModal');
+      if (modal && e.target === modal) {
+        closeReelModal();
+      }
+    });
+    
+    // Initialize reels when page loads
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', renderReels);
+    } else {
+      renderReels();
+    }
 
     // ============================================
     // SAFE SEARCH FUNCTIONALITY
@@ -2240,8 +2914,8 @@
           const verifiedIcon = item.isVerified ? "✅ " : "";
           const location = item.location || "";
           const bio = item.about || "";
-          // Link to internal creator page (cache-busted)
-          const profileUrl = username !== "—" ? `/creator.html?v=20251119-1&u=${encodeURIComponent(username)}` : "#";
+          // Link directly to OnlyFans profile (not to internal creator page)
+          const profileUrl = username !== "—" ? `https://onlyfans.com/${encodeURIComponent(username)}` : "#";
 
           const isFirstCard = resultsDiv.children.length === 0 && currentPage === 1;
           // Preload the first, above-the-fold image to help LCP
