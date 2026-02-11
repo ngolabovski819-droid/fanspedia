@@ -36,7 +36,8 @@ export default async function handler(req, res) {
       "bundle1_price","bundle1_duration","bundle1_discount",
       "bundle2_price","bundle2_duration","bundle2_discount",
       "bundle3_price","bundle3_duration","bundle3_discount",
-      "promotion1_price","promotion1_discount"
+      "promotion1_price","promotion1_discount",
+      "stories","about"
     ].join(',');
 
     const base = `${SUPABASE_URL}/rest/v1/onlyfans_profiles`;
