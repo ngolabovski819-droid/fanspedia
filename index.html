@@ -2108,7 +2108,7 @@
               avatar: creator.avatar ? `https://images.weserv.nl/?url=${encodeURIComponent(creator.avatar)}&w=120&h=120&fit=cover` : 'https://via.placeholder.com/120',
               videoUrl: storiesUrl,
               thumbnail: creator.avatar ? `https://images.weserv.nl/?url=${encodeURIComponent(creator.avatar)}&w=320&h=568&fit=cover` : 'https://via.placeholder.com/320x568',
-              caption: creator.about || `Check out ${creator.username}!`,
+              caption: creator.name || `Check out ${creator.username}!`,
               likes: creator.favoritedcount ? `${(creator.favoritedcount / 1000).toFixed(0)}k` : '0',
               creatorId: parseInt(creatorId)
             };
