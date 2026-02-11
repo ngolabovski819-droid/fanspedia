@@ -1512,13 +1512,37 @@
     }
     
     .reel-modal-sidebar {
-      position: absolute;
-      right: 16px;
-      bottom: 100px;
+      position: fixed;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
       display: flex;
       flex-direction: column;
       gap: 20px;
-      z-index: 10000;
+      z-index: 10002;
+    }
+    
+    .reel-sidebar-close {
+      width: 56px;
+      height: 56px;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    
+    .reel-sidebar-close:hover {
+      background: rgba(255, 0, 0, 0.8);
+      transform: scale(1.15);
+      box-shadow: 0 6px 20px rgba(255, 0, 0, 0.4);
     }
     
     .reel-modal-btn {
@@ -2318,8 +2342,8 @@
             <button class="reel-modal-close" onclick="closeReelModal()">
               <i class="fas fa-times"></i>
             </button>
-            <div class="reel-media-wrapper">
-              <div id="reelMediaContainer" style="width: 100%; height: 85vh; background: #000; display: flex; align-items: center; justify-content: center;">
+            <div class="reel-media-wrapper" onclick="toggleReelPlayPause(event)">
+              <div id="reelMediaContainer" style="width: 100%; height: 85vh; background: #000; display: flex; align-items: center; justify-content: center; cursor: pointer;">
                 <video id="reelVideo" class="reel-modal-video" autoplay loop muted playsinline style="display: none;">
                   <source src="" type="video/mp4">
                 </video>
@@ -2341,6 +2365,9 @@
               </div>
             </div>
             <div class="reel-modal-sidebar">
+              <button class="reel-sidebar-close" onclick="closeReelModal()" title="Close">
+                <i class="fas fa-times"></i>
+              </button>
               <button class="reel-modal-btn" onclick="toggleReelLike()" title="Like">
                 <i class="fas fa-heart"></i>
                 <span class="reel-modal-btn-label" id="reelLikes"></span>
@@ -2429,16 +2456,21 @@
       }
     }
 
-    function toggleReelPlayPause() {
+    function toggleReelPlayPause(event) {
+      // Don't toggle if clicking on control bar buttons
+      if (event && event.target.closest('.reel-controls-bar')) {
+        return;
+      }
+      
       const video = document.getElementById('reelVideo');
       const playBtn = document.querySelector('.reel-control-btn:first-child');
       if (video && video.style.display !== 'none') {
         if (video.paused) {
           video.play();
-          playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+          if (playBtn) playBtn.innerHTML = '<i class="fas fa-pause"></i>';
         } else {
           video.pause();
-          playBtn.innerHTML = '<i class="fas fa-play"></i>';
+          if (playBtn) playBtn.innerHTML = '<i class="fas fa-play"></i>';
         }
       }
     }
