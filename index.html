@@ -2370,7 +2370,7 @@
                   <button class="reel-control-btn" onclick="toggleReelMute()" title="Mute">
                     <i class="fas fa-volume-up"></i>
                   </button>
-                  <input type="range" class="reel-volume-slider" id="reelVolumeSlider" min="0" max="100" value="0" onchange="setReelVolume(this.value)">
+                  <input type="range" class="reel-volume-slider" id="reelVolumeSlider" min="0" max="100" value="100" oninput="setReelVolume(this.value)">
                 </div>
                 <button class="reel-control-btn reel-menu-btn" onclick="openReelMenu()" title="Menu">
                   <i class="fas fa-ellipsis-v"></i>
@@ -2488,21 +2488,47 @@
       }
     }
 
+    // Store the last volume before muting
+    let lastReelVolume = 100;
+
     function toggleReelMute() {
       const video = document.getElementById('reelVideo');
       const muteBtn = document.querySelector('.reel-volume-control .reel-control-btn');
+      const volumeSlider = document.getElementById('reelVolumeSlider');
+      
       if (video && video.style.display !== 'none') {
-        video.muted = !video.muted;
-        muteBtn.innerHTML = video.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
+        if (video.muted) {
+          // Unmute: restore previous volume
+          video.muted = false;
+          video.volume = lastReelVolume / 100;
+          volumeSlider.value = lastReelVolume;
+          muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+        } else {
+          // Mute: save current volume and mute
+          lastReelVolume = volumeSlider.value;
+          video.muted = true;
+          muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+        }
       }
     }
 
     function setReelVolume(value) {
       const video = document.getElementById('reelVideo');
+      const muteBtn = document.querySelector('.reel-volume-control .reel-control-btn');
+      
       if (video && video.style.display !== 'none') {
+        lastReelVolume = value;
         video.volume = value / 100;
-        if (value > 0) {
+        
+        // Auto-unmute when adjusting volume
+        if (value > 0 && video.muted) {
           video.muted = false;
+          muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+        } else if (value === '0' || value === 0) {
+          video.muted = true;
+          muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+        } else if (!video.muted) {
+          muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
         }
       }
     }
