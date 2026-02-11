@@ -2096,8 +2096,12 @@
         const SUPABASE_URL = 'https://ftvquneztkwvdidyfzez.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0dnF1bmV6dGt3dmRpZHlmemV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzExMzI0NzQsImV4cCI6MTk4NjcwODQ3NH0.aHEhZx6Gze7jkx_PGj-QZfEa5dZWJ6J_fM5bqv-8Sxo';
         
+        console.log('🔄 Fetching creator 61786830 from Supabase...');
+        
         // Direct Supabase query for just ID, username, avatar, stories, name
         const url = `${SUPABASE_URL}/rest/v1/onlyfans_profiles?id=eq.${creatorId}&select=id,username,avatar,stories,name,favoritedcount`;
+        console.log('📡 Query URL:', url);
+        
         const response = await fetch(url, {
           headers: {
             'apikey': SUPABASE_KEY,
@@ -2106,15 +2110,20 @@
           }
         });
         
+        console.log('📦 Response status:', response.status);
+        
         if (!response.ok) {
-          console.error('Supabase response error:', response.status);
+          const errorText = await response.text();
+          console.error('❌ Supabase error:', response.status, errorText);
           return;
         }
         
         const data = await response.json();
+        console.log('📊 Response data:', data);
         
         if (data && data.length > 0) {
           const creator = data[0];
+          console.log('👤 Creator found:', creator.username, 'Stories:', creator.stories);
           const storiesUrl = creator.stories;
           
           if (storiesUrl) {
@@ -2129,16 +2138,16 @@
               creatorId: parseInt(creatorId)
             };
             reelsData.push(newReel);
-            console.log('✅ Added creator 61786830 to reels:', newReel.username, storiesUrl);
+            console.log('✅ Added creator to reels, calling renderReels()');
             renderReels();
           } else {
-            console.warn('⚠️ Creator 61786830 found but stories field is empty');
+            console.warn('⚠️ Creator 61786830 found but stories field is empty or null');
           }
         } else {
-          console.warn('⚠️ Creator 61786830 not found in database');
+          console.warn('⚠️ Creator 61786830 not found in database (data array is empty)');
         }
       } catch (error) {
-        console.error('❌ Error fetching creator reel:', error);
+        console.error('❌ Error fetching creator reel:', error.message, error);
       }
     }
     
