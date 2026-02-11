@@ -2357,7 +2357,7 @@
           <div class="reel-modal-content">
             <div class="reel-media-wrapper" onclick="toggleReelPlayPause(event)">
               <div id="reelMediaContainer" style="width: 100%; height: 85vh; background: #000; display: flex; align-items: center; justify-content: center; cursor: pointer;">
-                <video id="reelVideo" class="reel-modal-video" autoplay loop muted playsinline style="display: none;">
+                <video id="reelVideo" class="reel-modal-video" autoplay loop playsinline style="display: none;">
                   <source src="" type="video/mp4">
                 </video>
                 <img id="reelImage" class="reel-modal-video" style="display: none;" />
@@ -2444,6 +2444,9 @@
       document.getElementById('reelCaption').textContent = reel.caption;
       document.getElementById('reelLikes').textContent = reel.likes;
       
+      // Initialize audio state
+      initializeReelAudio();
+      
       // Store current reel data
       window.currentReel = reel;
       
@@ -2491,6 +2494,21 @@
     // Store the last volume before muting
     let lastReelVolume = 100;
 
+    function initializeReelAudio() {
+      const video = document.getElementById('reelVideo');
+      const muteBtn = document.querySelector('.reel-volume-control .reel-control-btn');
+      const volumeSlider = document.getElementById('reelVolumeSlider');
+      
+      if (video) {
+        // Set initial state: unmuted with full volume
+        video.muted = false;
+        video.volume = 1;
+        lastReelVolume = 100;
+        volumeSlider.value = 100;
+        muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+      }
+    }
+
     function toggleReelMute() {
       const video = document.getElementById('reelVideo');
       const muteBtn = document.querySelector('.reel-volume-control .reel-control-btn');
@@ -2520,7 +2538,7 @@
         lastReelVolume = value;
         video.volume = value / 100;
         
-        // Auto-unmute when adjusting volume
+        // Auto-unmute when adjusting volume (if muted)
         if (value > 0 && video.muted) {
           video.muted = false;
           muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
