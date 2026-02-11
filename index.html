@@ -2093,36 +2093,26 @@
     async function addCreatorReelFromDatabase() {
       try {
         const creatorId = '61786830';
-        const SUPABASE_URL = 'https://ftvquneztkwvdidyfzez.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0dnF1bmV6dGt3dmRpZHlmemV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzExMzI0NzQsImV4cCI6MTk4NjcwODQ3NH0.aHEhZx6Gze7jkx_PGj-QZfEa5dZWJ6J_fM5bqv-8Sxo';
         
-        console.log('🔄 Fetching creator 61786830 from Supabase...');
+        console.log('🔄 Fetching creator 61786830 from API...');
         
-        // Direct Supabase query for just ID, username, avatar, stories, name
-        const url = `${SUPABASE_URL}/rest/v1/onlyfans_profiles?id=eq.${creatorId}&select=id,username,avatar,stories,name,favoritedcount`;
-        console.log('📡 Query URL:', url);
-        
-        const response = await fetch(url, {
-          headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`,
-            'Accept': 'application/json'
-          }
-        });
+        // Use backend API endpoint to safely fetch from Supabase
+        const response = await fetch(`/api/reel?id=${creatorId}`);
         
         console.log('📦 Response status:', response.status);
         
         if (!response.ok) {
           const errorText = await response.text();
-          console.error('❌ Supabase error:', response.status, errorText);
+          console.error('❌ API error:', response.status, errorText);
           return;
         }
         
-        const data = await response.json();
-        console.log('📊 Response data:', data);
+        const result = await response.json();
+        console.log('📊 Response data:', result);
         
-        if (data && data.length > 0) {
-          const creator = data[0];
+        const creator = result.creator;
+        
+        if (creator) {
           console.log('👤 Creator found:', creator.username, 'Stories:', creator.stories);
           const storiesUrl = creator.stories;
           
@@ -2144,7 +2134,7 @@
             console.warn('⚠️ Creator 61786830 found but stories field is empty or null');
           }
         } else {
-          console.warn('⚠️ Creator 61786830 not found in database (data array is empty)');
+          console.warn('⚠️ Creator 61786830 not found in database');
         }
       } catch (error) {
         console.error('❌ Error fetching creator reel:', error.message, error);
