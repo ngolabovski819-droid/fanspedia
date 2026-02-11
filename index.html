@@ -1513,7 +1513,7 @@
     
     .reel-modal-sidebar {
       position: absolute;
-      right: -90px;
+      right: -75px;
       top: 50%;
       transform: translateY(-50%);
       display: flex;
@@ -1532,7 +1532,7 @@
       color: white;
       font-size: 24px;
       cursor: pointer;
-      display: flex;
+      display: none;
       align-items: center;
       justify-content: center;
       transition: all 0.3s ease;
@@ -1561,6 +1561,19 @@
       justify-content: center;
       transition: all 0.3s ease;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    
+    .reel-modal-btn:nth-child(2) {
+      /* Like button - visible */
+    }
+    
+    .reel-modal-btn:nth-child(3) {
+      /* OnlyFans button - hide */
+      display: none;
+    }
+    
+    .reel-modal-btn:nth-child(4) {
+      /* Share button - visible */
     }
     
     .reel-modal-btn:hover {
