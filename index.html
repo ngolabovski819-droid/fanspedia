@@ -1383,6 +1383,46 @@
     .reel-nav-down {
       bottom: 20px;
     }
+
+    /* New arrow navigation positioned on the right side */
+    .reel-nav-arrows {
+      position: fixed;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      z-index: 10002;
+    }
+
+    .reel-nav-arrow-btn {
+      width: 50px;
+      height: 50px;
+      background: rgba(0, 0, 0, 0.7);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      opacity: 0.8;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    .reel-nav-arrow-btn:hover {
+      background: rgba(0, 175, 240, 0.9);
+      opacity: 1;
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(0, 175, 240, 0.5);
+    }
+
+    .reel-nav-arrow-btn i {
+      pointer-events: none;
+    }
     
     .reel-modal-sidebar {
       position: absolute;
@@ -2191,12 +2231,6 @@
             <button class="reel-modal-close" onclick="closeReelModal()">
               <i class="fas fa-times"></i>
             </button>
-            <button class="reel-nav-btn reel-nav-up" onclick="prevReel()" title="Previous reel (↑)">
-              <i class="fas fa-chevron-up"></i>
-            </button>
-            <button class="reel-nav-btn reel-nav-down" onclick="nextReel()" title="Next reel (↓)">
-              <i class="fas fa-chevron-down"></i>
-            </button>
             <div id="reelMediaContainer" style="width: 100%; height: 85vh; background: #000; display: flex; align-items: center; justify-content: center;">
               <video id="reelVideo" class="reel-modal-video" autoplay loop muted playsinline style="display: none;">
                 <source src="" type="video/mp4">
@@ -2228,6 +2262,14 @@
                 </div>
               </div>
               <div class="reel-modal-caption" id="reelCaption"></div>
+            </div>
+            <div class="reel-nav-arrows">
+              <button class="reel-nav-arrow-btn reel-nav-up" onclick="prevReel()" title="Previous reel">
+                <i class="fas fa-chevron-up"></i>
+              </button>
+              <button class="reel-nav-arrow-btn reel-nav-down" onclick="nextReel()" title="Next reel">
+                <i class="fas fa-chevron-down"></i>
+              </button>
             </div>
           </div>
         `;
