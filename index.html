@@ -2407,7 +2407,7 @@
                 <img id="reelImage" class="reel-modal-video" style="display: none;" />
               </div>
               <div class="reel-controls-bar">
-                <button class="reel-control-btn" onclick="toggleReelPlayPause()" title="Play/Pause">
+                <button class="reel-control-btn play-pause-btn" onclick="toggleReelPlayPauseBtn(event)" title="Play/Pause">
                   <i class="fas fa-play"></i>
                 </button>
                 <div class="reel-volume-control">
@@ -2517,13 +2517,29 @@
     }
 
     function toggleReelPlayPause(event) {
-      // Don't toggle if clicking on control bar buttons
+      // Only toggle if clicking directly on video (not on controls)
       if (event && event.target.closest('.reel-controls-bar')) {
         return;
       }
       
       const video = document.getElementById('reelVideo');
-      const playBtn = document.querySelector('.reel-control-btn:first-child');
+      const playBtn = document.querySelector('.play-pause-btn');
+      if (video && video.style.display !== 'none') {
+        if (video.paused) {
+          video.play();
+          if (playBtn) playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        } else {
+          video.pause();
+          if (playBtn) playBtn.innerHTML = '<i class="fas fa-play"></i>';
+        }
+      }
+    }
+
+    // Direct button click handler - always works
+    function toggleReelPlayPauseBtn(event) {
+      event.stopPropagation();
+      const video = document.getElementById('reelVideo');
+      const playBtn = document.querySelector('.play-pause-btn');
       if (video && video.style.display !== 'none') {
         if (video.paused) {
           video.play();
@@ -2543,13 +2559,16 @@
       const muteBtn = document.querySelector('.reel-volume-control .reel-control-btn');
       const volumeSlider = document.getElementById('reelVolumeSlider');
       
-      if (video) {
-        // Set initial state: unmuted with full volume
-        video.muted = false;
-        video.volume = 1;
-        lastReelVolume = 100;
-        volumeSlider.value = 100;
-        muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+      if (video && muteBtn && volumeSlider) {
+        // Wait a tiny bit for video to be ready
+        setTimeout(() => {
+          video.muted = false;
+          video.volume = 1.0;
+          lastReelVolume = 100;
+          volumeSlider.value = 100;
+          muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+          console.log('✅ Audio initialized: unmuted, volume 100%');
+        }, 100);
       }
     }
 
@@ -2558,18 +2577,20 @@
       const muteBtn = document.querySelector('.reel-volume-control .reel-control-btn');
       const volumeSlider = document.getElementById('reelVolumeSlider');
       
-      if (video && video.style.display !== 'none') {
+      if (video && muteBtn && volumeSlider && video.style.display !== 'none') {
         if (video.muted) {
           // Unmute: restore previous volume
           video.muted = false;
           video.volume = lastReelVolume / 100;
           volumeSlider.value = lastReelVolume;
           muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+          console.log('🔊 Unmuted, volume:', lastReelVolume);
         } else {
           // Mute: save current volume and mute
-          lastReelVolume = volumeSlider.value;
+          lastReelVolume = parseInt(volumeSlider.value);
           video.muted = true;
           muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+          console.log('🔇 Muted, saved volume:', lastReelVolume);
         }
       }
     }
@@ -2578,18 +2599,22 @@
       const video = document.getElementById('reelVideo');
       const muteBtn = document.querySelector('.reel-volume-control .reel-control-btn');
       
-      if (video && video.style.display !== 'none') {
+      if (video && muteBtn && video.style.display !== 'none') {
+        value = parseInt(value);
         lastReelVolume = value;
         video.volume = value / 100;
         
-        // Auto-unmute when adjusting volume (if muted)
+        // Auto-unmute when adjusting volume upward
         if (value > 0 && video.muted) {
           video.muted = false;
           muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-        } else if (value === '0' || value === 0) {
+          console.log('🔊 Auto-unmuted, volume:', value);
+        } else if (value === 0) {
+          // Automatically mute at 0
           video.muted = true;
           muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
-        } else if (!video.muted) {
+          console.log('🔇 Auto-muted at 0 volume');
+        } else if (value > 0 && !video.muted) {
           muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
         }
       }
