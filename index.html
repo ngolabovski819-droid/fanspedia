@@ -2130,6 +2130,38 @@
       }
     ];
     
+    // Fetch and add creator 61786830 from Supabase
+    async function addCreatorReelFromDatabase() {
+      try {
+        const creatorId = '61786830';
+        const response = await fetch(`/api/search?q=&page=1&page_size=1&creatorId=${encodeURIComponent(creatorId)}`);
+        const data = await response.json();
+        
+        if (data && data.length > 0) {
+          const creator = data[0];
+          const storiesUrl = creator.stories;
+          
+          if (storiesUrl) {
+            const newReel = {
+              id: reelsData.length + 1,
+              username: creator.username,
+              avatar: creator.avatar ? `https://images.weserv.nl/?url=${encodeURIComponent(creator.avatar)}&w=120&h=120&fit=cover` : 'https://via.placeholder.com/120',
+              videoUrl: storiesUrl,
+              thumbnail: creator.avatar ? `https://images.weserv.nl/?url=${encodeURIComponent(creator.avatar)}&w=320&h=568&fit=cover` : 'https://via.placeholder.com/320x568',
+              caption: creator.about || `Check out ${creator.username}!`,
+              likes: creator.favoritedcount ? `${(creator.favoritedcount / 1000).toFixed(0)}k` : '0',
+              creatorId: parseInt(creatorId)
+            };
+            reelsData.push(newReel);
+            console.log('✅ Added creator 61786830 to reels:', newReel.username);
+            renderReels();
+          }
+        }
+      } catch (error) {
+        console.warn('Could not fetch creator reel from database:', error);
+      }
+    }
+    
     function renderReels() {
       const reelsGrid = document.getElementById('reelsGrid');
       if (!reelsGrid) return;
@@ -2413,9 +2445,13 @@
     
     // Initialize reels when page loads
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', renderReels);
+      document.addEventListener('DOMContentLoaded', function() {
+        renderReels();
+        addCreatorReelFromDatabase();
+      });
     } else {
       renderReels();
+      addCreatorReelFromDatabase();
     }
 
     // ============================================
