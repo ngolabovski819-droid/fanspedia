@@ -2257,6 +2257,49 @@
     const reelsData = [];
     
     // Fetch and add creator 61786830 from Supabase
+    async function extractVideoThumbnail(videoUrl) {
+      return new Promise((resolve) => {
+        try {
+          const video = document.createElement('video');
+          video.setAttribute('crossorigin', 'anonymous');
+          video.src = videoUrl;
+          video.style.display = 'none';
+          document.body.appendChild(video);
+          
+          // Capture frame after a short delay
+          video.onloadedmetadata = () => {
+            video.currentTime = 0.5; // Capture at 0.5 seconds
+          };
+          
+          video.onseeked = () => {
+            try {
+              const canvas = document.createElement('canvas');
+              canvas.width = 320;
+              canvas.height = 568;
+              const ctx = canvas.getContext('2d');
+              ctx.drawImage(video, 0, 0, 320, 568);
+              const thumbnailUrl = canvas.toDataURL('image/jpeg', 0.8);
+              document.body.removeChild(video);
+              resolve(thumbnailUrl);
+            } catch (e) {
+              console.warn('Could not extract thumbnail:', e);
+              document.body.removeChild(video);
+              resolve(null);
+            }
+          };
+          
+          video.onerror = () => {
+            console.warn('Could not load video for thumbnail:', videoUrl);
+            document.body.removeChild(video);
+            resolve(null);
+          };
+        } catch (e) {
+          console.warn('Error extracting thumbnail:', e);
+          resolve(null);
+        }
+      });
+    }
+    
     async function addCreatorReelFromDatabase(creatorId) {
       try {
         console.log(`🔄 Fetching creator ${creatorId} from API...`);
@@ -2282,18 +2325,21 @@
           const storiesUrl = creator.stories;
           
           if (storiesUrl) {
+            // Extract first frame from video as thumbnail
+            const extractedThumbnail = await extractVideoThumbnail(storiesUrl);
+            
             const newReel = {
               id: reelsData.length + 1,
               username: creator.username,
               avatar: creator.avatar ? `https://images.weserv.nl/?url=${encodeURIComponent(creator.avatar)}&w=120&h=120&fit=cover` : 'https://via.placeholder.com/120',
               videoUrl: storiesUrl,
-              thumbnail: creator.avatar ? `https://images.weserv.nl/?url=${encodeURIComponent(creator.avatar)}&w=320&h=568&fit=cover` : 'https://via.placeholder.com/320x568',
+              thumbnail: extractedThumbnail || (creator.avatar ? `https://images.weserv.nl/?url=${encodeURIComponent(creator.avatar)}&w=320&h=568&fit=cover` : 'https://via.placeholder.com/320x568'),
               caption: creator.name || `Check out ${creator.username}!`,
               likes: creator.favoritedcount ? `${(creator.favoritedcount / 1000).toFixed(0)}k` : '0',
               creatorId: parseInt(creatorId)
             };
             reelsData.push(newReel);
-            console.log(`✅ Added creator ${creatorId} to reels`);
+            console.log(`✅ Added creator ${creatorId} to reels with video thumbnail`);
             renderReels();
           } else {
             console.warn(`⚠️ Creator ${creatorId} found but stories field is empty or null`);
