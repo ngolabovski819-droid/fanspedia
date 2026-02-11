@@ -1423,6 +1423,93 @@
     .reel-nav-arrow-btn i {
       pointer-events: none;
     }
+
+    /* Video controls bar */
+    .reel-media-wrapper {
+      position: relative;
+      width: 100%;
+      height: 85vh;
+    }
+
+    .reel-controls-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 1000;
+    }
+
+    .reel-media-wrapper:hover .reel-controls-bar {
+      opacity: 1;
+    }
+
+    .reel-control-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      border-radius: 6px;
+      color: white;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .reel-control-btn:hover {
+      background: rgba(0, 175, 240, 0.9);
+      transform: scale(1.1);
+    }
+
+    .reel-volume-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .reel-volume-slider {
+      width: 100px;
+      height: 4px;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .reel-volume-control:hover .reel-volume-slider {
+      opacity: 1;
+    }
+
+    .reel-volume-slider::-webkit-slider-thumb {
+      appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #00AFF0;
+      cursor: pointer;
+    }
+
+    .reel-volume-slider::-moz-range-thumb {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #00AFF0;
+      cursor: pointer;
+      border: none;
+    }
+
+    .reel-menu-btn {
+      margin-left: auto;
+    }
     
     .reel-modal-sidebar {
       position: absolute;
@@ -2231,11 +2318,27 @@
             <button class="reel-modal-close" onclick="closeReelModal()">
               <i class="fas fa-times"></i>
             </button>
-            <div id="reelMediaContainer" style="width: 100%; height: 85vh; background: #000; display: flex; align-items: center; justify-content: center;">
-              <video id="reelVideo" class="reel-modal-video" autoplay loop muted playsinline style="display: none;">
-                <source src="" type="video/mp4">
-              </video>
-              <img id="reelImage" class="reel-modal-video" style="display: none;" />
+            <div class="reel-media-wrapper">
+              <div id="reelMediaContainer" style="width: 100%; height: 85vh; background: #000; display: flex; align-items: center; justify-content: center;">
+                <video id="reelVideo" class="reel-modal-video" autoplay loop muted playsinline style="display: none;">
+                  <source src="" type="video/mp4">
+                </video>
+                <img id="reelImage" class="reel-modal-video" style="display: none;" />
+              </div>
+              <div class="reel-controls-bar">
+                <button class="reel-control-btn" onclick="toggleReelPlayPause()" title="Play/Pause">
+                  <i class="fas fa-play"></i>
+                </button>
+                <div class="reel-volume-control">
+                  <button class="reel-control-btn" onclick="toggleReelMute()" title="Mute">
+                    <i class="fas fa-volume-up"></i>
+                  </button>
+                  <input type="range" class="reel-volume-slider" id="reelVolumeSlider" min="0" max="100" value="0" onchange="setReelVolume(this.value)">
+                </div>
+                <button class="reel-control-btn reel-menu-btn" onclick="openReelMenu()" title="Menu">
+                  <i class="fas fa-ellipsis-v"></i>
+                </button>
+              </div>
             </div>
             <div class="reel-modal-sidebar">
               <button class="reel-modal-btn" onclick="toggleReelLike()" title="Like">
@@ -2324,6 +2427,44 @@
           image.src = '';
         }
       }
+    }
+
+    function toggleReelPlayPause() {
+      const video = document.getElementById('reelVideo');
+      const playBtn = document.querySelector('.reel-control-btn:first-child');
+      if (video && video.style.display !== 'none') {
+        if (video.paused) {
+          video.play();
+          playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        } else {
+          video.pause();
+          playBtn.innerHTML = '<i class="fas fa-play"></i>';
+        }
+      }
+    }
+
+    function toggleReelMute() {
+      const video = document.getElementById('reelVideo');
+      const muteBtn = document.querySelector('.reel-volume-control .reel-control-btn');
+      if (video && video.style.display !== 'none') {
+        video.muted = !video.muted;
+        muteBtn.innerHTML = video.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
+      }
+    }
+
+    function setReelVolume(value) {
+      const video = document.getElementById('reelVideo');
+      if (video && video.style.display !== 'none') {
+        video.volume = value / 100;
+        if (value > 0) {
+          video.muted = false;
+        }
+      }
+    }
+
+    function openReelMenu() {
+      console.log('Menu clicked - will add options here');
+      // Placeholder for menu functionality
     }
     
     function toggleReelLike() {
