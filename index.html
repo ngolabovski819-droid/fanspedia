@@ -2093,8 +2093,24 @@
     async function addCreatorReelFromDatabase() {
       try {
         const creatorId = '61786830';
-        // Query by ID - the API will search for the ID in all text fields
-        const response = await fetch(`/api/search?q=${encodeURIComponent(creatorId)}&page=1&page_size=1`);
+        const SUPABASE_URL = 'https://ftvquneztkwvdidyfzez.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0dnF1bmV6dGt3dmRpZHlmemV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzExMzI0NzQsImV4cCI6MTk4NjcwODQ3NH0.aHEhZx6Gze7jkx_PGj-QZfEa5dZWJ6J_fM5bqv-8Sxo';
+        
+        // Direct Supabase query for just ID, username, avatar, stories, name
+        const url = `${SUPABASE_URL}/rest/v1/onlyfans_profiles?id=eq.${creatorId}&select=id,username,avatar,stories,name,favoritedcount`;
+        const response = await fetch(url, {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Accept': 'application/json'
+          }
+        });
+        
+        if (!response.ok) {
+          console.error('Supabase response error:', response.status);
+          return;
+        }
+        
         const data = await response.json();
         
         if (data && data.length > 0) {
@@ -2113,7 +2129,7 @@
               creatorId: parseInt(creatorId)
             };
             reelsData.push(newReel);
-            console.log('✅ Added creator 61786830 to reels:', newReel.username);
+            console.log('✅ Added creator 61786830 to reels:', newReel.username, storiesUrl);
             renderReels();
           } else {
             console.warn('⚠️ Creator 61786830 found but stories field is empty');
