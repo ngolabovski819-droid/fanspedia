@@ -2411,7 +2411,7 @@
                   <i class="fas fa-play"></i>
                 </button>
                 <div class="reel-volume-control">
-                  <button class="reel-control-btn" onclick="toggleReelMute()" title="Mute">
+                  <button class="reel-control-btn" onclick="toggleReelMute(event)" title="Mute">
                     <i class="fas fa-volume-up"></i>
                   </button>
                   <input type="range" class="reel-volume-slider" id="reelVolumeSlider" min="0" max="100" value="100" oninput="setReelVolume(this.value)">
@@ -2572,7 +2572,8 @@
       }
     }
 
-    function toggleReelMute() {
+    function toggleReelMute(event) {
+      if (event) event.stopPropagation();
       const video = document.getElementById('reelVideo');
       const muteBtn = document.querySelector('.reel-volume-control .reel-control-btn');
       const volumeSlider = document.getElementById('reelVolumeSlider');
