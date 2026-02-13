@@ -1751,20 +1751,13 @@
     const overlay = document.getElementById('drawerOverlay');
     const drawerClose = document.getElementById('drawerClose');
     
-    console.log('Drawer init:', { mobileToggle: !!mobileToggle, drawer: !!drawer, overlay: !!overlay, drawerClose: !!drawerClose });
-    
     function openDrawer() {
-      console.log('openDrawer called');
-      if (!drawer || !overlay) {
-        console.log('Drawer or overlay missing:', { drawer: !!drawer, overlay: !!overlay });
-        return;
-      }
+      if (!drawer || !overlay) return;
       drawer.classList.add('open');
       overlay.classList.add('open');
       drawer.setAttribute('aria-hidden', 'false');
       overlay.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
-      console.log('Drawer opened - classes:', drawer.className, overlay.className);
     }
     
     function closeDrawer() {
@@ -1778,12 +1771,9 @@
     
     if (mobileToggle) {
       mobileToggle.addEventListener('click', (e) => {
-        console.log('Burger button clicked!');
         e.preventDefault();
         openDrawer();
       });
-    } else {
-      console.log('mobileToggle not found!');
     }
     if (overlay) {
       overlay.addEventListener('click', closeDrawer);
