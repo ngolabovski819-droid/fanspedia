@@ -1333,6 +1333,27 @@
       </div>
       <a href="/categories/" class="drawer-view-all-btn">View All Categories</a>
     </div>
+
+    <!-- Locations collapsible section -->
+    <div class="drawer-locations-toggle" id="drawerLocationsToggle">
+      <div class="icon-text">
+        <i class="fas fa-map-marker-alt"></i>
+        <span>Locations</span>
+      </div>
+      <i class="fas fa-chevron-down chevron"></i>
+    </div>
+    <div id="drawerLocationsSection">
+      <div class="drawer-locations-label">POPULAR LOCATIONS</div>
+      <div id="drawerLocations">
+        <a href="/near-me/">Near Me</a>
+        <a href="/united-states/">United States</a>
+        <a href="/canada/">Canada</a>
+        <a href="/india/">India</a>
+        <a href="/japan/">Japan</a>
+      </div>
+      <a href="/locations/" class="drawer-view-all-btn">View All Locations</a>
+    </div>
+  </nav>
   </nav>
   
   <!-- Main Content -->
@@ -1494,6 +1515,14 @@
     if (drawerCategoriesToggle && drawerCategoriesSection) {
       drawerCategoriesToggle.addEventListener('click', () => {
         drawerCategoriesSection.classList.toggle('open');
+      });
+    }
+
+    const drawerLocationsToggle = document.getElementById('drawerLocationsToggle');
+    const drawerLocationsSection = document.getElementById('drawerLocationsSection');
+    if (drawerLocationsToggle && drawerLocationsSection) {
+      drawerLocationsToggle.addEventListener('click', () => {
+        drawerLocationsSection.classList.toggle('open');
       });
     }
     

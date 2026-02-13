@@ -152,6 +152,22 @@
   /* View all button */
   .drawer-view-all { display:block; padding:12px 10px; margin:0 0 8px; border-radius:8px; text-align:center; background:linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); color:#fff; font-weight:700; font-size:15px; text-decoration:none; transition:transform .2s, box-shadow .2s; box-shadow:0 4px 12px rgba(0,175,240,0.3); }
   .drawer-view-all:hover { transform:translateY(-1px); box-shadow:0 6px 16px rgba(0,175,240,0.4); color:#fff; }
+
+  /* Locations toggle and section */
+  .drawer-locations-toggle { display:flex; align-items:center; justify-content:space-between; padding:12px 10px; cursor:pointer; user-select:none; border-radius:8px; transition:background .2s; }
+  .drawer-locations-toggle:hover { background:#f5f5f7; }
+  .drawer-locations-toggle .left { display:flex; align-items:center; gap:10px; }
+  .drawer-locations-toggle .icon { color:#00AFF0; font-size:18px; }
+  .drawer-locations-toggle .label { color:#1d1d1f; font-weight:700; font-size:16px; }
+  .drawer-locations-toggle .chevron { color:#999; font-size:14px; transition:transform .25s ease; }
+  .drawer-locations-section { max-height:0; overflow:hidden; transition:max-height .3s ease; }
+  .drawer-locations-section.open { max-height:800px; overflow-y:auto; }
+  .drawer-locations-section .section-label { margin:12px 10px 8px; color:#999; font-size:11px; text-transform:uppercase; letter-spacing:.8px; font-weight:700; }
+  .drawer-locations-section #drawerLocations { display:flex; flex-direction:column; gap:4px; padding:0 0 8px; }
+  .drawer-locations-section #drawerLocations a { padding:10px 10px; margin:0; border-radius:8px; font-weight:600; font-size:15px; color:#333; transition:background .2s, color .2s; }
+  .drawer-locations-section #drawerLocations a:hover { background:#f5f5f7; color:#00AFF0; }
+  .drawer-locations-section.open ~ .drawer-locations-toggle .chevron,
+  .drawer-locations-toggle:has(+ .drawer-locations-section.open) .chevron { transform:rotate(180deg); }
   
   /* Toggle chevron rotation when open */
   .drawer-categories-section.open ~ .drawer-categories-toggle .chevron,
@@ -452,6 +468,27 @@
       </div>
       <a href="/categories/" class="drawer-view-all">View All Categories</a>
     </div>
+
+    <!-- Locations collapsible section -->
+    <div class="drawer-locations-toggle" id="drawerLocationsToggle">
+      <div class="left">
+        <i class="fas fa-map-marker-alt icon"></i>
+        <span class="label">Locations</span>
+      </div>
+      <i class="fas fa-chevron-down chevron"></i>
+    </div>
+    
+    <div class="drawer-locations-section" id="drawerLocationsSection">
+      <div class="section-label">POPULAR LOCATIONS</div>
+      <div id="drawerLocations">
+        <a href="/near-me/">Near Me</a>
+        <a href="/united-states/">United States</a>
+        <a href="/canada/">Canada</a>
+        <a href="/india/">India</a>
+        <a href="/japan/">Japan</a>
+      </div>
+      <a href="/locations/" class="drawer-view-all">View All Locations</a>
+    </div>
   </nav>
 
   <!-- Breadcrumbs (dynamically populated) -->
@@ -561,6 +598,15 @@
     if (drawerCategoriesToggle && drawerCategoriesSection) {
       drawerCategoriesToggle.addEventListener('click', () => {
         drawerCategoriesSection.classList.toggle('open');
+      });
+    }
+
+    // Wire up locations toggle
+    const drawerLocationsToggle = document.getElementById('drawerLocationsToggle');
+    const drawerLocationsSection = document.getElementById('drawerLocationsSection');
+    if (drawerLocationsToggle && drawerLocationsSection) {
+      drawerLocationsToggle.addEventListener('click', () => {
+        drawerLocationsSection.classList.toggle('open');
       });
     }
   </script>
