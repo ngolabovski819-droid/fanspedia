@@ -65,7 +65,7 @@ const synonymsOverrides = {
   'famous': ['famous','celebrity','popular'],
   'bbw': ['bbw','plus size','curvy','thick'],
   'pussy': ['pussy','kitty','coochie'],
-  'pussy-play': ['pussy play','pussy','kitty','coochie','clit','clit play'],
+  'pussy-play': ['pussy play','coochie play','clit','clit play','kitty play'],
   'pregnant': ['pregnant','preggo','expecting'],
   'deepthroat': ['deepthroat','deep throat','oral'],
   'pegging': ['pegging','strap-on','strapon'],
