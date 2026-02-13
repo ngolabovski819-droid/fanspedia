@@ -507,11 +507,18 @@
       font-weight: 600;
       color: var(--text-primary);
       transition: transform 0.2s ease, border 0.2s ease, background 0.2s ease;
+      text-decoration: none;
+    }
+    a.country-chip {
+      cursor: pointer;
     }
     .country-chip:hover {
       transform: translateY(-1px);
       border-color: rgba(0,175,240,0.5);
       background: #ffffff;
+    }
+    [data-theme="dark"] .country-chip:hover {
+      background: var(--bg-primary);
     }
     .country-code {
       font-size: 11px;
@@ -765,7 +772,7 @@
       { code: 'BR', name: 'Brazil' },
       { code: 'BG', name: 'Bulgaria' },
       { code: 'KH', name: 'Cambodia' },
-      { code: 'CA', name: 'Canada' },
+      { code: 'CA', name: 'Canada', url: '/country/canada/' },
       { code: 'CL', name: 'Chile' },
       { code: 'CN', name: 'China' },
       { code: 'CO', name: 'Colombia' },
@@ -792,13 +799,13 @@
       { code: 'HK', name: 'Hong Kong' },
       { code: 'HU', name: 'Hungary' },
       { code: 'IS', name: 'Iceland' },
-      { code: 'IN', name: 'India' },
+      { code: 'IN', name: 'India', url: '/country/india/' },
       { code: 'ID', name: 'Indonesia' },
       { code: 'IE', name: 'Ireland' },
       { code: 'IL', name: 'Israel' },
       { code: 'IT', name: 'Italy' },
       { code: 'JM', name: 'Jamaica' },
-      { code: 'JP', name: 'Japan' },
+      { code: 'JP', name: 'Japan', url: '/country/japan/' },
       { code: 'KE', name: 'Kenya' },
       { code: 'LV', name: 'Latvia' },
       { code: 'LB', name: 'Lebanon' },
@@ -845,16 +852,19 @@
       { code: 'UA', name: 'Ukraine' },
       { code: 'AE', name: 'United Arab Emirates' },
       { code: 'GB', name: 'United Kingdom' },
-      { code: 'US', name: 'United States' },
+      { code: 'US', name: 'United States', url: '/country/united-states/' },
       { code: 'UY', name: 'Uruguay' },
       { code: 'VE', name: 'Venezuela' },
       { code: 'VN', name: 'Vietnam' }
     ];
 
     const container = document.getElementById('countries');
-    container.innerHTML = countries.map(item => (
-      `<div class="country-chip"><span class="country-code">${item.code}</span><span class="country-name">${item.name}</span></div>`
-    )).join('');
+    container.innerHTML = countries.map(item => {
+      if (item.url) {
+        return `<a href="${item.url}" class="country-chip"><span class="country-code">${item.code}</span><span class="country-name">${item.name}</span></a>`;
+      }
+      return `<div class="country-chip"><span class="country-code">${item.code}</span><span class="country-name">${item.name}</span></div>`;
+    }).join('');
   </script>
 
   <script type="module">

@@ -16,6 +16,12 @@
     { "source": "/locations/", "destination": "/locations.html" },
     { "source": "/country/united-states", "destination": "/united-states.html" },
     { "source": "/country/united-states/", "destination": "/united-states.html" },
+    { "source": "/country/canada", "destination": "/canada.html" },
+    { "source": "/country/canada/", "destination": "/canada.html" },
+    { "source": "/country/india", "destination": "/india.html" },
+    { "source": "/country/india/", "destination": "/india.html" },
+    { "source": "/country/japan", "destination": "/japan.html" },
+    { "source": "/country/japan/", "destination": "/japan.html" },
     { "source": "/near-me", "destination": "/near-me.html" },
     { "source": "/near-me/", "destination": "/near-me.html" },
     

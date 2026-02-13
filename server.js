@@ -52,6 +52,21 @@ app.get('/country/united-states', (req, res) => {
   res.sendFile(path.join(__dirname, 'united-states.html'));
 });
 
+// Handle /country/canada route (Vercel rewrite: "/country/canada" -> "/canada.html")
+app.get('/country/canada', (req, res) => {
+  res.sendFile(path.join(__dirname, 'canada.html'));
+});
+
+// Handle /country/india route (Vercel rewrite: "/country/india" -> "/india.html")
+app.get('/country/india', (req, res) => {
+  res.sendFile(path.join(__dirname, 'india.html'));
+});
+
+// Handle /country/japan route (Vercel rewrite: "/country/japan" -> "/japan.html")
+app.get('/country/japan', (req, res) => {
+  res.sendFile(path.join(__dirname, 'japan.html'));
+});
+
 // Disable /creator route as well
 app.get('/creator', (req, res) => {
   res.redirect(302, '/');
