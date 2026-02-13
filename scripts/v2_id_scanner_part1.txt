@@ -1,0 +1,69 @@
+﻿# OnlyFans V2 ID Scanner - improved version
+# - Persistent contexts with sticky proxy + UA
+# - Fast-path direct API requests, Playwright fallback
+# - Resource blocking
+# - Arithmetic-progression workers for numeric ID scanning (deterministic resume)
+# - Per-worker batching & proxy health reporting
+
+import asyncio
+import argparse
+import json
+import os
+import sys
+import random
+from typing import Dict, Any, Optional, List
+from datetime import datetime, timezone, timedelta
+from dateutil.parser import parse as parse_date
+from pathlib import Path
+import time
+from urllib.parse import urlparse
+
+from playwright.async_api import async_playwright, Browser, BrowserContext, Page
+from tqdm import tqdm
+
+# Load environment variables from .env file
+from dotenv import load_dotenv
+load_dotenv()
+
+# Add parent directory to path for imports
+sys.path.insert(0, str(Path(__file__).parent))
+from v2_shared_utils import SupabaseClient, RateLimiter, ProxyPool, UserAgentRotator
+
+# -------------------------
+# Field extraction unchanged
+# -------------------------
+VALID_DB_COLUMNS = {
+    "id", "username", "name", "about", "location", "website", "wishlist", "view",
+    "avatar", "header",
+    "archivedPostsCount", "audiosCount", "favoritedCount", "favoritesCount",
+    "finishedStreamsCount", "mediasCount", "photosCount", "postsCount",
+    "privateArchivedPostsCount", "subscribersCount", "videosCount",
+    "subscribePrice", "currentSubscribePrice", "tipsEnabled", "tipsMax", "tipsMin",
+    "tipsMinInternal", "tipsTextEnabled", "referalBonusSummForReferer",
+    "canAddSubscriber", "canChat", "canCommentStory", "canCreatePromotion",
+    "canCreateTrial", "canEarn", "canLookStory", "canPayInternal",
+    "canReceiveChatMessage", "canReport", "canRestrict", "canTrialSend",
+    "hasLabels", "hasLinks", "hasNotViewedStory", "hasPinnedPosts",
+    "hasSavedStreams", "hasScheduledStream", "hasStories", "hasStream",
+    "isAdultContent", "isBlocked", "isFriend", "isMarkdownDisabledForAbout",
+    "isPerformer", "isPrivateRestriction", "isRealPerformer", "isReferrerAllowed",
+    "isRestricted", "isSpotifyConnected", "isSpringConnected", "isVerified",
+    "showMediaCount", "showPostsInFeed", "showSubscribersCount", "shouldShowFinishedStreams",
+    "subscribedBy", "subscribedOn", "subscribedIsExpiredNow",
+    "subscribedByAutoprolong", "subscribedByData", "subscribedByExpire",
+    "subscribedByExpireDate", "subscribedOnData", "subscribedOnDuration",
+    "subscribedOnExpiredNow",
+    "joinDate", "lastSeen", "firstPublishedPostDate",
+    "avatarHeaderConverterUpload",
+    "avatar_c50", "avatar_c144", "avatar_thumbs_json",
+    "header_w480", "header_w760", "header_thumbs_json", "header_size",
+    "header_width", "header_height",
+    "promotion1_id", "promotion1_price", "promotion1_discount", "promotion1_title",
+    "promotion2_id", "promotion2_price", "promotion2_discount", "promotion2_title",
+    "promotion3_id", "promotion3_price", "promotion3_discount", "promotion3_title",
+    "bundle1_id", "bundle1_discount", "bundle1_duration", "bundle1_price", "bundle1_canBuy",
+    "bundle2_id", "bundle2_discount", "bundle2_duration", "bundle2_price", "bundle2_canBuy",
+    "bundle3_id", "bundle3_discount", "bundle3_duration", "bundle3_price", "bundle3_canBuy",
+    "raw_json", "source_url", "success_attempt", "timestamp",
+    "first_seen_at", "last_seen_at", "last_refreshed_at", "next_refresh_at", "status"
+}

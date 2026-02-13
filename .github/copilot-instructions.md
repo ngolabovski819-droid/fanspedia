@@ -1,46 +1,33 @@
-﻿# FansPedia — Copilot Guide (Concise)
+﻿# FansPedia — Copilot Instructions
 
 Quick links: [PATTERNS.md](./PATTERNS.md) • [CHECKLISTS.md](./CHECKLISTS.md) • [ARCHITECTURE.md](./ARCHITECTURE.md) • [QUICKSTART.md](./QUICKSTART.md) • [TROUBLESHOOTING.md](./TROUBLESHOOTING.md)
 
 ## Big Picture
-- Production site for `fanspedia.net`. Vanilla HTML/JS frontend + Vercel serverless API + Supabase. Similar stack to sibling repo.
-- Includes creator pages (`creator.html`) with Similar Creators recommendations and favorites.
+- Static HTML/vanilla JS frontend + Vercel serverless API + Supabase PostgREST. Production domain: `fanspedia.net`.
+- Core pages: search ([index.html](../index.html)), category hub ([categories.html](../categories.html)), category view ([category.html](../category.html)), creator profile ([creator.html](../creator.html)).
+- Data flow: frontend hits `/api/search` → [api/search.js](../api/search.js) proxies to Supabase REST and maps snake_case to camelCase for the UI.
 
-## Frontend
-- Pages: `index.html`, `categories.html`, `category.html`, `creator.html`.
-- Categories single source: `config/categories.js`. Always import with `?v=YYYYMMDD-N` and bump across all HTML when editing.
-- Infinite scroll: `currentPage,isLoading,hasMore` + “Load More”. First image eager/high priority; others lazy. Use `buildResponsiveSources()`.
-- Favorites: LocalStorage only; use event delegation pattern.
+## Frontend Conventions
+- Categories are single source of truth in [config/categories.js](../config/categories.js): `categories`, `popularCategories`, `compoundCategories`, `synonymsMap`.
+- Cache busting is required: import `config/categories.js` with `?v=YYYYMMDD-N` and bump across all HTML files on any category change.
+- Infinite scroll uses `currentPage`, `isLoading`, `hasMore` and a “Load More” button (not IntersectionObserver).
+- Images: first card uses `loading="eager" fetchpriority="high"`; others `loading="lazy"`. Follow `buildResponsiveSources()` pattern and `images.weserv.nl` proxy.
+- Favorites are stored in LocalStorage; UI uses event delegation (see [creator.html](../creator.html)).
 
-## Backend API
-- Files: `api/search.js`, `api/health.js`, `api/analytics.js`.
-- Supabase via REST with `apikey` + bearer; 60s in-memory Map cache.
-- Search OR-matches `username,name,about` for `q` split by `|` or `,`. Exclude `location`. Example: `q=goth|gothic|alt`.
+## Backend/API Patterns
+- [api/search.js](../api/search.js) builds a Supabase REST query with `select`, `order`, `limit`, `offset` and a 60s in-memory cache keyed by final URL.
+- Multi-term `q` is split by `|` or `,` and OR-matched across `username`, `name`, `about` only (do NOT search `location`).
+- Supabase headers always include `apikey`, `Authorization: Bearer`, `Accept-Profile`, `Prefer: count=exact`.
 
-## Database
-- `onlyfans_profiles` with lowercase columns including V2 tracking fields.
-- `onlyfans_profile_snapshots`, `scan_progress`, `crawl_runs`, `crawl_jobs` support snapshots and scheduling.
+## Workflows
+- Local dev server: `npm start` (serves API + static files on `http://127.0.0.1:3000`).
+- Sitemaps: `npm run build:sitemaps` (full) or `npm run sitemap` (single).
+- Creator page entry point: `/creator.html?u=username` (Similar Creators and favorites live here).
 
-## Scraping
-- V1: `mega_onlyfans_scraper_full.py` → CSV → `load_csv_to_supabase.py --exclude-columns raw_json,timestamp`.
-- V2: migrate `scripts/migrations/001_v2_snapshots_and_tracking.sql`; run `v2_id_scanner.py`, `v2_incremental_discovery.py`, `v2_refresh_orchestrator.py`.
-- Intercept `/api2/v2/users/`; skip `isperformer=false`; resume via `scan_progress`.
+## Data/Schema Notes
+- Supabase table `onlyfans_profiles` uses lowercase column names; API maps to camelCase for the frontend.
+- Category search pages use `compoundCategories` (filters like max price) and `synonymsMap` for broader matching (see [category.html](../category.html)).
 
-## Local Dev
-- Start: `npm start` → test `http://127.0.0.1:3000/api/search?q=test&page=1`.
-- Creator page: `/creator.html?u=username` shows profile + Similar Creators.
-- Supabase sanity curl as in sibling repo.
-
-## Deployment & SEO
-- Set `SUPABASE_URL` + `SUPABASE_KEY` in Vercel. Push to `main` to deploy.
-- Sitemaps: `npm run build:sitemaps` creates multiple sitemap files in repo root.
-- If rewrites ignored, follow `VERCEL_FIX_INSTRUCTIONS.md` (Framework "Other", no Output Directory override) and redeploy.
-
-## Conventions & Gotchas
-- Never hardcode categories; import module and bump `?v=`.
-- Keep PostgREST keys lowercase; avoid `location` in search.
-- Do not commit secrets/data files (`.env`, `cookies.json`, CSVs, failures/progress logs).
-
-## Pointers
-- Start with `api/search.js`, `config/categories.js`, `creator.html`.
-- Reuse patterns from PATTERNS: Supabase query, debounce + pagination, responsive images, favorites bar.
+## Guardrails
+- Never hardcode categories in HTML; always import from [config/categories.js](../config/categories.js) and bump the `?v=` query.
+- Do not commit `.env`, `cookies.json`, `*.csv`, or scrape failure logs (`failed_batch.json`, `failed_ids_v2.json`, `progress_urls.json`).

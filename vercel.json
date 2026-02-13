@@ -12,6 +12,10 @@
     { "source": "/categories/", "destination": "/categories.html" },
     { "source": "/categories/:slug", "destination": "/category.html" },
     { "source": "/categories/:slug/", "destination": "/category.html" },
+    { "source": "/locations", "destination": "/locations.html" },
+    { "source": "/locations/", "destination": "/locations.html" },
+    { "source": "/country/united-states", "destination": "/united-states.html" },
+    { "source": "/country/united-states/", "destination": "/united-states.html" },
     { "source": "/near-me", "destination": "/near-me.html" },
     { "source": "/near-me/", "destination": "/near-me.html" },
     
@@ -40,6 +44,18 @@
     },
     {
       "source": "/category.html",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/united-states.html",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/locations.html",
       "headers": [
         { "key": "Cache-Control", "value": "no-store, must-revalidate" }
       ]

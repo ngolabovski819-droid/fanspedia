@@ -42,6 +42,16 @@ app.get('/categories/:slug', (req, res) => {
   res.sendFile(path.join(__dirname, 'category.html'));
 });
 
+// Handle /locations route (Vercel rewrite: "/locations" -> "/locations.html")
+app.get('/locations', (req, res) => {
+  res.sendFile(path.join(__dirname, 'locations.html'));
+});
+
+// Handle /country/united-states route (Vercel rewrite: "/country/united-states" -> "/united-states.html")
+app.get('/country/united-states', (req, res) => {
+  res.sendFile(path.join(__dirname, 'united-states.html'));
+});
+
 // Disable /creator route as well
 app.get('/creator', (req, res) => {
   res.redirect(302, '/');

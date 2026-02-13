@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Story Feature Demo - FansPedia</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #f5f5f7;
+      padding: 40px 20px;
+    }
+
+    .demo-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: #1d1d1f;
+      margin-bottom: 40px;
+    }
+
+    .creator-card {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      margin-bottom: 20px;
+    }
+
+    /* Story Avatar with Ring */
+    .avatar-container {
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .avatar-container:hover {
+      transform: scale(1.05);
+    }
+
+    /* Gradient ring for stories */
+    .avatar-container.has-story::before {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      right: -4px;
+      bottom: -4px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, #00AFF0, #FF0080, #FFCC00, #00AFF0);
+      background-size: 300% 300%;
+      animation: storyGradient 3s ease infinite;
+      z-index: -1;
+    }
+
+    @keyframes storyGradient {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .avatar-img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid white;
+      display: block;
+    }
+
+    /* Play badge */
+    .story-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: linear-gradient(135deg, #FF0080, #FF4500);
+      color: white;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(255, 0, 128, 0.4);
+      border: 3px solid white;
+    }
+
+    .creator-info {
+      flex: 1;
+    }
+
+    .creator-info h2 {
+      color: #1d1d1f;
+      margin-bottom: 8px;
+    }
+
+    .creator-info p {
+      color: #666;
+      margin-bottom: 12px;
+    }
+
+    .view-story-btn {
+      background: linear-gradient(135deg, #00AFF0, #0099D6);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .view-story-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 175, 240, 0.4);
+    }
+
+    /* Story Modal */
+    .story-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .story-modal.active {
+      display: flex;
+    }
+
+    .story-content {
+      position: relative;
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      background: #000;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 175, 240, 0.3);
+    }
+
+    .story-video {
+      width: 100%;
+      height: auto;
+      max-height: 85vh;
+      display: block;
+      background: #000;
+    }
+
+    .story-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 44px;
+      height: 44px;
+      background: rgba(0, 0, 0, 0.7);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10001;
+      transition: all 0.3s ease;
+    }
+
+    .story-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+
+    .story-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 20px;
+      background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, transparent 100%);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .story-header-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+
+    .story-header-info {
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .story-controls {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      z-index: 10000;
+    }
+
+    .story-btn {
+      width: 48px;
+      height: 48px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .story-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+
+    .instructions {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      margin-top: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .instructions h3 {
+      color: #00AFF0;
+      margin-bottom: 12px;
+    }
+
+    .instructions ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .instructions li {
+      padding: 8px 0;
+      color: #666;
+    }
+
+    .instructions li::before {
+      content: '✓';
+      color: #00AFF0;
+      font-weight: bold;
+      margin-right: 8px;
+    }
+
+    code {
+      background: #f5f5f7;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      color: #0099D6;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-container">
+    <h1>📱 OnlyFans Story Feature Demo</h1>
+    
+    <div class="creator-card">
+      <div class="avatar-container has-story" onclick="openStory()">
+        <img src="https://images.weserv.nl/?url=https://public.onlyfans.com/files/thumbs/w480/e/eh/ehq/ehq1rhmhupuhhvfqw5ohpxf3jrvdp5u41653685098/header.jpg&w=120&h=120&fit=cover" alt="Creator Avatar" class="avatar-img">
+        <div class="story-badge">
+          <i class="fas fa-play"></i>
+        </div>
+      </div>
+      
+      <div class="creator-info">
+        <h2>@sharnabeckman</h2>
+        <p>Click the avatar or button to view the story!</p>
+        <button class="view-story-btn" onclick="openStory()">
+          <i class="fas fa-play"></i> View Story
+        </button>
+      </div>
+    </div>
+
+    <div class="instructions">
+      <h3>How to Implement This on Your Site:</h3>
+      <ul>
+        <li>Add the <code>stories</code> and <code>stories_preview</code> fields to your database</li>
+        <li>Check if creator has story data: <code>if (creator.stories || creator.stories_preview)</code></li>
+        <li>Add the <code>has-story</code> class to avatar container to show animated ring</li>
+        <li>Add story badge with play icon</li>
+        <li>On click, open modal with video player using the story URL</li>
+        <li>Story URLs come from the scraper capturing OnlyFans stories endpoint</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Story Modal -->
+  <div class="story-modal" id="storyModal">
+    <div class="story-content">
+      <div class="story-close" onclick="closeStory()">
+        <i class="fas fa-times"></i>
+      </div>
+      <div class="story-header">
+        <img class="story-header-avatar" src="https://images.weserv.nl/?url=https://public.onlyfans.com/files/thumbs/w480/e/eh/ehq/ehq1rhmhupuhhvfqw5ohpxf3jrvdp5u41653685098/header.jpg&w=80&h=80&fit=cover" alt="Avatar">
+        <div class="story-header-info">@sharnabeckman</div>
+      </div>
+      <video class="story-video" id="storyVideo" controls autoplay playsinline>
+        <source src="https://cdn77-vid.xnxx-cdn.com/ik_fDZR6k5f-bFpwSq9ySA/1709251082/data/upload/mp4/14/13/1423134.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="story-controls">
+        <div class="story-btn" onclick="document.getElementById('storyVideo').currentTime = 0">
+          <i class="fas fa-redo"></i>
+        </div>
+        <div class="story-btn" onclick="togglePlay()">
+          <i class="fas fa-pause" id="playPauseIcon"></i>
+        </div>
+        <div class="story-btn" onclick="toggleMute()">
+          <i class="fas fa-volume-up" id="muteIcon"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openStory() {
+      const modal = document.getElementById('storyModal');
+      const video = document.getElementById('storyVideo');
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      
+      // Update play/pause icon
+      video.addEventListener('play', () => {
+        document.getElementById('playPauseIcon').className = 'fas fa-pause';
+      });
+      video.addEventListener('pause', () => {
+        document.getElementById('playPauseIcon').className = 'fas fa-play';
+      });
+    }
+
+    function closeStory() {
+      const modal = document.getElementById('storyModal');
+      const video = document.getElementById('storyVideo');
+      modal.classList.remove('active');
+      video.pause();
+      document.body.style.overflow = '';
+    }
+
+    function togglePlay() {
+      const video = document.getElementById('storyVideo');
+      if (video.paused) {
+        video.play();
+      } else {
+        video.pause();
+      }
+    }
+
+    function toggleMute() {
+      const video = document.getElementById('storyVideo');
+      const icon = document.getElementById('muteIcon');
+      video.muted = !video.muted;
+      icon.className = video.muted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
+    }
+
+    // Close on backdrop click
+    document.getElementById('storyModal').addEventListener('click', (e) => {
+      if (e.target.id === 'storyModal') {
+        closeStory();
+      }
+    });
+
+    // ESC key to close
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeStory();
+      }
+    });
+  </script>
+</body>
+</html>

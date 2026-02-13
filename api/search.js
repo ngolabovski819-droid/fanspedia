@@ -22,6 +22,7 @@ export default async function handler(req, res) {
   const rawQ = (req.query.q || "").trim();
     const verified = (req.query.verified || "").toString().trim().toLowerCase();
     const bundles = (req.query.bundles || "").toString().trim().toLowerCase();
+    const location = (req.query.location || "").toString().trim();
     const max_price = (req.query.price || "").toString().trim();
     const page = parseInt(req.query.page || "1", 10) || 1;
     const page_size = Math.max(1, Math.min(parseInt(req.query.page_size || "50", 10) || 50, 1000)); // Allow up to 1000 per request
@@ -62,6 +63,11 @@ export default async function handler(req, res) {
 
     if (bundles === 'true') {
       params.set('bundle1_price', 'gt.0');
+    }
+
+    if (location) {
+      // Filter by location using ilike for case-insensitive match
+      params.set('location', `ilike.${location}`);
     }
 
     if (max_price) {
