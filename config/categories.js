@@ -13,7 +13,7 @@ export const categories = [
   'footjob', 'foot fetish', 'dick ratings', 'bbw', 'mature', 'teacher', 'pussy', 'cuckold', 'big ass', 'squirting', 'hottest',
   'amateur', 'blonde', 'instagram', 'pawg', 'gangbang', 'redhead', 'male', 'vip', 'famous',
   'twins', 'ass', 'deepthroat', 'pregnant', 'handjob', 'facial', 'asmr', 'pegging', 'no ppv', 'nurse', 'smoking fetish', 'goth-free',
-  'big natural boobs', 'olympian'
+  'big natural boobs', 'olympian', 'pussy-play'
 ];
 
 // Compound categories: special categories that combine search terms with automatic filters
@@ -65,6 +65,7 @@ const synonymsOverrides = {
   'famous': ['famous','celebrity','popular'],
   'bbw': ['bbw','plus size','curvy','thick'],
   'pussy': ['pussy','kitty','coochie'],
+  'pussy-play': ['pussy play','pussy','kitty','coochie','clit','clit play'],
   'pregnant': ['pregnant','preggo','expecting'],
   'deepthroat': ['deepthroat','deep throat','oral'],
   'pegging': ['pegging','strap-on','strapon'],
@@ -126,7 +127,8 @@ export const popularCategories = [
   'bbw',
   'pawg',
   'foot fetish',
-  'dick ratings'
+  'dick ratings',
+  'pussy-play'
 ];
 
 // Convert category name to URL slug
