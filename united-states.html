@@ -1377,6 +1377,45 @@
       </button>
     </div>
   </div>
+
+  <!-- SEO Content Section -->
+  <section class="mt-5 pt-5" style="max-width: 900px; margin-left: auto; margin-right: auto; text-align: left; border-top: 1px solid var(--border-color);">
+    <h2 id="us-seo-title" style="color: #00AFF0; font-weight: 700; font-size: 28px; margin-bottom: 20px;">American OnlyFans Creators: Discover the Best USA OnlyFans Profiles</h2>
+
+    <p style="color: var(--text-primary); font-size: 16px; line-height: 1.7; margin-bottom: 20px;">
+      American OnlyFans creators lead one of the most diverse creator markets in the world. The USA OnlyFans scene spans glamour, fitness, fashion, cosplay, and lifestyle content, making it easy for fans to find creators that match their interests.
+    </p>
+
+    <h2 style="color: #00AFF0; font-weight: 600; font-size: 22px; margin-bottom: 15px; margin-top: 30px;">Why USA OnlyFans Creators Are So Popular</h2>
+
+    <p style="color: var(--text-primary); font-size: 16px; line-height: 1.7; margin-bottom: 15px;">
+      Many top US OnlyFans models build strong brands with consistent posting schedules and high quality visuals. This professional approach helps fans know what to expect while improving retention and overall satisfaction.
+    </p>
+
+    <p style="color: var(--text-primary); font-size: 16px; line-height: 1.7; margin-bottom: 20px;">
+      The best American OnlyFans profiles also focus on engagement, offering interactive content and meaningful updates. These signals often indicate higher quality and long term value.
+    </p>
+
+    <h2 style="color: #00AFF0; font-weight: 600; font-size: 22px; margin-bottom: 15px; margin-top: 30px;">How to Find the Best American OnlyFans Creators</h2>
+
+    <ul style="color: var(--text-primary); font-size: 16px; line-height: 1.8; margin-bottom: 20px;">
+      <li><strong>Search smart:</strong> Use keywords like "American OnlyFans", "USA OnlyFans", and niche terms such as fitness or cosplay.</li>
+      <li><strong>Check profile quality:</strong> Clear bios, strong visuals, and consistent uploads signal a reliable creator.</li>
+      <li><strong>Use filters:</strong> Apply verified and bundle filters to find trusted creators with extra value.</li>
+      <li><strong>Compare pricing:</strong> Match subscription prices to your expectations and content preferences.</li>
+      <li><strong>Look for engagement:</strong> Active creators who respond to fans and post consistently are usually the best picks.</li>
+    </ul>
+
+    <h2 style="color: #00AFF0; font-weight: 600; font-size: 22px; margin-bottom: 15px; margin-top: 30px;">Practical Advice for Browsing OnlyFans USA</h2>
+
+    <p style="color: var(--text-primary); font-size: 16px; line-height: 1.7; margin-bottom: 20px;">
+      Focus on US OnlyFans creators with well defined niches and steady updates. Profiles that explain content themes and posting cadence tend to deliver better subscriber satisfaction. Use FansPedia filters for verified status, bundle deals, and price ranges to narrow your shortlist quickly.
+    </p>
+
+    <p style="color: var(--text-primary); font-size: 16px; line-height: 1.7; margin-bottom: 20px;">
+      Start with the listings above to explore the best USA OnlyFans profiles. Whether you want glamour, fitness, fashion, or alternative styles, American OnlyFans creators offer a broad range of options.
+    </p>
+  </section>
   
   <!-- Footer (exact replica from homepage) -->
   <footer class="modern-footer">
@@ -1397,7 +1436,7 @@
             </div>
           </div>
           <p class="footer-description">
-            Discover and connect with verified OnlyFans creators. Updated daily with 9,500+ profiles across all categories.
+            Discover and connect with verified OnlyFans creators. Updated daily with 10,000+ profiles across all categories.
           </p>
           <div class="footer-social">
             <a href="https://x.com/fanspedia" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="X (Twitter)">
@@ -1707,43 +1746,62 @@
     // Initialize on page load
     initSafeSearch();
     
-    // Mobile Search Modal
-    const mobileSearchTrigger = document.getElementById('mobileSearchTrigger');
+    // Mobile Search Modal (match homepage behavior)
     const mobileSearchModal = document.getElementById('mobileSearchModal');
+    const mobileSearchTrigger = document.getElementById('mobileSearchTrigger');
     const mobileSearchBack = document.getElementById('mobileSearchBack');
     const mobileSearchInput = document.getElementById('mobileSearchInput');
-    const mobileSearchClear = document.getElementById('mobileSearchClear');
-    
-    mobileSearchTrigger.addEventListener('click', () => {
+    const mobileSearchSuggestions = document.getElementById('mobileSearchSuggestions');
+    const popularSearches = ['milf', 'asian', 'big tits', 'trans', 'mature', 'latina', 'big ass', 'bbw'];
+
+    function populateMobileSuggestions() {
+      if (!mobileSearchSuggestions) return;
+      mobileSearchSuggestions.innerHTML = popularSearches
+        .map(term => `
+          <a href="/?q=${encodeURIComponent(term)}" class="mobile-search-suggestion">
+            <i class="fas fa-fire"></i>
+            <span>${term}</span>
+          </a>
+        `)
+        .join('');
+    }
+
+    function openMobileSearch() {
+      if (!mobileSearchModal) return;
       mobileSearchModal.classList.add('active');
-      setTimeout(() => mobileSearchInput.focus(), 300);
-    });
-    
-    mobileSearchBack.addEventListener('click', () => {
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => {
+        if (mobileSearchInput) mobileSearchInput.focus();
+      }, 100);
+    }
+
+    function closeMobileSearch() {
+      if (!mobileSearchModal) return;
       mobileSearchModal.classList.remove('active');
-    });
-    
-    mobileSearchInput.addEventListener('input', () => {
-      mobileSearchClear.classList.toggle('visible', mobileSearchInput.value.length > 0);
-    });
-    
-    mobileSearchClear.addEventListener('click', () => {
-      mobileSearchInput.value = '';
-      mobileSearchClear.classList.remove('visible');
-      mobileSearchInput.focus();
-    });
-    
-    mobileSearchInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        window.location.href = `/?q=${encodeURIComponent(mobileSearchInput.value)}`;
-      }
-    });
-    
-    document.querySelectorAll('.suggestion-chip').forEach(chip => {
-      chip.addEventListener('click', () => {
-        window.location.href = `/?q=${encodeURIComponent(chip.dataset.query)}`;
+      document.body.style.overflow = '';
+      if (mobileSearchInput) mobileSearchInput.value = '';
+    }
+
+    if (mobileSearchTrigger) {
+      mobileSearchTrigger.addEventListener('click', openMobileSearch);
+    }
+
+    if (mobileSearchBack) {
+      mobileSearchBack.addEventListener('click', closeMobileSearch);
+    }
+
+    if (mobileSearchInput) {
+      mobileSearchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          const query = mobileSearchInput.value.trim();
+          if (query) {
+            window.location.href = `/?q=${encodeURIComponent(query)}`;
+          }
+        }
       });
-    });
+    }
+
+    populateMobileSuggestions();
     
     // Mobile Drawer Toggle
     const mobileToggle = document.getElementById('mobileMenuToggle');
