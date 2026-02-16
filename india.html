@@ -1404,6 +1404,31 @@
       </button>
     </div>
   </div>
+
+  <!-- SEO Content: India (below results) -->
+  <section class="seo-section" aria-labelledby="india-seo-title">
+    <div class="seo-container">
+      <h2 id="india-seo-title">Indian OnlyFans Creators: The Rise of a Global Creative Scene</h2>
+      <p>Indian OnlyFans creators are shaping a fresh, diverse digital landscape that blends cultural confidence with modern content strategy. From metro hubs to smaller creative communities, Indian creators are building audiences with consistent branding, clear niches, and authentic storytelling that resonates worldwide.</p>
+      <p>The Indian OnlyFans scene is driven by variety. You will find creators focused on glamour, fitness, fashion, cosplay, art, and lifestyle content, each carving out a recognizable style. This diversity helps fans discover the exact vibe they want while giving creators the freedom to stand out.</p>
+      <p>What makes Indian OnlyFans profiles compelling is the balance of personal connection and professionalism. Successful creators prioritize high quality visuals, regular posting schedules, and real engagement with subscribers. That mix builds trust and turns casual viewers into long term fans.</p>
+      <p>In 2025, growth on OnlyFans is about more than visibility. Indian creators are optimizing their profiles with strong bios, clear value propositions, and consistent pricing strategies. These fundamentals help them rank in searches and convert traffic into loyal audiences.</p>
+      <p>Fans searching for Indian OnlyFans often care about authenticity, personality, and creative range. This is why many top creators share behind the scenes moments, themed content drops, and interactive formats such as Q and A sessions or custom requests.</p>
+      <p>India is also a hotspot for collaboration. Cross promotions, shared shoots, and networked communities help creators expand reach while keeping content fresh. That collaborative culture fuels faster growth and higher retention.</p>
+      <p>If you are looking for the best Indian OnlyFans creators, focus on profiles that show consistency, strong visuals, and clear niche positioning. These signals correlate with quality and reliability, which are key for long term subscription value.</p>
+      <p>FansPedia makes it easy to explore Indian OnlyFans creators across multiple categories and price points. Use filters for verified status, bundles, and price range to quickly narrow down your favorites.</p>
+      <p>Whether you want fashion forward creators, fitness focused profiles, or bold alternative styles, the Indian OnlyFans community offers something for everyone. Browse the listings above to discover standout talent and follow the creators who match your interests.</p>
+
+      <h3>How to Find the Best Indian OnlyFans Creators</h3>
+      <ul class="seo-list">
+        <li>Search with keywords like "Indian OnlyFans", "Indian creators", and specific niche terms.</li>
+        <li>Look for clear bios and consistent posting habits to spot high quality profiles.</li>
+        <li>Use verified and bundle filters to find trusted creators with added value.</li>
+        <li>Compare price points and content styles to match your preferences.</li>
+        <li>Follow creators on social platforms for previews and updates.</li>
+      </ul>
+    </div>
+  </section>
   
   <!-- Footer (exact replica from homepage) -->
   <footer class="modern-footer">
@@ -1424,7 +1449,7 @@
             </div>
           </div>
           <p class="footer-description">
-            Discover and connect with verified OnlyFans creators. Updated daily with 9,500+ profiles across all categories.
+            Discover and connect with verified OnlyFans creators. Updated daily with 10,000+ profiles across all categories.
           </p>
           <div class="footer-social">
             <a href="https://x.com/fanspedia" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="X (Twitter)">
@@ -1734,43 +1759,62 @@
     // Initialize on page load
     initSafeSearch();
     
-    // Mobile Search Modal
-    const mobileSearchTrigger = document.getElementById('mobileSearchTrigger');
+    // Mobile Search Modal (match homepage behavior)
     const mobileSearchModal = document.getElementById('mobileSearchModal');
+    const mobileSearchTrigger = document.getElementById('mobileSearchTrigger');
     const mobileSearchBack = document.getElementById('mobileSearchBack');
     const mobileSearchInput = document.getElementById('mobileSearchInput');
-    const mobileSearchClear = document.getElementById('mobileSearchClear');
-    
-    mobileSearchTrigger.addEventListener('click', () => {
+    const mobileSearchSuggestions = document.getElementById('mobileSearchSuggestions');
+    const popularSearches = ['milf', 'asian', 'big tits', 'trans', 'mature', 'latina', 'big ass', 'bbw'];
+
+    function populateMobileSuggestions() {
+      if (!mobileSearchSuggestions) return;
+      mobileSearchSuggestions.innerHTML = popularSearches
+        .map(term => `
+          <a href="/?q=${encodeURIComponent(term)}" class="mobile-search-suggestion">
+            <i class="fas fa-fire"></i>
+            <span>${term}</span>
+          </a>
+        `)
+        .join('');
+    }
+
+    function openMobileSearch() {
+      if (!mobileSearchModal) return;
       mobileSearchModal.classList.add('active');
-      setTimeout(() => mobileSearchInput.focus(), 300);
-    });
-    
-    mobileSearchBack.addEventListener('click', () => {
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => {
+        if (mobileSearchInput) mobileSearchInput.focus();
+      }, 100);
+    }
+
+    function closeMobileSearch() {
+      if (!mobileSearchModal) return;
       mobileSearchModal.classList.remove('active');
-    });
-    
-    mobileSearchInput.addEventListener('input', () => {
-      mobileSearchClear.classList.toggle('visible', mobileSearchInput.value.length > 0);
-    });
-    
-    mobileSearchClear.addEventListener('click', () => {
-      mobileSearchInput.value = '';
-      mobileSearchClear.classList.remove('visible');
-      mobileSearchInput.focus();
-    });
-    
-    mobileSearchInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        window.location.href = `/?q=${encodeURIComponent(mobileSearchInput.value)}`;
-      }
-    });
-    
-    document.querySelectorAll('.suggestion-chip').forEach(chip => {
-      chip.addEventListener('click', () => {
-        window.location.href = `/?q=${encodeURIComponent(chip.dataset.query)}`;
+      document.body.style.overflow = '';
+      if (mobileSearchInput) mobileSearchInput.value = '';
+    }
+
+    if (mobileSearchTrigger) {
+      mobileSearchTrigger.addEventListener('click', openMobileSearch);
+    }
+
+    if (mobileSearchBack) {
+      mobileSearchBack.addEventListener('click', closeMobileSearch);
+    }
+
+    if (mobileSearchInput) {
+      mobileSearchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          const query = mobileSearchInput.value.trim();
+          if (query) {
+            window.location.href = `/?q=${encodeURIComponent(query)}`;
+          }
+        }
       });
-    });
+    }
+
+    populateMobileSuggestions();
     
     // Mobile Drawer Toggle
     const mobileToggle = document.getElementById('mobileMenuToggle');
