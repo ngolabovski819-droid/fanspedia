@@ -1984,17 +1984,7 @@
       } catch (e) { console.warn('updateFavoriteButtons failed:', e); }
     }
     
-    function stripUrls(text) {
-      return String(text || '').replace(/https?:\/\/\S+|www\.\S+/gi, ' ');
-    }
-
-    function hasWholeWord(text, words) {
-      const cleaned = stripUrls(text).toLowerCase();
-      const pattern = new RegExp(`\\b(${words.join('|')})\\b`, 'i');
-      return pattern.test(cleaned);
-    }
-
-    // Perform API search with location filter
+    // Perform API search with country keywords (full-text)
     async function performSearch(resetPage = true, append = false) {
       if (isLoading || (!hasMore && !resetPage)) return;
       isLoading = true;
@@ -2010,11 +2000,10 @@
       statusDiv.textContent = append ? 'Loading more...' : 'Loading creators from Canada...';
       
       try {
-        // Search by country synonyms in about/location for faster matching
+        // Search by country synonyms (full-text across all fields)
         const countryTermsArr = ['canada', 'canadian'];
         const countryTerms = countryTermsArr.join('|');
-        const fields = 'username,about,location';
-        let apiUrl = `/api/search?q=${encodeURIComponent(countryTerms)}&fields=${encodeURIComponent(fields)}&page=${currentPage}&page_size=${pageSize}`;
+        let apiUrl = `/api/search?q=${encodeURIComponent(countryTerms)}&page=${currentPage}&page_size=${pageSize}`;
         const fallbackUrl = `/api/search?page=${currentPage}&page_size=${pageSize}`;
         console.log('Fetching:', apiUrl);
 
@@ -2052,12 +2041,6 @@
           return;
         }
 
-        const countryWords = [...countryTermsArr];
-        data = data.filter(item => {
-          const hay = `${item.about || ''} ${item.location || ''}`;
-          return hasWholeWord(hay, countryWords);
-        });
-        
         if (data.length === 0 && currentPage === 1) {
           resultsDiv.innerHTML = `<p class='text-muted' style='grid-column: 1/-1; text-align: center; padding: 40px 20px;'>No creators found from Canada.</p>`;
           statusDiv.textContent = '';
