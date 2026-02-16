@@ -2169,7 +2169,8 @@
           try {
             // Search by country terms in name/about/location
             const countryTerms = 'japan|japanese';
-            let apiUrl = `/api/search?q=${encodeURIComponent(countryTerms)}&page=${currentPage}&page_size=${pageSize}`;
+            const fields = 'username,about,location';
+            let apiUrl = `/api/search?q=${encodeURIComponent(countryTerms)}&fields=${encodeURIComponent(fields)}&page=${currentPage}&page_size=${pageSize}`;
             var headerVisible=headerInput && headerInput.offsetParent!==null;
             if(isMobile && !headerVisible){
               var mobileTrigger=document.getElementById('mobileSearchTrigger');

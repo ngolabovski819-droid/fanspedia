@@ -1943,7 +1943,8 @@
       try {
         // Search by country terms in name/about/location
         const countryTerms = 'india|indian';
-        let apiUrl = `/api/search?q=${encodeURIComponent(countryTerms)}&page=${currentPage}&page_size=${pageSize}`;
+        const fields = 'username,about,location';
+        let apiUrl = `/api/search?q=${encodeURIComponent(countryTerms)}&fields=${encodeURIComponent(fields)}&page=${currentPage}&page_size=${pageSize}`;
         console.log('Fetching:', apiUrl);
         
         const response = await fetch(apiUrl);
