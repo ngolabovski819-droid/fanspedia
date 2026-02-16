@@ -2010,14 +2010,10 @@
       statusDiv.textContent = append ? 'Loading more...' : 'Loading creators from Canada...';
       
       try {
-        // Search by country + province/city terms in name/about/location
+        // Search by country synonyms in about/location for faster matching
         const countryTermsArr = ['canada', 'canadian'];
-        const regionTerms = [
-          'alberta','british columbia','manitoba','new brunswick','newfoundland and labrador','nova scotia','ontario','prince edward island','quebec','saskatchewan','northwest territories','nunavut','yukon',
-          'toronto','vancouver','montreal','calgary','edmonton','ottawa','winnipeg','halifax','quebec city','victoria'
-        ];
-        const countryTerms = [...countryTermsArr, ...regionTerms].join('|');
-        const fields = 'username,name,about,location';
+        const countryTerms = countryTermsArr.join('|');
+        const fields = 'username,about,location';
         let apiUrl = `/api/search?q=${encodeURIComponent(countryTerms)}&fields=${encodeURIComponent(fields)}&page=${currentPage}&page_size=${pageSize}`;
         const fallbackUrl = `/api/search?page=${currentPage}&page_size=${pageSize}`;
         console.log('Fetching:', apiUrl);
@@ -2056,9 +2052,9 @@
           return;
         }
 
-        const countryWords = [...countryTermsArr, ...regionTerms];
+        const countryWords = [...countryTermsArr];
         data = data.filter(item => {
-          const hay = `${item.name || ''} ${item.about || ''} ${item.location || ''}`;
+          const hay = `${item.about || ''} ${item.location || ''}`;
           return hasWholeWord(hay, countryWords);
         });
         
