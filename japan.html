@@ -2037,8 +2037,15 @@
       statusDiv.textContent = append ? 'Loading more...' : 'Loading creators from Japan...';
       
       try {
-        // Filter by location: United States
-        let apiUrl = `/api/search?q=&location=Japan&page=${currentPage}&page_size=${pageSize}`;
+        // Search by country + prefecture/city terms in name/about/location
+        const countryTermsArr = ['japan', 'japanese'];
+        const regionTerms = [
+          'tokyo','osaka','hokkaido','aichi','kanagawa','saitama','chiba','fukuoka','hyogo','kyoto','okinawa','shizuoka','hiroshima','miyagi','niigata','nagano','gunma','tochigi','ibaraki','okayama','kagawa','ehime','kumamoto','kagoshima','nara','shiga','gifu','mie','fukushima','akita','iwate','yamagata','aomori',
+          'yokohama','sapporo','nagoya','kobe','sendai','naha'
+        ];
+        const countryTerms = [...countryTermsArr, ...regionTerms].join('|');
+        const fields = 'username,name,about,location';
+        let apiUrl = `/api/search?q=${encodeURIComponent(countryTerms)}&fields=${encodeURIComponent(fields)}&page=${currentPage}&page_size=${pageSize}`;
         console.log('Fetching:', apiUrl);
         
         const response = await fetch(apiUrl);
@@ -2067,9 +2074,9 @@
           return;
         }
 
-        const countryWords = ['japan','japanese'];
+        const countryWords = [...countryTermsArr, ...regionTerms];
         data = data.filter(item => {
-          const hay = `${item.about || ''} ${item.location || ''}`;
+          const hay = `${item.name || ''} ${item.about || ''} ${item.location || ''}`;
           return hasWholeWord(hay, countryWords);
         });
         

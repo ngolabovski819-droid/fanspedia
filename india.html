@@ -2041,9 +2041,15 @@
       statusDiv.textContent = append ? 'Loading more...' : 'Loading creators from India...';
       
       try {
-        // Search by country terms in name/about/location
-        const countryTerms = 'india|indian';
-        const fields = 'username,about,location';
+        // Search by country + state/city terms in name/about/location
+        const countryTermsArr = ['india', 'indian'];
+        const regionTerms = [
+          'andhra pradesh','arunachal pradesh','assam','bihar','chhattisgarh','goa','gujarat','haryana','himachal pradesh','jharkhand','karnataka','kerala','madhya pradesh','maharashtra','manipur','meghalaya','mizoram','nagaland','odisha','punjab','rajasthan','sikkim','tamil nadu','telangana','tripura','uttar pradesh','uttarakhand','west bengal',
+          'andaman and nicobar','chandigarh','dadra and nagar haveli','daman and diu','delhi','jammu and kashmir','ladakh','lakshadweep','puducherry',
+          'mumbai','delhi','bengaluru','bangalore','hyderabad','chennai','kolkata','pune','ahmedabad','jaipur','surat','lucknow','kanpur','nagpur'
+        ];
+        const countryTerms = [...countryTermsArr, ...regionTerms].join('|');
+        const fields = 'username,name,about,location';
         let apiUrl = `/api/search?q=${encodeURIComponent(countryTerms)}&fields=${encodeURIComponent(fields)}&page=${currentPage}&page_size=${pageSize}`;
         console.log('Fetching:', apiUrl);
         
@@ -2073,9 +2079,9 @@
           return;
         }
 
-        const countryWords = ['india','indian'];
+        const countryWords = [...countryTermsArr, ...regionTerms];
         data = data.filter(item => {
-          const hay = `${item.about || ''} ${item.location || ''}`;
+          const hay = `${item.name || ''} ${item.about || ''} ${item.location || ''}`;
           return hasWholeWord(hay, countryWords);
         });
         

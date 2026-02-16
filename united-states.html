@@ -2011,9 +2011,14 @@
       statusDiv.textContent = append ? 'Loading more...' : 'Loading creators from United States...';
       
       try {
-        // Search by country terms in name/about/location
-        const countryTerms = 'united states|usa|us|america|american';
-        const fields = 'username,about,location';
+        // Search by country + state/city terms in name/about/location
+        const countryTermsArr = ['united states', 'usa', 'america', 'american'];
+        const regionTerms = [
+          'alabama','alaska','arizona','arkansas','california','colorado','connecticut','delaware','florida','georgia','hawaii','idaho','illinois','indiana','iowa','kansas','kentucky','louisiana','maine','maryland','massachusetts','michigan','minnesota','mississippi','missouri','montana','nebraska','nevada','new hampshire','new jersey','new mexico','new york','north carolina','north dakota','ohio','oklahoma','oregon','pennsylvania','rhode island','south carolina','south dakota','tennessee','texas','utah','vermont','virginia','washington','west virginia','wisconsin','wyoming','district of columbia','washington dc',
+          'los angeles','san francisco','san diego','san jose','chicago','houston','dallas','austin','miami','orlando','atlanta','seattle','boston','phoenix','denver','las vegas','philadelphia','san antonio','new orleans'
+        ];
+        const countryTerms = [...countryTermsArr, ...regionTerms].join('|');
+        const fields = 'username,name,about,location';
         let apiUrl = `/api/search?q=${encodeURIComponent(countryTerms)}&fields=${encodeURIComponent(fields)}&page=${currentPage}&page_size=${pageSize}`;
         console.log('Fetching:', apiUrl);
         
@@ -2043,9 +2048,9 @@
           return;
         }
 
-        const countryWords = ['united','states','usa','us','america','american'];
+        const countryWords = [...countryTermsArr, ...regionTerms];
         data = data.filter(item => {
-          const hay = `${item.about || ''} ${item.location || ''}`;
+          const hay = `${item.name || ''} ${item.about || ''} ${item.location || ''}`;
           return hasWholeWord(hay, countryWords);
         });
         
