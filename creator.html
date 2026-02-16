@@ -2721,7 +2721,6 @@
           ? `$${parseFloat(item.subscribePrice).toFixed(2)}`
           : "FREE";
         const verifiedIcon = item.isVerified ? "✅ " : "";
-        const bio = item.about || "";
   const profileUrl = username !== "—" ? `https://onlyfans.com/${encodeURIComponent(username)}` : "#";
   // Removed onlyfansUrl and Visit OnlyFans link
 
@@ -2743,7 +2742,6 @@
                 ${priceText === "FREE" 
                   ? `<p class="price-free">${priceText}</p>` 
                   : `<p class="price-tag">${priceText}</p>`}
-                ${bio ? `<p class="bio-snippet">${bio}</p>` : ''}
                 <a href="${profileUrl}" class="view-profile-btn">View Profile</a>
               </div>
             </div>

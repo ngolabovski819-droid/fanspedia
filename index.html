@@ -3339,7 +3339,6 @@
             : "FREE";
           const verifiedIcon = item.isVerified ? "✅ " : "";
           const location = item.location || "";
-          const bio = item.about || "";
           // Link directly to OnlyFans profile (not to internal creator page)
           const profileUrl = username !== "—" ? `https://onlyfans.com/${encodeURIComponent(username)}` : "#";
 
@@ -3385,7 +3384,6 @@
                 ${priceText === "FREE" 
                   ? `<p class="price-free">${priceText}</p>` 
                   : `<p class="price-tag">${priceText}</p>`}
-                ${bio ? `<p class="bio-snippet">${bio}</p>` : ''}
                 <a href="${profileUrl}" class="view-profile-btn">
                   View Profile
                 </a>
