@@ -2020,25 +2020,34 @@
         const countryTerms = [...countryTermsArr, ...regionTerms].join('|');
         const fields = 'username,name,about,location';
         let apiUrl = `/api/search?q=${encodeURIComponent(countryTerms)}&fields=${encodeURIComponent(fields)}&page=${currentPage}&page_size=${pageSize}`;
+        const fallbackUrl = `/api/search?page=${currentPage}&page_size=${pageSize}`;
         console.log('Fetching:', apiUrl);
-        
-        const response = await fetch(apiUrl);
-        console.log('Response status:', response.status);
-        
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error('API error:', errorText);
-          throw new Error(`HTTP error: ${response.status}`);
+
+        async function fetchJson(url) {
+          const response = await fetch(url);
+          console.log('Response status:', response.status);
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error('API error:', errorText);
+            throw new Error(`HTTP error: ${response.status}`);
+          }
+          const text = await response.text();
+          try {
+            const parsed = JSON.parse(text);
+            console.log('Parsed data:', parsed.length, 'results');
+            return parsed;
+          } catch (err) {
+            console.error('Invalid JSON:', text);
+            throw new Error('Invalid JSON from server');
+          }
         }
-        
-        const text = await response.text();
+
         let data;
         try {
-          data = JSON.parse(text);
-          console.log('Parsed data:', data.length, 'results');
+          data = await fetchJson(apiUrl);
         } catch (err) {
-          console.error('Invalid JSON:', text);
-          throw new Error('Invalid JSON from server');
+          console.warn('Primary search failed, retrying fallback:', err.message);
+          data = await fetchJson(fallbackUrl);
         }
         
         if (!Array.isArray(data)) {
