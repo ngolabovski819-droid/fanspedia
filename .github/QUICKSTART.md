@@ -82,8 +82,7 @@ git push origin main
 - `categories.html` - Update version param in import
 
 ### Auto-Generated (Don't Edit Manually)
-- `sitemap.xml` - Run `node scripts/generate-sitemap.js`
-- `public/sitemap.xml` - Copy of sitemap.xml
+- `sitemap.xml`, `sitemap-index.xml`, `sitemap_base.xml`, `sitemap_creators_*.xml` - Run `node scripts/build-sitemaps.cjs`
 
 ### Never Commit
 - `.env` - Environment variables

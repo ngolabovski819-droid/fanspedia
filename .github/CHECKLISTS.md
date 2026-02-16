@@ -21,7 +21,7 @@
    - [ ] Ensure all three files use same version number
 
 3. **Regenerate SEO Files**
-   - [ ] Run: `node scripts/generate-sitemap.js`
+   - [ ] Run: `node scripts/build-sitemaps.cjs`
    - [ ] Verify sitemap.xml updated with new category
 
 4. **Test Locally**

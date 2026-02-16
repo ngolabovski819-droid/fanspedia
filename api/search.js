@@ -50,9 +50,8 @@ export default async function handler(req, res) {
     if (rawQ) {
       // Support multi-term queries separated by | or ,
       // e.g., q=goth|gothic|alt builds an OR across all columns and terms
-      // Note: removed 'location' from search to avoid false positives (e.g., "Gotham")
       const terms = rawQ.split(/[|,]/).map(s => s.trim()).filter(Boolean);
-      const cols = ['username','name','about'];
+      const cols = ['username','name','about','location'];
       const expressions = (terms.length ? terms : [rawQ]).flatMap(term => cols.map(c => `${c}.ilike.*${term}*`));
       params.set('or', `(${expressions.join(',')})`);
     }
