@@ -28,7 +28,7 @@ export default async function handler(req, res) {
     const page_size = Math.max(1, Math.min(parseInt(req.query.page_size || "50", 10) || 50, 1000)); // Allow up to 1000 per request
 
     const selectCols = [
-      "id","username","name","location","avatar","header",
+      "id","username","name","about","location","avatar","header",
       "isverified","subscribeprice",
       "avatar_c50","avatar_c144",
       "photoscount","videoscount","postscount","archivedpostscount","finishedstreamscount","audioscount",
