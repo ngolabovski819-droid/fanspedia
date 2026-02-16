@@ -1925,6 +1925,16 @@
       } catch (e) { console.warn('updateFavoriteButtons failed:', e); }
     }
     
+    function stripUrls(text) {
+      return String(text || '').replace(/https?:\/\/\S+|www\.\S+/gi, ' ');
+    }
+
+    function hasWholeWord(text, words) {
+      const cleaned = stripUrls(text).toLowerCase();
+      const pattern = new RegExp(`\\b(${words.join('|')})\\b`, 'i');
+      return pattern.test(cleaned);
+    }
+
     // Perform API search with location filter
     async function performSearch(resetPage = true, append = false) {
       if (isLoading || (!hasMore && !resetPage)) return;
@@ -1972,6 +1982,12 @@
           isLoading = false;
           return;
         }
+
+        const countryWords = ['india','indian'];
+        data = data.filter(item => {
+          const hay = `${item.about || ''} ${item.location || ''}`;
+          return hasWholeWord(hay, countryWords);
+        });
         
         if (data.length === 0 && currentPage === 1) {
           resultsDiv.innerHTML = `<p class='text-muted' style='grid-column: 1/-1; text-align: center; padding: 40px 20px;'>No creators found from India.</p>`;
