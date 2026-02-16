@@ -1941,8 +1941,9 @@
       statusDiv.textContent = append ? 'Loading more...' : 'Loading creators from India...';
       
       try {
-        // Filter by location: United States
-        let apiUrl = `/api/search?q=&location=India&page=${currentPage}&page_size=${pageSize}`;
+        // Search by country terms in name/about/location
+        const countryTerms = 'india|indian';
+        let apiUrl = `/api/search?q=${encodeURIComponent(countryTerms)}&page=${currentPage}&page_size=${pageSize}`;
         console.log('Fetching:', apiUrl);
         
         const response = await fetch(apiUrl);

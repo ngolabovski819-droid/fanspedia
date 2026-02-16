@@ -2139,9 +2139,10 @@
       if(searchLink){
         searchLink.addEventListener('click',function(ev){
           ev.preventDefault();
-          try{
-            var isMobile=window.matchMedia('(max-width: 768px)').matches;
-            var headerInput=document.getElementById('headerSearch')||document.querySelector('.header-search-input');
+          try {
+            // Search by country terms in name/about/location
+            const countryTerms = 'canada|canadian';
+            let apiUrl = `/api/search?q=${encodeURIComponent(countryTerms)}&page=${currentPage}&page_size=${pageSize}`;
             var headerVisible=headerInput && headerInput.offsetParent!==null;
             if(isMobile && !headerVisible){
               var mobileTrigger=document.getElementById('mobileSearchTrigger');
