@@ -144,11 +144,9 @@ initI18n().then(() => {
   // Apply translations if DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
-      i18n.applyTranslations();
+      window.i18n.applyTranslations();
     });
   } else {
-    i18n.applyTranslations();
+    window.i18n.applyTranslations();
   }
 });
-
-export { t, getCurrentLanguage, setLanguage, applyTranslations, toggleLanguage };
