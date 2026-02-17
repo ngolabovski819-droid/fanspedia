@@ -2359,38 +2359,19 @@
     // LANGUAGE TOGGLE
     // ============================================
     function toggleLanguage() {
-      console.log('[toggleLanguage] called');
+      // Get current language based on URL
+      const isSpanish = location.pathname.startsWith('/es/');
+      const newLang = isSpanish ? 'en' : 'es';
       
-      // Get current language
-      const currentLang = (window.i18n && window.i18n.getCurrentLanguage) ? 
-        window.i18n.getCurrentLanguage() : 
-        localStorage.getItem('fanspedia_lang') || 'en';
-      const newLang = currentLang === 'en' ? 'es' : 'en';
-      
-      console.log('[toggleLanguage] switching from', currentLang, 'to', newLang);
-      
-      // Update localStorage
-      localStorage.setItem('fanspedia_lang', newLang);
-      
-      // Update i18n module if it's ready
-      if (window.i18n && window.i18n.setLanguage) {
-        window.i18n.setLanguage(newLang);
-        console.log('[toggleLanguage] i18n.setLanguage() called');
-      }
-      
-      // Apply translations to all elements with data-i18n-key
-      if (window.i18n && window.i18n.applyTranslations) {
-        window.i18n.applyTranslations();
-        console.log('[toggleLanguage] i18n.applyTranslations() called');
+      if (newLang === 'es') {
+        // Redirect to Spanish version: add /es/ prefix
+        const esPath = '/es' + location.pathname + location.search;
+        location.href = esPath;
       } else {
-        // Fallback: manually apply translations if i18n.applyTranslations not available
-        applyTranslationsFallback(newLang);
+        // Redirect to English version: remove /es/ prefix
+        const enPath = (location.pathname.replace(/^\/es/, '') || '/') + location.search;
+        location.href = enPath;
       }
-      
-      // Update button indicator
-      updateLanguageIndicator(newLang);
-      
-      console.log('[toggleLanguage] complete - language is now', newLang);
     }
     
     // Fallback translation for when i18n module isn't ready

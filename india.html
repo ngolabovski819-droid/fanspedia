@@ -1739,52 +1739,32 @@
     // LANGUAGE TOGGLE FUNCTIONALITY
     // ============================================
     function toggleLanguage() {
-      console.log('[toggleLanguage] called');
+      // Get current language based on URL
+      const isSpanish = location.pathname.startsWith('/es/');
+      const newLang = isSpanish ? 'en' : 'es';
       
-      // Get current language
-      const currentLang = (window.i18n && window.i18n.getCurrentLanguage) ? 
-        window.i18n.getCurrentLanguage() : 
-        localStorage.getItem('fanspedia_lang') || 'en';
-      const newLang = currentLang === 'en' ? 'es' : 'en';
-      
-      console.log('[toggleLanguage] switching from', currentLang, 'to', newLang);
-      
-      // Update localStorage
-      localStorage.setItem('fanspedia_lang', newLang);
-      
-      // Update i18n module if it's ready
-      if (window.i18n && window.i18n.setLanguage) {
-        window.i18n.setLanguage(newLang);
-        console.log('[toggleLanguage] i18n.setLanguage() called');
+      if (newLang === 'es') {
+        // Redirect to Spanish version: add /es/ prefix
+        const esPath = '/es' + location.pathname + location.search;
+        location.href = esPath;
+      } else {
+        // Redirect to English version: remove /es/ prefix
+        const enPath = (location.pathname.replace(/^\/es/, '') || '/') + location.search;
+        location.href = enPath;
       }
-      
-      // Apply translations to all elements with data-i18n-key
-      if (window.i18n && window.i18n.applyTranslations) {
-        window.i18n.applyTranslations();
-        console.log('[toggleLanguage] i18n.applyTranslations() called');
-      }
-      
-      // Update button indicator
-      updateLanguageIndicator(newLang);
-      
-      console.log('[toggleLanguage] complete - language is now', newLang);
     }
     
     function updateLanguageIndicator(lang) {
       const indicator = document.getElementById('langIndicator');
       if (indicator) {
         indicator.textContent = lang === 'es' ? 'ES' : 'EN';
-        console.log('[updateLanguageIndicator] set to:', lang);
       }
     }
     
     // Initialize language indicator on page load
     document.addEventListener('DOMContentLoaded', function() {
-      const lang = (window.i18n && window.i18n.getCurrentLanguage) ? 
-        window.i18n.getCurrentLanguage() : 
-        localStorage.getItem('fanspedia_lang') || 'en';
-      updateLanguageIndicator(lang);
-      console.log('[DOMContentLoaded] language initialized to:', lang);
+      const isSpanish = location.pathname.startsWith('/es/');
+      updateLanguageIndicator(isSpanish ? 'es' : 'en');
     });
     
     // ============================================

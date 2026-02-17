@@ -1534,7 +1534,7 @@
               <span class="footer-logo-sub">Your Premium Creator Directory</span>
             </div>
           </div>
-          <p class="footer-description">
+          <p class="footer-description" data-i18n-key="footer_description" data-translated="true">
             Discover and connect with verified OnlyFans creators. Updated daily with 10,000+ profiles across all categories.
           </p>
           <div class="footer-social">
@@ -1617,7 +1617,7 @@
             </span>
           </div>
         </div>
-        <p class="footer-disclaimer">
+        <p class="footer-disclaimer" data-i18n-key="footer_disclaimer" data-translated="true">
           This website is an independent directory and is not affiliated with OnlyFans. All trademarks belong to their respective owners.
         </p>
       </div>
@@ -1743,39 +1743,51 @@
     // ============================================
     function toggleLanguage() {
       console.log('[toggleLanguage] called');
-      const currentLang = (window.i18n && window.i18n.getCurrentLanguage) ? window.i18n.getCurrentLanguage() : localStorage.getItem('fanspedia_lang') || 'en';
+      
+      // Get current language
+      const currentLang = (window.i18n && window.i18n.getCurrentLanguage) ? 
+        window.i18n.getCurrentLanguage() : 
+        localStorage.getItem('fanspedia_lang') || 'en';
       const newLang = currentLang === 'en' ? 'es' : 'en';
       
+      console.log('[toggleLanguage] switching from', currentLang, 'to', newLang);
+      
+      // Update localStorage
       localStorage.setItem('fanspedia_lang', newLang);
+      
+      // Update i18n module if it's ready
       if (window.i18n && window.i18n.setLanguage) {
         window.i18n.setLanguage(newLang);
+        console.log('[toggleLanguage] i18n.setLanguage() called');
       }
+      
+      // Apply translations to all elements with data-i18n-key
+      if (window.i18n && window.i18n.applyTranslations) {
+        window.i18n.applyTranslations();
+        console.log('[toggleLanguage] i18n.applyTranslations() called');
+      }
+      
+      // Update button indicator
       updateLanguageIndicator(newLang);
       
-      const currentPath = window.location.pathname;
-      if (newLang === 'es') {
-        if (!currentPath.startsWith('/es/')) {
-          window.location.href = '/es' + (currentPath === '/' ? '/index.html' : currentPath);
-        }
-      } else {
-        if (currentPath.startsWith('/es/')) {
-          const enPath = currentPath.replace('/es', '');
-          window.location.href = enPath === '' ? '/' : enPath;
-        }
-      }
+      console.log('[toggleLanguage] complete - language is now', newLang);
     }
     
     function updateLanguageIndicator(lang) {
       const indicator = document.getElementById('langIndicator');
       if (indicator) {
         indicator.textContent = lang === 'es' ? 'ES' : 'EN';
+        console.log('[updateLanguageIndicator] set to:', lang);
       }
     }
     
     // Initialize language indicator on page load
     document.addEventListener('DOMContentLoaded', function() {
-      const lang = (window.i18n && window.i18n.getCurrentLanguage) ? window.i18n.getCurrentLanguage() : localStorage.getItem('fanspedia_lang') || 'en';
+      const lang = (window.i18n && window.i18n.getCurrentLanguage) ? 
+        window.i18n.getCurrentLanguage() : 
+        localStorage.getItem('fanspedia_lang') || 'en';
       updateLanguageIndicator(lang);
+      console.log('[DOMContentLoaded] language initialized to:', lang);
     });
     
     // ============================================
