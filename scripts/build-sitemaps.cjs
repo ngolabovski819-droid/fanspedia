@@ -59,8 +59,36 @@ function buildBaseSitemap() {
   xml += wrapUrl(`${BASE_URL}/categories/`, 'weekly', '0.9', d);
   // Category pages
   for (const c of categories) {
-    const slug = categoryToSlug(c);
+    const slug = cate goryToSlug(c);
     xml += wrapUrl(`${BASE_URL}/categories/${slug}/`, 'weekly', '0.8', d);
+  }
+  xml += '</urlset>';
+  return xml;
+}
+
+function buildSpanishBaseSitemap() {
+  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n`;
+  const d = today();
+  // Spanish Homepage with hreflang
+  xml += `  <url>\n    <loc>${BASE_URL}/es/</loc>\n    <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/" />\n    <lastmod>${d}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>1.0</priority>\n  </url>\n`;
+  // Spanish Categories hub
+  xml += `  <url>\n    <loc>${BASE_URL}/es/categories/</loc>\n    <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/categories/" />\n    <lastmod>${d}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>\n`;
+  // Spanish Category pages
+  for (const c of categories) {
+    const slug = categoryToSlug(c);
+    xml += `  <url>\n    <loc>${BASE_URL}/es/categories/${slug}/</loc>\n    <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/categories/${slug}/" />\n    <lastmod>${d}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
+  }
+  // Spanish Locations
+  xml += `  <url>\n    <loc>${BASE_URL}/es/locations/</loc>\n    <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/locations/" />\n    <lastmod>${d}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
+  // Spanish Country pages
+  const countries = [
+    { slug: 'united-states', es: 'Estados Unidos' },
+    { slug: 'canada', es: 'Canadá' },
+    { slug: 'india', es: 'India' },
+    { slug: 'japan', es: 'Japón' }
+  ];
+  for (const country of countries) {
+    xml += `  <url>\n    <loc>${BASE_URL}/es/country/${country.slug}/</loc>\n    <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/country/${country.slug}/" />\n    <lastmod>${d}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
   }
   xml += '</urlset>';
   return xml;
@@ -96,6 +124,11 @@ function buildSitemapIndex(files) {
     const baseName = 'sitemap_base.xml';
   fs.writeFileSync(path.join(outDir, baseName), baseXml, 'utf8');
 
+    // 1b) Spanish Base sitemap
+    const spanishBaseXml = buildSpanishBaseSitemap();
+    const spanishBaseName = 'sitemap_base_es.xml';
+    fs.writeFileSync(path.join(outDir, spanishBaseName), spanishBaseXml, 'utf8');
+
     // 2) Creators, chunk into multiple files
     const allUsernames = await fetchAllCreatorUsernames();
     console.log(`Found ${allUsernames.length} creators.`);
@@ -106,8 +139,8 @@ function buildSitemapIndex(files) {
       const name = `sitemap_creators_${Math.floor(i / SITEMAP_CHUNK_SIZE) + 1}.xml`;
       fs.writeFileSync(path.join(outDir, name), xml, 'utf8');
       partFiles.push(name);
-    }    // 3) Build index file referencing base + parts
-    const indexFiles = [baseName, ...partFiles];
+    }    // 3) Build index file referencing base + Spanish base + parts
+    const indexFiles = [baseName, spanishBaseName, ...partFiles];
     const indexXml = buildSitemapIndex(indexFiles);
     const indexName = 'sitemap-index.xml';
     fs.writeFileSync(path.join(outDir, indexName), indexXml, 'utf8');
@@ -118,6 +151,7 @@ function buildSitemapIndex(files) {
     console.log('✅ Sitemaps built:');
     console.log(`- ${indexName}`);
     console.log(`- ${baseName}`);
+    console.log(`- ${spanishBaseName}`);
     partFiles.forEach(f => console.log(`- ${f}`));
   } catch (e) {
     console.error('❌ Failed to build sitemaps:', e);
