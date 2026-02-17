@@ -59,7 +59,7 @@ function buildBaseSitemap() {
   xml += wrapUrl(`${BASE_URL}/categories/`, 'weekly', '0.9', d);
   // Category pages
   for (const c of categories) {
-    const slug = cate goryToSlug(c);
+    const slug = categoryToSlug(c);
     xml += wrapUrl(`${BASE_URL}/categories/${slug}/`, 'weekly', '0.8', d);
   }
   xml += '</urlset>';

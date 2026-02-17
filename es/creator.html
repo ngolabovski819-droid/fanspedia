@@ -1,0 +1,3374 @@
+﻿<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Creator Profile - FansPedia</title>
+  <meta name="description" content="View detailed OnlyFans creator profile with stats, pricing, and direct link">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YV9QD82K7G"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);} 
+    gtag('js', new Date());
+    gtag('config', 'G-YV9QD82K7G', { 'anonymize_ip': true, 'debug_mode': true });
+    window.addEventListener('load', () => {
+      const params = new URLSearchParams(location.search);
+      const u = params.get('u');
+      if (typeof gtag === 'function') {
+        gtag('event', 'page_visible', { page_path: location.pathname, creator_username: u || null });
+        console.log('[GA4] page_visible sent');
+      } else {
+        console.warn('[GA4] gtag not available');
+      }
+    });
+  </script>
+  
+  <!-- URL handling for creator profiles -->
+  <script>
+    (function() {
+      // Simple URL cleanup - just update the address bar if we have query params
+      const params = new URLSearchParams(window.location.search);
+      const username = params.get('u');
+      
+      // If we have a username param and we're on creator.html, update to clean URL
+      if (username && window.location.pathname === '/creator.html') {
+        const cleanUrl = '/' + username;
+        if (window.history && window.history.replaceState) {
+          try {
+            window.history.replaceState(null, '', cleanUrl);
+          } catch(e) {
+            console.log('Could not update URL:', e);
+          }
+        }
+      }
+    })();
+  </script>
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YV9QD82K7G"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-YV9QD82K7G');
+  </script>
+  
+  <!-- Vercel Analytics -->
+  <script type="module">
+    import { inject } from '@vercel/analytics';
+    inject();
+  </script>
+  
+  <!-- Preconnect to critical domains -->
+  <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+  <link rel="preconnect" href="https://images.weserv.nl">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="dns-prefetch" href="https://onlyfans.com">
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --bg-primary: #f5f5f7;
+      --bg-secondary: #ffffff;
+      --bg-card: #ffffff;
+      --text-primary: #1d1d1f;
+      --text-secondary: #666;
+      --text-muted: #888;
+      --border-color: #e0e0e0;
+      --brand-color: #0099D6;
+      --brand-gradient: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
+      --success-color: #28a745;
+      --warning-color: #ffc107;
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.12);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.15);
+      --card-shadow: rgba(0, 0, 0, 0.08);
+      --card-shadow-hover: rgba(0, 0, 0, 0.12);
+      --placeholder-color: #999;
+      --heading-color: #1d1d1f;
+    }
+  /* Header effects */
+  .superior-header { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+  .superior-header.scrolled { box-shadow: 0 8px 32px rgba(0, 175, 240, 0.35); }
+
+  /* Mobile drawer & overlay styles (match homepage) */
+  .mobile-menu-toggle { display: none; background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.3); color: #fff; width: 44px; height: 44px; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; justify-content: center; align-items: center; }
+  .mobile-menu-toggle:hover { background: rgba(255, 255, 255, 0.3); }
+  .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 10000; opacity: 0; pointer-events: none; transition: opacity .3s ease; }
+  .drawer-overlay.open { opacity: 1; pointer-events: auto; }
+  .mobile-drawer { position: fixed; top: 0; right: -100%; width: 82%; max-width: 340px; height: 100%; background: #fff; box-shadow: -8px 0 24px rgba(0,0,0,0.2); z-index: 10001; padding: 16px; display: flex; flex-direction: column; gap: 6px; transition: right .3s ease; }
+  .mobile-drawer.open { right: 0; }
+  .mobile-drawer .drawer-close { align-self: flex-end; background: none; border: none; font-size: 28px; line-height: 1; color: #1d1d1f; margin-bottom: 4px; cursor: pointer; }
+  .mobile-drawer > a { display:block; padding: 14px 12px; border-radius: 8px; color: #1d1d1f; font-weight: 700; text-decoration: none; margin: 2px 0; font-size: 16px; }
+  .mobile-drawer > a:hover { background: #f5f5f7; color: #00AFF0; }
+  .drawer-categories-toggle { display:flex; align-items:center; justify-content:space-between; padding: 14px 12px; cursor:pointer; border-radius:8px; margin:2px 0; transition: background .2s ease; font-size:16px; font-weight:700; color:#1d1d1f; }
+  .drawer-categories-toggle:hover { background:#f5f5f7; }
+  .drawer-categories-toggle .icon-text { display:flex; align-items:center; gap:10px; }
+  .drawer-categories-toggle .icon-text i { font-size:18px; color:#1d1d1f; }
+  .drawer-categories-toggle .chevron { font-size:14px; transition: transform 0.3s ease; color:#666; }
+  .drawer-categories-toggle.open .chevron { transform: rotate(180deg); }
+  #drawerCategoriesSection { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, opacity 0.3s ease; opacity: 0; }
+  #drawerCategoriesSection.open { max-height: 800px; opacity: 1; overflow-y: auto; }
+  .drawer-categories-label { color: #999; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; padding: 12px 16px 8px; margin: 0; }
+  #drawerCategories { display: flex; flex-direction: column; gap: 0; padding: 0 4px; max-height: 400px; overflow-y: auto; }
+  #drawerCategories::-webkit-scrollbar { width: 4px; }
+  #drawerCategories::-webkit-scrollbar-thumb { background: #ddd; border-radius: 4px; }
+  #drawerCategories a { display: block; padding: 12px 12px; color: #555; font-weight: 600; text-decoration: none; border-radius: 6px; margin: 1px 0; font-size: 15px; transition: background 0.15s ease, color 0.15s ease; }
+  #drawerCategories a:hover { background: #f5f5f7; color: #00AFF0; }
+  .drawer-view-all-btn { display: block; margin: 12px 8px 8px; padding: 14px 20px; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); color: white; text-align: center; border-radius: 12px; font-weight: 800; text-decoration: none; font-size: 15px; box-shadow: 0 4px 12px rgba(0,175,240,0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+  .drawer-view-all-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(0,175,240,0.4); color: white; }
+  .drawer-locations-toggle { display: flex; align-items: center; justify-content: space-between; padding: 14px 12px; cursor: pointer; border-radius: 8px; margin: 2px 0; transition: background 0.2s ease; font-size: 16px; font-weight: 700; color: #1d1d1f; }
+  .drawer-locations-toggle:hover { background: #f5f5f7; }
+  .drawer-locations-toggle .icon-text { display: flex; align-items: center; gap: 10px; }
+  .drawer-locations-toggle .icon-text i { font-size: 18px; color: #1d1d1f; }
+  .drawer-locations-toggle .chevron { font-size: 14px; transition: transform 0.3s ease; color: #666; }
+  .drawer-locations-toggle.open .chevron { transform: rotate(180deg); }
+  #drawerLocationsSection { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, opacity 0.3s ease; opacity: 0; }
+  #drawerLocationsSection.open { max-height: 800px; opacity: 1; overflow-y: auto; }
+  .drawer-locations-label { color: #999; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; padding: 12px 16px 8px; margin: 0; }
+  #drawerLocations { display: flex; flex-direction: column; gap: 0; padding: 0 4px; }
+  #drawerLocations a { display: block; padding: 12px 12px; color: #555; font-weight: 600; text-decoration: none; border-radius: 6px; margin: 1px 0; font-size: 15px; transition: background 0.15s ease, color 0.15s ease; }
+  #drawerLocations a:hover { background: #f5f5f7; color: #00AFF0; }
+
+  /* Mobile Search Modal */
+  .mobile-search-modal { position: fixed; inset: 0; background: white; z-index: 10003; display: none; flex-direction: column; }
+  .mobile-search-modal.active { display: flex; }
+  .mobile-search-header { display: flex; align-items: center; gap: 12px; padding: 16px; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); box-shadow: 0 4px 12px rgba(0, 175, 240, 0.3); }
+  .mobile-search-back { background: none; border: none; color: white; font-size: 24px; cursor: pointer; padding: 8px; display: flex; align-items: center; justify-content: center; }
+  .mobile-search-input-wrapper { flex: 1; position: relative; }
+  .mobile-search-input { width: 100%; padding: 12px 16px 12px 44px; border: 2px solid rgba(255, 255, 255, 0.3); border-radius: 50px; background: rgba(255, 255, 255, 0.95); font-size: 16px; font-weight: 500; color: #1d1d1f; }
+  .mobile-search-input:focus { outline: none; border-color: white; background: white; }
+  .mobile-search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #00AFF0; font-size: 18px; pointer-events: none; }
+  .mobile-search-content { flex: 1; overflow-y: auto; padding: 20px 16px; }
+  .mobile-search-label { color: #999; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; }
+  .mobile-search-suggestions { display: flex; flex-direction: column; gap: 4px; }
+  .mobile-search-suggestion { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: #f5f5f7; border-radius: 12px; text-decoration: none; color: #1d1d1f; font-weight: 600; font-size: 15px; transition: all 0.2s ease; }
+  .mobile-search-suggestion:hover, .mobile-search-suggestion:active { background: #e8e8ea; transform: translateX(4px); }
+  .mobile-search-suggestion i { color: #00AFF0; font-size: 16px; }
+  .mobile-search-trigger { display: none; background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.3); color: white; width: 44px; height: 44px; border-radius: 12px; cursor: pointer; justify-content: center; align-items: center; font-size: 18px; transition: all 0.3s ease; }
+  .mobile-search-trigger:hover { background: rgba(255, 255, 255, 0.3); }
+
+    @media (max-width: 768px) { 
+      .desktop-nav { display:none; } 
+      .mobile-menu-toggle { display:inline-flex; } 
+      .header-search-section { display: none !important; } 
+      .logo-text .tagline { display:none; } 
+      .header-main { padding: 8px 0; } 
+      .header-container { flex-wrap: wrap; gap: 12px; }
+      .mobile-search-trigger { display: inline-flex; }
+    }
+  @media (max-width: 480px) { .header-search-input { padding: 10px 16px 10px 40px; font-size: 14px; } .header-main { padding: 6px 0; } }
+
+    [data-theme="dark"] {
+      --bg-primary: #1a1a1a;
+      --bg-secondary: #2a2a2a;
+      --bg-card: #242424;
+      --text-primary: #e8e8e8;
+      --text-secondary: #c8c8c8;
+      --text-muted: #888;
+      --border-color: #404040;
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
+      --card-shadow: rgba(0, 0, 0, 0.3);
+      --card-shadow-hover: rgba(0, 0, 0, 0.5);
+      --brand-color: #00AFF0;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Header - Match site style */
+    .superior-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
+      box-shadow: 0 4px 24px rgba(0, 175, 240, 0.25);
+    }
+    .header-main { padding: 10px 0; }
+    .header-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .header-search-section { flex: 1; max-width: 560px; }
+    .header-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: white;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    .logo-icon i { color: #00AFF0; }
+    .logo-text { display: flex; flex-direction: column; }
+    .logo-text .brand {
+      font-size: 20px;
+      font-weight: 800;
+      color: white;
+      letter-spacing: -0.5px;
+      line-height: 1;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+    .logo-text .tagline {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+    .header-search-section { flex: 1; max-width: 560px; }
+    .header-search-wrapper { position: relative; display: flex; align-items: center; }
+    .header-search-input {
+      width: 100%;
+      padding: 10px 16px 10px 44px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.95);
+      font-size: 15px;
+      font-weight: 500;
+      color: #1d1d1f;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+    .header-search-input:focus {
+      outline: none;
+      border-color: white;
+      background: white;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    }
+    .header-search-icon {
+      position: absolute;
+      left: 16px;
+      color: #00AFF0;
+      font-size: 18px;
+    }
+    .header-actions { display: flex; align-items: center; gap: 12px; }
+    /* Safe Search Toggle */
+    .safe-search-toggle { background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.3); color:white; width:44px; height:44px; border-radius:50%; cursor:pointer; transition:all 0.3s ease; display:flex; align-items:center; justify-content:center; font-size:18px; position:relative; }
+    .safe-search-toggle:hover { background:rgba(255,255,255,0.3); }
+    .safe-search-toggle.active { background:linear-gradient(135deg,#34c759 0%,#30b350 100%); border-color:#34c759; box-shadow:0 4px 16px rgba(52,199,89,0.4); }
+    .safe-search-toggle.active::after { content:''; position:absolute; top:-2px; right:-2px; width:10px; height:10px; background:#34c759; border-radius:50%; border:2px solid var(--bg-primary); animation:pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.6;} }
+    .theme-toggle {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .theme-toggle:hover { background: rgba(255, 255, 255, 0.3); }
+
+    /* Desktop Categories Dropdown */
+    .desktop-nav { position: relative; flex-shrink: 0; }
+    .desktop-nav .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 9999px;
+      padding: 10px 14px;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all .2s ease;
+      text-decoration: none;
+    }
+    .desktop-nav .nav-btn:hover { background: rgba(255,255,255,0.3); }
+    .desktop-nav .nav-btn i { font-size: 12px; opacity: 0.9; }
+    .desktop-nav .dropdown-menu {
+      position: absolute;
+      left: 0;
+      top: calc(100% + 8px);
+      background: var(--bg-card);
+      border-radius: 12px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+      padding: 8px;
+      min-width: 240px;
+      display: none;
+      z-index: 10000;
+    }
+      .desktop-nav .dropdown-menu.open {
+        display: block;
+      }
+      .dropdown-menu.show {
+        display: block;
+        animation: fadeIn 0.2s;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-8px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+    .desktop-nav .dropdown-menu a {
+  display: block;
+  padding: 10px 12px;
+  color: var(--text-primary);
+  font-weight: 700;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background .15s ease, color .15s ease;
+  text-transform: capitalize;
+    }
+    .desktop-nav .dropdown-menu a:hover { background: #f5f5f7; color: #00AFF0; }
+    .desktop-nav .dropdown-menu .divider { height: 1px; background: var(--border-color); margin: 6px 6px; }
+    .desktop-nav .dropdown-menu a.view-all { color: #00AFF0; }
+
+    /* Breadcrumbs */
+    body { padding-top: 68px; }
+    .breadcrumbs-wrapper { 
+      background: var(--bg-secondary); 
+      border-bottom: 1px solid var(--border-color); 
+      padding: 0;
+      /* removed margin-top, body now reserves space */
+    }
+    .breadcrumbs { max-width: 1400px; margin: 0 auto; padding: 12px 16px; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 13px; list-style: none; }
+    .breadcrumb-item { display: inline-flex; align-items: center; color: var(--text-secondary); font-weight: 500; }
+    .breadcrumb-item a { color: var(--text-secondary); text-decoration: none; transition: color .2s ease; padding: 4px 6px; border-radius: 6px; }
+    .breadcrumb-item a:hover { color: var(--brand-color); background: rgba(0, 175, 240, 0.08); }
+    .breadcrumb-item.active { color: var(--text-primary); font-weight: 600; }
+    .breadcrumb-separator { color: var(--text-muted); margin: 0 2px; font-size: 11px; user-select: none; }
+    .breadcrumb-home { display: inline-flex; align-items: center; gap: 4px; }
+
+    /* Profile Container */
+  .profile-container { max-width: 1200px; margin: 40px auto 0; padding: 0 20px 60px; }
+    .profile-grid { display: grid; grid-template-columns: 350px 1fr; gap: 40px; }
+    
+    /* Left Column - Image & CTA */
+    .profile-sidebar { position: -webkit-sticky; position: sticky; top: 80px; height: fit-content; z-index: 10; }
+    .profile-image-wrapper {
+      background: var(--bg-card);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .profile-image-wrapper img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      display: block;
+      transition: filter 0.3s ease;
+    }
+    /* Safe Search Blur for Profile Image */
+    body.safe-search-active .profile-image-wrapper img {
+      filter: blur(20px) saturate(0.7);
+      opacity: 0.85;
+    }
+    body.safe-search-active .profile-image-wrapper:hover img {
+      filter: blur(8px) saturate(0.8);
+      opacity: 0.9;
+    }
+    body.safe-search-active .profile-image-wrapper::before {
+      content: '18+';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 48px;
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.95);
+      z-index: 5;
+      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      pointer-events: none;
+      backdrop-filter: blur(2px);
+      padding: 12px 24px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.2);
+    }
+    .profile-cta {
+      background: var(--brand-gradient);
+      color: white;
+      padding: 16px;
+      text-align: center;
+      border-radius: 12px;
+      text-decoration: none;
+      display: block;
+      font-weight: 700;
+      font-size: 18px;
+      box-shadow: var(--shadow-md);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .profile-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+      color: white;
+    }
+    .profile-cta i { margin-right: 8px; }
+
+    /* Right Column - Info */
+    .profile-header { margin-bottom: 30px; }
+    .profile-header h1 {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .profile-username {
+      font-size: 20px;
+      color: var(--brand-color);
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: block;
+    }
+    .profile-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+    .profile-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .profile-meta-item i { color: var(--brand-color); font-size: 16px; }
+    .verified-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--success-color);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* Stats Grid */
+  .stats-section { margin: 24px 0; }
+    .stats-section h2 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+      border-bottom: 2px solid var(--brand-color);
+      padding-bottom: 10px;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .stat-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .stat-card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      background: linear-gradient(135deg, rgba(0, 175, 240, 0.1), rgba(0, 153, 214, 0.2));
+      color: var(--brand-color);
+    }
+    .stat-card-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .stat-card-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-top: 4px;
+    }
+    .stat-card-value.price {
+      color: var(--success-color);
+    }
+
+    /* Pricing Section */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .price-card {
+      background: var(--bg-card);
+      border: 2px solid var(--brand-color);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+    .price-card-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .price-card-value {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--brand-color);
+      margin-bottom: 4px;
+    }
+    .price-card-duration {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .price-card-discount {
+      background: var(--warning-color);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      display: inline-block;
+      margin-top: 8px;
+    }
+
+    /* Location */
+    .location-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 175, 240, 0.1);
+      color: var(--brand-color);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .profile-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .profile-sidebar { position: static; }
+      .profile-header h1 { font-size: 28px; }
+      .stats-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+      .stat-card { padding: 16px; }
+      .stat-card-value { font-size: 24px; }
+      .pricing-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Story Feature */
+    .story-indicator {
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .story-indicator:hover {
+      transform: scale(1.05);
+    }
+    .story-indicator.has-story::before {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      right: -4px;
+      bottom: -4px;
+      border-radius: inherit;
+      background: linear-gradient(45deg, #00AFF0, #FF0080, #FFCC00, #00AFF0);
+      background-size: 300% 300%;
+      animation: storyGradient 3s ease infinite;
+      z-index: -1;
+    }
+    @keyframes storyGradient {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    .story-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: linear-gradient(135deg, #FF0080, #FF4500);
+      color: white;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(255, 0, 128, 0.4);
+      border: 3px solid white;
+    }
+
+    /* Story Modal */
+    .story-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+    }
+    .story-modal.active {
+      display: flex;
+    }
+    .story-content {
+      position: relative;
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      background: #000;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 175, 240, 0.3);
+    }
+    .story-video {
+      width: 100%;
+      height: auto;
+      max-height: 85vh;
+      display: block;
+      background: #000;
+    }
+    .story-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 44px;
+      height: 44px;
+      background: rgba(0, 0, 0, 0.7);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10001;
+      transition: all 0.3s ease;
+    }
+    .story-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+    .story-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 20px;
+      background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, transparent 100%);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .story-header-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+    .story-header-info {
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .story-controls {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      z-index: 10000;
+    }
+    .story-btn {
+      width: 48px;
+      height: 48px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+    .story-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+
+    /* Loading State */
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-secondary);
+    }
+    .loading i { font-size: 48px; margin-bottom: 16px; color: var(--brand-color); }
+
+    /* Error State */
+    .error-message {
+      background: #dc3545;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 40px auto;
+      max-width: 600px;
+    }
+    /* Back to top button (match homepage) */
+    #backToTop {
+      position: fixed;
+      right: 16px;
+      bottom: 80px;
+      width: 48px;
+      height: 48px;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
+      color: #fff;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 18px rgba(0,175,240,0.35);
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(6px);
+      transition: opacity .25s ease, transform .25s ease, background-color .2s ease;
+      z-index: 1000;
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 1;
+    }
+    #backToTop.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    #backToTop:hover { background: linear-gradient(135deg, #0099D6 0%, #0088C0 100%); box-shadow: 0 10px 26px rgba(0,175,240,0.5); }
+
+    /* ============================================
+       MODERN FOOTER STYLES
+       ============================================ */
+    .modern-footer {
+      background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+      border-top: 1px solid var(--border-color);
+      margin-top: 80px;
+      padding: 60px 0 0;
+      position: relative;
+    }
+
+    .modern-footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, #00AFF0 50%, transparent 100%);
+      opacity: 0.5;
+    }
+
+    .footer-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    /* Footer Brand Column */
+    .footer-brand {
+      max-width: 380px;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .footer-logo-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(0, 175, 240, 0.3);
+    }
+
+    .footer-logo-icon svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .footer-logo-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .footer-logo-main {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+
+    .footer-logo-sub {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .footer-description {
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    /* Social Links */
+    .footer-social {
+      display: flex;
+      gap: 12px;
+    }
+
+    .social-link {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      font-size: 18px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      text-decoration: none;
+    }
+
+    .social-link:hover {
+      background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
+      border-color: transparent;
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0, 175, 240, 0.35);
+    }
+
+    /* Footer Columns */
+    .footer-column h3.footer-heading {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 12px;
+    }
+
+    .footer-column h3.footer-heading::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 32px;
+      height: 2px;
+      background: linear-gradient(90deg, #00AFF0, #0099D6);
+      border-radius: 2px;
+    }
+
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      transition: all 0.2s ease;
+      position: relative;
+      padding-left: 0;
+    }
+
+    .footer-links a::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #00AFF0, #0099D6);
+      bottom: -2px;
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .footer-links a:hover {
+      color: #00AFF0;
+      padding-left: 8px;
+    }
+
+    .footer-links a:hover::before {
+      width: 24px;
+    }
+
+    /* Footer Bottom */
+    .footer-bottom {
+      padding: 32px 0;
+    }
+
+    .footer-bottom-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 16px;
+    }
+
+    .footer-copyright {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin: 0;
+      font-weight: 500;
+    }
+
+    .footer-stats {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .stat-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .stat-badge i {
+      color: #00AFF0;
+      font-size: 12px;
+    }
+
+    .footer-disclaimer {
+      color: var(--text-muted);
+      font-size: 12px;
+      text-align: center;
+      margin: 0;
+      line-height: 1.5;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Footer Responsive */
+    @media (max-width: 992px) {
+      .footer-grid {
+        grid-template-columns: 2fr 1fr 1fr;
+        gap: 40px;
+      }
+
+      .footer-brand {
+        grid-column: 1 / -1;
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .modern-footer {
+        margin-top: 60px;
+        padding: 40px 0 0;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 36px;
+        padding-bottom: 36px;
+      }
+
+      .footer-brand {
+        text-align: center;
+      }
+
+      .footer-logo {
+        justify-content: center;
+      }
+
+      .footer-description {
+        text-align: center;
+      }
+
+      .footer-social {
+        justify-content: center;
+      }
+
+      .footer-column h3.footer-heading {
+        text-align: center;
+      }
+
+      .footer-column h3.footer-heading::after {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .footer-links {
+        text-align: center;
+      }
+
+      .footer-links a::before {
+        display: none;
+      }
+
+      .footer-links a:hover {
+        padding-left: 0;
+      }
+
+      .footer-bottom-content {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .footer-stats {
+        justify-content: center;
+      }
+    }
+
+    /* Small Mobile */
+    @media (max-width: 480px) {
+      .footer-logo-icon {
+        width: 40px;
+        height: 40px;
+      }
+
+      .footer-logo-icon svg {
+        width: 24px;
+        height: 24px;
+      }
+
+      .footer-logo-main {
+        font-size: 16px;
+      }
+
+      .footer-logo-sub {
+        font-size: 12px;
+      }
+
+      .social-link {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+      }
+
+      .footer-stats {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .stat-badge {
+        justify-content: center;
+        width: 100%;
+      }
+    }
+
+    /* Dark mode adjustments */
+    [data-theme="dark"] .footer-logo-icon {
+      box-shadow: 0 4px 12px rgba(0, 175, 240, 0.4);
+    }
+
+    [data-theme="dark"] .social-link {
+      background: var(--bg-primary);
+    }
+
+    [data-theme="dark"] .stat-badge {
+      background: var(--bg-primary);
+    }
+
+    [data-theme="dark"] .modern-footer::before {
+      opacity: 0.7;
+    }
+
+    /* Safe Search Modal */
+    .safe-search-modal { position:fixed; inset:0; background:rgba(0,0,0,0.75); backdrop-filter:blur(10px); z-index:10002; display:none; align-items:center; justify-content:center; padding:20px; animation:fadeIn 0.3s ease; }
+    .safe-search-modal.show { display:flex; }
+    @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+    .safe-search-modal-content { background:var(--bg-secondary); border-radius:24px; padding:40px; max-width:520px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,0.3); animation:slideUp 0.3s cubic-bezier(0.4,0,0.2,1); position:relative; }
+    @keyframes slideUp { from{transform:translateY(40px); opacity:0;} to{transform:translateY(0); opacity:1;} }
+    .safe-search-modal-icon { width:80px; height:80px; background:linear-gradient(135deg,#00AFF0 0%,#0099D6 100%); border-radius:20px; display:flex; align-items:center; justify-content:center; margin:0 auto 24px; font-size:36px; color:white; box-shadow:0 8px 24px rgba(0,175,240,0.4); }
+    .safe-search-modal h2 { font-size:28px; font-weight:800; color:var(--text-primary); margin-bottom:12px; text-align:center; }
+    .safe-search-modal p { color:var(--text-secondary); font-size:16px; line-height:1.6; text-align:center; margin-bottom:32px; }
+    .safe-search-modal-actions { display:flex; gap:12px; flex-direction:column; }
+    .safe-search-modal-btn { padding:16px 32px; border-radius:12px; font-weight:700; font-size:16px; cursor:pointer; transition:all 0.3s ease; border:none; text-align:center; }
+    .safe-search-modal-btn-primary { background:linear-gradient(135deg,#34c759 0%,#30b350 100%); color:white; box-shadow:0 6px 18px rgba(52,199,89,0.4); }
+    .safe-search-modal-btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(52,199,89,0.5); }
+    .safe-search-modal-btn-secondary { background:var(--bg-primary); color:var(--text-primary); border:2px solid var(--border-color); }
+    .safe-search-modal-btn-secondary:hover { background:var(--bg-secondary); border-color:var(--text-secondary); }
+    .safe-search-modal-footer { margin-top:24px; text-align:center; font-size:13px; color:var(--text-muted); }
+    @media(max-width:576px){ .safe-search-modal-content{padding:32px 24px;} .safe-search-modal h2{font-size:24px;} .safe-search-modal p{font-size:15px;} }
+    
+    /* Similar Creators Section */
+    #similarCreatorsSection {
+      background: var(--bg-primary);
+      padding: 24px 0 16px 0;
+      transition: background-color 0.3s ease;
+    }
+    #similarCreatorsSection h2 {
+      text-align: center;
+      color: var(--text-primary);
+      font-size: 2.25rem;
+      margin-bottom: 1.25rem;
+      font-weight: 800;
+    }
+    
+    /* Similar Creators Card Styles - Matching Homepage Design */
+    #similarCreatorsSection .card {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      border: none;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+      overflow: hidden;
+      box-shadow: 0 2px 8px var(--card-shadow);
+      position: relative;
+    }
+    #similarCreatorsSection .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px var(--card-shadow-hover);
+    }
+    #similarCreatorsSection .card img {
+      border-radius: 20px 20px 0 0;
+      height: 360px;
+      object-fit: cover;
+      width: 100%;
+      min-height: 360px;
+      transition: filter 0.3s ease, opacity 0.3s ease;
+    }
+    /* Safe Search blur support for Similar Creators images */
+    body.safe-search-active #similarCreatorsSection .card img {
+      filter: blur(20px) saturate(0.7);
+      opacity: 0.85;
+    }
+    body.safe-search-active #similarCreatorsSection .card:hover img {
+      filter: blur(8px) saturate(0.85);
+      opacity: 0.95;
+    }
+    body.safe-search-active #similarCreatorsSection .card::before {
+      content: '18+';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.75);
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 24px;
+      letter-spacing: 2px;
+      pointer-events: none;
+      z-index: 5;
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+    #similarCreatorsSection .favorite-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      transition: all 0.2s ease;
+      z-index: 10;
+      font-size: 20px;
+    }
+    #similarCreatorsSection .favorite-btn span { 
+      color: #ccc; 
+    }
+    #similarCreatorsSection .favorite-btn:hover {
+      transform: scale(1.1);
+      background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
+      box-shadow: 0 6px 16px rgba(0,175,240,0.35);
+    }
+    #similarCreatorsSection .favorite-btn:hover span { 
+      color: #fff !important; 
+    }
+    #similarCreatorsSection .favorite-btn.active {
+      background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
+      box-shadow: 0 6px 16px rgba(0,175,240,0.35);
+    }
+    #similarCreatorsSection .favorite-btn.active span { 
+      color: #fff !important; 
+    }
+    #similarCreatorsSection .view-profile-btn {
+      background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      display: block;
+      width: 100%;
+      text-align: center;
+      margin-top: 16px;
+      box-shadow: 0 6px 18px rgba(0,175,240,0.35);
+    }
+    #similarCreatorsSection .view-profile-btn:hover {
+      background: linear-gradient(135deg, #0099D6 0%, #0088C0 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 22px rgba(0,175,240,0.45);
+      color: white;
+      text-decoration: none;
+    }
+    #similarCreatorsSection .card-body {
+      padding: 20px;
+    }
+    #similarCreatorsSection .card h5 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--text-primary);
+    }
+    #similarCreatorsSection .username {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    #similarCreatorsSection .price-tag {
+      color: #34c759;
+      font-weight: 700;
+      font-size: 18px;
+    }
+    #similarCreatorsSection .price-free {
+      color: #34c759;
+      font-weight: 700;
+      font-size: 16px;
+      text-transform: uppercase;
+    }
+    #similarCreatorsSection .bio-snippet {
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.4;
+      margin-top: 8px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    /* Ensure footer is visible and prevent overflow scroll */
+    footer {
+      display: block !important;
+      margin-bottom: 0 !important;
+      padding-bottom: 40px !important;
+    }
+    /* Prevent body from showing horizontal overflow */
+    body {
+      overflow-x: hidden;
+    }
+    html {
+      overflow-x: hidden;
+    }
+  </style>
+    <link rel="alternate" hreflang="en" href="https://fanspedia.net/creator/" />
+  <link rel="alternate" hreflang="es" href="https://fanspedia.net/es/creator/" />
+  <link rel="alternate" hreflang="x-default" href="https://fanspedia.net/creator/" />
+</head>
+<body>
+  <script>
+    // Set language before i18n loads
+    localStorage.setItem('fanspedia_lang', 'es');
+  </script>
+  <script type="module">
+    import { slugify, toCreatorUrl } from '/utils/creatorUrl.js';
+    (async () => {
+      const params = new URLSearchParams(window.location.search);
+      const username = params.get('u');
+      if (username) {
+        // Fetch id for username (API or lookup)
+        const res = await fetch(`/api/lookup-id?username=${encodeURIComponent(username)}`);
+        const { id } = await res.json();
+        const canonicalUrl = toCreatorUrl({ id, username });
+        document.head.insertAdjacentHTML('beforeend', `<link rel="canonical" href="${canonicalUrl}">`);
+        document.head.insertAdjacentHTML('beforeend', `<meta name="robots" content="noindex,follow">`);
+        history.replaceState({}, '', canonicalUrl);
+      }
+    })();
+  </script>
+
+  <header class="superior-header" id="mainHeader">
+    <!-- Main header -->
+    <div class="header-main">
+      <div class="header-container">
+        <!-- Logo -->
+        <a href="/" class="logo-section">
+          <svg width="140" height="42" viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+            <!-- Pin + F -->
+            <g transform="translate(10,8)">
+              <!-- Map pin -->
+              <path
+                d="M48 4
+                   C31 4 18 17.5 18 34.5
+                   C18 48.5 30.1 62.9 42.4 79.1
+                   C45.0 82.7 51.0 82.7 53.6 79.1
+                   C65.9 62.9 78 48.5 78 34.5
+                   C78 17.5 65 4 48 4
+                   Z"
+                fill="#FFFFFF"
+              />
+              <!-- Centered large F -->
+              <text
+                x="48"
+                y="40"
+                text-anchor="middle"
+                dominant-baseline="middle"
+                font-family="Poppins, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+                font-size="34"
+                font-weight="700"
+                fill="#000000">
+                F
+              </text>
+            </g>
+
+            <!-- Wordmark -->
+            <text
+              x="115"
+              y="64"
+              font-family="Poppins, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+              font-size="40"
+              font-weight="500"
+              fill="#FFFFFF">
+              FansPedia
+            </text>
+          </svg>
+        </a>
+
+        <!-- Desktop navigation (moved next to logo) -->
+        <div class="desktop-nav">
+          <button id="categoriesToggle" class="nav-btn" aria-haspopup="true" aria-expanded="false">
+            Categories <i class="fas fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div id="categoriesMenu" class="dropdown-menu" role="menu" aria-hidden="true">
+            <!-- Populated dynamically from config/categories.js -->
+          </div>
+        </div>
+
+        <div class="desktop-nav">
+          <a href="/locations/" class="nav-btn">
+            Locations <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+          </a>
+        </div>
+
+        <!-- Search - THE CENTERPIECE -->
+        <div class="header-search-section">
+          <div class="header-search-wrapper">
+            <i class="fas fa-search header-search-icon"></i>
+            <input 
+              type="text" 
+              class="header-search-input" 
+              placeholder="Search by name, location, category..."
+              id="headerSearch"
+              autocomplete="off"
+              autocapitalize="none"
+              spellcheck="false"
+            >
+          </div>
+          
+        </div>
+
+        <!-- Actions -->
+        <div class="header-actions">
+          <!-- Mobile Search Trigger (visible only on mobile) -->
+          <button class="mobile-search-trigger" id="mobileSearchTrigger" aria-label="Search">
+            <i class="fas fa-search"></i>
+          </button>
+          <!-- Safe Search toggle -->
+          <button class="safe-search-toggle" id="safeSearchToggle" aria-label="Toggle Safe Search (blur images)" title="Safe Search: Browse comfortably in public">
+            <i class="fas fa-eye-slash"></i>
+          </button>
+          <!-- Dark mode toggle -->
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+          </button>
+          <!-- Language toggle -->
+          <button class="lang-toggle" id="langToggle" onclick="toggleLanguage()"><span id="langIndicator">EN</span></button>
+          <!-- Mobile menu toggle only -->
+          <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Search Modal -->
+  <div class="mobile-search-modal" id="mobileSearchModal">
+    <div class="mobile-search-header">
+      <button class="mobile-search-back" id="mobileSearchBack" aria-label="Close search">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div class="mobile-search-input-wrapper">
+        <i class="fas fa-search mobile-search-icon"></i>
+        <input type="text" class="mobile-search-input" id="mobileSearchInput" placeholder="Search by name, location, category..." autocomplete="off" autocapitalize="none" spellcheck="false">
+      </div>
+    </div>
+    <div class="mobile-search-content">
+      <div class="mobile-search-label">POPULAR SEARCHES</div>
+      <div class="mobile-search-suggestions" id="mobileSearchSuggestions">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Safe Search Modal (First-Time Consent) -->
+  <div id="safeSearchModal" class="safe-search-modal" role="dialog" aria-labelledby="safeSearchModalTitle" aria-modal="true">
+    <div class="safe-search-modal-content">
+      <div class="safe-search-modal-icon">
+        <i class="fas fa-shield-alt"></i>
+      </div>
+      <h2 id="safeSearchModalTitle">Browse Safely in Public?</h2>
+      <p>
+        Enable <strong>Safe Search</strong> to blur images so you can comfortably browse at work, on the bus, or anywhere public. 
+        You can toggle this anytime using the shield icon in the header.
+      </p>
+      <div class="safe-search-modal-actions">
+        <button class="safe-search-modal-btn safe-search-modal-btn-primary" id="enableSafeSearch">
+          <i class="fas fa-shield-alt"></i> Enable Safe Search
+        </button>
+        <button class="safe-search-modal-btn safe-search-modal-btn-secondary" id="dismissSafeSearch">
+          No Thanks, I'm in Private
+        </button>
+      </div>
+      <div class="safe-search-modal-footer">
+        You can change this setting anytime by clicking the <i class="fas fa-eye-slash"></i> icon in the header
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Drawer -->
+  <div id="drawerOverlay" class="drawer-overlay" tabindex="-1" aria-hidden="true"></div>
+  <nav id="mobileDrawer" class="mobile-drawer" aria-labelledby="mobileMenuToggle">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">×</button>
+    <a href="/">Home</a>
+    
+    <!-- Categories collapsible section -->
+    <div class="drawer-categories-toggle" id="drawerCategoriesToggle">
+      <div class="icon-text">
+        <i class="fas fa-th"></i>
+        <span>Categories</span>
+      </div>
+      <i class="fas fa-chevron-down chevron"></i>
+    </div>
+    <div id="drawerCategoriesSection">
+      <div class="drawer-categories-label">MOST POPULAR CATEGORIES</div>
+      <div id="drawerCategories">
+        <!-- Populated dynamically from config/categories.js -->
+      </div>
+      <a href="/categories/" class="drawer-view-all-btn">View All Categories</a>
+    </div>
+
+    <!-- Locations collapsible section -->
+    <div class="drawer-locations-toggle" id="drawerLocationsToggle">
+      <div class="icon-text">
+        <i class="fas fa-map-marker-alt"></i>
+        <span>Locations</span>
+      </div>
+      <i class="fas fa-chevron-down chevron"></i>
+    </div>
+    <div id="drawerLocationsSection">
+      <div class="drawer-locations-label">POPULAR LOCATIONS</div>
+      <div id="drawerLocations">
+        <a href="/near-me/">Near Me</a>
+        <a href="/country/united-states/">United States</a>
+        <a href="/country/canada/">Canada</a>
+        <a href="/country/india/">India</a>
+        <a href="/country/japan/">Japan</a>
+      </div>
+      <a href="/locations/" class="drawer-view-all-btn">View All Locations</a>
+    </div>
+  </nav>
+
+  <!-- Breadcrumbs -->
+  <nav class="breadcrumbs-wrapper" aria-label="Breadcrumb">
+    <ol id="breadcrumbsList" class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
+      <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href="/" itemprop="item" class="breadcrumb-home">
+          <i class="fas fa-home" aria-hidden="true"></i>
+          <span itemprop="name">Home</span>
+        </a>
+      </li>
+      <li class="breadcrumb-separator" aria-hidden="true">/</li>
+      <li class="breadcrumb-item active" aria-current="page" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <span itemprop="name" id="breadcrumbName">Creator Profile</span>
+      </li>
+    </ol>
+  </nav>
+
+  <!-- Main Content -->
+  <main>
+    <div id="loadingState" class="loading">
+      <i class="fas fa-spinner fa-spin"></i>
+      <p>Loading creator profile...</p>
+    </div>
+
+    <div id="errorState" style="display: none;"></div>
+
+    <div id="profileContent" class="profile-container" style="display: none;">
+      <div class="profile-grid">
+        <!-- Left Sidebar -->
+        <aside class="profile-sidebar">
+          <div class="profile-image-wrapper">
+            <img id="profileAvatar" src="" alt="" loading="eager" fetchpriority="high">
+          </div>
+          <a id="onlyfansLink" href="" target="_blank" rel="nofollow noopener noreferrer" class="profile-cta">
+            <i class="fas fa-external-link-alt"></i>
+            Visit OnlyFans
+          </a>
+        </aside>
+
+        <!-- Right Content -->
+        <div class="profile-main">
+          <!-- Header -->
+          <div class="profile-header">
+            <h1 id="profileName"></h1>
+            <span id="profileUsername" class="profile-username"></span>
+            
+            <div class="profile-meta">
+              <div class="profile-meta-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Joined: <strong id="joinDate"></strong></span>
+              </div>
+              <div class="profile-meta-item" id="lastSeenItem" style="display: none;">
+                <i class="fas fa-eye"></i>
+                <span>Last Seen: <strong id="lastSeen"></strong></span>
+              </div>
+              <div id="verifiedBadge" style="display: none;">
+                <span class="verified-badge">
+                  <i class="fas fa-check-circle"></i> Verified & Active
+                </span>
+              </div>
+            </div>
+
+            <div id="locationContainer" style="display: none; margin-top: 12px;">
+              <span class="location-tag">
+                <i class="fas fa-map-marker-alt"></i>
+                <span id="location"></span>
+              </span>
+            </div>
+          </div>
+
+          <!-- Content Stats -->
+          <section class="stats-section">
+            <h2><i class="fas fa-photo-video"></i> Content Statistics</h2>
+            <div class="stats-grid" id="contentStats"></div>
+          </section>
+
+          <!-- Engagement Stats -->
+          <section class="stats-section">
+            <h2><i class="fas fa-heart"></i> Engagement & Reach</h2>
+            <div class="stats-grid" id="engagementStats"></div>
+          </section>
+
+          <!-- Pricing -->
+          <section class="stats-section" id="pricingSection">
+            <h2><i class="fas fa-dollar-sign"></i> Subscription Pricing</h2>
+            <div class="pricing-grid" id="pricingGrid"></div>
+          </section>
+
+          <!-- Bundles -->
+          <section class="stats-section" id="bundlesSection" style="display: none;">
+            <h2><i class="fas fa-gift"></i> Bundle Offers</h2>
+            <div class="pricing-grid" id="bundlesGrid"></div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    // ============================================
+    // DYNAMIC CATEGORY NAVIGATION
+    // ============================================
+  import { popularCategories, categoryToSlug } from '/config/categories.js?v=20251121-4';
+    
+    // ===========================
+    // Desktop Categories Dropdown
+    // ===========================
+    const categoriesToggle = document.getElementById('categoriesToggle');
+    const categoriesMenu = document.getElementById('categoriesMenu');
+
+    // Populate categories menu
+    if (categoriesMenu) {
+      const menuHTML = popularCategories.map(cat => {
+        const slug = categoryToSlug(cat);
+        const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        return `<a role="menuitem" href="/categories/${slug}/">${label}</a>`;
+      }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Browse all categories →</a>';
+      categoriesMenu.innerHTML = menuHTML;
+    }
+
+    // Toggle dropdown
+    if (categoriesToggle && categoriesMenu) {
+      categoriesToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        // Close any other open dropdowns
+        document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+          if (menu !== categoriesMenu) menu.classList.remove('show');
+        });
+        const isOpen = categoriesMenu.classList.toggle('show');
+        categoriesToggle.setAttribute('aria-expanded', isOpen);
+        categoriesMenu.setAttribute('aria-hidden', !isOpen);
+      });
+
+      // Prevent closing when clicking inside dropdown
+      categoriesMenu.addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+
+      // Close on outside click
+      document.addEventListener('click', (e) => {
+        if (!categoriesMenu.contains(e.target) && !categoriesToggle.contains(e.target)) {
+          if (categoriesMenu.classList.contains('show')) {
+            categoriesMenu.classList.remove('show');
+            categoriesToggle.setAttribute('aria-expanded', 'false');
+            categoriesMenu.setAttribute('aria-hidden', 'true');
+          }
+        }
+      });
+      // Keyboard accessibility: ESC closes dropdown
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && categoriesMenu.classList.contains('show')) {
+          categoriesMenu.classList.remove('show');
+          categoriesToggle.setAttribute('aria-expanded', 'false');
+          categoriesMenu.setAttribute('aria-hidden', 'true');
+        }
+      });
+    }
+
+    // ===========================
+    // Mobile drawer wiring
+    // ===========================
+    const drawerOverlay = document.getElementById('drawerOverlay');
+    const mobileDrawer = document.getElementById('mobileDrawer');
+    const drawerClose = document.getElementById('drawerClose');
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const drawerCategoriesToggle = document.getElementById('drawerCategoriesToggle');
+    const drawerCategoriesSection = document.getElementById('drawerCategoriesSection');
+    const drawerCategories = document.getElementById('drawerCategories');
+
+    function openDrawer() {
+      if (!mobileDrawer || !drawerOverlay) return;
+      mobileDrawer.classList.add('open');
+      drawerOverlay.classList.add('open');
+      drawerOverlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+      if (!mobileDrawer || !drawerOverlay) return;
+      mobileDrawer.classList.remove('open');
+      drawerOverlay.classList.remove('open');
+      drawerOverlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    // Populate drawer categories (popular only)
+    console.log('🔧 Populating drawer categories...');
+    console.log('📦 popularCategories:', popularCategories);
+    console.log('🎯 drawerCategories element:', drawerCategories);
+    
+    if (drawerCategories) {
+      const drawerHTML = popularCategories.map(cat => {
+        const slug = categoryToSlug(cat);
+        const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        return `<a href="/categories/${slug}/">${label}</a>`;
+      }).join('');
+      drawerCategories.innerHTML = drawerHTML;
+      console.log('✅ Drawer categories populated:', drawerCategories.children.length, 'categories');
+    } else {
+      console.error('❌ drawerCategories element not found!');
+    }
+
+    if (mobileMenuToggle) mobileMenuToggle.addEventListener('click', openDrawer);
+    if (drawerClose) drawerClose.addEventListener('click', closeDrawer);
+    if (drawerOverlay) drawerOverlay.addEventListener('click', closeDrawer);
+
+    // ESC to close
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileDrawer && mobileDrawer.classList.contains('open')) {
+        closeDrawer();
+      }
+    });
+
+    // Toggle categories section inside drawer
+    console.log('🔧 Setting up drawer categories toggle...');
+    console.log('🎯 drawerCategoriesToggle:', drawerCategoriesToggle);
+    console.log('🎯 drawerCategoriesSection:', drawerCategoriesSection);
+    
+    if (drawerCategoriesToggle && drawerCategoriesSection) {
+      console.log('✅ Both elements found, adding click listener');
+      
+      // Log computed styles to debug
+      const computedStyle = window.getComputedStyle(drawerCategoriesSection);
+      console.log('📐 Initial computed styles:', {
+        maxHeight: computedStyle.maxHeight,
+        opacity: computedStyle.opacity,
+        overflow: computedStyle.overflow,
+        display: computedStyle.display
+      });
+      
+      drawerCategoriesToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('🖱️ Categories toggle clicked!');
+        const isOpen = drawerCategoriesSection.classList.toggle('open');
+        drawerCategoriesToggle.classList.toggle('open', isOpen);
+
+        // Force visible state with inline styles to bypass any cascade conflicts
+        if (isOpen) {
+          // Set to auto height by measuring scrollHeight
+          const h = drawerCategoriesSection.scrollHeight;
+          drawerCategoriesSection.style.maxHeight = h + 'px';
+          drawerCategoriesSection.style.opacity = '1';
+          drawerCategoriesSection.style.overflowY = 'auto';
+        } else {
+          drawerCategoriesSection.style.maxHeight = '0px';
+          drawerCategoriesSection.style.opacity = '0';
+          drawerCategoriesSection.style.overflowY = 'hidden';
+        }
+
+        console.log('📂 Categories section is now:', isOpen ? 'OPEN' : 'CLOSED');
+        console.log('📋 Section classes:', drawerCategoriesSection.className);
+
+        // Log computed styles after toggle (next frame to reflect updates)
+        requestAnimationFrame(() => {
+          const newStyle = window.getComputedStyle(drawerCategoriesSection);
+          console.log('📐 After toggle computed styles:', {
+            maxHeight: newStyle.maxHeight,
+            opacity: newStyle.opacity,
+            overflow: newStyle.overflow,
+            display: newStyle.display
+          });
+        });
+      });
+    } else {
+      console.error('❌ Missing elements:', {
+        toggle: !!drawerCategoriesToggle,
+        section: !!drawerCategoriesSection
+      });
+    }
+
+    // Locations drawer toggle
+    const drawerLocationsToggle = document.getElementById('drawerLocationsToggle');
+    const drawerLocationsSection = document.getElementById('drawerLocationsSection');
+    if (drawerLocationsToggle && drawerLocationsSection) {
+      drawerLocationsToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const isOpen = drawerLocationsSection.classList.toggle('open');
+        drawerLocationsToggle.classList.toggle('open', isOpen);
+        if (isOpen) {
+          const h = drawerLocationsSection.scrollHeight;
+          drawerLocationsSection.style.maxHeight = h + 'px';
+          drawerLocationsSection.style.opacity = '1';
+          drawerLocationsSection.style.overflowY = 'auto';
+        } else {
+          drawerLocationsSection.style.maxHeight = '0px';
+          drawerLocationsSection.style.opacity = '0';
+          drawerLocationsSection.style.overflowY = 'hidden';
+        }
+      });
+    }
+
+    // Header scrolled shadow
+    window.addEventListener('scroll', () => {
+      const header = document.getElementById('mainHeader');
+      if (!header) return;
+      if (window.pageYOffset > 50) header.classList.add('scrolled');
+      else header.classList.remove('scrolled');
+    });
+  </script>
+
+  <script type="module">
+
+
+    // ===== MOBILE SEARCH MODAL FUNCTIONALITY =====
+    const mobileSearchModal = document.getElementById('mobileSearchModal');
+    const mobileSearchTrigger = document.getElementById('mobileSearchTrigger');
+    const mobileSearchBack = document.getElementById('mobileSearchBack');
+    const mobileSearchInput = document.getElementById('mobileSearchInput');
+    const mobileSearchSuggestionsContainer = document.getElementById('mobileSearchSuggestionsContainer');
+
+    const popularSearches = ['milf', 'asian', 'big tits', 'trans', 'mature', 'latina', 'big ass', 'bbw'];
+
+    function populateMobileSuggestions() {
+      if (!mobileSearchSuggestionsContainer) return;
+      mobileSearchSuggestionsContainer.innerHTML = popularSearches.map(term => `
+        <a href="/?q=${encodeURIComponent(term)}" class="mobile-search-suggestion">
+          <i class="fas fa-search"></i>
+          <span>${term.charAt(0).toUpperCase() + term.slice(1)}</span>
+        </a>
+      `).join('');
+    }
+
+    function openMobileSearch() {
+      if (!mobileSearchModal) return;
+      mobileSearchModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      if (mobileSearchInput) {
+        setTimeout(() => mobileSearchInput.focus(), 100);
+      }
+    }
+
+    function closeMobileSearch() {
+      if (!mobileSearchModal) return;
+      mobileSearchModal.classList.remove('active');
+      document.body.style.overflow = '';
+      if (mobileSearchInput) {
+        mobileSearchInput.value = '';
+      }
+    }
+
+    // Event listeners
+    if (mobileSearchTrigger) {
+      mobileSearchTrigger.addEventListener('click', openMobileSearch);
+    }
+
+    if (mobileSearchBack) {
+      mobileSearchBack.addEventListener('click', closeMobileSearch);
+    }
+
+    if (mobileSearchInput) {
+      mobileSearchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && mobileSearchInput.value.trim()) {
+          window.location.href = `/?q=${encodeURIComponent(mobileSearchInput.value.trim())}`;
+        }
+      });
+    }
+
+    // Populate suggestions on page load
+    populateMobileSuggestions();
+
+    // Header search functionality
+    const headerSearch = document.getElementById('headerSearch');
+    if (headerSearch) {
+      headerSearch.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          const query = headerSearch.value.trim();
+          if (query) {
+            window.location.href = `/?q=${encodeURIComponent(query)}`;
+          }
+        }
+      });
+    }
+
+    // Image proxy helper
+    function proxyImg(url, w, h) {
+      try {
+        if (!url || url.startsWith('/static/')) return url;
+        const noScheme = url.replace(/^https?:\/\//, '');
+        return `https://images.weserv.nl/?url=${encodeURIComponent(noScheme)}&w=${w}&h=${h}&fit=cover&output=webp`;
+      } catch {
+        return url;
+      }
+    }
+
+    // Build responsive image sources
+    function buildResponsiveSources(originalUrl) {
+      const widths = [144, 240, 320, 480, 720];
+      const srcset = widths
+        .map(w => `${proxyImg(originalUrl, w, Math.round(w * 4 / 3))} ${w}w`)
+        .join(', ');
+      const src = proxyImg(originalUrl, 320, Math.round(320 * 4 / 3));
+      const sizes = '(max-width: 480px) 144px, (max-width: 768px) 240px, 320px';
+      return { src, srcset, sizes };
+    }
+    
+    // Format number
+    function formatNumber(num) {
+      if (num === null || num === undefined || num === '') return 'N/A';
+      const n = Number(num);
+      if (isNaN(n)) return 'N/A';
+      if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+      if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+      return n.toLocaleString();
+    }
+
+    // Format price
+    function formatPrice(price) {
+      if (price === null || price === undefined || price === '') return 'N/A';
+      const p = Number(price);
+      if (isNaN(p)) return 'N/A';
+      if (p === 0) return 'Free';
+      return '$' + p.toFixed(2);
+    }
+
+    // Format date
+    function formatDate(dateStr) {
+      if (!dateStr) return 'N/A';
+      try {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+      } catch {
+        return dateStr;
+      }
+    }
+
+    // Get username from URL
+    function getUsername() {
+      // Priority 1: SSR pre-injected username
+      if (window.__SSR_USERNAME__) {
+        console.log('Using SSR pre-injected username:', window.__SSR_USERNAME__);
+        return window.__SSR_USERNAME__;
+      }
+
+      // Priority 2: Query param (for direct creator.html access)
+      const params = new URLSearchParams(window.location.search);
+      const queryUsername = params.get('u');
+      if (queryUsername) {
+        console.log('Extracted username from query param:', queryUsername);
+        return queryUsername;
+      }
+
+      // Priority 3: Extract from path: /username or /username/ (including dots)
+      const path = window.location.pathname;
+      console.log('Current path:', path);
+
+      // Remove leading slash and trailing slash
+      let raw = path.replace(/^\/+/, '').replace(/\/+$/, '');
+      // Ignore creator.html and empty
+      if (raw && raw !== 'creator.html') {
+        // If there is a query string, remove it
+        raw = raw.split('?')[0];
+        // If there is a hash, remove it
+        raw = raw.split('#')[0];
+        // Validate: Only allow valid usernames (letters, numbers, dots, underscores, hyphens)
+        if (/^[A-Za-z0-9._-]+$/.test(raw)) {
+          console.log('Extracted username from path:', raw);
+          return raw;
+        }
+      }
+
+      console.log('No username found, using default');
+      return 'levibabestation';
+    }
+
+    // Fetch creator data
+    async function loadCreatorProfile() {
+      const username = getUsername();
+      console.log('Loading profile for username:', username);
+      
+      const loadingState = document.getElementById('loadingState');
+      const errorState = document.getElementById('errorState');
+      const profileContent = document.getElementById('profileContent');
+
+      // Check for SSR-injected data (from /:username SSR route)
+      if (window.__CREATOR_SSR__ && window.__SSR_USERNAME__ === username) {
+        console.log('Using SSR pre-fetched data (zero API calls needed)');
+        
+        // Store for similarity calculation
+        window.currentCreator = window.__CREATOR_SSR__;
+        
+        renderProfile(window.__CREATOR_SSR__);
+        loadingState.style.display = 'none';
+        profileContent.style.display = 'block';
+        
+        // Load similar creators after SSR render
+        loadSimilarCreators();
+        return;
+      }
+
+      try {
+        // Fallback: fetch from API
+        let apiUrl = `/api/search?q=${encodeURIComponent(username)}&page=1&page_size=10`;
+        console.log('Fetching from API:', apiUrl);
+        
+        const response = await fetch(apiUrl);
+        console.log('API response status:', response.status);
+        
+        if (!response.ok) {
+          throw new Error(`API error: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        console.log('API response data:', data);
+        console.log('Number of results:', data.length);
+
+        if (!data || data.length === 0) {
+          throw new Error('Creator not found');
+        }
+
+        // Find exact username match (case-insensitive)
+        const creator = data.find(c => c.username && c.username.toLowerCase() === username.toLowerCase()) || data[0];
+        console.log('Selected creator:', creator);
+        
+        // Store for similarity calculation
+        window.currentCreator = creator;
+        
+        renderProfile(creator);
+        
+        loadingState.style.display = 'none';
+        profileContent.style.display = 'block';
+        
+        // Load similar creators after API render
+        loadSimilarCreators();
+      } catch (error) {
+        console.error('Error loading profile:', error);
+        loadingState.style.display = 'none';
+        errorState.innerHTML = `
+          <div class="error-message">
+            <h2><i class="fas fa-exclamation-triangle"></i> Creator Not Found</h2>
+            <p>Sorry, we couldn't find a creator with username "${username}"</p>
+            <p style="font-size: 14px; opacity: 0.8; margin-top: 10px;">Error: ${error.message}</p>
+            <a href="/" style="color: white; text-decoration: underline; margin-top: 10px; display: inline-block;">Return to Search</a>
+          </div>
+        `;
+        errorState.style.display = 'block';
+      }
+    }
+
+    // Render profile
+    function renderProfile(c) {
+      // Update breadcrumb
+      document.getElementById('breadcrumbName').textContent = c.name || c.username;
+
+      // Avatar
+      const avatar = c.avatar || '/static/no-image.png';
+      const avatarEl = document.getElementById('profileAvatar');
+      avatarEl.src = proxyImg(avatar, 350, 467);
+      avatarEl.alt = `${c.name || c.username} avatar`;
+      
+      // Story indicator
+      const hasStory = c.stories || c.stories_preview;
+      if (hasStory) {
+        avatarEl.parentElement.classList.add('story-indicator', 'has-story');
+        avatarEl.parentElement.style.cursor = 'pointer';
+        avatarEl.parentElement.title = 'View Story';
+        
+        // Add story badge
+        const badge = document.createElement('div');
+        badge.className = 'story-badge';
+        badge.innerHTML = '<i class="fas fa-play"></i>';
+        avatarEl.parentElement.appendChild(badge);
+        
+        // Add click handler
+        avatarEl.parentElement.addEventListener('click', () => {
+          openStoryModal(c);
+        });
+      }
+
+      // OnlyFans link
+      document.getElementById('onlyfansLink').href = `https://onlyfans.com/${c.username}`;
+
+      // Header info
+      document.getElementById('profileName').textContent = (c.name || c.username) + ' OnlyFans profile';
+      document.getElementById('profileUsername').textContent = '@' + c.username;
+      // Handle both camelCase and lowercase DB fields for dates
+      const joinedRaw = c.firstPublishedPostDate || c.firstpublishedpostdate || c.joinDate || c.joindate;
+      document.getElementById('joinDate').textContent = formatDate(joinedRaw);
+      
+      const lastSeenRaw = c.lastSeen || c.lastseen;
+      if (lastSeenRaw) {
+        document.getElementById('lastSeen').textContent = formatDate(lastSeenRaw);
+        document.getElementById('lastSeenItem').style.display = 'flex';
+      }
+
+      if (c.isVerified || c.isverified) {
+        document.getElementById('verifiedBadge').style.display = 'block';
+      }
+
+      if (c.location) {
+        document.getElementById('location').textContent = c.location;
+        document.getElementById('locationContainer').style.display = 'block';
+      }
+
+      // Content Stats
+      const contentStats = [
+        { icon: 'fa-image', label: 'Photos', value: formatNumber(c.photoscount) },
+        { icon: 'fa-video', label: 'Videos', value: formatNumber(c.videoscount) },
+        { icon: 'fa-file-alt', label: 'Posts', value: formatNumber(c.postscount) },
+        { icon: 'fa-archive', label: 'Archived Posts', value: formatNumber(c.archivedpostscount) },
+        { icon: 'fa-broadcast-tower', label: 'Finished Streams', value: formatNumber(c.finishedstreamscount) },
+        { icon: 'fa-music', label: 'Audios', value: formatNumber(c.audioscount) }
+      ];
+
+      document.getElementById('contentStats').innerHTML = contentStats.map(stat => `
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <div class="stat-card-icon">
+              <i class="fas ${stat.icon}"></i>
+            </div>
+          </div>
+          <div class="stat-card-label">${stat.label}</div>
+          <div class="stat-card-value">${stat.value}</div>
+        </div>
+      `).join('');
+
+      // Engagement Stats
+      const engagementStats = [
+        { icon: 'fa-users', label: 'Subscribers', value: c.showsubscriberscount ? formatNumber(c.subscriberscount) : 'Hidden' },
+        { icon: 'fa-heart', label: 'Likes', value: formatNumber(c.favoritedcount) }
+      ];
+
+      // Add earnings if can earn
+      if (c.canearn) {
+        engagementStats.push({ icon: 'fa-dollar-sign', label: 'Can Earn', value: 'Yes' });
+      }
+
+      document.getElementById('engagementStats').innerHTML = engagementStats.map(stat => `
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <div class="stat-card-icon">
+              <i class="fas ${stat.icon}"></i>
+            </div>
+          </div>
+          <div class="stat-card-label">${stat.label}</div>
+          <div class="stat-card-value">${stat.value}</div>
+        </div>
+      `).join('');
+
+      // Pricing
+      const prices = [];
+      // Accept both camelCase and lowercase, and include 0 (Free)
+      const subPriceRaw = (c.subscribePrice !== undefined && c.subscribePrice !== null) ? c.subscribePrice : c.subscribeprice;
+      if (subPriceRaw !== null && subPriceRaw !== undefined) {
+        prices.push({
+          label: 'Monthly Subscription',
+          value: formatPrice(subPriceRaw),
+          duration: 'per month'
+        });
+      }
+
+      // Promotions
+      if (c.promotion1_price) {
+        prices.push({
+          label: 'Promotion Offer',
+          value: formatPrice(c.promotion1_price),
+          discount: c.promotion1_discount ? `${c.promotion1_discount}% OFF` : null
+        });
+      }
+
+      if (prices.length > 0) {
+        document.getElementById('pricingGrid').innerHTML = prices.map(p => `
+          <div class="price-card">
+            <div class="price-card-label">${p.label}</div>
+            <div class="price-card-value">${p.value}</div>
+            ${p.duration ? `<div class="price-card-duration">${p.duration}</div>` : ''}
+            ${p.discount ? `<div class="price-card-discount">${p.discount}</div>` : ''}
+          </div>
+        `).join('');
+      }
+
+      // Bundles
+      const bundles = [];
+      if (c.bundle1_price) {
+        bundles.push({
+          duration: c.bundle1_duration + ' months',
+          price: formatPrice(c.bundle1_price),
+          discount: c.bundle1_discount ? `${c.bundle1_discount}% OFF` : null
+        });
+      }
+      if (c.bundle2_price) {
+        bundles.push({
+          duration: c.bundle2_duration + ' months',
+          price: formatPrice(c.bundle2_price),
+          discount: c.bundle2_discount ? `${c.bundle2_discount}% OFF` : null
+        });
+      }
+      if (c.bundle3_price) {
+        bundles.push({
+          duration: c.bundle3_duration + ' months',
+          price: formatPrice(c.bundle3_price),
+          discount: c.bundle3_discount ? `${c.bundle3_discount}% OFF` : null
+        });
+      }
+
+      if (bundles.length > 0) {
+        document.getElementById('bundlesSection').style.display = 'block';
+        document.getElementById('bundlesGrid').innerHTML = bundles.map(b => `
+          <div class="price-card">
+            <div class="price-card-label">Bundle Deal</div>
+            <div class="price-card-value">${b.price}</div>
+            <div class="price-card-duration">${b.duration}</div>
+            ${b.discount ? `<div class="price-card-discount">${b.discount}</div>` : ''}
+          </div>
+        `).join('');
+      }
+    }
+
+    // Story modal functions
+    function openStoryModal(creator) {
+      const storyUrl = creator.stories || creator.stories_preview;
+      if (!storyUrl) return;
+      
+      // Create modal if not exists
+      let modal = document.getElementById('storyModal');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'storyModal';
+        modal.className = 'story-modal';
+        modal.innerHTML = `
+          <div class="story-content">
+            <div class="story-close" onclick="closeStoryModal()">
+              <i class="fas fa-times"></i>
+            </div>
+            <div class="story-header">
+              <img class="story-header-avatar" src="" alt="Avatar">
+              <div class="story-header-info"></div>
+            </div>
+            <video class="story-video" id="storyVideo" controls autoplay playsinline>
+              <source src="" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <div class="story-controls">
+              <div class="story-btn" onclick="document.getElementById('storyVideo').currentTime = 0">
+                <i class="fas fa-redo"></i>
+              </div>
+              <div class="story-btn" onclick="toggleStoryPlay()">
+                <i class="fas fa-pause" id="playPauseIcon"></i>
+              </div>
+              <div class="story-btn" onclick="toggleStoryMute()">
+                <i class="fas fa-volume-up" id="muteIcon"></i>
+              </div>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(modal);
+        
+        // Close on backdrop click
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) closeStoryModal();
+        });
+        
+        // ESC key to close
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeStoryModal();
+          }
+        });
+      }
+      
+      // Update modal content
+      const headerAvatar = modal.querySelector('.story-header-avatar');
+      const headerInfo = modal.querySelector('.story-header-info');
+      const video = document.getElementById('storyVideo');
+      const source = video.querySelector('source');
+      
+      headerAvatar.src = proxyImg(creator.avatar || '/static/no-image.png', 80, 80);
+      headerInfo.textContent = creator.name || creator.username;
+      source.src = storyUrl;
+      video.load();
+      
+      // Show modal
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      
+      // Update play/pause icon based on video state
+      video.addEventListener('play', () => {
+        document.getElementById('playPauseIcon').className = 'fas fa-pause';
+      });
+      video.addEventListener('pause', () => {
+        document.getElementById('playPauseIcon').className = 'fas fa-play';
+      });
+    }
+    
+    window.closeStoryModal = function() {
+      const modal = document.getElementById('storyModal');
+      const video = document.getElementById('storyVideo');
+      if (modal) {
+        modal.classList.remove('active');
+        if (video) video.pause();
+        document.body.style.overflow = '';
+      }
+    };
+    
+    window.toggleStoryPlay = function() {
+      const video = document.getElementById('storyVideo');
+      if (video.paused) {
+        video.play();
+      } else {
+        video.pause();
+      }
+    };
+    
+    window.toggleStoryMute = function() {
+      const video = document.getElementById('storyVideo');
+      const icon = document.getElementById('muteIcon');
+      video.muted = !video.muted;
+      icon.className = video.muted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
+    };
+
+    // Load on page ready
+    // Skip if SSR already populated the page (DOMContentLoaded ensures SSR script ran first)
+    if (!window.__CREATOR_SSR__ || !window.__SSR_USERNAME__) {
+      loadCreatorProfile().then(() => {
+        // Load similar creators after profile loads
+        loadSimilarCreators();
+      });
+    } else {
+      console.log('SSR data detected, skipping client-side load. Storing for similarity:', window.__CREATOR_SSR__);
+      window.currentCreator = window.__CREATOR_SSR__;
+      // Load similar creators after SSR data is set
+      setTimeout(() => loadSimilarCreators(), 100);
+    }
+    
+    // Favorites helper functions
+    function getFavoritesSet() {
+      try {
+        const saved = localStorage.getItem('favorites');
+        return saved ? new Set(JSON.parse(saved)) : new Set();
+      } catch (e) {
+        console.error('Failed to parse favorites:', e);
+        return new Set();
+      }
+    }
+
+    function saveFavorites(favSet) {
+      try {
+        localStorage.setItem('favorites', JSON.stringify([...favSet]));
+      } catch (e) {
+        console.error('Failed to save favorites:', e);
+      }
+    }
+
+    window.toggleFavorite = function(username, btn) {
+      if (!username || username === '—') return;
+      
+      const favSet = getFavoritesSet();
+      const isActive = favSet.has(username);
+      
+      if (isActive) {
+        favSet.delete(username);
+        btn.classList.remove('active');
+        btn.querySelector('span').textContent = '♡';
+      } else {
+        favSet.add(username);
+        btn.classList.add('active');
+        btn.querySelector('span').textContent = '♥';
+      }
+      
+      saveFavorites(favSet);
+      
+      // Update wishlist badge in sticky navigation
+      if (typeof window.fpUpdateWishlistBadge === 'function') {
+        window.fpUpdateWishlistBadge();
+      } else if (typeof window.updateWishlistBadge === 'function') {
+        window.updateWishlistBadge();
+      }
+    };
+    
+    // Load similar creators with smart similarity scoring
+  async function loadSimilarCreators(retryCount = 0) {
+      try {
+        // Get current creator's full profile first
+        const currentCreator = window.currentCreator; // Set when profile loads
+        if (!currentCreator) {
+          console.warn('Current creator not loaded yet, retry count:', retryCount);
+          if (retryCount < 5) {
+            // Retry after 200ms, up to 5 times
+            setTimeout(() => loadSimilarCreators(retryCount + 1), 200);
+          }
+          return;
+        }
+        
+        // Fetch from two random pages to get more variety (pages 1-5, 100 creators each)
+        const p1 = Math.floor(Math.random() * 5) + 1;
+        let p2 = Math.floor(Math.random() * 5) + 1;
+        if (p2 === p1) p2 = ((p2) % 5) + 1; // ensure distinct pages
+        // Match verification filter to the current creator when possible for better relevance
+        const verifiedFilter = (currentCreator.isVerified || currentCreator.isverified) ? 'true' : '';
+        const urls = [
+          `/api/search?${verifiedFilter ? 'verified=true&' : ''}page=${p1}&page_size=100`,
+          `/api/search?${verifiedFilter ? 'verified=true&' : ''}page=${p2}&page_size=100`
+        ];
+        const responses = await Promise.all(urls.map(u => fetch(u).then(r => r.json()).catch(() => [])));
+        // Merge and dedupe by username AND id
+        const merged = [...responses[0], ...responses[1]];
+        const seenUser = new Set();
+        const seenId = new Set();
+        const data = merged.filter(x => {
+          const uname = (x.username || '').trim().toLowerCase();
+          const idStr = x.id != null ? String(x.id) : '';
+          if (!uname || seenUser.has(uname) || (idStr && seenId.has(idStr))) return false;
+          seenUser.add(uname);
+          if (idStr) seenId.add(idStr);
+          return true;
+        });
+        
+        console.log('🎯 Current creator to exclude:', currentCreator.username, '(ID:', currentCreator.id, ')');
+        console.log('📄 Fetching from pages:', p1, 'and', p2);
+        console.log('📦 Total candidates before filter:', data.length);
+        console.log('🔍 Sample usernames in pool:', data.slice(0, 30).map(c => c.username).join(', '));
+        
+        // Filter out current creator by username AND id (case-insensitive)
+        const candidates = data.filter(c => {
+          const currentUsernameLower = (currentCreator.username || '').trim().toLowerCase();
+          const candidateUsernameLower = (c.username || '').trim().toLowerCase();
+          const isCurrentByUsername = candidateUsernameLower === currentUsernameLower;
+          const isCurrentById = (c.id != null && currentCreator.id != null) && (String(c.id) === String(currentCreator.id));
+          
+          if (isCurrentByUsername || isCurrentById) {
+            console.log('🚫 Filtering out current creator:', c.username, c.id);
+          }
+          return !isCurrentByUsername && !isCurrentById;
+        });
+        
+        // Score each candidate by similarity
+        const scored = candidates.map(candidate => ({
+          ...candidate,
+          similarityScore: calculateSimilarityScore(currentCreator, candidate)
+        }));
+        
+        console.log('Candidates after filter:', candidates.length);
+        
+        // Sort by score (highest first), final safety filter
+        scored.sort((a, b) => b.similarityScore - a.similarityScore);
+        const finalFiltered = scored.filter(s => {
+          const cu = (currentCreator.username || '').trim().toLowerCase();
+          const su = (s.username || '').trim().toLowerCase();
+          const sameUser = su === cu;
+          const sameId = (s.id != null && currentCreator.id != null) && (String(s.id) === String(currentCreator.id));
+          return !sameUser && !sameId;
+        });
+        // Diversity-aware selection: greedily pick from top 60 while capping per tier & price bucket
+        const topPool = finalFiltered.slice(0, 60);
+        const priceBucket = (p) => {
+          const val = parseFloat(p || 0);
+          if (!isFinite(val) || val <= 0) return 'free';
+          if (val <= 5) return '0-5';
+          if (val <= 10) return '5-10';
+          if (val <= 20) return '10-20';
+          if (val <= 30) return '20-30';
+          return '30+';
+        };
+        const tierFor = (favs) => {
+          if (favs > 100000) return 'mega';
+          if (favs > 50000) return 'huge';
+          if (favs > 10000) return 'large';
+          if (favs > 5000) return 'medium';
+          if (favs > 1000) return 'small';
+          return 'micro';
+        };
+        const caps = { price: 3, tier: 3, verified: 5 };
+        const priceCounts = new Map();
+        const tierCounts = new Map();
+        let verifiedCount = 0;
+        const chosen = [];
+        for (const s of topPool) {
+          if (chosen.length >= 8) break;
+          const pb = priceBucket(s.subscribePrice ?? s.subscribeprice);
+          const tr = tierFor(parseInt(s.favoritedCount ?? s.favoritedcount ?? 0));
+          const ver = !!(s.isVerified || s.isverified);
+          const pc = priceCounts.get(pb) || 0;
+          const tc = tierCounts.get(tr) || 0;
+          if (pc >= caps.price || tc >= caps.tier || (ver && verifiedCount >= caps.verified)) continue;
+          chosen.push(s);
+          priceCounts.set(pb, pc + 1);
+          tierCounts.set(tr, tc + 1);
+          if (ver) verifiedCount++;
+        }
+        // If not enough picked (rare), fill remaining with weighted sampling from remaining top pool
+        if (chosen.length < 8) {
+          const remaining = topPool.filter(x => !chosen.includes(x));
+          const extras = weightedSample(remaining, 8 - chosen.length, x => Math.max(1, x.similarityScore));
+          chosen.push(...extras);
+        }
+        const similar = chosen;
+        
+        console.log('Top 8 similar creators:', similar.map(s => `${s.username} (score: ${s.similarityScore})`));
+        
+        if (similar.length > 0) {
+          renderSimilarCreators(similar);
+        }
+      } catch (error) {
+        console.error('Error loading similar creators:', error);
+      }
+    }
+    
+    // Tokenization helpers for text similarity
+    const STOPWORDS = new Set(['the','and','for','you','your','with','from','that','this','have','has','are','was','were','but','not','just','onlyfans','page','account','free']);
+    function tokenize(str) {
+      if (!str) return [];
+      return String(str)
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, ' ')
+        .split(/\s+/)
+        .filter(w => w.length >= 3 && !STOPWORDS.has(w));
+    }
+    function jaccard(aTokens, bTokens) {
+      const a = new Set(aTokens);
+      const b = new Set(bTokens);
+      if (a.size === 0 || b.size === 0) return 0;
+      let inter = 0;
+      for (const t of a) if (b.has(t)) inter++;
+      const uni = a.size + b.size - inter;
+      return inter / (uni || 1);
+    }
+
+    // Calculate similarity score based on multiple factors (0-120+ scale)
+    function calculateSimilarityScore(current, candidate) {
+      let score = 0;
+      
+      // 1. Price similarity (40 points max)
+      const currentPrice = parseFloat(current.subscribePrice || current.subscribeprice || 0);
+      const candidatePrice = parseFloat(candidate.subscribePrice || candidate.subscribeprice || 0);
+      const priceDiff = Math.abs(currentPrice - candidatePrice);
+      
+      if (priceDiff === 0) {
+        score += 40; // Exact same price tier
+      } else if (priceDiff <= 5) {
+        score += 30; // Very similar price
+      } else if (priceDiff <= 10) {
+        score += 20; // Somewhat similar
+      } else if (priceDiff <= 20) {
+        score += 10; // Same ballpark
+      }
+      
+      // 2. Verification status match (20 points)
+      const currentVerified = current.isVerified || current.isverified || false;
+      const candidateVerified = candidate.isVerified || candidate.isverified || false;
+      if (currentVerified === candidateVerified) {
+        score += 20;
+      }
+      
+      // 3. Engagement level similarity (30 points max)
+      const currentFavorites = parseInt(current.favoritedCount || current.favoritedcount || 0);
+      const candidateFavorites = parseInt(candidate.favoritedCount || candidate.favoritedcount || 0);
+      
+      // Categorize into tiers
+      const getTier = (favs) => {
+        if (favs > 100000) return 'mega';
+        if (favs > 50000) return 'huge';
+        if (favs > 10000) return 'large';
+        if (favs > 5000) return 'medium';
+        if (favs > 1000) return 'small';
+        return 'micro';
+      };
+      
+      const currentTier = getTier(currentFavorites);
+      const candidateTier = getTier(candidateFavorites);
+      
+      if (currentTier === candidateTier) {
+        score += 30; // Same engagement tier
+      } else {
+        // Adjacent tiers get partial points
+        const tiers = ['micro', 'small', 'medium', 'large', 'huge', 'mega'];
+        const currentIdx = tiers.indexOf(currentTier);
+        const candidateIdx = tiers.indexOf(candidateTier);
+        const tierDiff = Math.abs(currentIdx - candidateIdx);
+        if (tierDiff === 1) score += 20;
+        else if (tierDiff === 2) score += 10;
+      }
+      
+      // 4. Content volume similarity (10 points max)
+      const currentPosts = parseInt(current.postsCount || current.postscount || 0);
+      const candidatePosts = parseInt(candidate.postsCount || candidate.postscount || 0);
+      
+      const getContentLevel = (posts) => {
+        if (posts > 1000) return 'prolific';
+        if (posts > 500) return 'active';
+        if (posts > 100) return 'moderate';
+        return 'starter';
+      };
+      
+      if (getContentLevel(currentPosts) === getContentLevel(candidatePosts)) {
+        score += 10;
+      }
+      
+      // 5. Text similarity based on name/username/about (up to 35)
+      const curText = [current.name, current.username, current.about].filter(Boolean).join(' ');
+      const candText = [candidate.name, candidate.username, candidate.about].filter(Boolean).join(' ');
+      const textSim = jaccard(tokenize(curText), tokenize(candText)); // 0..1
+      score += Math.min(35, Math.round(textSim * 35));
+
+      // 6. Add random factor for variety (0-10 points)
+      score += Math.random() * 10;
+      
+      return score;
+    }
+
+    // Weighted sampling without replacement
+    function weightedSample(items, k, getWeight) {
+      const arr = [...items];
+      const out = [];
+      for (let i = 0; i < k && arr.length > 0; i++) {
+        const weights = arr.map(getWeight);
+        const total = weights.reduce((a,b) => a + b, 0);
+        let r = Math.random() * (total || 1);
+        let idx = 0;
+        for (; idx < arr.length; idx++) {
+          r -= weights[idx];
+          if (r <= 0) break;
+        }
+        const chosen = arr.splice(Math.min(idx, arr.length - 1), 1)[0];
+        out.push(chosen);
+      }
+      return out;
+    }
+    
+    function renderSimilarCreators(creators) {
+      const container = document.getElementById('similarCreatorsGrid');
+      if (!container) return;
+      
+      // Extra safety: Filter out current creator again at render time (case-insensitive)
+      const currentCreator = window.currentCreator;
+      const filtered = currentCreator 
+        ? creators.filter(c => {
+            const currentUsernameLower = (currentCreator.username || '').toLowerCase();
+            const candidateUsernameLower = (c.username || '').toLowerCase();
+            const isDifferent = candidateUsernameLower !== currentUsernameLower && c.id !== currentCreator.id;
+            if (!isDifferent) {
+              console.log('🚫 Render filter caught:', c.username, c.id);
+            }
+            return isDifferent;
+          })
+        : creators;
+      
+      console.log('✅ Rendering similar creators:', filtered.length, 'Current creator:', currentCreator?.username);
+      
+      container.innerHTML = filtered.map((item, idx) => {
+        const img = item.avatar || item.avatar_c144 || "";
+        const imgSrc = img && img.startsWith("http") ? img : "/static/no-image.png";
+        const responsive = buildResponsiveSources(imgSrc);
+        
+  const name = item.name || "Unknown";
+  const username = item.username || "—";
+        const priceText = (item.subscribePrice && !isNaN(item.subscribePrice))
+          ? `$${parseFloat(item.subscribePrice).toFixed(2)}`
+          : "FREE";
+        const verifiedIcon = item.isVerified ? "✅ " : "";
+  const profileUrl = username !== "—" ? `https://onlyfans.com/${encodeURIComponent(username)}` : "#";
+  // Removed onlyfansUrl and Visit OnlyFans link
+
+        const safeUsername = String(username).replace(/'/g, "\\'");
+        const favSet = getFavoritesSet();
+        const favActive = username !== "—" && favSet.has(username);
+        const favChar = favActive ? '♥' : '♡';
+        
+        return `
+          <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+            <div class="card h-100">
+              <button class="favorite-btn ${favActive ? 'active' : ''}" data-username="${safeUsername}">
+                <span>${favChar}</span>
+              </button>
+              <img src="${responsive.src}" srcset="${responsive.srcset}" sizes="${responsive.sizes}" alt="${name}" width="270" height="360" style="aspect-ratio: 3 / 4;" loading="lazy" fetchpriority="low" decoding="async" referrerpolicy="no-referrer" onerror="if(this.src!='/static/no-image.png'){this.removeAttribute('srcset'); this.removeAttribute('sizes'); this.src='${imgSrc}';}">
+              <div class="card-body">
+                <h5>${verifiedIcon}${name}</h5>
+                <p class="username">@${username}</p>
+                ${priceText === "FREE" 
+                  ? `<p class="price-free">${priceText}</p>` 
+                  : `<p class="price-tag">${priceText}</p>`}
+                <a href="${profileUrl}" class="view-profile-btn">View Profile</a>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+      
+      // Show the section
+      document.getElementById('similarCreatorsSection').style.display = 'block';
+    }
+
+    // Event delegation for favorite buttons in Similar Creators section
+    document.addEventListener('click', function(e) {
+      const btn = e.target.closest('.favorite-btn');
+      if (!btn) return;
+      
+      // Only handle buttons in Similar Creators section
+      if (!btn.closest('#similarCreatorsSection')) return;
+      
+      const username = btn.getAttribute('data-username');
+      if (!username || username === '—') return;
+      
+      e.preventDefault();
+      e.stopPropagation();
+      
+      window.toggleFavorite(username, btn);
+    }, true);
+  </script>
+  <!-- Back to top button -->
+  <button id="backToTop" aria-label="Back to top" title="Back to top">↑</button>
+  <script>
+    (function(){
+      const backToTopBtn = document.getElementById('backToTop');
+      window.addEventListener('scroll', () => {
+        if (!backToTopBtn) return;
+        if (window.scrollY > 600) backToTopBtn.classList.add('visible');
+        else backToTopBtn.classList.remove('visible');
+      });
+      if (backToTopBtn) {
+        backToTopBtn.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+    })();
+  </script>
+
+  <!-- Header Interaction Scripts -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    console.log('🎯 Header scripts DOMContentLoaded fired');
+    // ============================================
+    // DARK MODE TOGGLE
+    // ============================================
+    const themeToggle = document.getElementById('themeToggle');
+    console.log('🎨 Theme toggle element:', themeToggle);
+    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+    
+    // Get saved theme or use system preference
+    function getCurrentTheme() {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) return savedTheme;
+      // Default to light mode
+      return 'light';
+    }
+    
+    // Apply theme
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      const icon = themeToggle.querySelector('i');
+      if (theme === 'dark') {
+        icon.className = 'fas fa-sun';
+        themeToggle.setAttribute('aria-label', 'Switch to light mode');
+      } else {
+        icon.className = 'fas fa-moon';
+        themeToggle.setAttribute('aria-label', 'Switch to dark mode');
+      }
+    }
+    
+    // Toggle theme
+    function toggleTheme() {
+      const currentTheme = getCurrentTheme();
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('theme', newTheme);
+      applyTheme(newTheme);
+    }
+    
+    // Initialize theme on load
+    applyTheme(getCurrentTheme());
+    
+    // Listen for toggle clicks
+    if (themeToggle) {
+      console.log('✅ Theme toggle found, adding click listener');
+      themeToggle.addEventListener('click', toggleTheme);
+    } else {
+      console.error('❌ Theme toggle NOT found in DOM');
+    }
+    
+    // Listen for system theme changes
+    prefersDarkScheme.addEventListener('change', (e) => {
+      if (!localStorage.getItem('theme')) {
+        applyTheme(e.matches ? 'dark' : 'light');
+      }
+    });
+
+    // ============================================
+    // LANGUAGE TOGGLE FUNCTIONALITY
+    // ============================================
+    function toggleLanguage() {
+      const newLang = i18n.getCurrentLanguage() === 'en' ? 'es' : 'en';
+      i18n.setLanguage(newLang);
+      i18n.applyTranslations();
+      updateLanguageIndicator(newLang);
+      
+      const currentPath = window.location.pathname;
+      if (newLang === 'es') {
+        if (!currentPath.startsWith('/es/')) {
+          window.location.href = '/es' + (currentPath === '/' ? '/index.html' : currentPath);
+        }
+      } else {
+        if (currentPath.startsWith('/es/')) {
+          const enPath = currentPath.replace('/es', '');
+          window.location.href = enPath === '' ? '/' : enPath;
+        }
+      }
+    }
+    
+    function updateLanguageIndicator(lang) {
+      const indicator = document.getElementById('langIndicator');
+      if (indicator) {
+        indicator.textContent = lang === 'es' ? 'ES' : 'EN';
+      }
+    }
+    
+    // Initialize language indicator on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      updateLanguageIndicator(i18n.getCurrentLanguage());
+    });
+
+    // ============================================
+    // SAFE SEARCH FUNCTIONALITY
+    // ============================================
+    const safeSearchToggle = document.getElementById('safeSearchToggle');
+    console.log('🔍 Safe search toggle element:', safeSearchToggle);
+    const safeSearchModal = document.getElementById('safeSearchModal');
+    const enableSafeSearchBtn = document.getElementById('enableSafeSearch');
+    const dismissSafeSearchBtn = document.getElementById('dismissSafeSearch');
+    
+    // Get saved Safe Search preference (default OFF for new users)
+    function getSafeSearchState() {
+      const saved = localStorage.getItem('safeSearch');
+      return saved === 'true'; // Returns false by default
+    }
+    
+    // Check if user has seen the modal before
+    function hasSeenSafeSearchModal() {
+      return localStorage.getItem('safeSearchModalShown') === 'true';
+    }
+    
+    // Apply Safe Search state to UI
+    function applySafeSearch(enabled) {
+      if (enabled) {
+        document.body.classList.add('safe-search-active');
+        safeSearchToggle.classList.add('active');
+        safeSearchToggle.querySelector('i').className = 'fas fa-eye-slash';
+        safeSearchToggle.setAttribute('aria-label', 'Disable Safe Search (show images)');
+        safeSearchToggle.setAttribute('title', 'Safe Search: ON (images blurred)');
+      } else {
+        document.body.classList.remove('safe-search-active');
+        safeSearchToggle.classList.remove('active');
+        safeSearchToggle.querySelector('i').className = 'fas fa-eye';
+        safeSearchToggle.setAttribute('aria-label', 'Enable Safe Search (blur images)');
+        safeSearchToggle.setAttribute('title', 'Safe Search: OFF (images visible)');
+      }
+      localStorage.setItem('safeSearch', enabled.toString());
+    }
+    
+    // Toggle Safe Search
+    function toggleSafeSearch() {
+      const current = getSafeSearchState();
+      applySafeSearch(!current);
+    }
+    
+    // Initialize Safe Search on page load
+    function initSafeSearch() {
+      // Apply saved preference
+      const savedState = getSafeSearchState();
+      applySafeSearch(savedState);
+      
+      // Check URL parameter for forced state (?safe=1)
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('safe')) {
+        const forcedState = urlParams.get('safe') === '1';
+        applySafeSearch(forcedState);
+      }
+    }
+    
+    // Event listeners
+    if (safeSearchToggle) {
+      console.log('✅ Safe search toggle found, adding click listener');
+      safeSearchToggle.addEventListener('click', toggleSafeSearch);
+    } else {
+      console.error('❌ Safe search toggle NOT found in DOM');
+    }
+    
+    if (enableSafeSearchBtn) {
+      enableSafeSearchBtn.addEventListener('click', () => {
+        applySafeSearch(true);
+        if (safeSearchModal) {
+          safeSearchModal.classList.remove('show');
+          document.body.style.overflow = '';
+        }
+      });
+    }
+    
+    if (dismissSafeSearchBtn) {
+      dismissSafeSearchBtn.addEventListener('click', () => {
+        applySafeSearch(false);
+        if (safeSearchModal) {
+          safeSearchModal.classList.remove('show');
+          document.body.style.overflow = '';
+        }
+      });
+    }
+    
+    // Close modal on overlay click
+    if (safeSearchModal) {
+      safeSearchModal.addEventListener('click', (e) => {
+        if (e.target === safeSearchModal) {
+          applySafeSearch(false);
+          safeSearchModal.classList.remove('show');
+          document.body.style.overflow = '';
+        }
+      });
+    }
+    
+    // Keyboard shortcut: Alt+S to toggle
+    document.addEventListener('keydown', (e) => {
+      if (e.altKey && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        toggleSafeSearch();
+      }
+      
+      // Escape key closes modal
+      if (e.key === 'Escape' && safeSearchModal && safeSearchModal.classList.contains('show')) {
+        applySafeSearch(false);
+        safeSearchModal.classList.remove('show');
+        document.body.style.overflow = '';
+      }
+    });
+    
+    // Initialize Safe Search
+    initSafeSearch();
+
+    /* ============================================
+       MOBILE SEARCH MODAL
+       ============================================ */
+    const mobileSearchModal = document.getElementById('mobileSearchModal');
+    const mobileSearchTrigger = document.getElementById('mobileSearchTrigger');
+    const mobileSearchBack = document.getElementById('mobileSearchBack');
+    const mobileSearchInput = document.getElementById('mobileSearchInput');
+    const mobileSearchSuggestions = document.getElementById('mobileSearchSuggestions');
+
+    // Popular searches
+    const popularSearches = ['milf', 'asian', 'big tits', 'trans', 'mature', 'latina', 'big ass', 'bbw'];
+
+    // Populate suggestions
+    function populateMobileSuggestions() {
+      if (mobileSearchSuggestions) {
+        const suggestionsHTML = popularSearches.map(term => 
+          `<a href="/?q=${encodeURIComponent(term)}" class="mobile-search-suggestion">
+            <i class="fas fa-fire"></i>
+            <span>${term}</span>
+          </a>`
+        ).join('');
+        mobileSearchSuggestions.innerHTML = suggestionsHTML;
+      }
+    }
+
+    // Open mobile search
+    function openMobileSearch() {
+      if (mobileSearchModal) {
+        mobileSearchModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => {
+          if (mobileSearchInput) mobileSearchInput.focus();
+        }, 100);
+      }
+    }
+
+    // Close mobile search
+    function closeMobileSearch() {
+      if (mobileSearchModal) {
+        mobileSearchModal.classList.remove('active');
+        document.body.style.overflow = '';
+        if (mobileSearchInput) mobileSearchInput.value = '';
+      }
+    }
+
+    // Event listeners
+    if (mobileSearchTrigger) {
+      mobileSearchTrigger.addEventListener('click', openMobileSearch);
+    }
+
+    if (mobileSearchBack) {
+      mobileSearchBack.addEventListener('click', closeMobileSearch);
+    }
+
+    // Handle search submission
+    if (mobileSearchInput) {
+      mobileSearchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          const query = mobileSearchInput.value.trim();
+          if (query) {
+            window.location.href = `/?q=${encodeURIComponent(query)}`;
+          }
+        }
+      });
+    }
+
+    // Initialize suggestions
+    populateMobileSuggestions();
+
+    // ============================================
+    // HEADER FUNCTIONALITY
+    // ============================================
+
+    // Add scrolled class to header
+    window.addEventListener('scroll', () => {
+      const header = document.getElementById('mainHeader');
+      if (header) {
+        if (window.pageYOffset > 50) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+      }
+    });
+
+    // Desktop Categories dropdown
+    const catToggle = document.getElementById('categoriesToggle');
+    const catMenuEl = document.getElementById('categoriesMenu');
+    if (catToggle && catMenuEl) {
+      catToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = catMenuEl.classList.toggle('open');
+        catToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        catMenuEl.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+      });
+      document.addEventListener('click', (e) => {
+        if (!catMenuEl.classList.contains('open')) return;
+        if (!catMenuEl.contains(e.target) && e.target !== catToggle) {
+          catMenuEl.classList.remove('open');
+          catToggle.setAttribute('aria-expanded', 'false');
+          catMenuEl.setAttribute('aria-hidden', 'true');
+        }
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          catMenuEl.classList.remove('open');
+          catToggle.setAttribute('aria-expanded', 'false');
+          catMenuEl.setAttribute('aria-hidden', 'true');
+        }
+      });
+    }
+
+    // Mobile drawer
+    const mobileToggle = document.getElementById('mobileMenuToggle');
+    const drawer = document.getElementById('mobileDrawer');
+    const overlay = document.getElementById('drawerOverlay');
+    const drawerClose = document.getElementById('drawerClose');
+    function openDrawer(){
+      if (!drawer || !overlay) return;
+      drawer.classList.add('open');
+      overlay.classList.add('open');
+      // Keep aria-hidden only on the overlay to avoid hiding focused drawer content
+      overlay.setAttribute('aria-hidden','false');
+      document.body.style.overflow='hidden';
+    }
+    function closeDrawer(){
+      if (!drawer || !overlay) return;
+      drawer.classList.remove('open');
+      overlay.classList.remove('open');
+      overlay.setAttribute('aria-hidden','true');
+      document.body.style.overflow='';
+    }
+    if (mobileToggle){ mobileToggle.addEventListener('click', (e)=>{ e.preventDefault(); openDrawer(); }); }
+    if (overlay){ overlay.addEventListener('click', closeDrawer); }
+    if (drawerClose){ drawerClose.addEventListener('click', closeDrawer); }
+    document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeDrawer(); });
+
+    // Mobile drawer categories accordion
+    // Handler is attached earlier in the page (with inline max-height/opacity updates).
+    // Avoid double-binding here to prevent toggle flicker.
+
+    // Header search submit (redirect to homepage with query)
+    const headerSearch = document.getElementById('headerSearch');
+    const headerSearchBtn = document.getElementById('headerSearchBtn');
+    if (headerSearchBtn) {
+      headerSearchBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const query = headerSearch ? headerSearch.value.trim() : '';
+        if (query) {
+          window.location.href = `/?q=${encodeURIComponent(query)}`;
+        } else {
+          window.location.href = '/';
+        }
+      });
+    }
+    if (headerSearch) {
+      headerSearch.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          const query = headerSearch.value.trim();
+          if (query) {
+            window.location.href = `/?q=${encodeURIComponent(query)}`;
+          } else {
+            window.location.href = '/';
+          }
+        }
+      });
+    }
+    }); // End DOMContentLoaded
+  </script>
+
+  <!-- Similar Creators Section -->
+  <section id="similarCreatorsSection" style="display: none;">
+    <div class="container">
+      <h2>Similar OnlyFans Creators</h2>
+      <div id="similarCreatorsGrid" class="row">
+        <!-- Cards will be inserted here by JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="modern-footer">
+    <div class="footer-container">
+      <!-- Main Footer Content -->
+      <div class="footer-grid">
+        <!-- Column 1: Brand -->
+        <div class="footer-column footer-brand">
+          <div class="footer-logo">
+            <div class="footer-logo-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="currentColor" opacity="0.8"/>
+                <path d="M2 17L12 22L22 17V12L12 17L2 12V17Z" fill="currentColor"/>
+              </svg>
+            </div>
+            <div class="footer-logo-text">
+              <span class="footer-logo-main">FansPedia</span>
+              <span class="footer-logo-sub">Your Premium Creator Directory</span>
+            </div>
+          </div>
+          <p class="footer-description">
+            Discover and connect with verified OnlyFans creators. Updated daily with 10,000+ profiles across all categories.
+          </p>
+          <!-- Social Links -->
+          <div class="footer-social">
+            <a href="https://x.com/fanspedia" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="X (Twitter)">
+              <span class="social-icon-x" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2H21.5l-6.52 7.455L22.25 22h-7.03l-4.64-6.08L4.9 22H1.64l7.02-8.04L1.25 2h7.19l4.27 5.64L18.245 2Z"/></svg></span>
+            </a>
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://www.youtube.com/@FansPediaOfficial" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="YouTube">
+              <i class="fab fa-youtube"></i>
+            </a>
+            <a href="https://www.tiktok.com/@fanspedia" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="TikTok">
+              <i class="fab fa-tiktok"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Column 2: Popular Categories -->
+        <div class="footer-column">
+          <h3 class="footer-heading">Popular Categories</h3>
+          <ul class="footer-links">
+            <li><a href="/categories/verified">Verified Creators</a></li>
+            <li><a href="/categories/free">Free OnlyFans</a></li>
+            <li><a href="/categories/cosplay">Cosplay Models</a></li>
+            <li><a href="/categories/fitness">Fitness & Wellness</a></li>
+            <li><a href="/categories/gaming">Gaming Creators</a></li>
+            <li><a href="/categories">View All Categories</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Resources -->
+        <div class="footer-column">
+          <h3 class="footer-heading">Resources</h3>
+          <ul class="footer-links">
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Creator Guide</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">How to Subscribe</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Safety Tips</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">FAQ</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Blog</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Support</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Legal & Info -->
+        <div class="footer-column">
+          <h3 class="footer-heading">Legal & Info</h3>
+          <ul class="footer-links">
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">About Us</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Contact</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Terms of Service</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Privacy Policy</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">DMCA Policy</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Cookie Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <div class="footer-bottom-content">
+          <p class="footer-copyright">
+            © 2026 FansPedia.net - All rights reserved
+          </p>
+          <div class="footer-stats">
+            <span class="stat-badge">
+              <i class="fas fa-check-circle"></i>
+              10,000+ Verified Creators
+            </span>
+            <span class="stat-badge">
+              <i class="fas fa-sync-alt"></i>
+              Updated Daily
+            </span>
+          </div>
+        </div>
+        <p class="footer-disclaimer">
+          This website is an independent directory and is not affiliated with OnlyFans. All trademarks belong to their respective owners.
+        </p>
+      </div>
+    </div>
+  </footer>
+  
+  <script>
+    (function(){
+      // Initialize on load
+      document.addEventListener('DOMContentLoaded', function(){
+        // Event delegation to catch clicks even if header is re-rendered
+        document.addEventListener('click', function(e){
+          const themeBtn = e.target.closest && e.target.closest('.theme-toggle');
+          if (themeBtn){ e.preventDefault(); toggleTheme(); return; }
+          const safeBtn = e.target.closest && e.target.closest('.safe-search-toggle');
+          if (safeBtn){ e.preventDefault(); toggleSafe(); return; }
+        }, true);
+      });
+    })();
+  </script>
+
+  <!-- Sticky Bottom Navigation -->
+  <nav class="sticky-bottom-nav" role="navigation" aria-label="Bottom navigation">
+    <a href="/" class="nav-item" data-nav="search">
+      <span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+      <span class="label">Search</span>
+    </a>
+    <a href="/near-me/" class="nav-item" data-nav="near">
+      <span class="icon"><i class="fa-solid fa-location-arrow"></i></span>
+      <span class="label">Near Me</span>
+    </a>
+    <a href="/?sort=best" class="nav-item" data-nav="best">
+      <span class="icon"><i class="fa-solid fa-trophy"></i></span>
+      <span class="label">Best</span>
+    </a>
+    <a href="/?sort=hot" class="nav-item" data-nav="hot">
+      <span class="icon"><i class="fa-solid fa-fire"></i></span>
+      <span class="label">Hot!</span>
+    </a>
+    <a href="/wishlist/" class="nav-item" data-nav="wishlist">
+      <span class="icon position-relative"><i class="fa-solid fa-heart"></i><span class="wishlist-count" style="display:none;position:absolute;top:-6px;right:-6px;background:#ff3b30;color:#fff;font-size:10px;font-weight:700;border-radius:10px;min-width:18px;height:18px;align-items:center;justify-content:center;padding:0 5px;border:2px solid var(--bg-secondary);box-shadow:0 2px 8px rgba(255,59,48,0.4)">0</span></span>
+      <span class="label">Wishlist</span>
+    </a>
+  </nav>
+  <style>
+    .sticky-bottom-nav{position:fixed;left:0;right:0;bottom:calc(0px + env(safe-area-inset-bottom));z-index:9999;display:flex;align-items:center;justify-content:space-between;padding:8px 16px;background:var(--bg-secondary);border-top:1px solid var(--border-color);border-left:0;border-right:0;border-bottom:0;border-radius:0;box-shadow:0 -4px 12px rgba(0,0,0,0.06)}
+    .sticky-bottom-nav .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text-primary);text-decoration:none}
+    .sticky-bottom-nav .icon{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#00AFF0 0%,#0099D6 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,175,240,0.35);color:#fff;position:relative;transition:box-shadow .35s ease, transform .3s ease}
+    .sticky-bottom-nav .nav-item:hover .icon{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,175,240,0.55)}
+    .sticky-bottom-nav .nav-item.active .icon{background:linear-gradient(135deg,#0099D6 0%,#0088C0 100%);box-shadow:0 6px 16px rgba(0,175,240,0.55)}
+    .sticky-bottom-nav .nav-item.active .icon::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:0 0 0 0 rgba(0,175,240,.55);animation:pulseGlow 3.2s ease-in-out infinite;pointer-events:none}
+    @keyframes pulseGlow{0%,65%{box-shadow:0 0 0 0 rgba(0,175,240,.55)}80%{box-shadow:0 0 0 10px rgba(0,175,240,0)}100%{box-shadow:0 0 0 0 rgba(0,175,240,0)}}
+    .sticky-bottom-nav .icon i{font-size:15px}
+    .sticky-bottom-nav .label{font-size:11px;font-weight:700;color:var(--text-primary)}
+  </style>
+  <script>
+    (function(){try{
+      var p=location.pathname;
+      document.querySelectorAll('.sticky-bottom-nav .nav-item').forEach(function(a){
+        var k=a.getAttribute('data-nav');
+        if((k==='search'&&(p==='/'||p==='/index.html'))||(k==='categories'&&p.startsWith('/categories'))){a.classList.add('active');}
+      });
+      var searchLink=document.querySelector('.sticky-bottom-nav .nav-item[data-nav="search"]');
+      if(searchLink){
+        searchLink.addEventListener('click',function(ev){
+          ev.preventDefault();
+          try{
+            var isMobile=window.matchMedia('(max-width: 768px)').matches;
+            var headerInput=document.getElementById('headerSearch')||document.querySelector('.header-search-input');
+            var headerVisible=headerInput && headerInput.offsetParent!==null;
+            if(isMobile && !headerVisible){
+              var mobileTrigger=document.getElementById('mobileSearchTrigger');
+              if(mobileTrigger){mobileTrigger.click();return;}
+            }
+            window.scrollTo({top:0,behavior:'smooth'});
+            if(headerInput && headerVisible){
+              setTimeout(function(){headerInput.focus({preventScroll:true});},220);
+            }else if(!isMobile){
+              location.href='/';
+            }
+          }catch(err){location.href='/';}
+        });
+      }
+    }catch(e){}})();
+  </script>
+  <script src="/utils/wishlist-badge.js?v=20251116-1"></script>
+</body>
+</html>

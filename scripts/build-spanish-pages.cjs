@@ -72,11 +72,24 @@ function translateHTML(html, lang = 'es') {
     // This is handled by i18n.js on client side, just mark it
   });
   
-  // Update lang attribute
-  result = result.replace(/^<html lang="[^"]*"/, `<html lang="${lang}"`);
+  // Update lang attribute (fix regex to work in multiline string)
+  result = result.replace(/<html lang="[^"]*"/, `<html lang="${lang}"`);
   
-  // Add hreflang tags before </head>
-  const hreflang = buildHreflang(path.basename(result.split('\n')[0]) || 'index.html', lang === 'es');
+  // Add hreflang tags before </head> 
+  // Determine page name from the content
+  let pageName = 'index.html';
+  if (result.includes('categories.html')) pageName = 'categories.html';
+  else if (result.includes('category.html')) pageName = 'category.html';
+  else if (result.includes('locations.html')) pageName = 'locations.html';
+  else if (result.includes('near-me.html')) pageName = 'near-me.html';
+  else if (result.includes('wishlist.html')) pageName = 'wishlist.html';
+  else if (result.includes('creator.html')) pageName = 'creator.html';
+  else if (result.includes('united-states.html')) pageName = 'united-states.html';
+  else if (result.includes('canada.html')) pageName = 'canada.html';
+  else if (result.includes('india.html')) pageName = 'india.html';
+  else if (result.includes('japan.html')) pageName = 'japan.html';
+  
+  const hreflang = buildHreflang(pageName, lang === 'es');
   result = result.replace('</head>', `  ${hreflang}\n</head>`);
   
   return result;
