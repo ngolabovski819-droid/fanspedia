@@ -129,17 +129,20 @@ function buildSitemapIndex(files) {
     const spanishBaseName = 'sitemap_base_es.xml';
     fs.writeFileSync(path.join(outDir, spanishBaseName), spanishBaseXml, 'utf8');
 
-    // 2) Creators, chunk into multiple files
-    const allUsernames = await fetchAllCreatorUsernames();
-    console.log(`Found ${allUsernames.length} creators.`);
-    const partFiles = [];
-    for (let i = 0; i < allUsernames.length; i += SITEMAP_CHUNK_SIZE) {
-      const chunk = allUsernames.slice(i, i + SITEMAP_CHUNK_SIZE);
-      const xml = buildCreatorSitemap(chunk);
-      const name = `sitemap_creators_${Math.floor(i / SITEMAP_CHUNK_SIZE) + 1}.xml`;
-      fs.writeFileSync(path.join(outDir, name), xml, 'utf8');
-      partFiles.push(name);
-    }    // 3) Build index file referencing base + Spanish base + parts
+    // 2) Creators - DISABLED: Do not index creator profiles
+    // const allUsernames = await fetchAllCreatorUsernames();
+    // console.log(`Found ${allUsernames.length} creators.`);
+    // const partFiles = [];
+    // for (let i = 0; i < allUsernames.length; i += SITEMAP_CHUNK_SIZE) {
+    //   const chunk = allUsernames.slice(i, i + SITEMAP_CHUNK_SIZE);
+    //   const xml = buildCreatorSitemap(chunk);
+    //   const name = `sitemap_creators_${Math.floor(i / SITEMAP_CHUNK_SIZE) + 1}.xml`;
+    //   fs.writeFileSync(path.join(outDir, name), xml, 'utf8');
+    //   partFiles.push(name);
+    // }
+    const partFiles = [];  // Empty array since we're not generating creator sitemaps
+
+    // 3) Build index file referencing base + Spanish base + parts
     const indexFiles = [baseName, spanishBaseName, ...partFiles];
     const indexXml = buildSitemapIndex(indexFiles);
     const indexName = 'sitemap-index.xml';
