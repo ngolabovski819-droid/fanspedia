@@ -468,8 +468,16 @@
         const enPath = (location.pathname.replace(/^\/es/, '') || '/') + location.search;
         location.href = enPath;
       }
+    }    
+    function updateLanguageIndicator(lang) {
+      const indicator = document.getElementById('langIndicator');
+      if (indicator) {
+        indicator.textContent = lang === 'es' ? 'ES' : 'EN';
+      }
     }
     
+    // Initialize language indicator on page load
+    updateLanguageIndicator(location.pathname.startsWith('/es/') ? 'es' : 'en');    
     function updateLanguageIndicator(lang) {
       const indicator = document.getElementById('langIndicator');
       if (indicator) {

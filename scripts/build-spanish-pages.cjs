@@ -62,14 +62,15 @@ function translateHTML(html, lang = 'es') {
   const translations = lang === 'es' ? esTranslations : enTranslations;
   let result = html;
   
-  // Replace data-i18n-key attributes
-  result = result.replace(/data-i18n-key="([^"]+)"/g, (match, key) => {
-    return `data-i18n-key="${key}" data-translated="true"`;
-  });
-  
-  // Replace placeholder translations
+  // Replace actual text content in elements with data-i18n-key attributes
   Object.entries(translations).forEach(([key, value]) => {
-    // This is handled by i18n.js on client side, just mark it
+    // Pattern: finds elements with data-i18n-key="[key]" and replaces text content
+    // Handles: <tag ... data-i18n-key="key" ... >TEXT</tag>
+    // Allows for other attributes and nested tags
+    const pattern = new RegExp(`(<[^>]*data-i18n-key="${key}"[^>]*)>([^<]*)<(\\/[^>]+>)`, 'g');
+    result = result.replace(pattern, (match, openTag, oldText, closeTag) => {
+      return `${openTag}>${value}<${closeTag}`;
+    });
   });
   
   // Update lang attribute (fix regex to work in multiline string)

@@ -2358,6 +2358,17 @@
     // ============================================
     // LANGUAGE TOGGLE
     // ============================================
+    
+    // Update button text to show current language
+    function updateLanguageIndicator() {
+      const langIndicator = document.getElementById('langIndicator');
+      if (!langIndicator) return;
+      
+      const isSpanish = location.pathname.startsWith('/es/');
+      langIndicator.textContent = isSpanish ? 'ES' : 'EN';
+    }
+    
+    // Toggle between English and Spanish versions
     function toggleLanguage() {
       // Get current language based on URL
       const isSpanish = location.pathname.startsWith('/es/');
@@ -2373,6 +2384,9 @@
         location.href = enPath;
       }
     }
+    
+    // Update indicator on page load
+    updateLanguageIndicator();
     
     // Fallback translation for when i18n module isn't ready
     function applyTranslationsFallback(lang) {
