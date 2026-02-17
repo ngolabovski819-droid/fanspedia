@@ -1281,6 +1281,9 @@
 
         <!-- Actions -->
         <div class="header-actions">
+          <button class="lang-toggle" id="langToggle" aria-label="Toggle Language" title="EN / ES" onclick="toggleLanguage()">
+            <span id="langIndicator">EN</span>
+          </button>
           <!-- Mobile Search Trigger (visible only on mobile) -->
           <button class="mobile-search-trigger" id="mobileSearchTrigger" aria-label="Search">
             <i class="fas fa-search"></i>
@@ -1666,6 +1669,40 @@
       if (!localStorage.getItem('theme')) {
         applyTheme(e.matches ? 'dark' : 'light');
       }
+    });
+    
+    // ============================================
+    // LANGUAGE TOGGLE FUNCTIONALITY
+    // ============================================
+    function toggleLanguage() {
+      const newLang = i18n.getCurrentLanguage() === 'en' ? 'es' : 'en';
+      i18n.setLanguage(newLang);
+      i18n.applyTranslations();
+      updateLanguageIndicator(newLang);
+      
+      const currentPath = window.location.pathname;
+      if (newLang === 'es') {
+        if (!currentPath.startsWith('/es/')) {
+          window.location.href = '/es' + (currentPath === '/' ? '/index.html' : currentPath);
+        }
+      } else {
+        if (currentPath.startsWith('/es/')) {
+          const enPath = currentPath.replace('/es', '');
+          window.location.href = enPath === '' ? '/' : enPath;
+        }
+      }
+    }
+    
+    function updateLanguageIndicator(lang) {
+      const indicator = document.getElementById('langIndicator');
+      if (indicator) {
+        indicator.textContent = lang === 'es' ? 'ES' : 'EN';
+      }
+    }
+    
+    // Initialize language indicator on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      updateLanguageIndicator(i18n.getCurrentLanguage());
     });
     
     // ============================================

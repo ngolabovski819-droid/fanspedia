@@ -1068,6 +1068,7 @@
           <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
             <i class="fas fa-moon"></i>
           </button>
+          <button class="lang-toggle" id="langToggle" onclick="toggleLanguage()"><span id="langIndicator">EN</span></button>
           <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
             <i class="fas fa-bars"></i>
           </button>
@@ -1375,6 +1376,38 @@
       if (!localStorage.getItem('theme')) {
         applyTheme(e.matches ? 'dark' : 'light');
       }
+    });
+
+    // Language toggle functionality
+    function toggleLanguage() {
+      const newLang = i18n.getCurrentLanguage() === 'en' ? 'es' : 'en';
+      i18n.setLanguage(newLang);
+      i18n.applyTranslations();
+      updateLanguageIndicator(newLang);
+      
+      const currentPath = window.location.pathname;
+      if (newLang === 'es') {
+        if (!currentPath.startsWith('/es/')) {
+          window.location.href = '/es' + (currentPath === '/' ? '/index.html' : currentPath);
+        }
+      } else {
+        if (currentPath.startsWith('/es/')) {
+          const enPath = currentPath.replace('/es', '');
+          window.location.href = enPath === '' ? '/' : enPath;
+        }
+      }
+    }
+    
+    function updateLanguageIndicator(lang) {
+      const indicator = document.getElementById('langIndicator');
+      if (indicator) {
+        indicator.textContent = lang === 'es' ? 'ES' : 'EN';
+      }
+    }
+    
+    // Initialize language indicator on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      updateLanguageIndicator(i18n.getCurrentLanguage());
     });
 
     const safeSearchToggle = document.getElementById('safeSearchToggle');
