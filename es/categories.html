@@ -517,6 +517,81 @@
     // Import shared categories config (absolute path so it works under /categories/)
   import { categories, popularCategories, categoryToSlug } from '/config/categories.js?v=20251121-4';
 
+    const categoryLabelMapEs = {
+      'nude': 'Desnudo',
+      'reddit': 'Reddit',
+      'models': 'Modelos',
+      'sex': 'Sexo',
+      'gay': 'Gay',
+      'anal': 'Anal',
+      'feet': 'Pies',
+      'twitter': 'Twitter',
+      'trans': 'Trans',
+      'lesbian': 'Lesbiana',
+      'squirt': 'Squirt',
+      'couple': 'Pareja',
+      'milf': 'MILF',
+      'tiktok': 'TikTok',
+      'girl': 'Chica',
+      'big tits': 'Pechos Grandes',
+      'blowjobs': 'Felaciones',
+      'boobs': 'Pechos',
+      'sextape': 'Sex Tape',
+      'creampie': 'Creampie',
+      'joi': 'JOI',
+      'threesome': 'Trío',
+      'teen (18+)': 'Joven (18+)',
+      'shemale': 'Trans',
+      'bbc': 'BBC',
+      'tits': 'Tetas',
+      'ebony': 'Ébano',
+      'pornhub': 'Pornhub',
+      'footjob': 'Footjob',
+      'foot fetish': 'Fetiche de Pies',
+      'dick ratings': 'Calificación de Penes',
+      'bbw': 'BBW',
+      'mature': 'Madura',
+      'teacher': 'Profesora',
+      'pussy': 'Coño',
+      'cuckold': 'Cuckold',
+      'big ass': 'Culo Grande',
+      'squirting': 'Squirting',
+      'hottest': 'Más Hot',
+      'amateur': 'Amateur',
+      'blonde': 'Rubia',
+      'instagram': 'Instagram',
+      'pawg': 'PAWG',
+      'gangbang': 'Gangbang',
+      'redhead': 'Pelirroja',
+      'male': 'Hombre',
+      'vip': 'VIP',
+      'famous': 'Famosa',
+      'twins': 'Gemelas',
+      'ass': 'Culo',
+      'deepthroat': 'Garganta Profunda',
+      'pregnant': 'Embarazada',
+      'handjob': 'Paja',
+      'facial': 'Facial',
+      'asmr': 'ASMR',
+      'pegging': 'Pegging',
+      'no ppv': 'Sin PPV',
+      'nurse': 'Enfermera',
+      'smoking fetish': 'Fetiche de Fumar',
+      'goth-free': 'Gótica (Gratis)',
+      'big natural boobs': 'Pechos Naturales Grandes',
+      'olympian': 'Olímpica',
+      'pussy-play': 'Juego con el Coño'
+    };
+
+    function toTitleCase(label) {
+      return label.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    }
+
+    function getCategoryDisplayLabel(label) {
+      const normalized = String(label || '').toLowerCase().trim();
+      return categoryLabelMapEs[normalized] || toTitleCase(label);
+    }
+
     // ============================================
     // DYNAMIC CATEGORY NAVIGATION
     // ============================================
@@ -526,7 +601,7 @@
     if (catMenu) {
       const menuHTML = popularCategories.map(cat => {
         const slug = categoryToSlug(cat);
-        const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        const label = getCategoryDisplayLabel(cat);
         return `<a role="menuitem" href="/categories/${slug}/">${label}</a>`;
       }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Ver todas las categorías →</a>';
       catMenu.innerHTML = menuHTML;
@@ -537,7 +612,7 @@
     if (drawerCats) {
       const drawerHTML = popularCategories.map(cat => {
         const slug = categoryToSlug(cat);
-        const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        const label = getCategoryDisplayLabel(cat);
         return `<a href="/categories/${slug}/">${label}</a>`;
       }).join('');
       drawerCats.innerHTML = drawerHTML;
@@ -639,7 +714,7 @@
       if (popularGrid) {
         popularGrid.innerHTML = popularCategories.map(cat => {
           const slug = categoryToSlug(cat);
-          const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+          const label = getCategoryDisplayLabel(cat);
           return `<a href="/categories/${slug}/" class="category-chip" rel="category tag"><i class="fas fa-tag" aria-hidden="true"></i>${label}</a>`;
         }).join('');
       }
@@ -649,7 +724,7 @@
         const allSorted = [...categories].sort((a, b) => a.localeCompare(b));
         chipGrid.innerHTML = allSorted.map(cat => {
           const slug = categoryToSlug(cat);
-          const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+          const label = getCategoryDisplayLabel(cat);
           return `<a href="/categories/${slug}/" class="category-chip" rel="category tag"><i class="fas fa-tag" aria-hidden="true"></i>${label}</a>`;
         }).join('');
       }
