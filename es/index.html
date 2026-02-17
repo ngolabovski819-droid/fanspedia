@@ -2365,21 +2365,43 @@
     // LANGUAGE TOGGLE
     // ============================================
     function toggleLanguage() {
-      const newLang = i18n.getCurrentLanguage() === 'en' ? 'es' : 'en';
-      i18n.setLanguage(newLang);
-      i18n.applyTranslations();
+      console.log('[toggleLanguage] called');
+      console.log('[toggleLanguage] i18n available?', typeof window.i18n);
+      console.log('[toggleLanguage] current language?', window.i18n?.getCurrentLanguage?.());
+      
+      // Get current language - default to EN if i18n not ready
+      const currentLang = (window.i18n && window.i18n.getCurrentLanguage) ? window.i18n.getCurrentLanguage() : localStorage.getItem('fanspedia_lang') || 'en';
+      const newLang = currentLang === 'en' ? 'es' : 'en';
+      
+      console.log('[toggleLanguage] current:', currentLang, 'new:', newLang);
+      
+      // Update localStorage directly
+      localStorage.setItem('fanspedia_lang', newLang);
+      
+      // Update i18n if available
+      if (window.i18n && window.i18n.setLanguage) {
+        window.i18n.setLanguage(newLang);
+      }
+      
+      // Update indicator
       updateLanguageIndicator(newLang);
       
       // Redirect to appropriate language path
       const currentPath = window.location.pathname;
+      console.log('[toggleLanguage] current path:', currentPath);
+      
       if (newLang === 'es') {
         if (!currentPath.startsWith('/es/')) {
-          window.location.href = '/es' + (currentPath === '/' ? '/index.html' : currentPath);
+          const redirectPath = '/es' + (currentPath === '/' ? '/index.html' : currentPath);
+          console.log('[toggleLanguage] redirect to:', redirectPath);
+          window.location.href = redirectPath;
         }
       } else {
         if (currentPath.startsWith('/es/')) {
           const enPath = currentPath.replace('/es', '');
-          window.location.href = enPath === '' ? '/' : enPath;
+          const redirectPath = enPath === '' ? '/' : enPath;
+          console.log('[toggleLanguage] redirect to:', redirectPath);
+          window.location.href = redirectPath;
         }
       }
     }
@@ -2388,13 +2410,15 @@
       const indicator = document.getElementById('langIndicator');
       if (indicator) {
         indicator.textContent = lang === 'es' ? 'ES' : 'EN';
+        console.log('[updateLanguageIndicator] set to:', lang);
       }
     }
     
     // Initialize language indicator on load
     document.addEventListener('DOMContentLoaded', () => {
-      const lang = i18n.getCurrentLanguage();
+      const lang = (window.i18n && window.i18n.getCurrentLanguage) ? window.i18n.getCurrentLanguage() : localStorage.getItem('fanspedia_lang') || 'en';
       updateLanguageIndicator(lang);
+      console.log('[DOMContentLoaded] language initialized to:', lang);
     });
 
     // ============================================

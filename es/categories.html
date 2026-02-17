@@ -108,6 +108,11 @@
   .safe-search-toggle { width:44px; height:44px; border-radius:12px; border:1px solid rgba(255,255,255,0.3); background:rgba(255,255,255,0.2); color:white; font-size:20px; cursor:pointer; transition:all 0.3s ease; display:inline-flex; align-items:center; justify-content:center; position:relative; }
   .safe-search-toggle:hover { background:rgba(255,255,255,0.3); transform:translateY(-1px); }
   .safe-search-toggle:active { transform:translateY(0); }
+  /* Language Toggle */
+  .lang-toggle { width:44px; height:44px; border-radius:12px; border:1px solid rgba(255,255,255,0.3); background:rgba(255,255,255,0.2); color:white; font-size:14px; font-weight:700; cursor:pointer; transition:all 0.3s ease; display:inline-flex; align-items:center; justify-content:center; position:relative; z-index:100; flex-shrink:0; }
+  .lang-toggle #langIndicator { pointer-events:none; display:block; }
+  .lang-toggle:hover { background:rgba(255,255,255,0.3); transform:translateY(-1px); }
+  .lang-toggle:active { transform:translateY(0); }
   .safe-search-toggle.active { background:rgba(52,199,89,0.9); border-color:rgba(52,199,89,1); box-shadow:0 0 20px rgba(52,199,89,0.4); }
   .safe-search-toggle.active:hover { background:rgba(52,199,89,1); }
   .safe-search-toggle.active::after { content:''; position:absolute; top:2px; right:2px; width:10px; height:10px; background:#34c759; border:2px solid white; border-radius:50%; box-shadow:0 2px 8px rgba(52,199,89,0.6); }
@@ -698,9 +703,14 @@
      ============================================ */
   
   function toggleLanguage() {
-    const newLang = i18n.getCurrentLanguage() === 'en' ? 'es' : 'en';
-    i18n.setLanguage(newLang);
-    i18n.applyTranslations();
+    console.log('[toggleLanguage] called');
+    const currentLang = (window.i18n && window.i18n.getCurrentLanguage) ? window.i18n.getCurrentLanguage() : localStorage.getItem('fanspedia_lang') || 'en';
+    const newLang = currentLang === 'en' ? 'es' : 'en';
+    
+    localStorage.setItem('fanspedia_lang', newLang);
+    if (window.i18n && window.i18n.setLanguage) {
+      window.i18n.setLanguage(newLang);
+    }
     updateLanguageIndicator(newLang);
     
     const currentPath = window.location.pathname;
@@ -725,7 +735,8 @@
   
   // Initialize language indicator on page load
   document.addEventListener('DOMContentLoaded', function() {
-    updateLanguageIndicator(i18n.getCurrentLanguage());
+    const lang = (window.i18n && window.i18n.getCurrentLanguage) ? window.i18n.getCurrentLanguage() : localStorage.getItem('fanspedia_lang') || 'en';
+    updateLanguageIndicator(lang);
   });
 
   /* ============================================

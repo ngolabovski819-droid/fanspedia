@@ -94,7 +94,8 @@
     .header-search-icon { position: absolute; left: 16px; color: #00AFF0; font-size: 18px; pointer-events: none; }
     .header-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
     /* Language Toggle */
-    .lang-toggle { width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.2); color: white; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .lang-toggle { width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.2); color: white; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; z-index: 100; }
+    .lang-toggle #langIndicator { pointer-events: none; }
     .lang-toggle:hover { background: rgba(255, 255, 255, 0.3); transform: translateY(-1px); }
     .lang-toggle:active { transform: translateY(0); }
     /* Safe Search Toggle Button */
@@ -1063,9 +1064,14 @@
   // LANGUAGE TOGGLE
   // ============================================
   function toggleLanguage() {
-    const newLang = i18n.getCurrentLanguage() === 'en' ? 'es' : 'en';
-    i18n.setLanguage(newLang);
-    i18n.applyTranslations();
+    console.log('[toggleLanguage] called');
+    const currentLang = (window.i18n && window.i18n.getCurrentLanguage) ? window.i18n.getCurrentLanguage() : localStorage.getItem('fanspedia_lang') || 'en';
+    const newLang = currentLang === 'en' ? 'es' : 'en';
+    
+    localStorage.setItem('fanspedia_lang', newLang);
+    if (window.i18n && window.i18n.setLanguage) {
+      window.i18n.setLanguage(newLang);
+    }
     updateLanguageIndicator(newLang);
     
     // Redirect to appropriate language path
@@ -1091,7 +1097,7 @@
   
   // Initialize language indicator on load
   document.addEventListener('DOMContentLoaded', () => {
-    const lang = i18n.getCurrentLanguage();
+    const lang = (window.i18n && window.i18n.getCurrentLanguage) ? window.i18n.getCurrentLanguage() : localStorage.getItem('fanspedia_lang') || 'en';
     updateLanguageIndicator(lang);
   });
 
