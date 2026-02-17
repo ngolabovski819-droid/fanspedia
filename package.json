@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node server.js",
     "sitemap": "node scripts/generate-sitemap.cjs",
-    "build:sitemaps": "node scripts/build-sitemaps.cjs"
+    "build:sitemaps": "node scripts/build-sitemaps.cjs",
+    "build:spanish": "node scripts/build-spanish-pages.cjs"
   },
   "dependencies": {
     "@vercel/analytics": "^1.5.0",
