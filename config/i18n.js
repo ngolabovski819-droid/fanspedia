@@ -139,14 +139,9 @@ window.i18n = {
   defaultLanguage
 };
 
-// Auto-init when module loads
-initI18n().then(() => {
-  // Apply translations if DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      window.i18n.applyTranslations();
-    });
-  } else {
-    window.i18n.applyTranslations();
-  }
+// Initialize but DO NOT auto-apply translations
+// This allows toggleLanguage() to work, but respects the page's language
+// based on URL structure (/en/ vs /es/)
+initI18n().catch(err => {
+  console.error('[i18n] Initialization failed:', err);
 });
