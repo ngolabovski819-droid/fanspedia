@@ -1985,7 +1985,7 @@
 
         <!-- Desktop navigation (moved next to logo) -->
         <div class="desktop-nav">
-          <button id="categoriesToggle" class="nav-btn" aria-haspopup="true" aria-expanded="false">
+          <button id="categoriesToggle" class="nav-btn" aria-haspopup="true" aria-expanded="false" data-i18n-key="nav_categories">
             Categories <i class="fas fa-chevron-down" aria-hidden="true"></i>
           </button>
           <div id="categoriesMenu" class="dropdown-menu" role="menu" aria-hidden="true">
@@ -1994,7 +1994,7 @@
         </div>
 
         <div class="desktop-nav">
-          <a href="/locations/" class="nav-btn">
+          <a href="/locations/" class="nav-btn" data-i18n-key="nav_locations">
             Locations <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
           </a>
         </div>
@@ -2008,6 +2008,7 @@
               class="header-search-input" 
               placeholder="Search by name, location, category..."
               id="headerSearch"
+              data-i18n-placeholder="searchPlaceholder"
               autocomplete="off"
               autocapitalize="none"
               spellcheck="false"
@@ -2158,7 +2159,7 @@
       <div class="input-group input-group-lg">
         <input id="search" type="text" class="form-control" placeholder='Type: "milf" "Texas" "piercings"' aria-label="Search creators" inputmode="search" enterkeyhint="search" autocomplete="off" autocapitalize="none" spellcheck="false" />
   <button class="clear-search" id="clearSearch" type="button" aria-label="Clear search">×</button>
-        <button id="searchBtn" class="btn btn-search" type="button">
+        <button id="searchBtn" class="btn btn-search" type="button" data-i18n-key="search">
           <span class="spinner" aria-hidden="true"></span>
           <span class="btn-label">Search</span>
         </button>
@@ -2176,21 +2177,21 @@
       <div class="d-flex justify-content-center align-items-center flex-wrap gap-3 filters">
         <div class="form-check form-switch">
           <input id="verified" type="checkbox" class="form-check-input me-2">
-          <label for="verified" class="form-check-label me-4">Verified only</label>
+          <label for="verified" class="form-check-label me-4" data-i18n-key="filter_verified">Verified only</label>
         </div>
 
         <div class="form-check form-switch">
           <input id="bundles" type="checkbox" class="form-check-input me-2">
-          <label for="bundles" class="form-check-label me-4">Bundle subscriptions</label>
+          <label for="bundles" class="form-check-label me-4" data-i18n-key="filter_bundles">Bundle subscriptions</label>
         </div>
 
         <div class="price-group">
-          <label for="price" class="form-label me-2">Max price ($)</label>
+          <label for="price" class="form-label me-2" data-i18n-key="filter_price">Max price ($)</label>
           <input id="price" type="range" class="form-range price-range" min="0" max="100" value="100" step="1">
           <span id="price-value" class="ms-2 price-value">100</span>
         </div>
 
-        <button id="resetFilters" type="button" class="btn-reset">Reset filters</button>
+        <button id="resetFilters" type="button" class="btn-reset" data-i18n-key="resetFilters">Reset filters</button>
       </div>
     </div>
 
@@ -2204,7 +2205,7 @@
     
     <!-- Load More Button -->
     <div id="loadMoreContainer" class="text-center my-4" style="display: none;">
-      <button id="loadMoreBtn" class="load-more-btn">
+      <button id="loadMoreBtn" class="load-more-btn" data-i18n-key="loadMore">
         <span class="btn-text">Load More Creators</span>
         <span class="btn-icon">↓</span>
       </button>
