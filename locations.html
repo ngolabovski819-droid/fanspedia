@@ -1096,13 +1096,13 @@
           <button class="mobile-search-trigger" id="mobileSearchTrigger" aria-label="Search">
             <i class="fas fa-search"></i>
           </button>
+          <button class="lang-toggle" id="langToggle" onclick="toggleLanguage()"><span id="langIndicator">EN</span></button>
           <button class="safe-search-toggle" id="safeSearchToggle" aria-label="Toggle Safe Search (blur images)" title="Safe Search: Browse comfortably in public">
             <i class="fas fa-eye-slash"></i>
           </button>
           <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
             <i class="fas fa-moon"></i>
           </button>
-          <button class="lang-toggle" id="langToggle" onclick="toggleLanguage()"><span id="langIndicator">EN</span></button>
           <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
             <i class="fas fa-bars"></i>
           </button>
@@ -1413,7 +1413,7 @@
     });
 
     // Language toggle functionality
-    function toggleLanguage() {
+    window.toggleLanguage = function toggleLanguage() {
       // Get current language based on URL
       const isSpanish = location.pathname.startsWith('/es/');
       const newLang = isSpanish ? 'en' : 'es';
