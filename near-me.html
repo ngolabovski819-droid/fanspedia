@@ -454,7 +454,7 @@
     }
     
     // Language toggle functionality
-    function toggleLanguage() {
+    window.toggleLanguage = function toggleLanguage() {
       // Get current language based on URL
       const isSpanish = location.pathname.startsWith('/es/');
       const newLang = isSpanish ? 'en' : 'es';
@@ -468,16 +468,8 @@
         const enPath = (location.pathname.replace(/^\/es/, '') || '/') + location.search;
         location.href = enPath;
       }
-    }    
-    function updateLanguageIndicator(lang) {
-      const indicator = document.getElementById('langIndicator');
-      if (indicator) {
-        indicator.textContent = lang === 'es' ? 'ES' : 'EN';
-      }
-    }
-    
-    // Initialize language indicator on page load
-    updateLanguageIndicator(location.pathname.startsWith('/es/') ? 'es' : 'en');    
+    };
+
     function updateLanguageIndicator(lang) {
       const indicator = document.getElementById('langIndicator');
       if (indicator) {
