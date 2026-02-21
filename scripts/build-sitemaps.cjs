@@ -74,19 +74,19 @@ function buildBaseSitemap() {
 }
 
 function buildSpanishBaseSitemap() {
-  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n`;
+  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
   const d = today();
-  // Spanish Homepage with hreflang
-  xml += `  <url>\n    <loc>${BASE_URL}/es/</loc>\n    <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/" />\n    <lastmod>${d}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>1.0</priority>\n  </url>\n`;
+  // Spanish Homepage
+  xml += wrapUrl(`${BASE_URL}/es/`, 'daily', '1.0', d);
   // Spanish Categories hub
-  xml += `  <url>\n    <loc>${BASE_URL}/es/categories/</loc>\n    <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/categories/" />\n    <lastmod>${d}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>\n`;
+  xml += wrapUrl(`${BASE_URL}/es/categories/`, 'weekly', '0.9', d);
   // Spanish Category pages
   for (const c of categories) {
     const slug = categoryToSlug(c);
-    xml += `  <url>\n    <loc>${BASE_URL}/es/categories/${slug}/</loc>\n    <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/categories/${slug}/" />\n    <lastmod>${d}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
+    xml += wrapUrl(`${BASE_URL}/es/categories/${slug}/`, 'weekly', '0.8', d);
   }
   // Spanish Locations
-  xml += `  <url>\n    <loc>${BASE_URL}/es/locations/</loc>\n    <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/locations/" />\n    <lastmod>${d}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
+  xml += wrapUrl(`${BASE_URL}/es/locations/`, 'weekly', '0.8', d);
   // Spanish Country pages
   const countries = [
     { slug: 'united-states', es: 'Estados Unidos' },
@@ -95,7 +95,7 @@ function buildSpanishBaseSitemap() {
     { slug: 'japan', es: 'Japón' }
   ];
   for (const country of countries) {
-    xml += `  <url>\n    <loc>${BASE_URL}/es/country/${country.slug}/</loc>\n    <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/country/${country.slug}/" />\n    <lastmod>${d}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
+    xml += wrapUrl(`${BASE_URL}/es/country/${country.slug}/`, 'weekly', '0.8', d);
   }
   xml += '</urlset>';
   return xml;
