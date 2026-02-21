@@ -53,6 +53,7 @@ function outputDir() {
 function buildBaseSitemap() {
   let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
   const d = today();
+  const countries = ['united-states', 'canada', 'india', 'japan'];
   // Homepage
   xml += wrapUrl(`${BASE_URL}/`, 'daily', '1.0', d);
   // Categories hub
@@ -61,6 +62,12 @@ function buildBaseSitemap() {
   for (const c of categories) {
     const slug = categoryToSlug(c);
     xml += wrapUrl(`${BASE_URL}/categories/${slug}/`, 'weekly', '0.8', d);
+  }
+  // Locations hub
+  xml += wrapUrl(`${BASE_URL}/locations/`, 'weekly', '0.8', d);
+  // Country pages
+  for (const country of countries) {
+    xml += wrapUrl(`${BASE_URL}/country/${country}/`, 'weekly', '0.8', d);
   }
   xml += '</urlset>';
   return xml;
