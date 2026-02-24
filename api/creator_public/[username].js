@@ -371,6 +371,17 @@ export default async function handler(req, res) {
     return;
   }
 
+  // --- CREATOR PAGES REMOVED: return 410 Gone ---
+  // 410 tells Google/Bing to permanently de-index these pages immediately.
+  res.status(410);
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.setHeader('Cache-Control', 'public, max-age=86400, s-maxage=86400');
+  res.setHeader('X-Robots-Tag', 'noindex');
+  res.send('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">'
+    + '<title>Gone</title><meta name="robots" content="noindex,nofollow">'
+    + '</head><body><h1>410 Gone</h1><p>This page has been permanently removed.</p></body></html>');
+  return;
+
   try {
     const timeoutMs = 5000;
     const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), timeoutMs));
