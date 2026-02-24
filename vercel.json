@@ -53,7 +53,7 @@
   "redirects": [
     { "source": "/categories/indian", "destination": "/country/india/", "statusCode": 301 },
     { "source": "/categories/indian/", "destination": "/country/india/", "statusCode": 301 },
-    { "source": "/categories/japanese", "destination": "/categories", "statusCode": 301 },
+    { "source": "/categories/japanese", "destination": "/country/japan/", "statusCode": 301 },
     { "source": "/categories/korean", "destination": "/categories", "statusCode": 301 },
     { "source": "/categories/scottish", "destination": "/categories", "statusCode": 301 },
     { "source": "/categories/asian", "destination": "/categories", "statusCode": 301 },
