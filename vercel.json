@@ -56,7 +56,32 @@
     { "source": "/categories/japanese", "destination": "/categories", "statusCode": 301 },
     { "source": "/categories/korean", "destination": "/categories", "statusCode": 301 },
     { "source": "/categories/scottish", "destination": "/categories", "statusCode": 301 },
-    { "source": "/categories/asian", "destination": "/categories", "statusCode": 301 }
+    { "source": "/categories/asian", "destination": "/categories", "statusCode": 301 },
+
+    { "source": "/index.html", "destination": "/", "statusCode": 301 },
+    { "source": "/categories.html", "destination": "/categories", "statusCode": 301 },
+    { "source": "/category.html", "destination": "/categories", "statusCode": 301 },
+    { "source": "/locations.html", "destination": "/locations", "statusCode": 301 },
+    { "source": "/near-me.html", "destination": "/near-me", "statusCode": 301 },
+    { "source": "/wishlist.html", "destination": "/wishlist", "statusCode": 301 },
+    { "source": "/blog.html", "destination": "/blog", "statusCode": 301 },
+    { "source": "/creator.html", "destination": "/", "statusCode": 301 },
+    { "source": "/canada.html", "destination": "/country/canada", "statusCode": 301 },
+    { "source": "/india.html", "destination": "/country/india", "statusCode": 301 },
+    { "source": "/japan.html", "destination": "/country/japan", "statusCode": 301 },
+    { "source": "/united-states.html", "destination": "/country/united-states", "statusCode": 301 },
+
+    { "source": "/es/index.html", "destination": "/es/", "statusCode": 301 },
+    { "source": "/es/categories.html", "destination": "/es/categories", "statusCode": 301 },
+    { "source": "/es/category.html", "destination": "/es/categories", "statusCode": 301 },
+    { "source": "/es/locations.html", "destination": "/es/locations", "statusCode": 301 },
+    { "source": "/es/near-me.html", "destination": "/es/near-me", "statusCode": 301 },
+    { "source": "/es/wishlist.html", "destination": "/es/wishlist", "statusCode": 301 },
+    { "source": "/es/creator.html", "destination": "/es/", "statusCode": 301 },
+    { "source": "/es/canada.html", "destination": "/es/country/canada", "statusCode": 301 },
+    { "source": "/es/india.html", "destination": "/es/country/india", "statusCode": 301 },
+    { "source": "/es/japan.html", "destination": "/es/country/japan", "statusCode": 301 },
+    { "source": "/es/united-states.html", "destination": "/es/country/united-states", "statusCode": 301 }
   ],
   "headers": [
     {
