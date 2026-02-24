@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog | FansPedia — Tips, Guides &amp; Creator News</title>
+  <meta name="description" content="Tips, guides and creator news from FansPedia. Discover the best OnlyFans creators, how-to guides, and industry news." />
+  <link rel="canonical" href="https://fanspedia.net/blog/" />
+  <link rel="icon" href="/favicon.svg" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0a0a0f;
+      --card-bg:   #12121a;
+      --card-hover:#16161f;
+      --accent:    #00a8ff;
+      --accent-dim:rgba(0,168,255,0.12);
+      --text:      #ffffff;
+      --muted:     #8892a4;
+      --border:    rgba(255,255,255,0.08);
+      --radius:    12px;
+      --header-h:  64px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: var(--header-h);
+      background: rgba(10,10,15,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 12px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .logo-icon {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg,#00a8ff,#0066cc);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+    .logo-text { font-size: 18px; font-weight: 700; color: var(--text); }
+    .logo-text span { color: var(--accent); }
+
+    .header-search {
+      flex: 1;
+      max-width: 480px;
+      position: relative;
+    }
+    .header-search input {
+      width: 100%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 8px 16px 8px 40px;
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .header-search input:focus { border-color: var(--accent); }
+    .header-search input::placeholder { color: var(--muted); }
+    .header-search svg {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      color: var(--muted); pointer-events: none;
+    }
+
+    .header-nav { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+    .header-nav a {
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      transition: background .2s, color .2s;
+      white-space: nowrap;
+    }
+    .header-nav a:hover, .header-nav a.active { background: var(--accent-dim); color: var(--accent); }
+
+    .header-actions { display: flex; align-items: center; gap: 6px; }
+    .icon-btn {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: var(--muted);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background .2s, color .2s;
+      text-decoration: none;
+    }
+    .icon-btn:hover { background: var(--accent-dim); color: var(--accent); }
+
+    /* ── HERO ── */
+    .blog-hero {
+      text-align: center;
+      padding: 72px 20px 48px;
+      background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,168,255,0.08) 0%, transparent 70%);
+    }
+    .blog-hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .blog-hero h1 span { color: var(--accent); }
+    .blog-hero p {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto 32px;
+    }
+
+    .hero-search {
+      max-width: 520px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .hero-search input {
+      width: 100%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 14px 20px 14px 48px;
+      color: var(--text);
+      font-size: 15px;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .hero-search input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0,168,255,0.12);
+    }
+    .hero-search input::placeholder { color: var(--muted); }
+    .hero-search svg {
+      position: absolute; left: 18px; top: 50%; transform: translateY(-50%);
+      color: var(--muted); pointer-events: none;
+    }
+
+    /* ── FILTER TABS ── */
+    .filter-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 20px 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .filter-row::-webkit-scrollbar { display: none; }
+    .filter-chip {
+      padding: 6px 16px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all .2s;
+    }
+    .filter-chip:hover, .filter-chip.active {
+      border-color: var(--accent);
+      background: var(--accent-dim);
+      color: var(--accent);
+    }
+
+    /* ── GRID ── */
+    main { flex: 1; }
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+      padding: 0 20px 48px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ── POST CARD ── */
+    .post-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      transition: transform .2s, border-color .2s, box-shadow .2s;
+    }
+    .post-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(0,168,255,0.3);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+      background: var(--card-hover);
+    }
+    .post-card-image-placeholder {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: linear-gradient(135deg, #12121a 0%, #1a1a2e 50%, #0f1117 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      flex-shrink: 0;
+    }
+    .post-card-body {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+    .post-card-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      background: var(--accent-dim);
+      color: var(--accent);
+      width: fit-content;
+    }
+    .post-card-title {
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.4;
+      color: var(--text);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .post-card-excerpt {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      flex: 1;
+    }
+    .post-card-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: auto;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+    .post-card-meta svg { flex-shrink: 0; }
+
+    /* ── STATES ── */
+    .state-box {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 64px 20px;
+      color: var(--muted);
+    }
+    .state-box .state-icon { font-size: 48px; margin-bottom: 16px; }
+    .state-box h3 { font-size: 18px; color: var(--text); margin-bottom: 8px; }
+
+    /* ── SKELETON ── */
+    .skeleton {
+      background: linear-gradient(90deg, var(--card-bg) 25%, #1a1a2a 50%, var(--card-bg) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 6px;
+    }
+    @keyframes shimmer { to { background-position: -200% 0; } }
+    .skeleton-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .skeleton-img { width: 100%; aspect-ratio: 16/9; border-radius: 0; }
+    .skeleton-body { padding: 18px; display: flex; flex-direction: column; gap: 10px; }
+    .skeleton-tag { height: 20px; width: 70px; border-radius: 20px; }
+    .skeleton-title { height: 18px; width: 90%; border-radius: 4px; }
+    .skeleton-title-2 { height: 18px; width: 65%; border-radius: 4px; }
+    .skeleton-line { height: 13px; border-radius: 4px; }
+
+    /* ── LOAD MORE ── */
+    .load-more-wrap {
+      text-align: center;
+      padding: 8px 20px 56px;
+    }
+    .load-more-btn {
+      padding: 12px 40px;
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .load-more-btn:hover:not(:disabled) {
+      border-color: var(--accent);
+      background: var(--accent-dim);
+      color: var(--accent);
+    }
+    .load-more-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #0d0d15;
+      border-top: 1px solid var(--border);
+      padding: 48px 20px 0;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto 40px;
+    }
+    .footer-brand p { font-size: 13px; color: var(--muted); line-height: 1.7; margin: 12px 0 20px; max-width: 260px; }
+    .footer-socials { display: flex; gap: 10px; }
+    .social-btn {
+      width: 34px; height: 34px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none;
+      font-size: 14px;
+      transition: all .2s;
+    }
+    .social-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+    .footer-col h4 { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 16px; color: var(--text); }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .footer-col a:hover { color: var(--accent); }
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding: 20px 0;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer-bottom p { font-size: 12px; color: var(--muted); }
+    .footer-badges { display: flex; gap: 10px; }
+    .badge {
+      display: flex; align-items: center; gap: 6px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; }
+
+    /* ── BOTTOM NAV (mobile) ── */
+    .bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(13,13,21,0.97);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border);
+      padding: 8px 0 env(safe-area-inset-bottom, 8px);
+      z-index: 99;
+    }
+    .bottom-nav-inner { display: flex; justify-content: space-around; }
+    .bottom-nav-item {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 3px; padding: 4px 12px;
+      text-decoration: none; color: var(--muted);
+      font-size: 10px; font-weight: 500;
+      transition: color .2s;
+    }
+    .bottom-nav-item.active, .bottom-nav-item:hover { color: var(--accent); }
+
+    @media (max-width: 768px) {
+      .header-nav { display: none; }
+      .header-search { max-width: 240px; }
+      .bottom-nav { display: block; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      body { padding-bottom: 60px; }
+    }
+    @media (max-width: 480px) {
+      .footer-grid { grid-template-columns: 1fr; }
+      .blog-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header>
+  <a href="/" class="logo">
+    <div class="logo-icon">🔍</div>
+    <span class="logo-text">Fans<span>Pedia</span></span>
+  </a>
+
+  <div class="header-search">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" placeholder="Search creators…" id="headerSearchInput" />
+  </div>
+
+  <nav class="header-nav">
+    <a href="/">Home</a>
+    <a href="/categories/">Categories</a>
+    <a href="/locations/">Locations</a>
+    <a href="/blog/" class="active">Blog</a>
+  </nav>
+
+  <div class="header-actions">
+    <button class="icon-btn" title="Language">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+    </button>
+    <button class="icon-btn" title="Safe Search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- ── HERO ── -->
+<section class="blog-hero">
+  <h1>FansPedia <span>Blog</span></h1>
+  <p>Tips, guides &amp; creator news</p>
+  <div class="hero-search">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="blogSearchInput" placeholder="Search articles…" />
+  </div>
+</section>
+
+<!-- ── FILTER CHIPS ── -->
+<div class="filter-row" id="filterRow">
+  <button class="filter-chip active" data-filter="all">All Posts</button>
+  <button class="filter-chip" data-filter="guides">Guides</button>
+  <button class="filter-chip" data-filter="news">News</button>
+  <button class="filter-chip" data-filter="tips">Tips</button>
+  <button class="filter-chip" data-filter="creators">Creators</button>
+  <button class="filter-chip" data-filter="how-to">How-To</button>
+</div>
+
+<!-- ── BLOG GRID ── -->
+<main>
+  <div class="blog-grid" id="blogGrid">
+    <div class="skeleton-card" id="sk1">
+      <div class="skeleton skeleton-img"></div>
+      <div class="skeleton-body">
+        <div class="skeleton skeleton-tag"></div>
+        <div class="skeleton skeleton-title"></div>
+        <div class="skeleton skeleton-title-2"></div>
+        <div class="skeleton skeleton-line" style="width:100%"></div>
+        <div class="skeleton skeleton-line" style="width:80%"></div>
+        <div class="skeleton skeleton-line" style="width:60%"></div>
+      </div>
+    </div>
+    <div class="skeleton-card" id="sk2">
+      <div class="skeleton skeleton-img"></div>
+      <div class="skeleton-body">
+        <div class="skeleton skeleton-tag"></div>
+        <div class="skeleton skeleton-title"></div>
+        <div class="skeleton skeleton-title-2"></div>
+        <div class="skeleton skeleton-line" style="width:100%"></div>
+        <div class="skeleton skeleton-line" style="width:75%"></div>
+        <div class="skeleton skeleton-line" style="width:50%"></div>
+      </div>
+    </div>
+    <div class="skeleton-card" id="sk3">
+      <div class="skeleton skeleton-img"></div>
+      <div class="skeleton-body">
+        <div class="skeleton skeleton-tag"></div>
+        <div class="skeleton skeleton-title"></div>
+        <div class="skeleton skeleton-title-2"></div>
+        <div class="skeleton skeleton-line" style="width:100%"></div>
+        <div class="skeleton skeleton-line" style="width:70%"></div>
+        <div class="skeleton skeleton-line" style="width:55%"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="load-more-wrap" id="loadMoreWrap" style="display:none">
+    <button class="load-more-btn" id="loadMoreBtn">Load More Articles</button>
+  </div>
+</main>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="/" class="logo">
+        <div class="logo-icon">🔍</div>
+        <span class="logo-text">Fans<span>Pedia</span></span>
+      </a>
+      <p>Discover and connect with verified OnlyFans creators. Updated daily with 10,000+ profiles across all categories.</p>
+      <div class="footer-socials">
+        <a href="#" class="social-btn" aria-label="X/Twitter">𝕏</a>
+        <a href="#" class="social-btn" aria-label="Facebook">f</a>
+        <a href="#" class="social-btn" aria-label="Instagram">📷</a>
+        <a href="#" class="social-btn" aria-label="YouTube">▶</a>
+        <a href="#" class="social-btn" aria-label="TikTok">🎵</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Popular Categories</h4>
+      <ul>
+        <li><a href="/categories/verified-creators/">Verified Creators</a></li>
+        <li><a href="/categories/free-onlyfans/">Free OnlyFans</a></li>
+        <li><a href="/categories/cosplay/">Cosplay Models</a></li>
+        <li><a href="/categories/fitness/">Fitness &amp; Wellness</a></li>
+        <li><a href="/categories/gaming/">Gaming Creators</a></li>
+        <li><a href="/categories/">View All Categories</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="/blog/">Creator Guide</a></li>
+        <li><a href="/blog/">How to Subscribe</a></li>
+        <li><a href="/blog/">Safety Tips</a></li>
+        <li><a href="/blog/">FAQ</a></li>
+        <li><a href="/blog/">Blog</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal &amp; Info</h4>
+      <ul>
+        <li><a href="/about/">About Us</a></li>
+        <li><a href="/contact/">Contact</a></li>
+        <li><a href="/terms/">Terms of Service</a></li>
+        <li><a href="/privacy/">Privacy Policy</a></li>
+        <li><a href="/dmca/">DMCA Policy</a></li>
+        <li><a href="/cookies/">Cookie Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 fanspedia.net — All rights reserved</p>
+    <div class="footer-badges">
+      <div class="badge"><span class="badge-dot"></span> 10,000+ Verified Creators</div>
+      <div class="badge"><span class="badge-dot"></span> Updated Daily</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ── BOTTOM NAV ── -->
+<nav class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <a href="/" class="bottom-nav-item">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </a>
+    <a href="/categories/" class="bottom-nav-item">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Categories
+    </a>
+    <a href="/locations/" class="bottom-nav-item">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Locations
+    </a>
+    <a href="/blog/" class="bottom-nav-item active">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      Blog
+    </a>
+    <a href="/wishlist/" class="bottom-nav-item">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      Wishlist
+    </a>
+  </div>
+</nav>
+
+<script>
+  const PAGE_SIZE = 9;
+  let currentPage = 1;
+  let isLoading = false;
+  let hasMore = true;
+  let activeFilter = 'all';
+  let searchQuery = '';
+
+  const POSTS = [
+    { slug: 'how-to-find-best-onlyfans-creators', title: 'How to Find the Best OnlyFans Creators for You', excerpt: 'Discover the most effective strategies for finding OnlyFans creators that match your interests, from using category filters to checking verified badges.', category: 'guides', categoryLabel: 'Guides', date: '2026-02-24', emoji: '🔍', readTime: '5 min read' },
+    { slug: 'top-free-onlyfans-accounts-2026', title: 'Top Free OnlyFans Accounts to Follow in 2026', excerpt: 'A curated list of the best free OnlyFans accounts updated for 2026. No subscription fee required — just hit follow and enjoy premium content.', category: 'tips', categoryLabel: 'Tips', date: '2026-02-22', emoji: '⭐', readTime: '7 min read' },
+    { slug: 'onlyfans-subscription-safety-tips', title: 'OnlyFans Safety Tips: How to Subscribe Securely', excerpt: 'Before you subscribe to any OnlyFans account, read these essential safety and privacy tips to protect your personal information.', category: 'tips', categoryLabel: 'Tips', date: '2026-02-20', emoji: '🛡️', readTime: '4 min read' },
+    { slug: 'verified-creators-vs-unverified', title: 'Verified vs Unverified Creators: What\'s the Difference?', excerpt: 'The blue checkmark on OnlyFans means more than you think. We break down exactly what verification means and why it matters when choosing who to follow.', category: 'guides', categoryLabel: 'Guides', date: '2026-02-18', emoji: '✅', readTime: '6 min read' },
+    { slug: 'how-to-use-fanspedia', title: 'How to Use FansPedia to Discover New Creators', excerpt: 'A complete walkthrough of FansPedia\'s search, filters, category pages, and wishlist features so you get the most out of every visit.', category: 'how-to', categoryLabel: 'How-To', date: '2026-02-16', emoji: '📖', readTime: '8 min read' },
+    { slug: 'onlyfans-price-guide-2026', title: 'OnlyFans Subscription Prices: What to Expect in 2026', excerpt: 'From free accounts to premium $50/month subscriptions — here\'s a data-driven breakdown of OnlyFans pricing across categories.', category: 'news', categoryLabel: 'News', date: '2026-02-14', emoji: '💰', readTime: '5 min read' },
+    { slug: 'best-cosplay-onlyfans-creators', title: 'Best Cosplay OnlyFans Creators to Follow Right Now', excerpt: 'From anime to video games, these cosplay OnlyFans creators are setting the bar for creativity and production quality in 2026.', category: 'creators', categoryLabel: 'Creators', date: '2026-02-12', emoji: '🎭', readTime: '6 min read' },
+    { slug: 'onlyfans-vs-fansly-comparison', title: 'OnlyFans vs Fansly: Which Platform Is Better in 2026?', excerpt: 'A head-to-head comparison of OnlyFans and Fansly for both subscribers and creators — pricing, features, content variety, and more.', category: 'news', categoryLabel: 'News', date: '2026-02-10', emoji: '⚔️', readTime: '9 min read' },
+    { slug: 'fitness-onlyfans-creators-guide', title: 'Best Fitness & Wellness OnlyFans Creators in 2026', excerpt: 'Looking for workout motivation and wellness content? These fitness OnlyFans creators combine great content with genuine expertise.', category: 'creators', categoryLabel: 'Creators', date: '2026-02-08', emoji: '💪', readTime: '5 min read' },
+  ];
+
+  function formatDate(iso) {
+    return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  function buildCard(post) {
+    const a = document.createElement('a');
+    a.href = '/blog/' + post.slug + '/';
+    a.className = 'post-card';
+    a.innerHTML =
+      '<div class="post-card-image-placeholder">' + post.emoji + '</div>' +
+      '<div class="post-card-body">' +
+        '<span class="post-card-tag">' + post.categoryLabel + '</span>' +
+        '<div class="post-card-title">' + post.title + '</div>' +
+        '<div class="post-card-excerpt">' + post.excerpt + '</div>' +
+        '<div class="post-card-meta">' +
+          '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' +
+          '<span>' + formatDate(post.date) + '</span>' +
+          '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' +
+          '<span>' + post.readTime + '</span>' +
+        '</div>' +
+      '</div>';
+    return a;
+  }
+
+  function getFiltered() {
+    return POSTS.filter(function(p) {
+      var matchFilter = activeFilter === 'all' || p.category === activeFilter;
+      var q = searchQuery.toLowerCase();
+      var matchSearch = !q || p.title.toLowerCase().includes(q) || p.excerpt.toLowerCase().includes(q);
+      return matchFilter && matchSearch;
+    });
+  }
+
+  function removeSkeletons() {
+    ['sk1','sk2','sk3'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.remove();
+    });
+  }
+
+  function renderPage() {
+    removeSkeletons();
+    var grid = document.getElementById('blogGrid');
+    var wrap = document.getElementById('loadMoreWrap');
+    var filtered = getFiltered();
+    var start = (currentPage - 1) * PAGE_SIZE;
+    var slice = filtered.slice(start, start + PAGE_SIZE);
+
+    if (currentPage === 1) {
+      grid.innerHTML = '';
+      if (filtered.length === 0) {
+        grid.innerHTML = '<div class="state-box"><div class="state-icon">🔍</div><h3>No articles found</h3><p>Try a different search or filter.</p></div>';
+        wrap.style.display = 'none';
+        return;
+      }
+    }
+
+    slice.forEach(function(post) { grid.appendChild(buildCard(post)); });
+
+    hasMore = start + PAGE_SIZE < filtered.length;
+    wrap.style.display = hasMore ? 'block' : 'none';
+    document.getElementById('loadMoreBtn').disabled = false;
+  }
+
+  document.getElementById('filterRow').addEventListener('click', function(e) {
+    var chip = e.target.closest('.filter-chip');
+    if (!chip) return;
+    document.querySelectorAll('.filter-chip').forEach(function(c) { c.classList.remove('active'); });
+    chip.classList.add('active');
+    activeFilter = chip.dataset.filter;
+    currentPage = 1;
+    renderPage();
+  });
+
+  var searchTimer;
+  document.getElementById('blogSearchInput').addEventListener('input', function(e) {
+    clearTimeout(searchTimer);
+    var val = e.target.value;
+    searchTimer = setTimeout(function() {
+      searchQuery = val.trim();
+      currentPage = 1;
+      renderPage();
+    }, 280);
+  });
+
+  document.getElementById('headerSearchInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') window.location.href = '/?q=' + encodeURIComponent(e.target.value);
+  });
+
+  document.getElementById('loadMoreBtn').addEventListener('click', function() {
+    if (isLoading || !hasMore) return;
+    isLoading = true;
+    document.getElementById('loadMoreBtn').disabled = true;
+    setTimeout(function() {
+      currentPage++;
+      renderPage();
+      isLoading = false;
+    }, 300);
+  });
+
+  renderPage();
+</script>
+
+</body>
+</html>

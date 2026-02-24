@@ -43,7 +43,10 @@
     { "source": "/es/country/japan/", "destination": "/es/japan.html" },
     { "source": "/es/near-me", "destination": "/es/near-me.html" },
     { "source": "/es/near-me/", "destination": "/es/near-me.html" },
-    
+
+    { "source": "/blog", "destination": "/blog.html" },
+    { "source": "/blog/", "destination": "/blog.html" },
+
     { "source": "/:username([A-Za-z0-9_-]+)", "destination": "/api/creator_public/:username" },
     { "source": "/:username([A-Za-z0-9_-]+)/", "destination": "/api/creator_public/:username" }
   ],
