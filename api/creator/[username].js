@@ -136,6 +136,7 @@ async function fetchCreator(username) {
       p.set('select', '*,avatar_c50,avatar_c144,header_w480,header_w760');
       p.set('username', `eq.${v}`);
       p.set('limit', '1');
+      p.set('is_published', 'eq.true');
       const url = `${base}?${p.toString()}`;
       debug.attempts.push({ type: 'eq', v });
       console.log('[SSR] Supabase URL (eq):', url);
@@ -163,6 +164,7 @@ async function fetchCreator(username) {
       p.set('select', '*,avatar_c50,avatar_c144,header_w480,header_w760');
       p.set('username', `ilike.*${v}*`);
       p.set('limit', '1');
+      p.set('is_published', 'eq.true');
       const url = `${base}?${p.toString()}`;
       debug.attempts.push({ type: 'ilike', v });
       console.log('[SSR] Supabase URL (ilike):', url);
