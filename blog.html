@@ -6,7 +6,19 @@
   <title>Blog | FansPedia — Tips, Guides &amp; Creator News</title>
   <meta name="description" content="Tips, guides and creator news from FansPedia. Discover the best OnlyFans creators, how-to guides, and industry news." />
   <link rel="canonical" href="https://fanspedia.net/blog/" />
-  <link rel="icon" href="/favicon.svg" />
+  <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YV9QD82K7G"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-YV9QD82K7G');
+  </script>
+  <link rel="preload" as="style" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"></noscript>
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -20,7 +32,26 @@
       --muted:     #8892a4;
       --border:    rgba(255,255,255,0.08);
       --radius:    12px;
-      --header-h:  64px;
+      --bg-primary: #f5f5f7;
+      --bg-secondary: #ffffff;
+      --text-primary: #1d1d1f;
+      --text-secondary: #666;
+      --text-muted: #888;
+      --border-color: #e0e0e0;
+      --input-bg: #ffffff;
+      --brand-color: #0099D6;
+      --placeholder-color: #999;
+    }
+    [data-theme="dark"] {
+      --bg-primary: #1a1a1a;
+      --bg-secondary: #2a2a2a;
+      --text-primary: #e8e8e8;
+      --text-secondary: #c8c8c8;
+      --text-muted: #888;
+      --border-color: #404040;
+      --input-bg: #2a2a2a;
+      --brand-color: #00AFF0;
+      --placeholder-color: #999;
     }
 
     html { scroll-behavior: smooth; }
@@ -31,88 +62,105 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      padding-top: 68px;
+      padding-bottom: 80px;
     }
 
-    /* ── HEADER ── */
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      height: var(--header-h);
-      background: rgba(10,10,15,0.95);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      padding: 0 20px;
-      gap: 12px;
+    /* ── EXACT HEADER FROM INDEX.HTML ── */
+    .superior-header { position: fixed; top: 0; left: 0; right: 0; z-index: 9999; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); box-shadow: 0 4px 24px rgba(0, 175, 240, 0.25); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .superior-header.scrolled { box-shadow: 0 8px 32px rgba(0, 175, 240, 0.35); }
+    .header-main { padding: 10px 0; backdrop-filter: blur(10px); }
+    .header-container { max-width: 1400px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .logo-section { display: flex; align-items: center; gap: 12px; flex-shrink: 0; text-decoration: none; }
+    .logo-icon { width: 40px; height: 40px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: transform 0.3s ease; }
+    .logo-icon:hover { transform: scale(1.05) rotate(5deg); }
+    .logo-icon i { color: #00AFF0; }
+    .logo-text { display: flex; flex-direction: column; }
+    .logo-text .brand { font-size: 22px; font-weight: 900; color: white; letter-spacing: 0.3px; line-height: 1; text-shadow: 0 2px 4px rgba(0,0,0,0.3); filter: brightness(1.05); }
+    .logo-text .tagline { font-size: 11px; color: rgba(255,255,255,0.95); font-weight: 600; letter-spacing: 0.8px; margin-top: 2px; text-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+    .header-search-section { flex: 1; max-width: 560px; position: relative; }
+    .header-search-wrapper { position: relative; display: flex; align-items: center; }
+    .header-search-input { width: 100%; padding: 10px 16px 10px 44px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50px; background: rgba(255,255,255,0.95); font-size: 15px; font-weight: 500; color: #1d1d1f; transition: all 0.3s ease; box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+    .header-search-input:focus { outline: none; border-color: white; background: white; box-shadow: 0 8px 32px rgba(0,0,0,0.15); transform: translateY(-1px); }
+    .header-search-input::placeholder { color: var(--placeholder-color); }
+    .header-search-icon { position: absolute; left: 16px; color: #00AFF0; font-size: 18px; pointer-events: none; }
+    .header-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .lang-toggle { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; width: 44px; height: 44px; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; position: relative; z-index: 100; flex-shrink: 0; }
+    .lang-toggle:hover { background: rgba(255,255,255,0.3); transform: translateY(-1px); }
+    .theme-toggle { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; width: 44px; height: 44px; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; font-size: 20px; }
+    .theme-toggle:hover { background: rgba(255,255,255,0.3); transform: translateY(-1px); }
+    .safe-search-toggle { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; width: 44px; height: 44px; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; font-size: 20px; position: relative; }
+    .safe-search-toggle:hover { background: rgba(255,255,255,0.3); transform: translateY(-1px); }
+    .safe-search-toggle.active { background: rgba(52,199,89,0.9); border-color: rgba(52,199,89,1); box-shadow: 0 0 20px rgba(52,199,89,0.4); }
+    .safe-search-toggle.active::after { content: ''; position: absolute; top: 2px; right: 2px; width: 10px; height: 10px; background: #34c759; border: 2px solid white; border-radius: 50%; }
+    .mobile-menu-toggle { display: none; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; width: 44px; height: 44px; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; justify-content: center; align-items: center; font-size: 18px; }
+    .mobile-menu-toggle:hover { background: rgba(255,255,255,0.3); transform: translateY(-1px); }
+    .mobile-search-trigger { display: none; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: #fff; width: 44px; height: 44px; border-radius: 12px; cursor: pointer; justify-content: center; align-items: center; font-size: 20px; transition: all .3s ease; }
+    .mobile-search-trigger:hover { background: rgba(255,255,255,0.3); transform: translateY(-1px); }
+    .desktop-nav { position: relative; flex-shrink: 0; }
+    .desktop-nav .nav-btn { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.2); color: #fff; border: 1px solid rgba(255,255,255,0.35); border-radius: 9999px; padding: 10px 14px; font-weight: 800; font-size: 14px; cursor: pointer; transition: all .2s ease; text-decoration: none; }
+    .desktop-nav .nav-btn:hover { background: rgba(255,255,255,0.3); }
+    .desktop-nav .nav-btn i { font-size: 12px; opacity: 0.9; }
+    .desktop-nav .dropdown-menu { position: absolute; right: 0; top: calc(100% + 8px); background: #fff; border-radius: 12px; box-shadow: 0 12px 32px rgba(0,0,0,0.15); padding: 8px; min-width: 240px; display: none; z-index: 10000; }
+    .desktop-nav .dropdown-menu.open { display: block; }
+    .desktop-nav .dropdown-menu a { display: block; padding: 10px 12px; color: #1d1d1f; font-weight: 700; border-radius: 8px; text-decoration: none; transition: background .15s ease, color .15s ease; }
+    .desktop-nav .dropdown-menu a:hover { background: #f5f5f7; color: #00AFF0; }
+    .desktop-nav .dropdown-menu .divider { height: 1px; background: #eee; margin: 6px 6px; }
+    .desktop-nav .dropdown-menu a.view-all { color: #00AFF0; }
+    .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 10000; opacity: 0; pointer-events: none; transition: opacity .3s ease; }
+    .drawer-overlay.open { opacity: 1; pointer-events: auto; }
+    .mobile-drawer { position: fixed; top: 0; right: -100%; width: 82%; max-width: 340px; height: 100%; background: #fff; box-shadow: -8px 0 24px rgba(0,0,0,0.2); z-index: 10001; padding: 16px; display: flex; flex-direction: column; gap: 6px; transition: right .3s ease; overflow-y: auto; }
+    .mobile-drawer.open { right: 0; }
+    .mobile-drawer .drawer-close { align-self: flex-end; background: none; border: none; font-size: 28px; line-height: 1; color: #1d1d1f; margin-bottom: 4px; cursor: pointer; }
+    .mobile-drawer > a { display: block; padding: 14px 12px; border-radius: 8px; color: #1d1d1f; font-weight: 700; text-decoration: none; margin: 2px 0; font-size: 16px; }
+    .mobile-drawer > a:hover { background: #f5f5f7; color: #00AFF0; }
+    .drawer-categories-toggle, .drawer-locations-toggle { display: flex; align-items: center; justify-content: space-between; padding: 14px 12px; cursor: pointer; border-radius: 8px; margin: 2px 0; font-size: 16px; font-weight: 700; color: #1d1d1f; transition: background 0.2s; }
+    .drawer-categories-toggle:hover, .drawer-locations-toggle:hover { background: #f5f5f7; }
+    .drawer-categories-toggle .icon-text, .drawer-locations-toggle .icon-text { display: flex; align-items: center; gap: 10px; }
+    .drawer-categories-toggle .chevron, .drawer-locations-toggle .chevron { font-size: 14px; transition: transform 0.3s ease; color: #666; }
+    .drawer-categories-toggle.open .chevron, .drawer-locations-toggle.open .chevron { transform: rotate(180deg); }
+    #drawerCategoriesSection, #drawerLocationsSection { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, opacity 0.3s ease; opacity: 0; }
+    #drawerCategoriesSection.open, #drawerLocationsSection.open { max-height: 800px; opacity: 1; overflow-y: auto; }
+    .drawer-categories-label, .drawer-locations-label { color: #999; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; padding: 12px 16px 8px; }
+    #drawerCategories, #drawerLocations { display: flex; flex-direction: column; gap: 0; padding: 0 4px; }
+    #drawerCategories a, #drawerLocations a { display: block; padding: 12px 12px; color: #555; font-weight: 600; text-decoration: none; border-radius: 6px; margin: 1px 0; font-size: 15px; transition: background .15s, color .15s; }
+    #drawerCategories a:hover, #drawerLocations a:hover { background: #f5f5f7; color: #00AFF0; }
+    .drawer-view-all-btn { display: block; margin: 12px 8px 8px; padding: 14px 20px; background: linear-gradient(135deg,#00AFF0 0%,#0099D6 100%); color: white; text-align: center; border-radius: 12px; font-weight: 800; text-decoration: none; font-size: 15px; }
+    .drawer-view-all-btn:hover { color: white; }
+    .mobile-search-modal { position: fixed; inset: 0; background: var(--bg-secondary); z-index: 10003; display: none; flex-direction: column; color: var(--text-primary); }
+    .mobile-search-modal.active { display: flex; }
+    .mobile-search-header { display: flex; align-items: center; gap: 12px; padding: 16px; background: linear-gradient(135deg,#00AFF0 0%,#0099D6 100%); box-shadow: 0 4px 12px rgba(0,175,240,0.3); }
+    .mobile-search-back { background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; padding: 8px; display: flex; align-items: center; justify-content: center; }
+    .mobile-search-input-wrapper { flex: 1; position: relative; }
+    .mobile-search-input { width: 100%; padding: 12px 16px 12px 44px; border: 2px solid var(--border-color); border-radius: 50px; background: var(--input-bg); font-size: 16px; font-weight: 500; color: var(--text-primary); }
+    .mobile-search-input:focus { outline: none; border-color: var(--brand-color); }
+    .mobile-search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #00AFF0; font-size: 18px; pointer-events: none; }
+    .mobile-search-content { flex: 1; overflow-y: auto; padding: 20px 16px; }
+    .mobile-search-label { color: var(--text-secondary); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; margin-bottom: 12px; }
+    .mobile-search-suggestions { display: flex; flex-direction: column; gap: 4px; }
+    .mobile-search-suggestion { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--bg-primary); border-radius: 12px; text-decoration: none; color: var(--text-primary); font-weight: 600; font-size: 15px; transition: all .2s; }
+    .mobile-search-suggestion i { color: #00AFF0; font-size: 16px; }
+    .safe-search-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 10002; align-items: center; justify-content: center; padding: 20px; }
+    .safe-search-modal.show { display: flex; }
+    .safe-search-modal-content { background: #fff; border-radius: 20px; padding: 32px; max-width: 420px; width: 100%; text-align: center; }
+    .safe-search-modal-icon { font-size: 48px; color: #00AFF0; margin-bottom: 16px; }
+    .safe-search-modal h2 { font-size: 22px; font-weight: 800; color: #1d1d1f; margin-bottom: 12px; }
+    .safe-search-modal p { color: #555; font-size: 15px; line-height: 1.6; margin-bottom: 24px; }
+    .safe-search-modal-actions { display: flex; flex-direction: column; gap: 10px; }
+    .safe-search-modal-btn { padding: 14px 24px; border-radius: 12px; border: none; font-size: 15px; font-weight: 700; cursor: pointer; transition: all .2s; }
+    .safe-search-modal-btn-primary { background: linear-gradient(135deg,#00AFF0,#0099D6); color: white; }
+    .safe-search-modal-btn-secondary { background: #f5f5f7; color: #555; }
+    .safe-search-modal-footer { font-size: 12px; color: #888; margin-top: 16px; }
+    @media (max-width: 768px) {
+      .header-container { flex-wrap: nowrap; gap: 12px; }
+      .logo-text .tagline { display: none; }
+      .header-search-section { display: none !important; }
+      .mobile-search-trigger { display: inline-flex; }
+      .desktop-nav { display: none; }
+      .mobile-menu-toggle { display: inline-flex; }
+      .header-main { padding: 8px 0; }
+      body { padding-top: 66px; }
     }
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-      flex-shrink: 0;
-    }
-    .logo-icon {
-      width: 32px; height: 32px;
-      background: linear-gradient(135deg,#00a8ff,#0066cc);
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 16px;
-    }
-    .logo-text { font-size: 18px; font-weight: 700; color: var(--text); }
-    .logo-text span { color: var(--accent); }
-
-    .header-search {
-      flex: 1;
-      max-width: 480px;
-      position: relative;
-    }
-    .header-search input {
-      width: 100%;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 8px 16px 8px 40px;
-      color: var(--text);
-      font-size: 14px;
-      outline: none;
-      transition: border-color .2s;
-    }
-    .header-search input:focus { border-color: var(--accent); }
-    .header-search input::placeholder { color: var(--muted); }
-    .header-search svg {
-      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-      color: var(--muted); pointer-events: none;
-    }
-
-    .header-nav { display: flex; align-items: center; gap: 4px; margin-left: auto; }
-    .header-nav a {
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--muted);
-      text-decoration: none;
-      transition: background .2s, color .2s;
-      white-space: nowrap;
-    }
-    .header-nav a:hover, .header-nav a.active { background: var(--accent-dim); color: var(--accent); }
-
-    .header-actions { display: flex; align-items: center; gap: 6px; }
-    .icon-btn {
-      width: 36px; height: 36px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.04);
-      color: var(--muted);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      transition: background .2s, color .2s;
-      text-decoration: none;
-    }
-    .icon-btn:hover { background: var(--accent-dim); color: var(--accent); }
 
     /* ── HERO ── */
     .blog-hero {
@@ -426,34 +474,119 @@
 </head>
 <body>
 
-<!-- ── HEADER ── -->
-<header>
-  <a href="/" class="logo">
-    <div class="logo-icon">🔍</div>
-    <span class="logo-text">Fans<span>Pedia</span></span>
-  </a>
+<!-- ── HEADER (exact from index.html) ── -->
+<header class="superior-header" id="mainHeader">
+  <div class="header-main">
+    <div class="header-container">
+      <a href="/" class="logo-section">
+        <svg width="140" height="42" viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+          <g transform="translate(10,8)">
+            <path d="M48 4 C31 4 18 17.5 18 34.5 C18 48.5 30.1 62.9 42.4 79.1 C45.0 82.7 51.0 82.7 53.6 79.1 C65.9 62.9 78 48.5 78 34.5 C78 17.5 65 4 48 4 Z" fill="#FFFFFF"/>
+            <text x="48" y="40" text-anchor="middle" dominant-baseline="middle" font-family="Poppins, system-ui, sans-serif" font-size="34" font-weight="700" fill="#000000">F</text>
+          </g>
+          <text x="115" y="64" font-family="Poppins, system-ui, sans-serif" font-size="40" font-weight="500" fill="#FFFFFF">FansPedia</text>
+        </svg>
+      </a>
 
-  <div class="header-search">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    <input type="text" placeholder="Search creators…" id="headerSearchInput" />
-  </div>
+      <div class="desktop-nav">
+        <button id="categoriesToggle" class="nav-btn" aria-haspopup="true" aria-expanded="false">
+          Categories <i class="fas fa-chevron-down"></i>
+        </button>
+        <div id="categoriesMenu" class="dropdown-menu" role="menu" aria-hidden="true"></div>
+      </div>
 
-  <nav class="header-nav">
-    <a href="/">Home</a>
-    <a href="/categories/">Categories</a>
-    <a href="/locations/">Locations</a>
-    <a href="/blog/" class="active">Blog</a>
-  </nav>
+      <div class="desktop-nav">
+        <a href="/locations/" class="nav-btn">Locations <i class="fas fa-map-marker-alt"></i></a>
+      </div>
 
-  <div class="header-actions">
-    <button class="icon-btn" title="Language">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-    </button>
-    <button class="icon-btn" title="Safe Search">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-    </button>
+      <div class="header-search-section">
+        <div class="header-search-wrapper">
+          <i class="fas fa-search header-search-icon"></i>
+          <input type="text" class="header-search-input" placeholder="Search by name, location, category..." id="headerSearch" autocomplete="off" autocapitalize="none" spellcheck="false">
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button class="lang-toggle" id="langToggle" aria-label="Toggle Language" title="EN / ES" onclick="toggleLanguage()">
+          <span id="langIndicator">EN</span>
+        </button>
+        <button class="mobile-search-trigger" id="mobileSearchTrigger" aria-label="Search">
+          <i class="fas fa-search"></i>
+        </button>
+        <button class="safe-search-toggle" id="safeSearchToggle" aria-label="Toggle Safe Search" title="Safe Search">
+          <i class="fas fa-eye-slash"></i>
+        </button>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+          <i class="fas fa-moon"></i>
+        </button>
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
   </div>
 </header>
+
+<!-- Mobile Search Modal -->
+<div class="mobile-search-modal" id="mobileSearchModal">
+  <div class="mobile-search-header">
+    <button class="mobile-search-back" id="mobileSearchBack" aria-label="Close search"><i class="fas fa-arrow-left"></i></button>
+    <div class="mobile-search-input-wrapper">
+      <i class="fas fa-search mobile-search-icon"></i>
+      <input type="text" class="mobile-search-input" id="mobileSearchInput" placeholder="Search by name, location, category..." autocomplete="off">
+    </div>
+  </div>
+  <div class="mobile-search-content">
+    <div class="mobile-search-label">POPULAR SEARCHES</div>
+    <div class="mobile-search-suggestions" id="mobileSearchSuggestions"></div>
+  </div>
+</div>
+
+<!-- Safe Search Modal -->
+<div id="safeSearchModal" class="safe-search-modal" role="dialog" aria-modal="true">
+  <div class="safe-search-modal-content">
+    <div class="safe-search-modal-icon"><i class="fas fa-shield-alt"></i></div>
+    <h2>Browse Safely in Public?</h2>
+    <p>Enable <strong>Safe Search</strong> to blur images so you can browse comfortably anywhere.</p>
+    <div class="safe-search-modal-actions">
+      <button class="safe-search-modal-btn safe-search-modal-btn-primary" id="enableSafeSearch"><i class="fas fa-shield-alt"></i> Enable Safe Search</button>
+      <button class="safe-search-modal-btn safe-search-modal-btn-secondary" id="dismissSafeSearch">No Thanks</button>
+    </div>
+    <div class="safe-search-modal-footer">Toggle anytime with the <i class="fas fa-eye-slash"></i> icon</div>
+  </div>
+</div>
+
+<!-- Mobile Drawer -->
+<div id="drawerOverlay" class="drawer-overlay" tabindex="-1" aria-hidden="true"></div>
+<nav id="mobileDrawer" class="mobile-drawer" aria-hidden="true">
+  <button class="drawer-close" id="drawerClose" aria-label="Close menu">×</button>
+  <a href="/">Home</a>
+  <a href="/blog/" style="color:#00AFF0">Blog</a>
+  <div class="drawer-categories-toggle" id="drawerCategoriesToggle">
+    <div class="icon-text"><i class="fas fa-th"></i><span>Categories</span></div>
+    <i class="fas fa-chevron-down chevron"></i>
+  </div>
+  <div id="drawerCategoriesSection">
+    <div class="drawer-categories-label">MOST POPULAR CATEGORIES</div>
+    <div id="drawerCategories"></div>
+    <a href="/categories/" class="drawer-view-all-btn">View All Categories</a>
+  </div>
+  <div class="drawer-locations-toggle" id="drawerLocationsToggle">
+    <div class="icon-text"><i class="fas fa-map-marker-alt"></i><span>Locations</span></div>
+    <i class="fas fa-chevron-down chevron"></i>
+  </div>
+  <div id="drawerLocationsSection">
+    <div class="drawer-locations-label">POPULAR LOCATIONS</div>
+    <div id="drawerLocations">
+      <a href="/near-me/">Near Me</a>
+      <a href="/country/united-states/">United States</a>
+      <a href="/country/canada/">Canada</a>
+      <a href="/country/india/">India</a>
+      <a href="/country/japan/">Japan</a>
+    </div>
+    <a href="/locations/" class="drawer-view-all-btn">View All Locations</a>
+  </div>
+</nav>
 
 <!-- ── HERO ── -->
 <section class="blog-hero">
@@ -577,33 +710,140 @@
   </div>
 </footer>
 
-<!-- ── BOTTOM NAV ── -->
-<nav class="bottom-nav">
-  <div class="bottom-nav-inner">
-    <a href="/" class="bottom-nav-item">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      Home
-    </a>
-    <a href="/categories/" class="bottom-nav-item">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-      Categories
-    </a>
-    <a href="/locations/" class="bottom-nav-item">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-      Locations
-    </a>
-    <a href="/blog/" class="bottom-nav-item active">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-      Blog
-    </a>
-    <a href="/wishlist/" class="bottom-nav-item">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-      Wishlist
-    </a>
-  </div>
+<nav class="sticky-bottom-nav" role="navigation" aria-label="Bottom navigation">
+  <a href="/" class="nav-item" data-nav="home">
+    <span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+    <span class="label">Search</span>
+  </a>
+  <a href="/near-me/" class="nav-item" data-nav="near">
+    <span class="icon"><i class="fa-solid fa-location-arrow"></i></span>
+    <span class="label">Near Me</span>
+  </a>
+  <a href="/categories/" class="nav-item" data-nav="categories">
+    <span class="icon"><i class="fa-solid fa-th"></i></span>
+    <span class="label">Categories</span>
+  </a>
+  <a href="/blog/" class="nav-item active" data-nav="blog">
+    <span class="icon"><i class="fa-solid fa-newspaper"></i></span>
+    <span class="label">Blog</span>
+  </a>
+  <a href="/wishlist/" class="nav-item" data-nav="wishlist">
+    <span class="icon"><i class="fa-solid fa-heart"></i></span>
+    <span class="label">Wishlist</span>
+  </a>
 </nav>
+<style>
+  .sticky-bottom-nav{position:fixed;left:0;right:0;bottom:calc(0px + env(safe-area-inset-bottom));z-index:9999;display:flex;align-items:center;justify-content:space-between;padding:8px 16px;background:var(--bg-secondary);border-top:1px solid var(--border-color);box-shadow:0 -4px 12px rgba(0,0,0,0.06)}
+  .sticky-bottom-nav .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text-primary);text-decoration:none}
+  .sticky-bottom-nav .icon{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#00AFF0 0%,#0099D6 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,175,240,0.35);color:#fff;position:relative;transition:box-shadow .35s ease,transform .3s ease}
+  .sticky-bottom-nav .nav-item:hover .icon{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,175,240,0.55)}
+  .sticky-bottom-nav .nav-item.active .icon{background:linear-gradient(135deg,#0099D6 0%,#0088C0 100%);box-shadow:0 6px 16px rgba(0,175,240,0.55)}
+  .sticky-bottom-nav .icon i{font-size:15px}
+  .sticky-bottom-nav .label{font-size:11px;font-weight:700;color:var(--text-primary)}
+</style>
+
+<script type="module">
+  import { popularCategories, categoryToSlug } from '/config/categories.js?v=20251121-4';
+  const catMenu = document.getElementById('categoriesMenu');
+  if (catMenu) {
+    catMenu.innerHTML = popularCategories.map(cat => {
+      const slug = categoryToSlug(cat);
+      const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+      return `<a role="menuitem" href="/categories/${slug}/">${label}</a>`;
+    }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Browse all categories →</a>';
+  }
+  const drawerCats = document.getElementById('drawerCategories');
+  if (drawerCats) {
+    drawerCats.innerHTML = popularCategories.map(cat => {
+      const slug = categoryToSlug(cat);
+      const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+      return `<a href="/categories/${slug}/">${label}</a>`;
+    }).join('');
+  }
+  document.getElementById('drawerCategoriesToggle')?.addEventListener('click', () => document.getElementById('drawerCategoriesSection')?.classList.toggle('open'));
+  document.getElementById('drawerLocationsToggle')?.addEventListener('click', () => document.getElementById('drawerLocationsSection')?.classList.toggle('open'));
+</script>
 
 <script>
+  // Dark mode
+  const themeToggle = document.getElementById('themeToggle');
+  function getCurrentTheme() { return localStorage.getItem('theme') || 'light'; }
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    const icon = themeToggle && themeToggle.querySelector('i');
+    if (icon) icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+  }
+  applyTheme(getCurrentTheme());
+  if (themeToggle) themeToggle.addEventListener('click', () => { const t = getCurrentTheme() === 'dark' ? 'light' : 'dark'; localStorage.setItem('theme', t); applyTheme(t); });
+
+  // Language toggle
+  function toggleLanguage() {
+    const isEs = location.pathname.startsWith('/es/');
+    location.href = isEs ? (location.pathname.replace(/^\/es/, '') || '/') + location.search : '/es' + location.pathname + location.search;
+  }
+  const li = document.getElementById('langIndicator');
+  if (li) li.textContent = location.pathname.startsWith('/es/') ? 'ES' : 'EN';
+
+  // Scroll header effect
+  window.addEventListener('scroll', () => {
+    const h = document.getElementById('mainHeader');
+    if (h) h.classList.toggle('scrolled', window.pageYOffset > 50);
+  });
+
+  // Desktop categories dropdown
+  const catToggle = document.getElementById('categoriesToggle');
+  const catMenuEl = document.getElementById('categoriesMenu');
+  if (catToggle && catMenuEl) {
+    catToggle.addEventListener('click', e => { e.stopPropagation(); const open = catMenuEl.classList.toggle('open'); catToggle.setAttribute('aria-expanded', open); });
+    document.addEventListener('click', e => { if (!catMenuEl.contains(e.target) && e.target !== catToggle) catMenuEl.classList.remove('open'); });
+  }
+
+  // Mobile drawer
+  const mobileToggle = document.getElementById('mobileMenuToggle');
+  const drawer = document.getElementById('mobileDrawer');
+  const overlay = document.getElementById('drawerOverlay');
+  const drawerClose = document.getElementById('drawerClose');
+  function openDrawer() { drawer?.classList.add('open'); overlay?.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function closeDrawer() { drawer?.classList.remove('open'); overlay?.classList.remove('open'); document.body.style.overflow = ''; }
+  mobileToggle?.addEventListener('click', e => { e.preventDefault(); openDrawer(); });
+  overlay?.addEventListener('click', closeDrawer);
+  drawerClose?.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+
+  // Mobile search modal
+  const mobileSearchModal = document.getElementById('mobileSearchModal');
+  const mobileSearchTrigger = document.getElementById('mobileSearchTrigger');
+  const mobileSearchBack = document.getElementById('mobileSearchBack');
+  const mobileSearchInput = document.getElementById('mobileSearchInput');
+  const mobileSearchSuggestions = document.getElementById('mobileSearchSuggestions');
+  const popularSearches = ['milf', 'asian', 'big tits', 'trans', 'mature', 'latina', 'big ass', 'bbw'];
+  if (mobileSearchSuggestions) mobileSearchSuggestions.innerHTML = popularSearches.map(t => `<a href="/?q=${encodeURIComponent(t)}" class="mobile-search-suggestion"><i class="fas fa-fire"></i><span>${t}</span></a>`).join('');
+  mobileSearchTrigger?.addEventListener('click', () => { mobileSearchModal?.classList.add('active'); document.body.style.overflow = 'hidden'; setTimeout(() => mobileSearchInput?.focus(), 100); });
+  mobileSearchBack?.addEventListener('click', () => { mobileSearchModal?.classList.remove('active'); document.body.style.overflow = ''; });
+  mobileSearchInput?.addEventListener('keypress', e => { if (e.key === 'Enter' && mobileSearchInput.value.trim()) location.href = '/?q=' + encodeURIComponent(mobileSearchInput.value.trim()); });
+
+  // Header search → go to homepage search
+  document.getElementById('headerSearch')?.addEventListener('keydown', e => { if (e.key === 'Enter') location.href = '/?q=' + encodeURIComponent(e.target.value); });
+
+  // Safe Search
+  const safeSearchToggle = document.getElementById('safeSearchToggle');
+  const safeSearchModal = document.getElementById('safeSearchModal');
+  function getSafeSearchState() { return localStorage.getItem('safeSearch') === 'true'; }
+  function applySafeSearch(enabled) {
+    document.body.classList.toggle('safe-search-active', enabled);
+    safeSearchToggle?.classList.toggle('active', enabled);
+    const icon = safeSearchToggle?.querySelector('i');
+    if (icon) icon.className = 'fas fa-' + (enabled ? 'eye-slash' : 'eye');
+    localStorage.setItem('safeSearch', enabled);
+  }
+  function hideSafeSearchModal() { safeSearchModal?.classList.remove('show'); document.body.style.overflow = ''; localStorage.setItem('safeSearchModalShown','true'); }
+  applySafeSearch(getSafeSearchState());
+  safeSearchToggle?.addEventListener('click', () => applySafeSearch(!getSafeSearchState()));
+  document.getElementById('enableSafeSearch')?.addEventListener('click', () => { applySafeSearch(true); hideSafeSearchModal(); });
+  document.getElementById('dismissSafeSearch')?.addEventListener('click', () => { applySafeSearch(false); hideSafeSearchModal(); });
+  if (!localStorage.getItem('safeSearchModalShown')) setTimeout(() => safeSearchModal?.classList.add('show'), 10000);
+
+  // BLOG JS
   const PAGE_SIZE = 9;
   let currentPage = 1;
   let isLoading = false;
