@@ -23,41 +23,47 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:        #0a0a0f;
-      --card-bg:   #12121a;
-      --card-hover:#16161f;
-      --accent:    #00a8ff;
-      --accent-dim:rgba(0,168,255,0.12);
-      --text:      #ffffff;
-      --muted:     #8892a4;
-      --border:    rgba(255,255,255,0.08);
-      --radius:    12px;
-      --bg-primary: #f5f5f7;
+      /* Theme foundations — light default */
+      --bg-primary:   #f5f5f7;
       --bg-secondary: #ffffff;
       --text-primary: #1d1d1f;
-      --text-secondary: #666;
-      --text-muted: #888;
+      --text-secondary: #555;
+      --text-muted:   #888;
       --border-color: #e0e0e0;
-      --input-bg: #ffffff;
-      --brand-color: #0099D6;
+      --input-bg:     #ffffff;
+      --brand-color:  #0099D6;
       --placeholder-color: #999;
+      /* Blog aliases → theme vars */
+      --bg:        var(--bg-primary);
+      --card-bg:   var(--bg-secondary);
+      --card-hover:#f0f0f2;
+      --accent:    #00AFF0;
+      --accent-dim:rgba(0,175,240,0.10);
+      --text:      var(--text-primary);
+      --muted:     var(--text-secondary);
+      --border:    var(--border-color);
+      --radius:    12px;
     }
     [data-theme="dark"] {
-      --bg-primary: #1a1a1a;
-      --bg-secondary: #2a2a2a;
+      --bg-primary:   #1a1a1a;
+      --bg-secondary: #242424;
       --text-primary: #e8e8e8;
-      --text-secondary: #c8c8c8;
-      --text-muted: #888;
-      --border-color: #404040;
-      --input-bg: #2a2a2a;
-      --brand-color: #00AFF0;
-      --placeholder-color: #999;
+      --text-secondary: #aaa;
+      --text-muted:   #888;
+      --border-color: #383838;
+      --input-bg:     #2a2a2a;
+      --brand-color:  #00AFF0;
+      --placeholder-color: #666;
+      /* Blog aliases — dark overrides */
+      --card-bg:   #242424;
+      --card-hover:#2e2e2e;
+      --accent-dim:rgba(0,175,240,0.12);
     }
 
     html { scroll-behavior: smooth; }
     body {
-      background: var(--bg);
-      color: var(--text);
+      background: var(--bg-primary);
+      color: var(--text-primary);
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       min-height: 100vh;
       display: flex;
@@ -187,20 +193,21 @@
     }
     .hero-search input {
       width: 100%;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
       border-radius: 28px;
       padding: 14px 20px 14px 48px;
-      color: var(--text);
+      color: var(--text-primary);
       font-size: 15px;
       outline: none;
       transition: border-color .2s, box-shadow .2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
     .hero-search input:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(0,168,255,0.12);
+      box-shadow: 0 0 0 3px rgba(0,175,240,0.12);
     }
-    .hero-search input::placeholder { color: var(--muted); }
+    .hero-search input::placeholder { color: var(--placeholder-color); }
     .hero-search svg {
       position: absolute; left: 18px; top: 50%; transform: translateY(-50%);
       color: var(--muted); pointer-events: none;
@@ -269,7 +276,7 @@
     .post-card-image-placeholder {
       width: 100%;
       aspect-ratio: 16/9;
-      background: linear-gradient(135deg, #12121a 0%, #1a1a2e 50%, #0f1117 100%);
+      background: linear-gradient(135deg, var(--bg-primary) 0%, var(--border-color) 50%, var(--bg-primary) 100%);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -340,7 +347,7 @@
 
     /* ── SKELETON ── */
     .skeleton {
-      background: linear-gradient(90deg, var(--card-bg) 25%, #1a1a2a 50%, var(--card-bg) 75%);
+      background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--border-color) 50%, var(--bg-secondary) 75%);
       background-size: 200% 100%;
       animation: shimmer 1.4s infinite;
       border-radius: 6px;
