@@ -28,10 +28,10 @@ function readAllPosts() {
   if (!existsSync(contentDir)) return [];
   const files = readdirSync(contentDir).filter(f => f.endsWith('.md'));
   const posts = files.map(file => {
-    const fileSlug = file.replace(/\.md$/, '');
     const raw = readFileSync(join(contentDir, file), 'utf8');
     const { data } = parseFrontmatter(raw);
-    const slug = data.slug || fileSlug;
+    const slug = data.slug;
+    if (!slug) return null;
     return {
       slug,
       title: data.title || slug,
@@ -42,7 +42,7 @@ function readAllPosts() {
       emoji: data.emoji || '📝',
       readTime: data.read_time || '5 min read',
     };
-  });
+  }).filter(Boolean);
   // Sort newest first
   return posts.sort((a, b) => (a.date < b.date ? 1 : -1));
 }
