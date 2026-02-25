@@ -7,6 +7,16 @@
   <title id="pageTitle">Blog — FansPedia</title>
   <meta name="description" id="pageDesc" content="Read the latest guides and tips on FansPedia.">
   <link rel="canonical" id="pageCanonical" href="https://www.fanspedia.net/blog/">
+  <!-- Open Graph -->
+  <meta property="og:type" content="article" id="ogType">
+  <meta property="og:site_name" content="FansPedia">
+  <meta property="og:title" id="ogTitle" content="FansPedia Blog">
+  <meta property="og:description" id="ogDesc" content="Read the latest guides and tips on FansPedia.">
+  <meta property="og:url" id="ogUrl" content="https://www.fanspedia.net/blog/">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" id="twitterTitle" content="FansPedia Blog">
+  <meta name="twitter:description" id="twitterDesc" content="Read the latest guides and tips on FansPedia.">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -573,10 +583,65 @@
   }
 
   function renderArticle(post) {
-    // Update meta
+    const canonicalUrl = 'https://www.fanspedia.net/blog/' + post.slug + '/';
+
+    // Update meta tags
     document.title = post.title + ' — FansPedia Blog';
-    document.getElementById('pageDesc').content = post.excerpt;
-    document.getElementById('pageCanonical').href = 'https://www.fanspedia.net/blog/' + post.slug + '/';
+    document.getElementById('pageDesc').content = post.metaDescription || post.excerpt;
+    document.getElementById('pageCanonical').href = canonicalUrl;
+    document.getElementById('ogTitle').content = post.ogTitle || post.title;
+    document.getElementById('ogDesc').content = post.ogDescription || post.excerpt;
+    document.getElementById('ogUrl').content = canonicalUrl;
+    document.getElementById('twitterTitle').content = post.ogTitle || post.title;
+    document.getElementById('twitterDesc').content = post.ogDescription || post.excerpt;
+
+    // Inject JSON-LD structured data
+    const articleSchema = {
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: post.title,
+      description: post.metaDescription || post.excerpt,
+      datePublished: post.date ? new Date(post.date).toISOString() : undefined,
+      dateModified: post.updatedDate ? new Date(post.updatedDate).toISOString() : undefined,
+      author: post.authorName ? { '@type': 'Organization', name: post.authorName } : { '@type': 'Organization', name: 'FansPedia Editorial Team' },
+      publisher: { '@type': 'Organization', name: 'FansPedia', url: 'https://www.fanspedia.net' },
+      url: canonicalUrl,
+      mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl }
+    };
+
+    const ldScripts = [JSON.stringify(articleSchema)];
+
+    if (post.faqItems && post.faqItems.length > 0) {
+      const faqSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: post.faqItems.map(item => ({
+          '@type': 'Question',
+          name: item.q,
+          acceptedAnswer: { '@type': 'Answer', text: item.a }
+        }))
+      };
+      ldScripts.push(JSON.stringify(faqSchema));
+    }
+
+    ldScripts.forEach(json => {
+      const s = document.createElement('script');
+      s.type = 'application/ld+json';
+      s.textContent = json;
+      document.head.appendChild(s);
+    });
+
+    // Build author box HTML
+    const authorHtml = post.authorName ? `
+      <div class="author-box" style="margin-top:32px;padding:20px 24px;background:var(--bg-secondary);border-radius:var(--radius);border-left:4px solid var(--brand-color);">
+        <p style="margin:0 0 4px;font-weight:700;color:var(--text-primary);">✍️ ${post.authorName}</p>
+        <p style="margin:0;font-size:14px;color:var(--text-secondary);">${post.authorBio || ''}</p>
+        ${post.updatedDate ? `<p style="margin:8px 0 0;font-size:13px;color:var(--text-muted);">Last updated: ${formatDate(post.updatedDate)}</p>` : ''}
+      </div>` : '';
+
+    // Build disclaimer HTML
+    const disclaimerHtml = post.disclaimer ? `
+      <p style="margin-top:24px;font-size:13px;color:var(--text-muted);border-top:1px solid var(--border-color);padding-top:16px;"><em>${post.disclaimer}</em></p>` : '';
 
     const main = document.getElementById('articleMain');
     main.innerHTML = `
@@ -590,11 +655,14 @@
         <p class="article-excerpt">${post.excerpt}</p>
         <div class="article-meta">
           <span><i class="fas fa-calendar-alt"></i> ${formatDate(post.date)}</span>
+          ${post.updatedDate && post.updatedDate !== post.date ? `<span><i class="fas fa-sync-alt"></i> Updated ${formatDate(post.updatedDate)}</span>` : ''}
           <span><i class="fas fa-clock"></i> ${post.readTime}</span>
         </div>
       </div>
       <div class="article-divider"><hr></div>
       <article class="article-body">${post.bodyHtml || '<p><em>Content coming soon.</em></p>'}</article>
+      ${authorHtml}
+      ${disclaimerHtml}
     `;
   }
 
