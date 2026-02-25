@@ -350,13 +350,6 @@ async function renderCreatorHtmlFromOrigin(req, creator, username) {
 }
 
 export default async function handler(req, res) {
-  let buildSSRTemplate;
-  try {
-    ({ buildSSRTemplate } = await import('../creator/ssr-template.js'));
-  } catch (e) {
-    // If import fails, we'll fall back to the minimal HTML builder below
-    buildSSRTemplate = null;
-  }
   let username = req.query?.params ?? req.query?.username ?? null;
   if (Array.isArray(username)) username = username.join('/');
   if (!username && typeof req.url === 'string') {
