@@ -26,8 +26,14 @@ function mdToHtml(md) {
   md = md.replace(/\r\n/g, '\n');
 
   md = md.replace(/```([^\n]*)\n([\s\S]*?)```/g, (_, lang, code) => {
+    const langTrimmed = lang.trim().toLowerCase();
+    // Handle Mermaid diagrams (flowchart, graph, sequenceDiagram, etc.)
+    if (langTrimmed === 'mermaid' || langTrimmed === 'flowchart' || langTrimmed.startsWith('graph')) {
+      return `<div class="mermaid">${code.trim()}</div>\n\n`;
+    }
+    // Regular code blocks
     const escaped = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    return `<pre><code class="language-${lang.trim()}">${escaped.trim()}</code></pre>\n\n`;
+    return `<pre><code class="language-${langTrimmed}">${escaped.trim()}</code></pre>\n\n`;
   });
 
   md = md.replace(/`([^`]+)`/g, (_, c) => {
