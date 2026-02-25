@@ -1,7 +1,6 @@
 import { readFileSync, existsSync, readdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { marked } from 'marked';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const contentDir = join(__dirname, '..', 'content', 'blog');
@@ -21,19 +20,123 @@ function parseFrontmatter(raw) {
   return { data, body: match[2].trim() };
 }
 
-marked.setOptions({
-  gfm: true,
-  breaks: true,
-});
-
 function mdToHtml(md) {
   if (!md) return '';
 
-  const html = marked.parse(md);
+  md = md.replace(/\r\n/g, '\n');
 
-  return String(html)
-    .replace(/<table>/g, '<div class="table-wrap"><table>')
-    .replace(/<\/table>/g, '</table></div>');
+  md = md.replace(/```([^\n]*)\n([\s\S]*?)```/g, (_, lang, code) => {
+    const escaped = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return `<pre><code class="language-${lang.trim()}">${escaped.trim()}</code></pre>\n\n`;
+  });
+
+  md = md.replace(/`([^`]+)`/g, (_, c) => {
+    const escaped = c.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return `<code>${escaped}</code>`;
+  });
+
+  const blocks = md.split(/\n\s*\n+/);
+
+  const htmlBlocks = blocks.map(block => {
+    block = block.trim();
+    if (!block) return '';
+    if (block.startsWith('<pre>')) return block;
+
+    const tableLines = block.split('\n').map(l => l.trim()).filter(Boolean);
+    if (
+      tableLines.length >= 2 &&
+      tableLines[0].includes('|') &&
+      isMarkdownTableSeparator(tableLines[1])
+    ) {
+      const headers = splitMarkdownTableRow(tableLines[0]);
+      const alignments = parseMarkdownTableAlignments(tableLines[1]);
+      const bodyRows = tableLines
+        .slice(2)
+        .filter(line => line.includes('|'))
+        .map(splitMarkdownTableRow)
+        .filter(row => row.some(cell => cell.length > 0));
+
+      const thead = `<thead><tr>${headers
+        .map((cell, i) => `<th${tableAlignAttr(alignments[i])}>${inlineFormat(cell)}</th>`)
+        .join('')}</tr></thead>`;
+
+      const tbody = bodyRows.length
+        ? `<tbody>${bodyRows
+            .map(row => `<tr>${headers
+              .map((_, i) => `<td${tableAlignAttr(alignments[i])}>${inlineFormat(row[i] || '')}</td>`)
+              .join('')}</tr>`)
+            .join('')}</tbody>`
+        : '';
+
+      return `<div class="table-wrap"><table>${thead}${tbody}</table></div>`;
+    }
+
+    if (/^###\s+/.test(block)) return `<h3>${inlineFormat(block.replace(/^###\s+/, ''))}</h3>`;
+    if (/^##\s+/.test(block)) return `<h2>${inlineFormat(block.replace(/^##\s+/, ''))}</h2>`;
+    if (/^#\s+/.test(block)) return `<h1>${inlineFormat(block.replace(/^#\s+/, ''))}</h1>`;
+
+    if (/^>\s+/.test(block)) {
+      const content = block.split('\n').map(l => l.replace(/^>\s?/, '')).join('\n');
+      return `<blockquote>${inlineFormat(content)}</blockquote>`;
+    }
+
+    if (/^---+$/.test(block)) return '<hr>';
+
+    if (/^[-*]\s+/.test(block)) {
+      const items = block
+        .split('\n')
+        .filter(l => /^[-*]\s+/.test(l))
+        .map(l => `<li>${inlineFormat(l.replace(/^[-*]\s+/, ''))}</li>`);
+      return `<ul>${items.join('')}</ul>`;
+    }
+
+    if (/^\d+\.\s+/.test(block)) {
+      const items = block
+        .split('\n')
+        .filter(l => /^\d+\.\s+/.test(l))
+        .map(l => `<li>${inlineFormat(l.replace(/^\d+\.\s+/, ''))}</li>`);
+      return `<ol>${items.join('')}</ol>`;
+    }
+
+    const lines = block.split('\n').map(l => inlineFormat(l)).join('<br>');
+    return `<p>${lines}</p>`;
+  });
+
+  return htmlBlocks.filter(Boolean).join('\n');
+}
+
+function splitMarkdownTableRow(line) {
+  const normalized = line.trim().replace(/^\|/, '').replace(/\|$/, '');
+  return normalized.split('|').map(cell => cell.trim());
+}
+
+function isMarkdownTableSeparator(line) {
+  const cols = splitMarkdownTableRow(line);
+  return cols.length > 0 && cols.every(col => /^:?-{3,}:?$/.test(col));
+}
+
+function parseMarkdownTableAlignments(line) {
+  return splitMarkdownTableRow(line).map(col => {
+    const left = col.startsWith(':');
+    const right = col.endsWith(':');
+    if (left && right) return 'center';
+    if (right) return 'right';
+    return 'left';
+  });
+}
+
+function tableAlignAttr(align) {
+  if (align === 'center') return ' style="text-align:center"';
+  if (align === 'right') return ' style="text-align:right"';
+  return '';
+}
+
+function inlineFormat(text) {
+  return text
+    .replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" rel="noopener noreferrer">$1</a>');
 }
 
 export default function handler(req, res) {
