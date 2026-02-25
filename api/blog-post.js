@@ -105,17 +105,33 @@ export default function handler(req, res) {
     const { data, body } = parseFrontmatter(raw);
     const bodyHtml = mdToHtml(body);
 
+    // Collect FAQ items from faq_N_q / faq_N_a frontmatter keys
+    const faqItems = [];
+    let n = 1;
+    while (data[`faq_${n}_q`] && data[`faq_${n}_a`]) {
+      faqItems.push({ q: data[`faq_${n}_q`], a: data[`faq_${n}_a`] });
+      n++;
+    }
+
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Cache-Control', 'public, max-age=300');
     res.end(JSON.stringify({
       slug,
       title: data.title || slug,
+      metaDescription: data.meta_description || data.excerpt || '',
+      ogTitle: data.og_title || data.title || slug,
+      ogDescription: data.og_description || data.excerpt || '',
       excerpt: data.excerpt || '',
       category: data.category || 'guides',
       categoryLabel: data.categoryLabel || data.category || 'Guides',
       date: data.date || '',
+      updatedDate: data.updated_date || data.date || '',
       emoji: data.emoji || '📝',
       readTime: data.read_time || '5 min read',
+      authorName: data.author_name || '',
+      authorBio: data.author_bio || '',
+      disclaimer: data.disclaimer || '',
+      faqItems,
       bodyHtml,
     }));
   } catch (err) {
