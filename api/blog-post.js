@@ -1,4 +1,4 @@
-import { readFileSync, existsSync } from 'fs';
+import { readFileSync, existsSync, readdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -94,10 +94,20 @@ export default function handler(req, res) {
     return;
   }
 
-  const filePath = join(contentDir, `${slug}.md`);
+  // First try exact filename match, then scan for frontmatter slug match
+  let filePath = join(contentDir, `${slug}.md`);
   if (!existsSync(filePath)) {
-    res.status(404).json({ error: 'Post not found' });
-    return;
+    const files = readdirSync(contentDir).filter(f => f.endsWith('.md'));
+    const match = files.find(f => {
+      const raw2 = readFileSync(join(contentDir, f), 'utf8');
+      const { data: d } = parseFrontmatter(raw2);
+      return d.slug === slug;
+    });
+    if (!match) {
+      res.status(404).json({ error: 'Post not found' });
+      return;
+    }
+    filePath = join(contentDir, match);
   }
 
   try {

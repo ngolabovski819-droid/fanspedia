@@ -28,9 +28,10 @@ function readAllPosts() {
   if (!existsSync(contentDir)) return [];
   const files = readdirSync(contentDir).filter(f => f.endsWith('.md'));
   const posts = files.map(file => {
-    const slug = file.replace(/\.md$/, '');
+    const fileSlug = file.replace(/\.md$/, '');
     const raw = readFileSync(join(contentDir, file), 'utf8');
     const { data } = parseFrontmatter(raw);
+    const slug = data.slug || fileSlug;
     return {
       slug,
       title: data.title || slug,
