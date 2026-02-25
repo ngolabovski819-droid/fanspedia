@@ -282,6 +282,12 @@
       justify-content: center;
       font-size: 48px;
       flex-shrink: 0;
+      overflow: hidden;
+    }
+    .post-card-image-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
     .post-card-body {
       padding: 18px;
@@ -923,8 +929,20 @@
     const a = document.createElement('a');
     a.href = '/blog/' + post.slug + '/';
     a.className = 'post-card';
+    
+    // Build image or emoji fallback (16:9 aspect ratio)
+    let imagePlaceholder = '';
+    if (post.featuredImage && post.featuredImage.trim()) {
+      const baseUrl = post.featuredImage.trim();
+      const alt = post.featuredImageAlt || post.title;
+      const thumbSrc = 'https://images.weserv.nl/?url=' + encodeURIComponent(baseUrl) + '&w=600&h=338&fit=cover&output=webp&q=85';
+      imagePlaceholder = '<div class="post-card-image-placeholder"><img src="' + thumbSrc + '" alt="' + alt + '" loading="lazy"></div>';
+    } else {
+      imagePlaceholder = '<div class="post-card-image-placeholder">' + post.emoji + '</div>';
+    }
+    
     a.innerHTML =
-      '<div class="post-card-image-placeholder">' + post.emoji + '</div>' +
+      imagePlaceholder +
       '<div class="post-card-body">' +
         '<span class="post-card-tag">' + post.categoryLabel + '</span>' +
         '<div class="post-card-title">' + post.title + '</div>' +

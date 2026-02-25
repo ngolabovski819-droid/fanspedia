@@ -180,6 +180,8 @@ export default function handler(req, res) {
       date: data.date || '',
       emoji: data.emoji || '📝',
       readTime: data.read_time || '5 min read',
+      featuredImage: data.featured_image || '',
+      featuredImageAlt: data.featured_image_alt || data.title || '',
       bodyHtml,
     }));
   } catch (err) {

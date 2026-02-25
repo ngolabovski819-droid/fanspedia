@@ -244,6 +244,29 @@
     }
     .article-body hr { border: none; border-top: 1px solid var(--border-color); margin: 2em 0; }
     .article-body img { max-width: 100%; border-radius: 12px; margin: 1.5em 0; }
+    
+    /* Blog Hero Image (16:9 responsive) */
+    .blog-hero-image {
+      max-width: 860px;
+      margin: 0 auto 40px;
+      padding: 0 20px;
+    }
+    .blog-hero-image picture {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--bg-secondary);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    }
+    .blog-hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      margin: 0;
+    }
+    
     .article-body .table-wrap {
       margin: 1.5em 0;
       overflow-x: auto;
@@ -600,6 +623,23 @@
     document.getElementById('pageDesc').content = post.metaDescription || post.excerpt;
     document.getElementById('pageCanonical').href = 'https://www.fanspedia.net/blog/' + post.slug + '/';
 
+    // Build hero image HTML (16:9 responsive) if available
+    let heroImageHTML = '';
+    if (post.featuredImage && post.featuredImage.trim()) {
+      const baseUrl = post.featuredImage.trim();
+      const alt = post.featuredImageAlt || post.title;
+      const desktopSrc = `https://images.weserv.nl/?url=${encodeURIComponent(baseUrl)}&w=1200&h=675&fit=cover&output=webp&q=85`;
+      const mobileSrc = `https://images.weserv.nl/?url=${encodeURIComponent(baseUrl)}&w=800&h=450&fit=cover&output=webp&q=85`;
+      heroImageHTML = `
+        <div class="blog-hero-image">
+          <picture>
+            <source media="(min-width: 768px)" srcset="${desktopSrc}">
+            <img src="${mobileSrc}" alt="${alt}" loading="eager" fetchpriority="high">
+          </picture>
+        </div>
+      `;
+    }
+
     const main = document.getElementById('articleMain');
     main.innerHTML = `
       <div class="back-bar">
@@ -615,6 +655,7 @@
           <span><i class="fas fa-clock"></i> ${post.readTime}</span>
         </div>
       </div>
+      ${heroImageHTML}
       <div class="article-divider"><hr></div>
       <article class="article-body">${post.bodyHtml || '<p><em>Content coming soon.</em></p>'}</article>
     `;
