@@ -27,11 +27,13 @@
             label: 'Blog Posts',
             folder: 'content/blog',
             create: true,
-            slug: '{{slug}}',
+            slug: '{{fields.slug}}',
             extension: 'md',
             format: 'frontmatter',
+            identifier_field: 'slug',
             fields: [
               { label: 'Title', name: 'title', widget: 'string' },
+              { label: 'URL Slug', name: 'slug', widget: 'string', hint: 'The URL path for this post, e.g. my-post-title — lowercase letters, numbers and hyphens only. Cannot be changed after publishing (would break the URL).', pattern: ['^[a-z0-9][a-z0-9-]*[a-z0-9]$', 'Lowercase letters, numbers, and hyphens only (no leading/trailing hyphens)'] },
               { label: 'Date', name: 'date', widget: 'datetime', format: 'YYYY-MM-DD', date_format: 'YYYY-MM-DD', time_format: false },
               {
                 label: 'Category', name: 'category', widget: 'select',
