@@ -244,6 +244,28 @@
     }
     .article-body hr { border: none; border-top: 1px solid var(--border-color); margin: 2em 0; }
     .article-body img { max-width: 100%; border-radius: 12px; margin: 1.5em 0; }
+    .article-body .table-wrap {
+      margin: 1.5em 0;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .article-body table {
+      width: 100%;
+      min-width: 620px;
+      border-collapse: collapse;
+      font-size: 0.95em;
+    }
+    .article-body th,
+    .article-body td {
+      border: 1px solid var(--border-color);
+      padding: 10px 12px;
+      vertical-align: top;
+    }
+    .article-body th {
+      background: var(--bg-secondary);
+      font-weight: 700;
+      text-align: left;
+    }
 
     /* Loading / Error states */
     .state-center {
