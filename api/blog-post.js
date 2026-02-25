@@ -110,6 +110,8 @@ export default function handler(req, res) {
     res.end(JSON.stringify({
       slug,
       title: data.title || slug,
+      seoTitle: data.seo_title || data.title || slug,
+      metaDescription: data.meta_description || data.excerpt || '',
       excerpt: data.excerpt || '',
       category: data.category || 'guides',
       categoryLabel: data.categoryLabel || data.category || 'Guides',

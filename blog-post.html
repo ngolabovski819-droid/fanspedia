@@ -574,8 +574,8 @@
 
   function renderArticle(post) {
     // Update meta
-    document.title = post.title + ' — FansPedia Blog';
-    document.getElementById('pageDesc').content = post.excerpt;
+    document.title = (post.seoTitle || post.title) + ' — FansPedia Blog';
+    document.getElementById('pageDesc').content = post.metaDescription || post.excerpt;
     document.getElementById('pageCanonical').href = 'https://www.fanspedia.net/blog/' + post.slug + '/';
 
     const main = document.getElementById('articleMain');
