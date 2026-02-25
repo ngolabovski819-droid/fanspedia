@@ -1,0 +1,35 @@
+backend:
+  name: github
+  repo: ngolabovski819-droid/fanspedia
+  branch: main
+  base_url: https://www.fanspedia.net
+  auth_endpoint: api/oauth/authorize
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+collections:
+  - name: "blog"
+    label: "Blog Posts"
+    folder: "content/blog"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
+      - label: "Category"
+        name: "category"
+        widget: "select"
+        options:
+          - { label: "Guides", value: "guides" }
+          - { label: "Tips", value: "tips" }
+          - { label: "News", value: "news" }
+          - { label: "Creators", value: "creators" }
+          - { label: "How-To", value: "how-to" }
+      - { label: "Category Label", name: "categoryLabel", widget: "string", hint: "Display label e.g. 'Guides', 'Tips'" }
+      - { label: "Emoji", name: "emoji", widget: "string", hint: "Single emoji for the post card e.g. 🔍" }
+      - { label: "Read Time", name: "read_time", widget: "string", hint: "e.g. '5 min read'" }
+      - { label: "Excerpt", name: "excerpt", widget: "text", hint: "Short summary shown in the blog listing card (1-2 sentences)" }
+      - { label: "Body", name: "body", widget: "markdown" }

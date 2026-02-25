@@ -913,17 +913,7 @@
   let activeFilter = 'all';
   let searchQuery = '';
 
-  const POSTS = [
-    { slug: 'how-to-find-best-onlyfans-creators', title: 'How to Find the Best OnlyFans Creators for You', excerpt: 'Discover the most effective strategies for finding OnlyFans creators that match your interests, from using category filters to checking verified badges.', category: 'guides', categoryLabel: 'Guides', date: '2026-02-24', emoji: '🔍', readTime: '5 min read' },
-    { slug: 'top-free-onlyfans-accounts-2026', title: 'Top Free OnlyFans Accounts to Follow in 2026', excerpt: 'A curated list of the best free OnlyFans accounts updated for 2026. No subscription fee required — just hit follow and enjoy premium content.', category: 'tips', categoryLabel: 'Tips', date: '2026-02-22', emoji: '⭐', readTime: '7 min read' },
-    { slug: 'onlyfans-subscription-safety-tips', title: 'OnlyFans Safety Tips: How to Subscribe Securely', excerpt: 'Before you subscribe to any OnlyFans account, read these essential safety and privacy tips to protect your personal information.', category: 'tips', categoryLabel: 'Tips', date: '2026-02-20', emoji: '🛡️', readTime: '4 min read' },
-    { slug: 'verified-creators-vs-unverified', title: 'Verified vs Unverified Creators: What\'s the Difference?', excerpt: 'The blue checkmark on OnlyFans means more than you think. We break down exactly what verification means and why it matters when choosing who to follow.', category: 'guides', categoryLabel: 'Guides', date: '2026-02-18', emoji: '✅', readTime: '6 min read' },
-    { slug: 'how-to-use-fanspedia', title: 'How to Use FansPedia to Discover New Creators', excerpt: 'A complete walkthrough of FansPedia\'s search, filters, category pages, and wishlist features so you get the most out of every visit.', category: 'how-to', categoryLabel: 'How-To', date: '2026-02-16', emoji: '📖', readTime: '8 min read' },
-    { slug: 'onlyfans-price-guide-2026', title: 'OnlyFans Subscription Prices: What to Expect in 2026', excerpt: 'From free accounts to premium $50/month subscriptions — here\'s a data-driven breakdown of OnlyFans pricing across categories.', category: 'news', categoryLabel: 'News', date: '2026-02-14', emoji: '💰', readTime: '5 min read' },
-    { slug: 'best-cosplay-onlyfans-creators', title: 'Best Cosplay OnlyFans Creators to Follow Right Now', excerpt: 'From anime to video games, these cosplay OnlyFans creators are setting the bar for creativity and production quality in 2026.', category: 'creators', categoryLabel: 'Creators', date: '2026-02-12', emoji: '🎭', readTime: '6 min read' },
-    { slug: 'onlyfans-vs-fansly-comparison', title: 'OnlyFans vs Fansly: Which Platform Is Better in 2026?', excerpt: 'A head-to-head comparison of OnlyFans and Fansly for both subscribers and creators — pricing, features, content variety, and more.', category: 'news', categoryLabel: 'News', date: '2026-02-10', emoji: '⚔️', readTime: '9 min read' },
-    { slug: 'fitness-onlyfans-creators-guide', title: 'Best Fitness & Wellness OnlyFans Creators in 2026', excerpt: 'Looking for workout motivation and wellness content? These fitness OnlyFans creators combine great content with genuine expertise.', category: 'creators', categoryLabel: 'Creators', date: '2026-02-08', emoji: '💪', readTime: '5 min read' },
-  ];
+  let POSTS = [];
 
   function formatDate(iso) {
     return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -1025,7 +1015,18 @@
     }, 300);
   });
 
-  renderPage();
+  // Load posts from API
+  fetch('/api/blog')
+    .then(function(r) { return r.ok ? r.json() : Promise.reject(r.status); })
+    .then(function(posts) {
+      POSTS = posts;
+      renderPage();
+    })
+    .catch(function() {
+      removeSkeletons();
+      document.getElementById('blogGrid').innerHTML =
+        '<div class="state-box"><div class="state-icon">⚠️</div><h3>Unable to load articles</h3><p>Please try again later.</p></div>';
+    });
 </script>
 
 </body>

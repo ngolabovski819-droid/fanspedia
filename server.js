@@ -5,6 +5,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import searchHandler from './api/search.js';
+import blogHandler from './api/blog.js';
+import blogPostHandler from './api/blog-post.js';
 // Use the catch-all SSR handler for local testing (matches Vercel's [...params] serverless function)
 // creator profiles temporarily disabled; keep SSR handler code in repo but do not mount it
 
@@ -21,6 +23,30 @@ app.all('/api/search', async (req, res) => {
     console.error('local search handler error', err);
     res.status(500).json({ error: 'local_handler_error', message: String(err) });
   }
+});
+
+// Blog API routes
+app.all('/api/blog', async (req, res) => {
+  try { await blogHandler(req, res); } catch (err) { res.status(500).json({ error: String(err) }); }
+});
+app.all('/api/blog-post', async (req, res) => {
+  try { await blogPostHandler(req, res); } catch (err) { res.status(500).json({ error: String(err) }); }
+});
+
+// Admin CMS panel
+app.get(['/admin', '/admin/'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'admin', 'index.html'));
+});
+
+// Blog routes
+app.get(['/blog', '/blog/'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'blog.html'));
+});
+app.get('/blog/:slug', (req, res) => {
+  res.sendFile(path.join(__dirname, 'blog-post.html'));
+});
+app.get('/blog/:slug/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'blog-post.html'));
 });
 
 // Disable direct access to creator.html in local dev to mirror production

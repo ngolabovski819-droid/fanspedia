@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <title id="pageTitle">Blog — FansPedia</title>
+  <meta name="description" id="pageDesc" content="Read the latest guides and tips on FansPedia.">
+  <link rel="canonical" id="pageCanonical" href="https://www.fanspedia.net/blog/">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f5f5f7;
+      --text-primary: #1d1d1f;
+      --text-secondary: #555;
+      --text-muted: #888;
+      --border-color: #e5e5e7;
+      --input-bg: #f5f5f7;
+      --brand-color: #00AFF0;
+      --placeholder-color: #aaa;
+      --card-bg: #ffffff;
+      --card-hover: #f9f9fb;
+      --accent-dim: rgba(0,175,240,0.08);
+      --radius: 16px;
+    }
+    [data-theme="dark"] {
+      --bg-primary: #1a1a1a;
+      --bg-secondary: #2a2a2a;
+      --text-primary: #e8e8e8;
+      --text-secondary: #aaa;
+      --text-muted: #888;
+      --border-color: #383838;
+      --input-bg: #2a2a2a;
+      --brand-color: #00AFF0;
+      --placeholder-color: #666;
+      --card-bg: #242424;
+      --card-hover: #2e2e2e;
+      --accent-dim: rgba(0,175,240,0.12);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding-top: 68px;
+      padding-bottom: 80px;
+    }
+
+    /* ── HEADER (exact from index.html) ── */
+    .superior-header { position: fixed; top: 0; left: 0; right: 0; z-index: 9999; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); box-shadow: 0 4px 24px rgba(0, 175, 240, 0.25); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .superior-header.scrolled { box-shadow: 0 8px 32px rgba(0, 175, 240, 0.35); }
+    .header-main { padding: 10px 0; }
+    .header-container { max-width: 1400px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .logo-section { display: flex; align-items: center; gap: 12px; flex-shrink: 0; text-decoration: none; }
+    .logo-icon { width: 40px; height: 40px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: transform 0.3s ease; }
+    .logo-icon:hover { transform: scale(1.05) rotate(5deg); }
+    .logo-icon i { color: #00AFF0; }
+    .logo-text { display: flex; flex-direction: column; }
+    .logo-text .brand { font-size: 22px; font-weight: 900; color: white; letter-spacing: 0.3px; line-height: 1; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+    .logo-text .tagline { font-size: 11px; color: rgba(255,255,255,0.95); font-weight: 600; letter-spacing: 0.8px; margin-top: 2px; }
+    .header-search-section { flex: 1; max-width: 560px; position: relative; }
+    .header-search-wrapper { position: relative; display: flex; align-items: center; }
+    .header-search-input { width: 100%; padding: 10px 16px 10px 44px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50px; background: rgba(255,255,255,0.95); font-size: 15px; font-weight: 500; color: #1d1d1f; transition: all 0.3s ease; box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+    .header-search-input:focus { outline: none; border-color: white; background: white; }
+    .header-search-input::placeholder { color: #aaa; }
+    .header-search-icon { position: absolute; left: 16px; color: #00AFF0; font-size: 18px; pointer-events: none; }
+    .header-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .theme-toggle { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; width: 44px; height: 44px; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; font-size: 20px; }
+    .theme-toggle:hover { background: rgba(255,255,255,0.3); }
+    .safe-search-toggle { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; width: 44px; height: 44px; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; font-size: 20px; position: relative; }
+    .safe-search-toggle:hover { background: rgba(255,255,255,0.3); }
+    .mobile-menu-toggle { display: none; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; width: 44px; height: 44px; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; justify-content: center; align-items: center; font-size: 18px; }
+    .mobile-search-trigger { display: none; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: #fff; width: 44px; height: 44px; border-radius: 12px; cursor: pointer; justify-content: center; align-items: center; font-size: 20px; transition: all .3s ease; }
+    .desktop-nav { position: relative; flex-shrink: 0; }
+    .desktop-nav .nav-btn { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.2); color: #fff; border: 1px solid rgba(255,255,255,0.35); border-radius: 9999px; padding: 10px 14px; font-weight: 800; font-size: 14px; cursor: pointer; transition: all .2s ease; text-decoration: none; }
+    .desktop-nav .nav-btn:hover { background: rgba(255,255,255,0.3); }
+    .desktop-nav .nav-btn i { font-size: 12px; opacity: 0.9; }
+    .desktop-nav .dropdown-menu { position: absolute; right: 0; top: calc(100% + 8px); background: #fff; border-radius: 12px; box-shadow: 0 12px 32px rgba(0,0,0,0.15); padding: 8px; min-width: 240px; display: none; z-index: 10000; }
+    .desktop-nav .dropdown-menu.open { display: block; }
+    .desktop-nav .dropdown-menu a { display: block; padding: 10px 12px; color: #1d1d1f; font-weight: 700; border-radius: 8px; text-decoration: none; transition: background .15s; }
+    .desktop-nav .dropdown-menu a:hover { background: #f5f5f7; color: #00AFF0; }
+    .desktop-nav .dropdown-menu .divider { height: 1px; background: #eee; margin: 6px; }
+    .desktop-nav .dropdown-menu a.view-all { color: #00AFF0; }
+    .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 10000; opacity: 0; pointer-events: none; transition: opacity .3s ease; }
+    .drawer-overlay.open { opacity: 1; pointer-events: auto; }
+    .mobile-drawer { position: fixed; top: 0; right: -100%; width: 82%; max-width: 340px; height: 100%; background: #fff; box-shadow: -8px 0 24px rgba(0,0,0,0.2); z-index: 10001; padding: 16px; display: flex; flex-direction: column; gap: 6px; transition: right .3s ease; overflow-y: auto; }
+    .mobile-drawer.open { right: 0; }
+    .mobile-drawer .drawer-close { align-self: flex-end; background: none; border: none; font-size: 28px; line-height: 1; color: #1d1d1f; margin-bottom: 4px; cursor: pointer; }
+    .mobile-drawer > a { display: block; padding: 14px 12px; border-radius: 8px; color: #1d1d1f; font-weight: 700; text-decoration: none; margin: 2px 0; font-size: 16px; }
+    .mobile-drawer > a:hover { background: #f5f5f7; color: #00AFF0; }
+    .drawer-categories-toggle { display: flex; align-items: center; justify-content: space-between; padding: 14px 12px; cursor: pointer; border-radius: 8px; margin: 2px 0; font-size: 16px; font-weight: 700; color: #1d1d1f; }
+    .drawer-categories-toggle .icon-text { display: flex; align-items: center; gap: 10px; }
+    .drawer-categories-toggle .chevron { font-size: 14px; transition: transform 0.3s ease; color: #666; }
+    .drawer-categories-toggle.open .chevron { transform: rotate(180deg); }
+    #drawerCategoriesSection { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, opacity 0.3s ease; opacity: 0; }
+    #drawerCategoriesSection.open { max-height: 800px; opacity: 1; overflow-y: auto; }
+    .drawer-categories-label { color: #999; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; padding: 12px 16px 8px; }
+    #drawerCategories { display: flex; flex-direction: column; gap: 0; padding: 0 4px; }
+    #drawerCategories a { display: block; padding: 12px 12px; color: #555; font-weight: 600; text-decoration: none; border-radius: 6px; margin: 1px 0; font-size: 15px; }
+    #drawerCategories a:hover { background: #f5f5f7; color: #00AFF0; }
+    .drawer-view-all-btn { display: block; margin: 12px 8px 8px; padding: 14px 20px; background: linear-gradient(135deg,#00AFF0 0%,#0099D6 100%); color: white; text-align: center; border-radius: 12px; font-weight: 800; text-decoration: none; font-size: 15px; }
+    .mobile-search-modal { position: fixed; inset: 0; background: var(--bg-secondary); z-index: 10003; display: none; flex-direction: column; color: var(--text-primary); }
+    .mobile-search-modal.active { display: flex; }
+    .mobile-search-header { display: flex; align-items: center; gap: 12px; padding: 16px; background: linear-gradient(135deg,#00AFF0 0%,#0099D6 100%); }
+    .mobile-search-back { background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; padding: 8px; display: flex; align-items: center; justify-content: center; }
+    .mobile-search-input-wrapper { flex: 1; position: relative; }
+    .mobile-search-input { width: 100%; padding: 12px 16px 12px 44px; border: 2px solid var(--border-color); border-radius: 50px; background: var(--input-bg); font-size: 16px; font-weight: 500; color: var(--text-primary); }
+    .mobile-search-input:focus { outline: none; border-color: var(--brand-color); }
+    .mobile-search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #00AFF0; font-size: 18px; pointer-events: none; }
+    .mobile-search-content { flex: 1; overflow-y: auto; padding: 20px 16px; }
+    .mobile-search-suggestions { display: flex; flex-direction: column; gap: 4px; }
+    .mobile-search-suggestion { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--bg-primary); border-radius: 12px; text-decoration: none; color: var(--text-primary); font-weight: 600; font-size: 15px; }
+    .mobile-search-suggestion i { color: #00AFF0; font-size: 16px; }
+    @media (max-width: 768px) {
+      .header-search-section { display: none !important; }
+      .mobile-search-trigger { display: inline-flex; }
+      .desktop-nav { display: none; }
+      .mobile-menu-toggle { display: inline-flex; }
+    }
+
+    /* ── ARTICLE LAYOUT ── */
+    .article-hero {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 56px 20px 32px;
+      text-align: center;
+    }
+    .article-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: var(--accent-dim);
+      color: var(--brand-color);
+      margin-bottom: 20px;
+    }
+    .article-emoji {
+      font-size: 64px;
+      margin-bottom: 20px;
+      display: block;
+    }
+    .article-title {
+      font-size: clamp(1.6rem, 4vw, 2.6rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+    .article-excerpt {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      max-width: 640px;
+      margin: 0 auto 24px;
+    }
+    .article-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      font-size: 13px;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+    }
+    .article-meta span { display: flex; align-items: center; gap: 6px; }
+    .article-meta i { color: var(--brand-color); font-size: 12px; }
+    .article-divider {
+      max-width: 860px;
+      margin: 0 auto 40px;
+      padding: 0 20px;
+    }
+    .article-divider hr {
+      border: none;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+    }
+    .article-body {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 20px 80px;
+      font-size: 17px;
+      line-height: 1.75;
+      color: var(--text-primary);
+    }
+    .article-body h1,
+    .article-body h2,
+    .article-body h3 {
+      font-weight: 700;
+      line-height: 1.3;
+      margin-top: 2.2em;
+      margin-bottom: 0.7em;
+      color: var(--text-primary);
+    }
+    .article-body h1 { font-size: 1.9rem; }
+    .article-body h2 { font-size: 1.45rem; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
+    .article-body h3 { font-size: 1.15rem; }
+    .article-body p { margin-bottom: 1.3em; }
+    .article-body ul, .article-body ol { padding-left: 1.5em; margin-bottom: 1.3em; }
+    .article-body li { margin-bottom: 0.5em; }
+    .article-body strong { font-weight: 700; color: var(--text-primary); }
+    .article-body em { font-style: italic; }
+    .article-body blockquote {
+      border-left: 4px solid var(--brand-color);
+      margin: 1.5em 0;
+      padding: 12px 20px;
+      background: var(--accent-dim);
+      border-radius: 0 8px 8px 0;
+      font-style: italic;
+      color: var(--text-secondary);
+    }
+    .article-body a { color: var(--brand-color); text-decoration: underline; }
+    .article-body a:hover { opacity: 0.8; }
+    .article-body code {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.87em;
+    }
+    .article-body pre {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin-bottom: 1.3em;
+    }
+    .article-body pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 0.9em;
+    }
+    .article-body hr { border: none; border-top: 1px solid var(--border-color); margin: 2em 0; }
+    .article-body img { max-width: 100%; border-radius: 12px; margin: 1.5em 0; }
+
+    /* Loading / Error states */
+    .state-center {
+      max-width: 640px;
+      margin: 80px auto;
+      text-align: center;
+      padding: 0 20px;
+      color: var(--text-muted);
+    }
+    .state-center .state-emoji { font-size: 56px; margin-bottom: 16px; }
+    .state-center h2 { font-size: 1.4rem; color: var(--text-primary); margin-bottom: 8px; }
+    .state-center p { font-size: 15px; line-height: 1.6; }
+
+    /* ── BACK TO BLOG ── */
+    .back-bar {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 20px 20px 0;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--brand-color);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-primary);
+      transition: all .2s;
+    }
+    .back-btn:hover { background: var(--accent-dim); border-color: var(--brand-color); }
+
+    /* ── FOOTER ── */
+    .modern-footer { background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%); border-top: 1px solid var(--border-color); margin-top: 80px; padding: 60px 0 0; position: relative; }
+    .modern-footer::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent 0%, #00AFF0 50%, transparent 100%); opacity: 0.5; }
+    .footer-container { max-width: 1400px; margin: 0 auto; padding: 0 16px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 48px; border-bottom: 1px solid var(--border-color); }
+    .footer-brand { max-width: 380px; }
+    .footer-logo { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 20px; }
+    .footer-logo-icon { width: 48px; height: 48px; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0; }
+    .footer-logo-icon svg { width: 28px; height: 28px; }
+    .footer-logo-text { display: flex; flex-direction: column; gap: 2px; }
+    .footer-logo-main { font-size: 18px; font-weight: 700; color: var(--text-primary); line-height: 1.2; }
+    .footer-logo-sub { font-size: 13px; color: var(--text-secondary); font-weight: 500; }
+    .footer-description { color: var(--text-secondary); font-size: 14px; line-height: 1.6; margin-bottom: 24px; }
+    .footer-social { display: flex; gap: 12px; }
+    .social-link { width: 40px; height: 40px; border-radius: 10px; background: var(--bg-secondary); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-size: 18px; transition: all 0.3s ease; text-decoration: none; }
+    .social-link:hover { background: linear-gradient(135deg,#00AFF0 0%,#0099D6 100%); border-color: transparent; color: white; transform: translateY(-3px); }
+    .footer-column h3.footer-heading { font-size: 14px; font-weight: 700; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 20px; position: relative; padding-bottom: 12px; }
+    .footer-column h3.footer-heading::after { content: ''; position: absolute; bottom: 0; left: 0; width: 32px; height: 2px; background: linear-gradient(90deg,#00AFF0,#0099D6); border-radius: 2px; }
+    .footer-links { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
+    .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 14px; display: inline-flex; align-items: center; transition: all 0.2s ease; }
+    .footer-links a:hover { color: #00AFF0; padding-left: 8px; }
+    .footer-bottom { padding: 32px 0; }
+    .footer-bottom-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; margin-bottom: 16px; }
+    .footer-copyright { color: var(--text-secondary); font-size: 14px; margin: 0; font-weight: 500; }
+    .footer-stats { display: flex; gap: 16px; flex-wrap: wrap; }
+    .stat-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 20px; color: var(--text-secondary); font-size: 13px; font-weight: 600; white-space: nowrap; }
+    .stat-badge i { color: #00AFF0; font-size: 12px; }
+    .footer-disclaimer { color: var(--text-muted); font-size: 12px; text-align: center; margin: 0 auto; line-height: 1.5; max-width: 900px; }
+    @media (max-width: 992px) { .footer-grid { grid-template-columns: 2fr 1fr 1fr; } .footer-brand { grid-column: 1 / -1; } }
+    @media (max-width: 768px) { .modern-footer { margin-top: 60px; padding: 40px 0 0; } .footer-grid { grid-template-columns: 1fr; } .footer-brand { text-align: center; } .footer-logo { justify-content: center; } .footer-social { justify-content: center; } .footer-column h3.footer-heading { text-align: center; } .footer-column h3.footer-heading::after { left: 50%; transform: translateX(-50%); } .footer-links { text-align: center; } .footer-bottom-content { flex-direction: column; text-align: center; } .footer-stats { justify-content: center; } }
+
+    /* ── STICKY BOTTOM NAV ── */
+    .sticky-bottom-nav { position: fixed; left: 0; right: 0; bottom: calc(0px + env(safe-area-inset-bottom)); z-index: 9999; display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; background: var(--bg-secondary); border-top: 1px solid var(--border-color); }
+    .sticky-bottom-nav .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-primary); text-decoration: none; }
+    .sticky-bottom-nav .icon { width: 32px; height: 32px; border-radius: 10px; background: linear-gradient(135deg,#00AFF0 0%,#0099D6 100%); display: flex; align-items: center; justify-content: center; color: #fff; transition: transform .3s ease; }
+    .sticky-bottom-nav .nav-item:hover .icon { transform: translateY(-2px); }
+    .sticky-bottom-nav .nav-item.active .icon { background: linear-gradient(135deg,#0099D6 0%,#0088C0 100%); }
+    .sticky-bottom-nav .icon i { font-size: 15px; }
+    .sticky-bottom-nav .label { font-size: 11px; font-weight: 700; color: var(--text-primary); }
+    [data-theme="dark"] .mobile-drawer { background: var(--bg-secondary); }
+    [data-theme="dark"] .mobile-drawer > a { color: var(--text-primary); }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="superior-header" id="mainHeader">
+  <div class="header-main">
+    <div class="header-container">
+      <a href="/" class="logo-section">
+        <svg width="140" height="42" viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+          <g transform="translate(10,8)">
+            <path d="M48 4 C31 4 18 17.5 18 34.5 C18 48.5 30.1 62.9 42.4 79.1 C45.0 82.7 51.0 82.7 53.6 79.1 C65.9 62.9 78 48.5 78 34.5 C78 17.5 65 4 48 4 Z" fill="#FFFFFF"/>
+            <text x="48" y="40" text-anchor="middle" dominant-baseline="middle" font-family="Poppins, system-ui, sans-serif" font-size="34" font-weight="700" fill="#000000">F</text>
+          </g>
+          <text x="115" y="64" font-family="Poppins, system-ui, sans-serif" font-size="40" font-weight="500" fill="#FFFFFF">FansPedia</text>
+        </svg>
+      </a>
+      <div class="desktop-nav">
+        <button id="categoriesToggle" class="nav-btn" aria-haspopup="true" aria-expanded="false">
+          Categories <i class="fas fa-chevron-down"></i>
+        </button>
+        <div id="categoriesMenu" class="dropdown-menu" role="menu" aria-hidden="true"></div>
+      </div>
+      <div class="desktop-nav">
+        <a href="/locations/" class="nav-btn">Locations <i class="fas fa-map-marker-alt"></i></a>
+      </div>
+      <div class="header-search-section">
+        <div class="header-search-wrapper">
+          <i class="fas fa-search header-search-icon"></i>
+          <input type="text" class="header-search-input" placeholder="Search creators..." id="headerSearch" autocomplete="off">
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="mobile-search-trigger" id="mobileSearchTrigger" aria-label="Search"><i class="fas fa-search"></i></button>
+        <button class="safe-search-toggle" id="safeSearchToggle" aria-label="Safe Search" title="Safe Search"><i class="fas fa-eye-slash"></i></button>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><i class="fas fa-moon"></i></button>
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Search Modal -->
+<div class="mobile-search-modal" id="mobileSearchModal">
+  <div class="mobile-search-header">
+    <button class="mobile-search-back" id="mobileSearchBack"><i class="fas fa-arrow-left"></i></button>
+    <div class="mobile-search-input-wrapper">
+      <i class="fas fa-search mobile-search-icon"></i>
+      <input type="text" class="mobile-search-input" id="mobileSearchInput" placeholder="Search creators..." autocomplete="off">
+    </div>
+  </div>
+  <div class="mobile-search-content">
+    <div style="color:var(--text-secondary);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;">POPULAR SEARCHES</div>
+    <div class="mobile-search-suggestions" id="mobileSearchSuggestions"></div>
+  </div>
+</div>
+
+<!-- Mobile Drawer -->
+<div id="drawerOverlay" class="drawer-overlay"></div>
+<nav id="mobileDrawer" class="mobile-drawer">
+  <button class="drawer-close" id="drawerClose">×</button>
+  <a href="/">Home</a>
+  <a href="/blog/" style="color:#00AFF0">Blog</a>
+  <div class="drawer-categories-toggle" id="drawerCategoriesToggle">
+    <div class="icon-text"><i class="fas fa-th"></i><span>Categories</span></div>
+    <i class="fas fa-chevron-down chevron"></i>
+  </div>
+  <div id="drawerCategoriesSection">
+    <div class="drawer-categories-label">MOST POPULAR CATEGORIES</div>
+    <div id="drawerCategories"></div>
+    <a href="/categories/" class="drawer-view-all-btn">View All Categories</a>
+  </div>
+</nav>
+
+<!-- ARTICLE CONTENT -->
+<main id="articleMain">
+  <div class="state-center" id="loadingState">
+    <div class="state-emoji">⏳</div>
+    <h2>Loading article...</h2>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="modern-footer">
+  <div class="footer-container">
+    <div class="footer-grid">
+      <div class="footer-column footer-brand">
+        <div class="footer-logo">
+          <div class="footer-logo-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="currentColor" opacity="0.8"/>
+              <path d="M2 17L12 22L22 17V12L12 17L2 12V17Z" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="footer-logo-text">
+            <span class="footer-logo-main">FansPedia</span>
+            <span class="footer-logo-sub">Your Premium Creator Directory</span>
+          </div>
+        </div>
+        <p class="footer-description">Discover and connect with verified OnlyFans creators. Updated daily with 10,000+ profiles across all categories.</p>
+        <div class="footer-social">
+          <a href="https://x.com/fanspedia" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="X (Twitter)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2H21.5l-6.52 7.455L22.25 22h-7.03l-4.64-6.08L4.9 22H1.64l7.02-8.04L1.25 2h7.19l4.27 5.64L18.245 2Z"/></svg>
+          </a>
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.youtube.com/@FansPediaOfficial" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          <a href="https://www.tiktok.com/@fanspedia" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+        </div>
+      </div>
+      <div class="footer-column">
+        <h3 class="footer-heading">Popular Categories</h3>
+        <ul class="footer-links">
+          <li><a href="/categories/verified">Verified Creators</a></li>
+          <li><a href="/categories/free">Free OnlyFans</a></li>
+          <li><a href="/categories/cosplay">Cosplay Models</a></li>
+          <li><a href="/categories/fitness">Fitness &amp; Wellness</a></li>
+          <li><a href="/categories/gaming">Gaming Creators</a></li>
+          <li><a href="/categories">View All Categories</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3 class="footer-heading">Resources</h3>
+        <ul class="footer-links">
+          <li><a href="#" onclick="alert('Coming soon!'); return false;">Creator Guide</a></li>
+          <li><a href="#" onclick="alert('Coming soon!'); return false;">How to Subscribe</a></li>
+          <li><a href="#" onclick="alert('Coming soon!'); return false;">Safety Tips</a></li>
+          <li><a href="#" onclick="alert('Coming soon!'); return false;">FAQ</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="#" onclick="alert('Coming soon!'); return false;">Support</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3 class="footer-heading">Legal &amp; Info</h3>
+        <ul class="footer-links">
+          <li><a href="#" onclick="alert('Coming soon!'); return false;">About Us</a></li>
+          <li><a href="#" onclick="alert('Coming soon!'); return false;">Contact</a></li>
+          <li><a href="#" onclick="alert('Coming soon!'); return false;">Terms of Service</a></li>
+          <li><a href="#" onclick="alert('Coming soon!'); return false;">Privacy Policy</a></li>
+          <li><a href="#" onclick="alert('Coming soon!'); return false;">DMCA Policy</a></li>
+          <li><a href="#" onclick="alert('Coming soon!'); return false;">Cookie Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-content">
+        <p class="footer-copyright">&copy; 2026 fanspedia.net - All rights reserved</p>
+        <div class="footer-stats">
+          <span class="stat-badge"><i class="fas fa-check-circle"></i> 10,000+ Verified Creators</span>
+          <span class="stat-badge"><i class="fas fa-sync-alt"></i> Updated Daily</span>
+        </div>
+      </div>
+      <p class="footer-disclaimer">This website is an independent directory and is not affiliated with OnlyFans. All trademarks belong to their respective owners.</p>
+    </div>
+  </div>
+</footer>
+
+<nav class="sticky-bottom-nav" role="navigation">
+  <a href="/" class="nav-item" data-nav="home"><span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span><span class="label">Search</span></a>
+  <a href="/near-me/" class="nav-item" data-nav="near"><span class="icon"><i class="fa-solid fa-location-arrow"></i></span><span class="label">Near Me</span></a>
+  <a href="/categories/" class="nav-item" data-nav="categories"><span class="icon"><i class="fa-solid fa-th"></i></span><span class="label">Categories</span></a>
+  <a href="/blog/" class="nav-item active" data-nav="blog"><span class="icon"><i class="fa-solid fa-newspaper"></i></span><span class="label">Blog</span></a>
+  <a href="/wishlist/" class="nav-item" data-nav="wishlist"><span class="icon"><i class="fa-solid fa-heart"></i></span><span class="label">Wishlist</span></a>
+</nav>
+
+<script type="module">
+  import { popularCategories, categoryToSlug } from '/config/categories.js?v=20251121-4';
+  const catMenu = document.getElementById('categoriesMenu');
+  if (catMenu) {
+    catMenu.innerHTML = popularCategories.map(cat => {
+      const slug = categoryToSlug(cat);
+      const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+      return `<a role="menuitem" href="/categories/${slug}/">${label}</a>`;
+    }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Browse all categories →</a>';
+  }
+  const drawerCats = document.getElementById('drawerCategories');
+  if (drawerCats) {
+    drawerCats.innerHTML = popularCategories.map(cat => {
+      const slug = categoryToSlug(cat);
+      const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+      return `<a href="/categories/${slug}/">${label}</a>`;
+    }).join('');
+  }
+  document.getElementById('drawerCategoriesToggle')?.addEventListener('click', () => {
+    document.getElementById('drawerCategoriesSection')?.classList.toggle('open');
+  });
+</script>
+
+<script>
+  // Theme
+  const themeToggle = document.getElementById('themeToggle');
+  function getCurrentTheme() { return localStorage.getItem('theme') || 'light'; }
+  function applyTheme(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    const icon = themeToggle && themeToggle.querySelector('i');
+    if (icon) icon.className = t === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+  }
+  applyTheme(getCurrentTheme());
+  themeToggle?.addEventListener('click', () => {
+    const t = getCurrentTheme() === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('theme', t);
+    applyTheme(t);
+  });
+
+  // Scroll header
+  window.addEventListener('scroll', () => {
+    document.getElementById('mainHeader')?.classList.toggle('scrolled', window.pageYOffset > 50);
+  });
+
+  // Desktop categories dropdown
+  const catToggle = document.getElementById('categoriesToggle');
+  const catMenuEl = document.getElementById('categoriesMenu');
+  if (catToggle && catMenuEl) {
+    catToggle.addEventListener('click', e => { e.stopPropagation(); const open = catMenuEl.classList.toggle('open'); catToggle.setAttribute('aria-expanded', open); });
+    document.addEventListener('click', e => { if (!catMenuEl.contains(e.target) && e.target !== catToggle) catMenuEl.classList.remove('open'); });
+  }
+
+  // Mobile drawer
+  const mobileToggle = document.getElementById('mobileMenuToggle');
+  const drawer = document.getElementById('mobileDrawer');
+  const overlay = document.getElementById('drawerOverlay');
+  const drawerClose = document.getElementById('drawerClose');
+  function openDrawer() { drawer?.classList.add('open'); overlay?.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function closeDrawer() { drawer?.classList.remove('open'); overlay?.classList.remove('open'); document.body.style.overflow = ''; }
+  mobileToggle?.addEventListener('click', openDrawer);
+  overlay?.addEventListener('click', closeDrawer);
+  drawerClose?.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+
+  // Mobile search
+  const mobileSearchModal = document.getElementById('mobileSearchModal');
+  const mobileSearchInput = document.getElementById('mobileSearchInput');
+  document.getElementById('mobileSearchSuggestions').innerHTML =
+    ['milf','asian','big tits','trans','mature','latina','big ass','bbw']
+      .map(t => `<a href="/?q=${encodeURIComponent(t)}" class="mobile-search-suggestion"><i class="fas fa-fire"></i><span>${t}</span></a>`).join('');
+  document.getElementById('mobileSearchTrigger')?.addEventListener('click', () => { mobileSearchModal?.classList.add('active'); document.body.style.overflow = 'hidden'; setTimeout(() => mobileSearchInput?.focus(), 100); });
+  document.getElementById('mobileSearchBack')?.addEventListener('click', () => { mobileSearchModal?.classList.remove('active'); document.body.style.overflow = ''; });
+  mobileSearchInput?.addEventListener('keypress', e => { if (e.key === 'Enter' && mobileSearchInput.value.trim()) location.href = '/?q=' + encodeURIComponent(mobileSearchInput.value.trim()); });
+  document.getElementById('headerSearch')?.addEventListener('keydown', e => { if (e.key === 'Enter') location.href = '/?q=' + encodeURIComponent(e.target.value); });
+
+  // ── ARTICLE LOADER ──
+  function getSlugFromPath() {
+    // Expects /blog/my-slug or /blog/my-slug/
+    const parts = window.location.pathname.replace(/\/$/, '').split('/');
+    return parts[parts.length - 1] || '';
+  }
+
+  function formatDate(iso) {
+    if (!iso) return '';
+    return new Date(iso).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  }
+
+  function renderArticle(post) {
+    // Update meta
+    document.title = post.title + ' — FansPedia Blog';
+    document.getElementById('pageDesc').content = post.excerpt;
+    document.getElementById('pageCanonical').href = 'https://www.fanspedia.net/blog/' + post.slug + '/';
+
+    const main = document.getElementById('articleMain');
+    main.innerHTML = `
+      <div class="back-bar">
+        <a href="/blog/" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+      </div>
+      <div class="article-hero">
+        <span class="article-tag">${post.categoryLabel}</span>
+        <span class="article-emoji">${post.emoji}</span>
+        <h1 class="article-title">${post.title}</h1>
+        <p class="article-excerpt">${post.excerpt}</p>
+        <div class="article-meta">
+          <span><i class="fas fa-calendar-alt"></i> ${formatDate(post.date)}</span>
+          <span><i class="fas fa-clock"></i> ${post.readTime}</span>
+        </div>
+      </div>
+      <div class="article-divider"><hr></div>
+      <article class="article-body">${post.bodyHtml || '<p><em>Content coming soon.</em></p>'}</article>
+    `;
+  }
+
+  function renderError(msg) {
+    document.getElementById('articleMain').innerHTML = `
+      <div class="state-center">
+        <div class="state-emoji">😕</div>
+        <h2>Article not found</h2>
+        <p>${msg}</p>
+        <a href="/blog/" style="display:inline-block;margin-top:20px;padding:12px 28px;background:linear-gradient(135deg,#00AFF0,#0099D6);color:white;border-radius:24px;text-decoration:none;font-weight:700;">← Back to Blog</a>
+      </div>
+    `;
+  }
+
+  const slug = getSlugFromPath();
+  if (!slug || slug === 'blog') {
+    window.location.replace('/blog/');
+  } else {
+    fetch('/api/blog-post?slug=' + encodeURIComponent(slug))
+      .then(r => {
+        if (r.status === 404) throw new Error('This article could not be found.');
+        if (!r.ok) throw new Error('Server error (' + r.status + ')');
+        return r.json();
+      })
+      .then(post => renderArticle(post))
+      .catch(err => renderError(err.message || 'Please try again later.'));
+  }
+</script>
+
+</body>
+</html>

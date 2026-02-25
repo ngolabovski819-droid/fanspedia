@@ -1,5 +1,9 @@
 {
   "version": 2,
+  "functions": {
+    "api/blog.js": { "includeFiles": "content/blog/**" },
+    "api/blog-post.js": { "includeFiles": "content/blog/**" }
+  },
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
     { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
@@ -46,6 +50,12 @@
 
     { "source": "/blog", "destination": "/blog.html" },
     { "source": "/blog/", "destination": "/blog.html" },
+
+    { "source": "/admin", "destination": "/admin/index.html" },
+    { "source": "/admin/", "destination": "/admin/index.html" },
+
+    { "source": "/blog/:slug", "destination": "/blog-post.html" },
+    { "source": "/blog/:slug/", "destination": "/blog-post.html" },
 
     { "source": "/:username([A-Za-z0-9_-]+)", "destination": "/api/creator_public/:username" },
     { "source": "/:username([A-Za-z0-9_-]+)/", "destination": "/api/creator_public/:username" }
