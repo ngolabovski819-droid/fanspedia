@@ -1000,7 +1000,7 @@
     }, 280);
   });
 
-  document.getElementById('headerSearchInput').addEventListener('keydown', function(e) {
+  document.getElementById('headerSearchInput')?.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') window.location.href = '/?q=' + encodeURIComponent(e.target.value);
   });
 
