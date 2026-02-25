@@ -10,7 +10,7 @@ excerpt: The blue checkmark on OnlyFans means more than you think. We break down
   exactly what verification means and why it matters when choosing who to
   follow.
 seo_title: "Verified OnlyFans Creator vs Unverified: A Fan’s Safety"
-meta_description: >+
+meta_description: >
   I’ve subscribed since the early OnlyFans days. Here’s how I vet creators,
   avoid scams, protect payments, and set content expectations - verified vs
   unverified explained.
@@ -120,7 +120,8 @@ Security guidance notes phishing as a common route to account compromise for sub
 
 ### My “should I subscribe?” decision flow
 
-```yaml
+````yaml
+```mermaid
 flowchart TD
   A[Find a creator link] --> B{Can I verify identity signals?}
   B -->|Yes| C[Cross-check socials + consistency]
@@ -133,7 +134,7 @@ flowchart TD
   H --> I{Content matches expectations?}
   I -->|Yes| J[Stay subscribed / tip responsibly]
   I -->|No| K[Unsubscribe, move on]
-```
+````
 
 This flows from two platform realities that affect fans:
 
