@@ -12,6 +12,7 @@
     CMS.init({
       config: {
         load_config_file: false,
+        publish_mode: 'simple',
         backend: {
           name: 'github',
           repo: 'ngolabovski819-droid/fanspedia',
@@ -48,7 +49,7 @@
               { label: 'Category Label', name: 'categoryLabel', widget: 'string', hint: "Display label e.g. 'Guides', 'Tips'" },
               { label: 'Emoji', name: 'emoji', widget: 'string', hint: 'Single emoji for the post card e.g. 🔍' },
               { label: 'Read Time', name: 'read_time', widget: 'string', hint: "e.g. '5 min read'" },
-              { label: 'Excerpt', name: 'excerpt', widget: 'text', hint: 'Short summary shown in the blog listing card (1-2 sentences)' },
+              { label: 'Excerpt', name: 'excerpt', widget: 'text', required: false, hint: 'Short summary shown in the blog listing card (1-2 sentences). Leave blank to auto-generate from body.' },
               { label: 'Featured Image', name: 'featured_image', widget: 'string', required: false, hint: 'URL of the 16:9 hero image (recommended: 1200×675px). Leave blank to show emoji instead.' },
               { label: 'Featured Image Alt Text', name: 'featured_image_alt', widget: 'string', required: false, hint: 'Descriptive alt text for the featured image (for accessibility and SEO)' },
               { label: 'SEO Title', name: 'seo_title', widget: 'string', required: false, hint: 'Overrides the browser tab title for SEO (50-60 chars). Leave blank to use the post title.' },
