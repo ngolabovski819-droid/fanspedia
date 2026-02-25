@@ -55,10 +55,7 @@
     { "source": "/admin/", "destination": "/admin/index.html" },
 
     { "source": "/blog/:slug", "destination": "/blog-post.html" },
-    { "source": "/blog/:slug/", "destination": "/blog-post.html" },
-
-    { "source": "/:username((?!admin|blog|near-me|locations|categories|wishlist|country|es|api|static|config|public|_templates|sitemap|robots)[A-Za-z0-9_-]+)", "destination": "/api/creator_public/:username" },
-    { "source": "/:username((?!admin|blog|near-me|locations|categories|wishlist|country|es|api|static|config|public|_templates|sitemap|robots)[A-Za-z0-9_-]+)/", "destination": "/api/creator_public/:username" }
+    { "source": "/blog/:slug/", "destination": "/blog-post.html" }
   ],
   "redirects": [
     { "source": "/categories/indian", "destination": "/country/india/", "statusCode": 301 },
