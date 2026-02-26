@@ -9,6 +9,8 @@ read_time: 6 min read
 excerpt: The blue checkmark on OnlyFans means more than you think. We break down
   exactly what verification means and why it matters when choosing who to
   follow.
+featured_image: https://prnt.sc/wWjZSvaTF-mO
+featured_image_alt: Verified vs. unverified Onlyfans creators cover
 seo_title: "Verified OnlyFans Creator vs Unverified: A Fan’s Safety"
 meta_description: >
   I’ve subscribed since the early OnlyFans days. Here’s how I vet creators,
