@@ -60,23 +60,6 @@
         ]
       }
     });
-
-    function relabelCmsButtons() {
-      const labels = {
-        'Publish changes': 'Update',
-        'Publish': 'Publish',
-      };
-      document.querySelectorAll('button, [role="button"]').forEach(el => {
-        const text = (el.textContent || '').trim();
-        if (labels[text]) {
-          el.textContent = labels[text];
-        }
-      });
-    }
-
-    const cmsLabelObserver = new MutationObserver(() => relabelCmsButtons());
-    cmsLabelObserver.observe(document.body, { childList: true, subtree: true });
-    relabelCmsButtons();
   </script>
 </body>
 </html>

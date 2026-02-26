@@ -145,7 +145,45 @@ function inlineFormat(text) {
     .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" rel="noopener noreferrer">$1</a>');
 }
 
-export default function handler(req, res) {
+async function resolveFeaturedImageUrl(rawUrl) {
+  if (!rawUrl) return '';
+
+  try {
+    const parsed = new URL(rawUrl);
+    const host = parsed.hostname.toLowerCase().replace(/^www\./, '');
+
+    if (host !== 'prnt.sc') {
+      return rawUrl;
+    }
+
+    const response = await fetch(parsed.toString(), {
+      headers: {
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+      },
+    });
+
+    if (!response.ok) {
+      return rawUrl;
+    }
+
+    const html = await response.text();
+    const metaMatch =
+      html.match(/<meta[^>]+property=["']og:image["'][^>]*content=["']([^"']+)["'][^>]*>/i) ||
+      html.match(/<meta[^>]+content=["']([^"']+)["'][^>]*property=["']og:image["'][^>]*>/i) ||
+      html.match(/<meta[^>]+name=["']twitter:image(?::src)?["'][^>]*content=["']([^"']+)["'][^>]*>/i) ||
+      html.match(/<meta[^>]+content=["']([^"']+)["'][^>]*name=["']twitter:image(?::src)?["'][^>]*>/i);
+
+    if (!metaMatch?.[1]) {
+      return rawUrl;
+    }
+
+    return new URL(metaMatch[1], parsed).toString();
+  } catch {
+    return rawUrl;
+  }
+}
+
+export default async function handler(req, res) {
   const slug = req.query.slug;
   if (!slug || !/^[a-z0-9-]+$/.test(slug)) {
     res.status(400).json({ error: 'Invalid slug' });
@@ -172,6 +210,7 @@ export default function handler(req, res) {
     const raw = readFileSync(filePath, 'utf8');
     const { data, body } = parseFrontmatter(raw);
     const bodyHtml = mdToHtml(body);
+    const resolvedFeaturedImage = await resolveFeaturedImageUrl(data.featured_image || '');
 
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Cache-Control', 'no-store, max-age=0');
@@ -186,7 +225,7 @@ export default function handler(req, res) {
       date: data.date || '',
       emoji: data.emoji || '',
       readTime: data.read_time || '5 min read',
-      featuredImage: data.featured_image || '',
+      featuredImage: resolvedFeaturedImage,
       featuredImageAlt: data.featured_image_alt || data.title || '',
       bodyHtml,
     }));
