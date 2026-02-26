@@ -73,6 +73,8 @@
     .header-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
     .theme-toggle { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; width: 44px; height: 44px; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; font-size: 20px; }
     .theme-toggle:hover { background: rgba(255,255,255,0.3); }
+    .lang-toggle { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; width: 44px; height: 44px; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; }
+    .lang-toggle:hover { background: rgba(255,255,255,0.3); }
     .safe-search-toggle { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; width: 44px; height: 44px; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; font-size: 20px; position: relative; }
     .safe-search-toggle:hover { background: rgba(255,255,255,0.3); }
     .mobile-menu-toggle { display: none; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; width: 44px; height: 44px; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; justify-content: center; align-items: center; font-size: 18px; }
@@ -383,6 +385,7 @@
     [data-theme="dark"] .mobile-drawer { background: var(--bg-secondary); }
     [data-theme="dark"] .mobile-drawer > a { color: var(--text-primary); }
   </style>
+  <script src="/config/i18n.js?v=20260226-1"></script>
 </head>
 <body>
 
@@ -401,20 +404,21 @@
       </a>
       <div class="desktop-nav">
         <button id="categoriesToggle" class="nav-btn" aria-haspopup="true" aria-expanded="false">
-          Categories <i class="fas fa-chevron-down"></i>
+          <span data-i18n-key="nav_categories">Categories</span> <i class="fas fa-chevron-down"></i>
         </button>
         <div id="categoriesMenu" class="dropdown-menu" role="menu" aria-hidden="true"></div>
       </div>
       <div class="desktop-nav">
-        <a href="/locations/" class="nav-btn">Locations <i class="fas fa-map-marker-alt"></i></a>
+        <a href="/locations/" class="nav-btn"><span data-i18n-key="nav_locations">Locations</span> <i class="fas fa-map-marker-alt"></i></a>
       </div>
       <div class="header-search-section">
         <div class="header-search-wrapper">
           <i class="fas fa-search header-search-icon"></i>
-          <input type="text" class="header-search-input" placeholder="Search creators..." id="headerSearch" autocomplete="off">
+          <input type="text" class="header-search-input" placeholder="Search creators..." data-i18n-placeholder="searchPlaceholder" id="headerSearch" autocomplete="off">
         </div>
       </div>
       <div class="header-actions">
+        <button class="lang-toggle" id="langToggle" aria-label="Toggle Language" title="EN / ES" onclick="toggleLanguage()"><span id="langIndicator">EN</span></button>
         <button class="mobile-search-trigger" id="mobileSearchTrigger" aria-label="Search"><i class="fas fa-search"></i></button>
         <button class="safe-search-toggle" id="safeSearchToggle" aria-label="Safe Search" title="Safe Search"><i class="fas fa-eye-slash"></i></button>
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><i class="fas fa-moon"></i></button>
@@ -434,7 +438,7 @@
     </div>
   </div>
   <div class="mobile-search-content">
-    <div style="color:var(--text-secondary);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;">POPULAR SEARCHES</div>
+    <div style="color:var(--text-secondary);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;" data-i18n-key="blog_popularSearches">POPULAR SEARCHES</div>
     <div class="mobile-search-suggestions" id="mobileSearchSuggestions"></div>
   </div>
 </div>
@@ -443,16 +447,16 @@
 <div id="drawerOverlay" class="drawer-overlay"></div>
 <nav id="mobileDrawer" class="mobile-drawer">
   <button class="drawer-close" id="drawerClose">×</button>
-  <a href="/">Home</a>
-  <a href="/blog/" style="color:#00AFF0">Blog</a>
+  <a href="/" data-i18n-key="nav_home">Home</a>
+  <a href="/blog/" style="color:#00AFF0" data-i18n-key="nav_blog">Blog</a>
   <div class="drawer-categories-toggle" id="drawerCategoriesToggle">
-    <div class="icon-text"><i class="fas fa-th"></i><span>Categories</span></div>
+    <div class="icon-text"><i class="fas fa-th"></i><span data-i18n-key="nav_categories">Categories</span></div>
     <i class="fas fa-chevron-down chevron"></i>
   </div>
   <div id="drawerCategoriesSection">
-    <div class="drawer-categories-label">MOST POPULAR CATEGORIES</div>
+    <div class="drawer-categories-label" data-i18n-key="blog_mostPopularCategories">MOST POPULAR CATEGORIES</div>
     <div id="drawerCategories"></div>
-    <a href="/categories/" class="drawer-view-all-btn">View All Categories</a>
+    <a href="/categories/" class="drawer-view-all-btn" data-i18n-key="nav_viewAllCategories">View All Categories</a>
   </div>
 </nav>
 
@@ -460,7 +464,7 @@
 <main id="articleMain">
   <div class="state-center" id="loadingState">
     <div class="state-emoji">⏳</div>
-    <h2>Loading article...</h2>
+    <h2 data-i18n-key="blog_loadingArticle">Loading article...</h2>
   </div>
 </main>
 
@@ -493,18 +497,18 @@
         </div>
       </div>
       <div class="footer-column">
-        <h3 class="footer-heading">Popular Categories</h3>
+        <h3 class="footer-heading" data-i18n-key="blog_footerPopularCategories">Popular Categories</h3>
         <ul class="footer-links">
           <li><a href="/categories/verified">Verified Creators</a></li>
           <li><a href="/categories/free">Free OnlyFans</a></li>
           <li><a href="/categories/cosplay">Cosplay Models</a></li>
           <li><a href="/categories/fitness">Fitness &amp; Wellness</a></li>
           <li><a href="/categories/gaming">Gaming Creators</a></li>
-          <li><a href="/categories">View All Categories</a></li>
+          <li><a href="/categories" data-i18n-key="nav_viewAllCategories">View All Categories</a></li>
         </ul>
       </div>
       <div class="footer-column">
-        <h3 class="footer-heading">Resources</h3>
+        <h3 class="footer-heading" data-i18n-key="blog_footerResources">Resources</h3>
         <ul class="footer-links">
           <li><a href="#" onclick="alert('Coming soon!'); return false;">Creator Guide</a></li>
           <li><a href="#" onclick="alert('Coming soon!'); return false;">How to Subscribe</a></li>
@@ -515,7 +519,7 @@
         </ul>
       </div>
       <div class="footer-column">
-        <h3 class="footer-heading">Legal &amp; Info</h3>
+        <h3 class="footer-heading" data-i18n-key="blog_footerLegalInfo">Legal &amp; Info</h3>
         <ul class="footer-links">
           <li><a href="#" onclick="alert('Coming soon!'); return false;">About Us</a></li>
           <li><a href="#" onclick="alert('Coming soon!'); return false;">Contact</a></li>
@@ -528,10 +532,10 @@
     </div>
     <div class="footer-bottom">
       <div class="footer-bottom-content">
-        <p class="footer-copyright">&copy; 2026 fanspedia.net - All rights reserved</p>
+        <p class="footer-copyright" data-i18n-key="blog_footerCopyright">&copy; 2026 fanspedia.net - All rights reserved</p>
         <div class="footer-stats">
-          <span class="stat-badge"><i class="fas fa-check-circle"></i> 10,000+ Verified Creators</span>
-          <span class="stat-badge"><i class="fas fa-sync-alt"></i> Updated Daily</span>
+          <span class="stat-badge"><i class="fas fa-check-circle"></i> <span data-i18n-key="blog_footerVerifiedCreators">10,000+ Verified Creators</span></span>
+          <span class="stat-badge"><i class="fas fa-sync-alt"></i> <span data-i18n-key="blog_footerUpdatedDaily">Updated Daily</span></span>
         </div>
       </div>
       <p class="footer-disclaimer">This website is an independent directory and is not affiliated with OnlyFans. All trademarks belong to their respective owners.</p>
@@ -540,22 +544,23 @@
 </footer>
 
 <nav class="sticky-bottom-nav" role="navigation">
-  <a href="/" class="nav-item" data-nav="home"><span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span><span class="label">Search</span></a>
-  <a href="/near-me/" class="nav-item" data-nav="near"><span class="icon"><i class="fa-solid fa-location-arrow"></i></span><span class="label">Near Me</span></a>
-  <a href="/categories/" class="nav-item" data-nav="categories"><span class="icon"><i class="fa-solid fa-th"></i></span><span class="label">Categories</span></a>
-  <a href="/blog/" class="nav-item active" data-nav="blog"><span class="icon"><i class="fa-solid fa-newspaper"></i></span><span class="label">Blog</span></a>
-  <a href="/wishlist/" class="nav-item" data-nav="wishlist"><span class="icon"><i class="fa-solid fa-heart"></i></span><span class="label">Wishlist</span></a>
+  <a href="/" class="nav-item" data-nav="home"><span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span><span class="label" data-i18n-key="search">Search</span></a>
+  <a href="/near-me/" class="nav-item" data-nav="near"><span class="icon"><i class="fa-solid fa-location-arrow"></i></span><span class="label" data-i18n-key="location_nearMe">Near Me</span></a>
+  <a href="/categories/" class="nav-item" data-nav="categories"><span class="icon"><i class="fa-solid fa-th"></i></span><span class="label" data-i18n-key="nav_categories">Categories</span></a>
+  <a href="/blog/" class="nav-item active" data-nav="blog"><span class="icon"><i class="fa-solid fa-newspaper"></i></span><span class="label" data-i18n-key="nav_blog">Blog</span></a>
+  <a href="/wishlist/" class="nav-item" data-nav="wishlist"><span class="icon"><i class="fa-solid fa-heart"></i></span><span class="label" data-i18n-key="myWishlist">Wishlist</span></a>
 </nav>
 
 <script type="module">
   import { popularCategories, categoryToSlug } from '/config/categories.js?v=20260226-1';
+  const i18nText = (key, fallback) => (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t(key) : fallback;
   const catMenu = document.getElementById('categoriesMenu');
   if (catMenu) {
     catMenu.innerHTML = popularCategories.map(cat => {
       const slug = categoryToSlug(cat);
       const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
       return `<a role="menuitem" href="/categories/${slug}/">${label}</a>`;
-    }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Browse all categories →</a>';
+    }).join('') + `<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">${i18nText('nav_viewAllCategories', 'View All Categories')} →</a>`;
   }
   const drawerCats = document.getElementById('drawerCategories');
   if (drawerCats) {
@@ -571,6 +576,57 @@
 </script>
 
 <script>
+  function isSpanishRoute() {
+    return window.location.pathname.startsWith('/es/');
+  }
+
+  function getLangPrefix() {
+    return isSpanishRoute() ? '/es' : '';
+  }
+
+  function localizedPath(path) {
+    return getLangPrefix() + path;
+  }
+
+  function applyLocalizedLinks() {
+    if (!isSpanishRoute()) return;
+    document.querySelectorAll('a[href^="/"]').forEach(link => {
+      const href = link.getAttribute('href');
+      if (!href || href.startsWith('/es/') || href.startsWith('/api/') || href.startsWith('/admin')) return;
+      if (href === '/') {
+        link.setAttribute('href', '/es/');
+        return;
+      }
+      link.setAttribute('href', '/es' + href);
+    });
+  }
+
+  function i18nText(key, fallback) {
+    return (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t(key) : fallback;
+  }
+
+  async function initializeTranslations() {
+    if (!window.i18n) return;
+    await window.i18n.init();
+    window.i18n.setLanguage(isSpanishRoute() ? 'es' : 'en');
+    window.i18n.applyTranslations();
+    applyLocalizedLinks();
+    const indicator = document.getElementById('langIndicator');
+    if (indicator) indicator.textContent = isSpanishRoute() ? 'ES' : 'EN';
+  }
+
+  function toggleLanguage() {
+    const path = window.location.pathname;
+    const query = window.location.search || '';
+    if (isSpanishRoute()) {
+      window.location.href = (path.replace(/^\/es/, '') || '/') + query;
+      return;
+    }
+    window.location.href = '/es' + path + query;
+  }
+
+  initializeTranslations().catch(() => {});
+
   // Theme
   const themeToggle = document.getElementById('themeToggle');
   function getCurrentTheme() { return localStorage.getItem('theme') || 'light'; }
@@ -614,31 +670,35 @@
   // Mobile search
   const mobileSearchModal = document.getElementById('mobileSearchModal');
   const mobileSearchInput = document.getElementById('mobileSearchInput');
+  if (mobileSearchInput) mobileSearchInput.placeholder = i18nText('searchPlaceholder', 'Search creators...');
   document.getElementById('mobileSearchSuggestions').innerHTML =
     ['milf','asian','big tits','trans','mature','latina','big ass','bbw']
       .map(t => `<a href="/?q=${encodeURIComponent(t)}" class="mobile-search-suggestion"><i class="fas fa-fire"></i><span>${t}</span></a>`).join('');
   document.getElementById('mobileSearchTrigger')?.addEventListener('click', () => { mobileSearchModal?.classList.add('active'); document.body.style.overflow = 'hidden'; setTimeout(() => mobileSearchInput?.focus(), 100); });
   document.getElementById('mobileSearchBack')?.addEventListener('click', () => { mobileSearchModal?.classList.remove('active'); document.body.style.overflow = ''; });
-  mobileSearchInput?.addEventListener('keypress', e => { if (e.key === 'Enter' && mobileSearchInput.value.trim()) location.href = '/?q=' + encodeURIComponent(mobileSearchInput.value.trim()); });
-  document.getElementById('headerSearch')?.addEventListener('keydown', e => { if (e.key === 'Enter') location.href = '/?q=' + encodeURIComponent(e.target.value); });
+  mobileSearchInput?.addEventListener('keypress', e => { if (e.key === 'Enter' && mobileSearchInput.value.trim()) location.href = localizedPath('/?q=' + encodeURIComponent(mobileSearchInput.value.trim())); });
+  document.getElementById('headerSearch')?.addEventListener('keydown', e => { if (e.key === 'Enter') location.href = localizedPath('/?q=' + encodeURIComponent(e.target.value)); });
 
   // ── ARTICLE LOADER ──
   function getSlugFromPath() {
-    // Expects /blog/my-slug or /blog/my-slug/
-    const parts = window.location.pathname.replace(/\/$/, '').split('/');
-    return parts[parts.length - 1] || '';
+    const path = window.location.pathname.replace(/\/$/, '');
+    const normalizedPath = path.startsWith('/es/') ? path.slice(3) : path;
+    const parts = normalizedPath.split('/').filter(Boolean);
+    if (parts[0] !== 'blog') return '';
+    return parts[1] || '';
   }
 
   function formatDate(iso) {
     if (!iso) return '';
-    return new Date(iso).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    const locale = isSpanishRoute() ? 'es-ES' : 'en-US';
+    return new Date(iso).toLocaleDateString(locale, { month: 'long', day: 'numeric', year: 'numeric' });
   }
 
   function renderArticle(post) {
     // Update meta
     document.title = (post.seoTitle || post.title) + ' — FansPedia Blog';
     document.getElementById('pageDesc').content = post.metaDescription || post.excerpt;
-    document.getElementById('pageCanonical').href = 'https://www.fanspedia.net/blog/' + post.slug + '/';
+    document.getElementById('pageCanonical').href = 'https://www.fanspedia.net' + getLangPrefix() + '/blog/' + post.slug + '/';
 
     // Build hero image HTML (16:9 responsive) if available
     let heroImageHTML = '';
@@ -664,7 +724,7 @@
     const main = document.getElementById('articleMain');
     main.innerHTML = `
       <div class="back-bar">
-        <a href="/blog/" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+        <a href="${localizedPath('/blog/')}" class="back-btn"><i class="fas fa-arrow-left"></i> ${i18nText('blog_backToBlog', 'Back to Blog')}</a>
       </div>
       <div class="article-hero">
         <span class="article-tag">${post.categoryLabel}</span>
@@ -678,7 +738,7 @@
       </div>
       ${heroImageHTML}
       <div class="article-divider"><hr></div>
-      <article class="article-body">${post.bodyHtml || '<p><em>Content coming soon.</em></p>'}</article>
+      <article class="article-body">${post.bodyHtml || `<p><em>${i18nText('blog_contentComingSoon', 'Content coming soon.')}</em></p>`}</article>
     `;
   }
 
@@ -686,9 +746,9 @@
     document.getElementById('articleMain').innerHTML = `
       <div class="state-center">
         <div class="state-emoji">😕</div>
-        <h2>Article not found</h2>
+        <h2>${i18nText('blog_articleNotFound', 'Article not found')}</h2>
         <p>${msg}</p>
-        <a href="/blog/" style="display:inline-block;margin-top:20px;padding:12px 28px;background:linear-gradient(135deg,#00AFF0,#0099D6);color:white;border-radius:24px;text-decoration:none;font-weight:700;">← Back to Blog</a>
+        <a href="${localizedPath('/blog/')}" style="display:inline-block;margin-top:20px;padding:12px 28px;background:linear-gradient(135deg,#00AFF0,#0099D6);color:white;border-radius:24px;text-decoration:none;font-weight:700;">← ${i18nText('blog_backToBlog', 'Back to Blog')}</a>
       </div>
     `;
   }
@@ -701,8 +761,8 @@
   });
 
   const slug = getSlugFromPath();
-  if (!slug || slug === 'blog') {
-    window.location.replace('/blog/');
+  if (!slug) {
+    window.location.replace(localizedPath('/blog/'));
   } else {
     fetch('/api/blog-post?slug=' + encodeURIComponent(slug) + '&t=' + Date.now(), { cache: 'no-store' })
       .then(r => {

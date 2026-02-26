@@ -50,12 +50,16 @@
 
     { "source": "/blog", "destination": "/blog.html" },
     { "source": "/blog/", "destination": "/blog.html" },
+    { "source": "/es/blog", "destination": "/blog.html" },
+    { "source": "/es/blog/", "destination": "/blog.html" },
 
     { "source": "/admin", "destination": "/admin/index.html" },
     { "source": "/admin/", "destination": "/admin/index.html" },
 
     { "source": "/blog/:slug", "destination": "/blog-post.html" },
-    { "source": "/blog/:slug/", "destination": "/blog-post.html" }
+    { "source": "/blog/:slug/", "destination": "/blog-post.html" },
+    { "source": "/es/blog/:slug", "destination": "/blog-post.html" },
+    { "source": "/es/blog/:slug/", "destination": "/blog-post.html" }
   ],
   "redirects": [
     { "source": "/categories/indian", "destination": "/country/india/", "statusCode": 301 },
@@ -79,6 +83,7 @@
     { "source": "/united-states.html", "destination": "/country/united-states", "statusCode": 301 },
 
     { "source": "/es/index.html", "destination": "/es/", "statusCode": 301 },
+    { "source": "/es/blog.html", "destination": "/es/blog", "statusCode": 301 },
     { "source": "/es/categories.html", "destination": "/es/categories", "statusCode": 301 },
     { "source": "/es/category.html", "destination": "/es/categories", "statusCode": 301 },
     { "source": "/es/locations.html", "destination": "/es/locations", "statusCode": 301 },
