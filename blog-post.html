@@ -130,7 +130,7 @@
     .article-hero {
       max-width: 860px;
       margin: 0 auto;
-      padding: 56px 20px 32px;
+      padding: 28px 20px 24px;
       text-align: center;
     }
     .article-tag {
@@ -145,6 +145,11 @@
       background: var(--accent-dim);
       color: var(--brand-color);
       margin-bottom: 20px;
+    }
+    .article-tag-inline {
+      margin-bottom: 0;
+      padding: 2px 10px;
+      font-size: 11px;
     }
     .article-emoji {
       font-size: 64px;
@@ -179,7 +184,7 @@
     .article-meta i { color: var(--brand-color); font-size: 12px; }
     .article-divider {
       max-width: 860px;
-      margin: 0 auto 40px;
+      margin: 0 auto 32px;
       padding: 0 20px;
     }
     .article-divider hr {
@@ -251,7 +256,7 @@
     /* Blog Hero Image (16:9 responsive) */
     .blog-hero-image {
       max-width: 860px;
-      margin: 0 auto 40px;
+      margin: 0 auto 28px;
       padding: 0 20px;
     }
     .blog-hero-image picture {
@@ -325,7 +330,7 @@
     .back-bar {
       max-width: 860px;
       margin: 0 auto;
-      padding: 20px 20px 0;
+      padding: 8px 20px 0;
     }
     .back-btn {
       display: inline-flex;
@@ -727,13 +732,13 @@
         <a href="${localizedPath('/blog/')}" class="back-btn"><i class="fas fa-arrow-left"></i> ${i18nText('blog_backToBlog', 'Back to Blog')}</a>
       </div>
       <div class="article-hero">
-        <span class="article-tag">${post.categoryLabel}</span>
         ${emojiHTML}
         <h1 class="article-title">${post.title}</h1>
         <p class="article-excerpt">${post.excerpt}</p>
         <div class="article-meta">
           <span><i class="fas fa-calendar-alt"></i> ${formatDate(post.date)}</span>
           <span><i class="fas fa-clock"></i> ${post.readTime}</span>
+          <span class="article-tag article-tag-inline">${post.categoryLabel}</span>
         </div>
       </div>
       ${heroImageHTML}

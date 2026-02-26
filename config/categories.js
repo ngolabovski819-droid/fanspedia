@@ -149,18 +149,18 @@ function setupMobileLanguageTogglePlacement() {
     const style = document.createElement('style');
     style.id = STYLE_ID;
     style.textContent = `
+      .footer-social .lang-toggle.footer-lang-toggle {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        width: auto;
+        min-width: 68px;
+        padding: 0 12px;
+        border-radius: 10px;
+      }
       @media (max-width: 768px) {
         .lang-toggle:not(.footer-lang-toggle) { display: none !important; }
-        .footer-social .lang-toggle.footer-lang-toggle {
-          display: inline-flex !important;
-          align-items: center;
-          justify-content: center;
-          gap: 6px;
-          width: auto;
-          min-width: 68px;
-          padding: 0 12px;
-          border-radius: 10px;
-        }
       }
     `;
     document.head.appendChild(style);
@@ -173,6 +173,8 @@ function setupMobileLanguageTogglePlacement() {
     const langToggle = document.getElementById('langToggle') || document.querySelector('.lang-toggle');
     if (!langToggle) return;
 
+    const placementMode = (document.body?.dataset?.langTogglePlacement || '').toLowerCase();
+    const forceFooter = placementMode === 'footer';
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
     const headerActions = document.querySelector('.header-actions') || originalParent;
     const footerSocial = document.querySelector('.footer-social');
@@ -182,7 +184,7 @@ function setupMobileLanguageTogglePlacement() {
       originalNextSibling = langToggle.nextElementSibling;
     }
 
-    if (isMobile && footerSocial) {
+    if ((forceFooter || isMobile) && footerSocial) {
       const tiktokLink = footerSocial.querySelector('a[aria-label="TikTok"]');
       langToggle.classList.add('footer-lang-toggle');
 
