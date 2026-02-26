@@ -53,6 +53,7 @@ function outputDir() {
 function buildBaseSitemap() {
   let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
   const d = today();
+  const newestBlogSlug = 'verified-vs-unverified-onlyfans-creators';
   const countries = ['united-states', 'canada', 'india', 'japan'];
   // Homepage
   xml += wrapUrl(`${BASE_URL}/`, 'daily', '1.0', d);
@@ -65,6 +66,9 @@ function buildBaseSitemap() {
   }
   // Locations hub
   xml += wrapUrl(`${BASE_URL}/locations/`, 'weekly', '0.8', d);
+  // Blog hub + newest post
+  xml += wrapUrl(`${BASE_URL}/blog/`, 'weekly', '0.8', d);
+  xml += wrapUrl(`${BASE_URL}/blog/${newestBlogSlug}/`, 'weekly', '0.7', d);
   // Country pages
   for (const country of countries) {
     xml += wrapUrl(`${BASE_URL}/country/${country}/`, 'weekly', '0.8', d);
@@ -76,6 +80,7 @@ function buildBaseSitemap() {
 function buildSpanishBaseSitemap() {
   let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
   const d = today();
+  const newestBlogSlug = 'verified-vs-unverified-onlyfans-creators';
   // Spanish Homepage
   xml += wrapUrl(`${BASE_URL}/es/`, 'daily', '1.0', d);
   // Spanish Categories hub
@@ -87,6 +92,9 @@ function buildSpanishBaseSitemap() {
   }
   // Spanish Locations
   xml += wrapUrl(`${BASE_URL}/es/locations/`, 'weekly', '0.8', d);
+  // Spanish Blog hub + newest post
+  xml += wrapUrl(`${BASE_URL}/es/blog/`, 'weekly', '0.8', d);
+  xml += wrapUrl(`${BASE_URL}/es/blog/${newestBlogSlug}/`, 'weekly', '0.7', d);
   // Spanish Country pages
   const countries = [
     { slug: 'united-states', es: 'Estados Unidos' },
