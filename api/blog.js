@@ -5,10 +5,6 @@ import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const contentDir = join(__dirname, '..', 'content', 'blog');
 
-// Simple in-memory cache (resets on cold start)
-const cache = { data: null, ts: 0 };
-const CACHE_TTL = 60_000;
-
 function parseFrontmatter(raw) {
   const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
   if (!match) return { data: {}, body: raw };
@@ -39,7 +35,7 @@ function readAllPosts() {
       category: data.category || 'guides',
       categoryLabel: data.categoryLabel || data.category || 'Guides',
       date: data.date || '2026-01-01',
-      emoji: data.emoji || '📝',
+      emoji: data.emoji || '',
       readTime: data.read_time || '5 min read',
       featuredImage: data.featured_image || '',
       featuredImageAlt: data.featured_image_alt || data.title || '',
@@ -52,20 +48,10 @@ function readAllPosts() {
 export default function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
 
-  const now = Date.now();
-  if (cache.data && now - cache.ts < CACHE_TTL) {
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Cache-Control', 'public, max-age=60');
-    res.end(JSON.stringify(cache.data));
-    return;
-  }
-
   try {
     const posts = readAllPosts();
-    cache.data = posts;
-    cache.ts = now;
     res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Cache-Control', 'public, max-age=60');
+    res.setHeader('Cache-Control', 'no-store, max-age=0');
     res.end(JSON.stringify(posts));
   } catch (err) {
     res.status(500).json({ error: 'Failed to read blog posts', message: String(err) });

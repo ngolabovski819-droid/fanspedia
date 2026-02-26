@@ -657,6 +657,10 @@
       `;
     }
 
+    const emojiHTML = (post.emoji && post.emoji.trim())
+      ? `<span class="article-emoji">${post.emoji}</span>`
+      : '';
+
     const main = document.getElementById('articleMain');
     main.innerHTML = `
       <div class="back-bar">
@@ -664,7 +668,7 @@
       </div>
       <div class="article-hero">
         <span class="article-tag">${post.categoryLabel}</span>
-        <span class="article-emoji">${post.emoji}</span>
+        ${emojiHTML}
         <h1 class="article-title">${post.title}</h1>
         <p class="article-excerpt">${post.excerpt}</p>
         <div class="article-meta">
@@ -700,7 +704,7 @@
   if (!slug || slug === 'blog') {
     window.location.replace('/blog/');
   } else {
-    fetch('/api/blog-post?slug=' + encodeURIComponent(slug))
+    fetch('/api/blog-post?slug=' + encodeURIComponent(slug) + '&t=' + Date.now(), { cache: 'no-store' })
       .then(r => {
         if (r.status === 404) throw new Error('This article could not be found.');
         if (!r.ok) throw new Error('Server error (' + r.status + ')');

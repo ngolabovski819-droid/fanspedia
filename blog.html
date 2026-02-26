@@ -938,7 +938,8 @@
       const thumbSrc = 'https://images.weserv.nl/?url=' + encodeURIComponent(baseUrl) + '&w=600&h=338&fit=cover&output=webp&q=85';
       imagePlaceholder = '<div class="post-card-image-placeholder"><img src="' + thumbSrc + '" alt="' + alt + '" loading="lazy"></div>';
     } else {
-      imagePlaceholder = '<div class="post-card-image-placeholder">' + post.emoji + '</div>';
+      const fallbackEmoji = (post.emoji && post.emoji.trim()) ? post.emoji : '📝';
+      imagePlaceholder = '<div class="post-card-image-placeholder">' + fallbackEmoji + '</div>';
     }
     
     a.innerHTML =
@@ -1034,7 +1035,7 @@
   });
 
   // Load posts from API
-  fetch('/api/blog')
+  fetch('/api/blog?t=' + Date.now(), { cache: 'no-store' })
     .then(function(r) { return r.ok ? r.json() : Promise.reject(r.status); })
     .then(function(posts) {
       POSTS = posts;

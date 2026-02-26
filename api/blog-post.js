@@ -174,7 +174,7 @@ export default function handler(req, res) {
     const bodyHtml = mdToHtml(body);
 
     res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Cache-Control', 'public, max-age=300');
+    res.setHeader('Cache-Control', 'no-store, max-age=0');
     res.end(JSON.stringify({
       slug,
       title: data.title || slug,
@@ -184,7 +184,7 @@ export default function handler(req, res) {
       category: data.category || 'guides',
       categoryLabel: data.categoryLabel || data.category || 'Guides',
       date: data.date || '',
-      emoji: data.emoji || '📝',
+      emoji: data.emoji || '',
       readTime: data.read_time || '5 min read',
       featuredImage: data.featured_image || '',
       featuredImageAlt: data.featured_image_alt || data.title || '',
