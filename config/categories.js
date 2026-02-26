@@ -140,3 +140,88 @@ export function categoryToSlug(category) {
 export function slugToLabel(slug) {
   return slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }
+
+function setupMobileLanguageTogglePlacement() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+
+  const STYLE_ID = 'mobile-lang-toggle-placement-style';
+  if (!document.getElementById(STYLE_ID)) {
+    const style = document.createElement('style');
+    style.id = STYLE_ID;
+    style.textContent = `
+      @media (max-width: 768px) {
+        .header-actions .lang-toggle { display: none !important; }
+        .footer-social .lang-toggle.footer-lang-toggle {
+          display: inline-flex !important;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+          width: auto;
+          min-width: 68px;
+          padding: 0 12px;
+          border-radius: 10px;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  let originalParent = null;
+  let originalNextSibling = null;
+
+  function placeLanguageToggle() {
+    const langToggle = document.getElementById('langToggle');
+    if (!langToggle) return;
+
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const headerActions = document.querySelector('.header-actions');
+    const footerSocial = document.querySelector('.footer-social');
+
+    if (!originalParent) {
+      originalParent = langToggle.parentElement;
+      originalNextSibling = langToggle.nextElementSibling;
+    }
+
+    if (isMobile && footerSocial) {
+      const tiktokLink = footerSocial.querySelector('a[aria-label="TikTok"]');
+      langToggle.classList.add('footer-lang-toggle');
+
+      if (langToggle.parentElement !== footerSocial) {
+        if (tiktokLink && tiktokLink.nextSibling) {
+          footerSocial.insertBefore(langToggle, tiktokLink.nextSibling);
+        } else {
+          footerSocial.appendChild(langToggle);
+        }
+      }
+      return;
+    }
+
+    langToggle.classList.remove('footer-lang-toggle');
+    if (headerActions && langToggle.parentElement !== headerActions) {
+      const anchor = originalNextSibling && originalNextSibling.parentElement === headerActions
+        ? originalNextSibling
+        : null;
+      if (anchor) {
+        headerActions.insertBefore(langToggle, anchor);
+      } else {
+        headerActions.appendChild(langToggle);
+      }
+    } else if (originalParent && langToggle.parentElement !== originalParent) {
+      originalParent.appendChild(langToggle);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', placeLanguageToggle, { once: true });
+  } else {
+    placeLanguageToggle();
+  }
+
+  let resizeTimer = null;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(placeLanguageToggle, 120);
+  });
+}
+
+setupMobileLanguageTogglePlacement();
