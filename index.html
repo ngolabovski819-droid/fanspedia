@@ -2091,7 +2091,7 @@
   <!-- Mobile Drawer -->
   <div id="drawerOverlay" class="drawer-overlay" tabindex="-1" aria-hidden="true"></div>
   <nav id="mobileDrawer" class="mobile-drawer" aria-hidden="true" aria-labelledby="mobileMenuToggle">
-    <button class="drawer-close" id="drawerClose" aria-label="Close menu">×</button>
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">ï¿½</button>
     <a href="/">Home</a>
     
     <!-- Categories collapsible section -->
@@ -2158,7 +2158,7 @@
     <div class="mb-3 search-group">
       <div class="input-group input-group-lg">
         <input id="search" type="text" class="form-control" placeholder='Type: "milf" "Texas" "piercings"' aria-label="Search creators" inputmode="search" enterkeyhint="search" autocomplete="off" autocapitalize="none" spellcheck="false" />
-  <button class="clear-search" id="clearSearch" type="button" aria-label="Clear search">×</button>
+  <button class="clear-search" id="clearSearch" type="button" aria-label="Clear search">ï¿½</button>
         <button id="searchBtn" class="btn btn-search" type="button">
           <span class="spinner" aria-hidden="true"></span>
           <span class="btn-label" data-i18n-key="search">Search</span>
@@ -2207,7 +2207,7 @@
     <div id="loadMoreContainer" class="text-center my-4" style="display: none;">
       <button id="loadMoreBtn" class="load-more-btn">
         <span class="btn-text" data-i18n-key="loadMore">Load More Creators</span>
-        <span class="btn-icon">?</span>
+        <span class="btn-icon">â†“</span>
       </button>
       <p id="loadedCount" class="mt-2" style="color: #888; font-size: 14px; margin-bottom: 0;"></p>
     </div>
@@ -2255,7 +2255,7 @@
     </section>
     
     <!-- Back to top button -->
-    <button id="backToTop" aria-label="Back to top" title="Back to top">?</button>
+    <button id="backToTop" aria-label="Back to top" title="Back to top">â†‘</button>
   </div>
 
   <script type="module">
@@ -2271,7 +2271,7 @@
         const slug = categoryToSlug(cat);
         const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
         return `<a role="menuitem" href="/categories/${slug}/">${label}</a>`;
-      }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Browse all categories ?</a>';
+      }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Browse all categories â†’</a>';
       catMenu.innerHTML = menuHTML;
     }
     
@@ -3308,7 +3308,7 @@
       if (loading) {
         searchBtn.classList.add('loading');
         searchBtn.disabled = true;
-        if (label) label.textContent = 'Searching…';
+        if (label) label.textContent = 'Searching...';
       } else {
         searchBtn.classList.remove('loading');
         searchBtn.disabled = false;
@@ -3434,14 +3434,14 @@
           const responsive = buildResponsiveSources(imgSrc);
           
           const name = item.name || "Unknown";
-          const username = item.username || "—";
+          const username = item.username || "â€”";
           const priceText = (item.subscribePrice && !isNaN(item.subscribePrice))
             ? `$${parseFloat(item.subscribePrice).toFixed(2)}`
             : "FREE";
-          const verifiedIcon = item.isVerified ? "? " : "";
+          const verifiedIcon = item.isVerified ? "âœ… " : "";
           const location = item.location || "";
           // Link directly to OnlyFans profile (not to internal creator page)
-          const profileUrl = username !== "—" ? `https://onlyfans.com/${encodeURIComponent(username)}` : "#";
+          const profileUrl = username !== "â€”" ? `https://onlyfans.com/${encodeURIComponent(username)}` : "#";
 
           const isFirstCard = resultsDiv.children.length === 0 && currentPage === 1;
           // Preload the first, above-the-fold image to help LCP
@@ -3461,8 +3461,8 @@
           col.className = "col-sm-6 col-md-4 col-lg-3 mb-4";
           const safeUsername = String(username).replace(/'/g, "\\'");
           const favSet = getFavoritesSet();
-          const favActive = username !== "—" && favSet.has(username);
-          const favChar = favActive ? '?' : '?';
+          const favActive = username !== "â€”" && favSet.has(username);
+          const favChar = favActive ? 'â™¥' : 'â™¡';
           col.innerHTML = `
             <div class="card h-100">
               <button class="favorite-btn ${favActive ? 'active' : ''}" data-username="${safeUsername}" onclick="event.preventDefault(); toggleFavorite('${safeUsername}', this);">
@@ -3615,7 +3615,7 @@
       if (btnEl) {
         btnEl.classList.toggle('active', active);
         const s = btnEl.querySelector('span');
-        if (s) s.textContent = active ? '?' : '?';
+        if (s) s.textContent = active ? 'â™¥' : 'â™¡';
       }
       updateFavoriteButtons(username, active);
       renderFavoritesBar();
@@ -3629,7 +3629,7 @@
         buttons.forEach(b => {
           b.classList.toggle('active', active);
           const s = b.querySelector('span');
-          if (s) s.textContent = active ? '?' : '?';
+          if (s) s.textContent = active ? 'â™¥' : 'â™¡';
         });
       } catch {}
     }
@@ -3648,7 +3648,7 @@
         const safe = String(u).replace(/'/g, "\\'");
         const url = `https://onlyfans.com/${encodeURIComponent(u)}`;
         return `<div class="favorite-chip" data-username="${safe}" onclick="window.open('${url}','_blank')">
-          <span class=\"heart\">?</span>
+          <span class=\"heart\">â™¥</span>
           <a class=\"open\" href=\"${url}\" target=\"_blank\" rel=\"noopener\">@${u}</a>
           <button class=\"remove\" aria-label=\"Remove\" onclick=\"event.stopPropagation(); toggleFavorite('${safe}');\">&times;</button>
         </div>`;
@@ -3875,13 +3875,13 @@
       if (!activeFiltersDiv) return;
       const chips = [];
       if (verifiedToggle.checked) {
-        chips.push(`<div class="search-chip" data-filter="verified">Verified only <span class="remove" aria-label="Remove">×</span></div>`);
+        chips.push(`<div class="search-chip" data-filter="verified">Verified only <span class="remove" aria-label="Remove">ï¿½</span></div>`);
       }
       if (bundlesToggle.checked) {
-        chips.push(`<div class="search-chip" data-filter="bundles">Bundles <span class="remove" aria-label="Remove">×</span></div>`);
+        chips.push(`<div class="search-chip" data-filter="bundles">Bundles <span class="remove" aria-label="Remove">ï¿½</span></div>`);
       }
       if (priceRange.value !== '100') {
-        chips.push(`<div class="search-chip" data-filter="max">Max $${priceRange.value} <span class="remove" aria-label="Remove">×</span></div>`);
+        chips.push(`<div class="search-chip" data-filter="max">Max $${priceRange.value} <span class="remove" aria-label="Remove">ï¿½</span></div>`);
       }
       activeFiltersDiv.innerHTML = chips.join('');
       activeFiltersDiv.style.display = chips.length ? 'flex' : 'none';
@@ -4029,7 +4029,7 @@
       <div class="footer-bottom">
         <div class="footer-bottom-content">
           <p class="footer-copyright">
-            © 2026 fanspedia.net - All rights reserved
+            ï¿½ 2026 fanspedia.net - All rights reserved
           </p>
           <div class="footer-stats">
             <span class="stat-badge">
