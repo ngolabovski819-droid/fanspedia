@@ -120,22 +120,6 @@ Security guidance notes phishing as a common route to account compromise for sub
 
 ### My “should I subscribe?” decision flow
 
-````html
-```mermaid
-flowchart TD
-  A[Find a creator link] --> B{Can I verify identity signals?}
-  B -->|Yes| C[Cross-check socials + consistency]
-  B -->|No| D[Assume higher risk]
-  C --> E{Any red flags?}
-  D --> E
-  E -->|Yes| F[Skip or keep researching]
-  E -->|No| G[Start small: 1 month / lowest tier]
-  G --> H[Cancel auto-renew immediately]
-  H --> I{Content matches expectations?}
-  I -->|Yes| J[Stay subscribed / tip responsibly]
-  I -->|No| K[Unsubscribe, move on]
-````
-
 This flows from two platform realities that affect fans:
 
 * The paywall structure makes independent scrutiny hard (you often can’t see much without paying). 
