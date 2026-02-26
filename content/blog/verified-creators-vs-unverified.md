@@ -4,7 +4,7 @@ slug: verified-vs-unverified-onlyfans-creators
 date: 2026-02-18
 category: guides
 categoryLabel: Guides
-emoji: ✅
+emoji: ""
 read_time: 6 min read
 excerpt: The blue checkmark on OnlyFans means more than you think. We break down
   exactly what verification means and why it matters when choosing who to
