@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -458,7 +458,7 @@
   <!-- Mobile Drawer -->
   <div id="drawerOverlay" class="drawer-overlay" tabindex="-1" aria-hidden="true"></div>
   <nav id="mobileDrawer" class="mobile-drawer" aria-hidden="true" aria-labelledby="mobileMenuToggle">
-    <button class="drawer-close" id="drawerClose" aria-label="Close menu">×</button>
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">�</button>
     <a href="/">Home</a>
     
     <div class="drawer-categories-toggle" id="drawerCategoriesToggle">
@@ -548,13 +548,13 @@
       <div id="loadMoreContainer" class="text-center my-4" style="display: none;">
         <button id="loadMoreBtn" class="load-more-btn">
           <span class="btn-text">Load More Creators</span>
-          <span class="btn-icon">↓</span>
+          <span class="btn-icon">?</span>
         </button>
         <p id="loadedCount" class="mt-2" style="color: #888; font-size: 14px; margin-bottom: 0;"></p>
       </div>
 
       <!-- Back to top button -->
-      <button id="backToTop" aria-label="Back to top" title="Back to top">↑</button>
+      <button id="backToTop" aria-label="Back to top" title="Back to top">?</button>
 
       <!-- SEO content -->
       <section id="seoSection" class="mt-5 pt-4" style="max-width:900px; margin:0 auto; text-align:left; border-top:1px solid #e0e0e0;">
@@ -576,7 +576,7 @@
     // ============================================
     // DYNAMIC CATEGORY NAVIGATION
     // ============================================
-  import { popularCategories, categoryToSlug, compoundCategories } from '/config/categories.js?v=20251121-4';
+  import { popularCategories, categoryToSlug, compoundCategories } from '/config/categories.js?v=20260226-1';
     
     // Render desktop dropdown menu
     const catMenu = document.getElementById('categoriesMenu');
@@ -585,7 +585,7 @@
         const slug = categoryToSlug(cat);
         const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
         return `<a role="menuitem" href="/categories/${slug}/">${label}</a>`;
-      }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Browse all categories →</a>';
+      }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Browse all categories ?</a>';
       catMenu.innerHTML = menuHTML;
     }
     
@@ -620,7 +620,7 @@
   </script>
 
   <script type="module">
-  import { compoundCategories, synonymsMap } from '/config/categories.js?v=20251121-4';
+  import { compoundCategories, synonymsMap } from '/config/categories.js?v=20260226-1';
     
     // ============================================
     // BREADCRUMBS POPULATION
@@ -816,9 +816,9 @@
   // Favorites (match homepage behavior)
   function getFavoritesSet() { try { const raw = localStorage.getItem('favorites') || '[]'; const arr = JSON.parse(raw); return new Set(Array.isArray(arr) ? arr : []);} catch { return new Set(); } }
   function saveFavoritesSet(set){ try { localStorage.setItem('favorites', JSON.stringify(Array.from(set))); } catch {} }
-  function updateFavoriteButtons(username, active){ try{ const buttons = document.querySelectorAll(`.favorite-btn[data-username="${CSS.escape(username)}"]`); buttons.forEach(b=>{ b.classList.toggle('active', active); const s=b.querySelector('span'); if(s) s.textContent = active ? '♥' : '♡'; }); }catch{} }
-  function renderFavoritesBar(){ if(!favoritesBar) return; const set=getFavoritesSet(); const list=Array.from(set); if(list.length===0){ favoritesBar.style.display='none'; favoritesBar.innerHTML=''; return; } favoritesBar.style.display='flex'; favoritesBar.innerHTML = list.map(u=>{ const safe=String(u).replace(/'/g, "\\'"); const url=`https://onlyfans.com/${encodeURIComponent(u)}`; return `<div class="favorite-chip" data-username="${safe}" onclick="window.open('${url}','_blank')"><span class='heart'>♥</span><a class='open' href='${url}' target='_blank' rel='noopener'>@${u}</a><button class='remove' aria-label='Remove' onclick="event.stopPropagation(); toggleFavorite('${safe}');">&times;</button></div>`; }).join(''); }
-  function toggleFavorite(username, btnEl){ if(!username) return; const set=getFavoritesSet(); let active; if(set.has(username)){ set.delete(username); active=false; } else { set.add(username); active=true; } saveFavoritesSet(set); if(btnEl){ btnEl.classList.toggle('active', active); const s=btnEl.querySelector('span'); if(s) s.textContent = active ? '♥' : '♡'; } updateFavoriteButtons(username, active); renderFavoritesBar(); updateWishlistBadge(); window.dispatchEvent(new StorageEvent('storage',{key:'favorites',newValue:localStorage.getItem('favorites')})); }
+  function updateFavoriteButtons(username, active){ try{ const buttons = document.querySelectorAll(`.favorite-btn[data-username="${CSS.escape(username)}"]`); buttons.forEach(b=>{ b.classList.toggle('active', active); const s=b.querySelector('span'); if(s) s.textContent = active ? '?' : '?'; }); }catch{} }
+  function renderFavoritesBar(){ if(!favoritesBar) return; const set=getFavoritesSet(); const list=Array.from(set); if(list.length===0){ favoritesBar.style.display='none'; favoritesBar.innerHTML=''; return; } favoritesBar.style.display='flex'; favoritesBar.innerHTML = list.map(u=>{ const safe=String(u).replace(/'/g, "\\'"); const url=`https://onlyfans.com/${encodeURIComponent(u)}`; return `<div class="favorite-chip" data-username="${safe}" onclick="window.open('${url}','_blank')"><span class='heart'>?</span><a class='open' href='${url}' target='_blank' rel='noopener'>@${u}</a><button class='remove' aria-label='Remove' onclick="event.stopPropagation(); toggleFavorite('${safe}');">&times;</button></div>`; }).join(''); }
+  function toggleFavorite(username, btnEl){ if(!username) return; const set=getFavoritesSet(); let active; if(set.has(username)){ set.delete(username); active=false; } else { set.add(username); active=true; } saveFavoritesSet(set); if(btnEl){ btnEl.classList.toggle('active', active); const s=btnEl.querySelector('span'); if(s) s.textContent = active ? '?' : '?'; } updateFavoriteButtons(username, active); renderFavoritesBar(); updateWishlistBadge(); window.dispatchEvent(new StorageEvent('storage',{key:'favorites',newValue:localStorage.getItem('favorites')})); }
   window.toggleFavorite = toggleFavorite;
   function updateWishlistBadge(){ try{ const badge=document.querySelector('.sticky-bottom-nav .nav-item[data-nav="wishlist"] .badge'); if(!badge)return; const count=getFavoritesSet().size; badge.textContent=count; badge.style.display=count>0?'block':'none'; }catch{} }
 
@@ -886,8 +886,8 @@
       const wrap = document.getElementById('activeFilters');
       if (!wrap) return;
       const chips = [];
-      if (verifiedToggle.checked) chips.push(`<div class="search-chip" data-filter="verified">Verified only <span class="remove" aria-label="Remove">×</span></div>`);
-      if (bundlesToggle.checked) chips.push(`<div class="search-chip" data-filter="bundles">Bundles <span class="remove" aria-label="Remove">×</span></div>`);
+      if (verifiedToggle.checked) chips.push(`<div class="search-chip" data-filter="verified">Verified only <span class="remove" aria-label="Remove">�</span></div>`);
+      if (bundlesToggle.checked) chips.push(`<div class="search-chip" data-filter="bundles">Bundles <span class="remove" aria-label="Remove">�</span></div>`);
       
       // For compound categories with auto-maxPrice, show a non-removable chip
       const autoMaxPrice = isCompound && compoundCategories[slug]?.filters?.maxPrice !== undefined;
@@ -896,7 +896,7 @@
         const label = maxVal === 0 ? 'Free Only' : `Max $${maxVal}`;
         chips.push(`<div class="search-chip" aria-label="Price filter">${label}</div>`);
       } else if (priceRange.value !== '100') {
-        chips.push(`<div class="search-chip" data-filter="max">Max $${priceRange.value} <span class="remove" aria-label="Remove">×</span></div>`);
+        chips.push(`<div class="search-chip" data-filter="max">Max $${priceRange.value} <span class="remove" aria-label="Remove">�</span></div>`);
       }
       
       wrap.innerHTML = chips.join('');
@@ -965,16 +965,16 @@
           const imgSrc = img && img.startsWith('http') ? img : '/static/no-image.png';
           const responsive = buildResponsiveSources(imgSrc);
           const name = item.name || 'Unknown';
-          const username = item.username || '—';
+          const username = item.username || '�';
           const priceText = (item.subscribePrice && !isNaN(item.subscribePrice)) ? `$${parseFloat(item.subscribePrice).toFixed(2)}` : 'FREE';
-          const verifiedIcon = item.isVerified ? '✅ ' : '';
-          const profileUrl = username !== '—' ? `https://onlyfans.com/${encodeURIComponent(username)}` : '#';
+          const verifiedIcon = item.isVerified ? '? ' : '';
+          const profileUrl = username !== '�' ? `https://onlyfans.com/${encodeURIComponent(username)}` : '#';
           const col = document.createElement('div');
           col.className = 'col-sm-6 col-md-4 col-lg-3 mb-4';
           const safeUsername = String(username).replace(/'/g, "\\'");
           const favSet = getFavoritesSet();
-          const favActive = username !== '—' && favSet.has(username);
-          const favChar = favActive ? '♥' : '♡';
+          const favActive = username !== '�' && favSet.has(username);
+          const favChar = favActive ? '?' : '?';
           col.innerHTML = `
             <div class=\"card h-100\">
               <button class=\"favorite-btn ${favActive ? 'active' : ''}\" data-username=\"${safeUsername}\" onclick=\"event.preventDefault(); toggleFavorite('${safeUsername}', this);\">
@@ -1367,7 +1367,7 @@
       <div class="footer-bottom">
         <div class="footer-bottom-content">
           <p class="footer-copyright">
-            © 2026 fanspedia.net - All rights reserved
+            � 2026 fanspedia.net - All rights reserved
           </p>
           <div class="footer-stats">
             <span class="stat-badge">

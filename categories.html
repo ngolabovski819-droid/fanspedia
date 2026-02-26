@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -413,7 +413,7 @@
   <!-- Mobile Drawer Menu -->
   <div id="drawerOverlay" class="drawer-overlay" tabindex="-1" aria-hidden="true"></div>
   <nav id="mobileDrawer" class="mobile-drawer" aria-hidden="true" aria-labelledby="mobileMenuToggle">
-    <button class="drawer-close" id="drawerClose" aria-label="Close menu">×</button>
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">�</button>
     <a href="/">Home</a>
     
     <div class="drawer-categories-toggle" id="drawerCategoriesToggle">
@@ -508,7 +508,7 @@
 
   <script type="module">
     // Import shared categories config (absolute path so it works under /categories/)
-  import { categories, popularCategories, categoryToSlug } from '/config/categories.js?v=20251121-4';
+  import { categories, popularCategories, categoryToSlug } from '/config/categories.js?v=20260226-1';
 
     // ============================================
     // DYNAMIC CATEGORY NAVIGATION
@@ -521,7 +521,7 @@
         const slug = categoryToSlug(cat);
         const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
         return `<a role="menuitem" href="/categories/${slug}/">${label}</a>`;
-      }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Browse all categories →</a>';
+      }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Browse all categories ?</a>';
       catMenu.innerHTML = menuHTML;
     }
     
@@ -654,7 +654,7 @@
   function saveFavoritesSet(set){ try { localStorage.setItem('favorites', JSON.stringify(Array.from(set))); } catch {} }
   function toggleFavorite(username){ if(!username) return; const set=getFavoritesSet(); if(set.has(username)){ set.delete(username);} else { set.add(username);} saveFavoritesSet(set); renderFavoritesBar(); }
   window.toggleFavorite = toggleFavorite;
-  function renderFavoritesBar(){ if(!favoritesBar) return; const list = Array.from(getFavoritesSet()); if(list.length===0){ favoritesBar.style.display='none'; favoritesBar.innerHTML=''; return; } favoritesBar.style.display='flex'; favoritesBar.innerHTML = list.map(u=>{ const safe=String(u).replace(/'/g, "\\'"); const url=`https://onlyfans.com/${encodeURIComponent(u)}`; return `<div class='favorite-chip' data-username='${safe}' onclick=\"window.open('${url}','_blank')\"><span class='heart'>♥</span><a class='open' href='${url}' target='_blank' rel='noopener'>@${u}</a><button class='remove' aria-label='Remove' onclick=\"event.stopPropagation(); toggleFavorite('${safe}');\">&times;</button></div>`; }).join(''); }
+  function renderFavoritesBar(){ if(!favoritesBar) return; const list = Array.from(getFavoritesSet()); if(list.length===0){ favoritesBar.style.display='none'; favoritesBar.innerHTML=''; return; } favoritesBar.style.display='flex'; favoritesBar.innerHTML = list.map(u=>{ const safe=String(u).replace(/'/g, "\\'"); const url=`https://onlyfans.com/${encodeURIComponent(u)}`; return `<div class='favorite-chip' data-username='${safe}' onclick=\"window.open('${url}','_blank')\"><span class='heart'>?</span><a class='open' href='${url}' target='_blank' rel='noopener'>@${u}</a><button class='remove' aria-label='Remove' onclick=\"event.stopPropagation(); toggleFavorite('${safe}');\">&times;</button></div>`; }).join(''); }
     renderFavoritesBar();
 
   // ============================================
@@ -1006,7 +1006,7 @@
       <div class="footer-bottom">
         <div class="footer-bottom-content">
           <p class="footer-copyright">
-            © 2026 fanspedia.net - All rights reserved
+            � 2026 fanspedia.net - All rights reserved
           </p>
           <div class="footer-stats">
             <span class="stat-badge">

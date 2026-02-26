@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
@@ -1560,7 +1560,7 @@
   <!-- Mobile Drawer -->
   <div id="drawerOverlay" class="drawer-overlay" tabindex="-1" aria-hidden="true"></div>
   <nav id="mobileDrawer" class="mobile-drawer" aria-labelledby="mobileMenuToggle">
-    <button class="drawer-close" id="drawerClose" aria-label="Close menu">×</button>
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">�</button>
     <a href="/">Home</a>
     
     <!-- Categories collapsible section -->
@@ -1701,7 +1701,7 @@
     // ============================================
     // DYNAMIC CATEGORY NAVIGATION
     // ============================================
-  import { popularCategories, categoryToSlug } from '/config/categories.js?v=20251121-4';
+  import { popularCategories, categoryToSlug } from '/config/categories.js?v=20260226-1';
     
     // ===========================
     // Desktop Categories Dropdown
@@ -1715,7 +1715,7 @@
         const slug = categoryToSlug(cat);
         const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
         return `<a role="menuitem" href="/categories/${slug}/">${label}</a>`;
-      }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Browse all categories →</a>';
+      }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Browse all categories ?</a>';
       categoriesMenu.innerHTML = menuHTML;
     }
 
@@ -1785,9 +1785,9 @@
     }
 
     // Populate drawer categories (popular only)
-    console.log('🔧 Populating drawer categories...');
-    console.log('📦 popularCategories:', popularCategories);
-    console.log('🎯 drawerCategories element:', drawerCategories);
+    console.log('?? Populating drawer categories...');
+    console.log('?? popularCategories:', popularCategories);
+    console.log('?? drawerCategories element:', drawerCategories);
     
     if (drawerCategories) {
       const drawerHTML = popularCategories.map(cat => {
@@ -1796,9 +1796,9 @@
         return `<a href="/categories/${slug}/">${label}</a>`;
       }).join('');
       drawerCategories.innerHTML = drawerHTML;
-      console.log('✅ Drawer categories populated:', drawerCategories.children.length, 'categories');
+      console.log('? Drawer categories populated:', drawerCategories.children.length, 'categories');
     } else {
-      console.error('❌ drawerCategories element not found!');
+      console.error('? drawerCategories element not found!');
     }
 
     if (mobileMenuToggle) mobileMenuToggle.addEventListener('click', openDrawer);
@@ -1813,16 +1813,16 @@
     });
 
     // Toggle categories section inside drawer
-    console.log('🔧 Setting up drawer categories toggle...');
-    console.log('🎯 drawerCategoriesToggle:', drawerCategoriesToggle);
-    console.log('🎯 drawerCategoriesSection:', drawerCategoriesSection);
+    console.log('?? Setting up drawer categories toggle...');
+    console.log('?? drawerCategoriesToggle:', drawerCategoriesToggle);
+    console.log('?? drawerCategoriesSection:', drawerCategoriesSection);
     
     if (drawerCategoriesToggle && drawerCategoriesSection) {
-      console.log('✅ Both elements found, adding click listener');
+      console.log('? Both elements found, adding click listener');
       
       // Log computed styles to debug
       const computedStyle = window.getComputedStyle(drawerCategoriesSection);
-      console.log('📐 Initial computed styles:', {
+      console.log('?? Initial computed styles:', {
         maxHeight: computedStyle.maxHeight,
         opacity: computedStyle.opacity,
         overflow: computedStyle.overflow,
@@ -1832,7 +1832,7 @@
       drawerCategoriesToggle.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        console.log('🖱️ Categories toggle clicked!');
+        console.log('??? Categories toggle clicked!');
         const isOpen = drawerCategoriesSection.classList.toggle('open');
         drawerCategoriesToggle.classList.toggle('open', isOpen);
 
@@ -1849,13 +1849,13 @@
           drawerCategoriesSection.style.overflowY = 'hidden';
         }
 
-        console.log('📂 Categories section is now:', isOpen ? 'OPEN' : 'CLOSED');
-        console.log('📋 Section classes:', drawerCategoriesSection.className);
+        console.log('?? Categories section is now:', isOpen ? 'OPEN' : 'CLOSED');
+        console.log('?? Section classes:', drawerCategoriesSection.className);
 
         // Log computed styles after toggle (next frame to reflect updates)
         requestAnimationFrame(() => {
           const newStyle = window.getComputedStyle(drawerCategoriesSection);
-          console.log('📐 After toggle computed styles:', {
+          console.log('?? After toggle computed styles:', {
             maxHeight: newStyle.maxHeight,
             opacity: newStyle.opacity,
             overflow: newStyle.overflow,
@@ -1864,7 +1864,7 @@
         });
       });
     } else {
-      console.error('❌ Missing elements:', {
+      console.error('? Missing elements:', {
         toggle: !!drawerCategoriesToggle,
         section: !!drawerCategoriesSection
       });
@@ -2444,7 +2444,7 @@
     }
 
     window.toggleFavorite = function(username, btn) {
-      if (!username || username === '—') return;
+      if (!username || username === '�') return;
       
       const favSet = getFavoritesSet();
       const isActive = favSet.has(username);
@@ -2452,11 +2452,11 @@
       if (isActive) {
         favSet.delete(username);
         btn.classList.remove('active');
-        btn.querySelector('span').textContent = '♡';
+        btn.querySelector('span').textContent = '?';
       } else {
         favSet.add(username);
         btn.classList.add('active');
-        btn.querySelector('span').textContent = '♥';
+        btn.querySelector('span').textContent = '?';
       }
       
       saveFavorites(favSet);
@@ -2507,10 +2507,10 @@
           return true;
         });
         
-        console.log('🎯 Current creator to exclude:', currentCreator.username, '(ID:', currentCreator.id, ')');
-        console.log('📄 Fetching from pages:', p1, 'and', p2);
-        console.log('📦 Total candidates before filter:', data.length);
-        console.log('🔍 Sample usernames in pool:', data.slice(0, 30).map(c => c.username).join(', '));
+        console.log('?? Current creator to exclude:', currentCreator.username, '(ID:', currentCreator.id, ')');
+        console.log('?? Fetching from pages:', p1, 'and', p2);
+        console.log('?? Total candidates before filter:', data.length);
+        console.log('?? Sample usernames in pool:', data.slice(0, 30).map(c => c.username).join(', '));
         
         // Filter out current creator by username AND id (case-insensitive)
         const candidates = data.filter(c => {
@@ -2520,7 +2520,7 @@
           const isCurrentById = (c.id != null && currentCreator.id != null) && (String(c.id) === String(currentCreator.id));
           
           if (isCurrentByUsername || isCurrentById) {
-            console.log('🚫 Filtering out current creator:', c.username, c.id);
+            console.log('?? Filtering out current creator:', c.username, c.id);
           }
           return !isCurrentByUsername && !isCurrentById;
         });
@@ -2730,13 +2730,13 @@
             const candidateUsernameLower = (c.username || '').toLowerCase();
             const isDifferent = candidateUsernameLower !== currentUsernameLower && c.id !== currentCreator.id;
             if (!isDifferent) {
-              console.log('🚫 Render filter caught:', c.username, c.id);
+              console.log('?? Render filter caught:', c.username, c.id);
             }
             return isDifferent;
           })
         : creators;
       
-      console.log('✅ Rendering similar creators:', filtered.length, 'Current creator:', currentCreator?.username);
+      console.log('? Rendering similar creators:', filtered.length, 'Current creator:', currentCreator?.username);
       
       container.innerHTML = filtered.map((item, idx) => {
         const img = item.avatar || item.avatar_c144 || "";
@@ -2744,18 +2744,18 @@
         const responsive = buildResponsiveSources(imgSrc);
         
   const name = item.name || "Unknown";
-  const username = item.username || "—";
+  const username = item.username || "�";
         const priceText = (item.subscribePrice && !isNaN(item.subscribePrice))
           ? `$${parseFloat(item.subscribePrice).toFixed(2)}`
           : "FREE";
-        const verifiedIcon = item.isVerified ? "✅ " : "";
-  const profileUrl = username !== "—" ? `https://onlyfans.com/${encodeURIComponent(username)}` : "#";
+        const verifiedIcon = item.isVerified ? "? " : "";
+  const profileUrl = username !== "�" ? `https://onlyfans.com/${encodeURIComponent(username)}` : "#";
   // Removed onlyfansUrl and Visit OnlyFans link
 
         const safeUsername = String(username).replace(/'/g, "\\'");
         const favSet = getFavoritesSet();
-        const favActive = username !== "—" && favSet.has(username);
-        const favChar = favActive ? '♥' : '♡';
+        const favActive = username !== "�" && favSet.has(username);
+        const favChar = favActive ? '?' : '?';
         
         return `
           <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
@@ -2789,7 +2789,7 @@
       if (!btn.closest('#similarCreatorsSection')) return;
       
       const username = btn.getAttribute('data-username');
-      if (!username || username === '—') return;
+      if (!username || username === '�') return;
       
       e.preventDefault();
       e.stopPropagation();
@@ -2798,7 +2798,7 @@
     }, true);
   </script>
   <!-- Back to top button -->
-  <button id="backToTop" aria-label="Back to top" title="Back to top">↑</button>
+  <button id="backToTop" aria-label="Back to top" title="Back to top">?</button>
   <script>
     (function(){
       const backToTopBtn = document.getElementById('backToTop');
@@ -2818,12 +2818,12 @@
   <!-- Header Interaction Scripts -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-    console.log('🎯 Header scripts DOMContentLoaded fired');
+    console.log('?? Header scripts DOMContentLoaded fired');
     // ============================================
     // DARK MODE TOGGLE
     // ============================================
     const themeToggle = document.getElementById('themeToggle');
-    console.log('🎨 Theme toggle element:', themeToggle);
+    console.log('?? Theme toggle element:', themeToggle);
     const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
     
     // Get saved theme or use system preference
@@ -2860,10 +2860,10 @@
     
     // Listen for toggle clicks
     if (themeToggle) {
-      console.log('✅ Theme toggle found, adding click listener');
+      console.log('? Theme toggle found, adding click listener');
       themeToggle.addEventListener('click', toggleTheme);
     } else {
-      console.error('❌ Theme toggle NOT found in DOM');
+      console.error('? Theme toggle NOT found in DOM');
     }
     
     // Listen for system theme changes
@@ -2909,7 +2909,7 @@
     // SAFE SEARCH FUNCTIONALITY
     // ============================================
     const safeSearchToggle = document.getElementById('safeSearchToggle');
-    console.log('🔍 Safe search toggle element:', safeSearchToggle);
+    console.log('?? Safe search toggle element:', safeSearchToggle);
     const safeSearchModal = document.getElementById('safeSearchModal');
     const enableSafeSearchBtn = document.getElementById('enableSafeSearch');
     const dismissSafeSearchBtn = document.getElementById('dismissSafeSearch');
@@ -2965,10 +2965,10 @@
     
     // Event listeners
     if (safeSearchToggle) {
-      console.log('✅ Safe search toggle found, adding click listener');
+      console.log('? Safe search toggle found, adding click listener');
       safeSearchToggle.addEventListener('click', toggleSafeSearch);
     } else {
-      console.error('❌ Safe search toggle NOT found in DOM');
+      console.error('? Safe search toggle NOT found in DOM');
     }
     
     if (enableSafeSearchBtn) {
@@ -3287,7 +3287,7 @@
       <div class="footer-bottom">
         <div class="footer-bottom-content">
           <p class="footer-copyright">
-            © 2026 FansPedia.net - All rights reserved
+            � 2026 FansPedia.net - All rights reserved
           </p>
           <div class="footer-stats">
             <span class="stat-badge">

@@ -150,7 +150,7 @@ function setupMobileLanguageTogglePlacement() {
     style.id = STYLE_ID;
     style.textContent = `
       @media (max-width: 768px) {
-        .header-actions .lang-toggle { display: none !important; }
+        .lang-toggle:not(.footer-lang-toggle) { display: none !important; }
         .footer-social .lang-toggle.footer-lang-toggle {
           display: inline-flex !important;
           align-items: center;
@@ -170,11 +170,11 @@ function setupMobileLanguageTogglePlacement() {
   let originalNextSibling = null;
 
   function placeLanguageToggle() {
-    const langToggle = document.getElementById('langToggle');
+    const langToggle = document.getElementById('langToggle') || document.querySelector('.lang-toggle');
     if (!langToggle) return;
 
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const headerActions = document.querySelector('.header-actions');
+    const headerActions = document.querySelector('.header-actions') || originalParent;
     const footerSocial = document.querySelector('.footer-social');
 
     if (!originalParent) {
@@ -193,7 +193,7 @@ function setupMobileLanguageTogglePlacement() {
           footerSocial.appendChild(langToggle);
         }
       }
-      return;
+      return true;
     }
 
     langToggle.classList.remove('footer-lang-toggle');
@@ -209,6 +209,8 @@ function setupMobileLanguageTogglePlacement() {
     } else if (originalParent && langToggle.parentElement !== originalParent) {
       originalParent.appendChild(langToggle);
     }
+
+    return false;
   }
 
   if (document.readyState === 'loading') {
@@ -216,6 +218,16 @@ function setupMobileLanguageTogglePlacement() {
   } else {
     placeLanguageToggle();
   }
+
+  let retryCount = 0;
+  const maxRetries = 20;
+  const retryTimer = setInterval(() => {
+    const moved = placeLanguageToggle();
+    retryCount += 1;
+    if (moved || retryCount >= maxRetries) {
+      clearInterval(retryTimer);
+    }
+  }, 250);
 
   let resizeTimer = null;
   window.addEventListener('resize', () => {
