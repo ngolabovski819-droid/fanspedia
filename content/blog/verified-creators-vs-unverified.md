@@ -120,7 +120,7 @@ Security guidance notes phishing as a common route to account compromise for sub
 
 ### My “should I subscribe?” decision flow
 
-````ags
+````html
 ```mermaid
 flowchart TD
   A[Find a creator link] --> B{Can I verify identity signals?}
