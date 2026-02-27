@@ -61,8 +61,10 @@
               {
                 label: 'Body',
                 name: 'body',
-                widget: 'text',
-                hint: 'Markdown supported. Use plain textarea mode for stable editing.'
+                widget: 'markdown',
+                modes: ['raw'],
+                default_mode: 'raw',
+                hint: 'Use markdown formatting (#, ##, **bold**, etc.) with stable raw editor mode.'
               }
             ]
           }
