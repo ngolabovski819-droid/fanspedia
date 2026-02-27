@@ -55,7 +55,13 @@
               { label: 'Featured Image Alt Text', name: 'featured_image_alt', widget: 'string', required: false, hint: 'Descriptive alt text for the featured image (for accessibility and SEO)' },
               { label: 'SEO Title', name: 'seo_title', widget: 'string', required: false, hint: 'Overrides the browser tab title for SEO (50-60 chars). Leave blank to use the post title.' },
               { label: 'Meta Description', name: 'meta_description', widget: 'text', required: false, hint: 'Shown in Google search results (150-160 chars). Leave blank to use the excerpt.' },
-              { label: 'Body', name: 'body', widget: 'markdown' }
+              {
+                label: 'Body',
+                name: 'body',
+                widget: 'markdown',
+                modes: ['raw'],
+                default_mode: 'raw'
+              }
             ]
           }
         ]
