@@ -21,7 +21,7 @@ meta_description: >
 
 ### What verified can mean on the platform
 
-When fans say “verified creator,” they often mean “the platform checked them.” While OnlyFans’ own help pages weren’t accessible from my research environment (site access restriction), credible sources describe creator verification as requiring identity details and documentation.
+When fans say “verified creator,” they often mean “the platform checked them.” I credible sources describe creator verification as requiring identity details and documentation.
 
 A peer-reviewed study presented at USENIX describes OnlyFans creator onboarding as involving additional identity verification checks (e.g., name, date of birth, address, government photo ID, selfie, social media handles, and payment details). 
 
