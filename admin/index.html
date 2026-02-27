@@ -7,7 +7,7 @@
   <title>FansPedia CMS</title>
 </head>
 <body>
-  <script src="https://unpkg.com/decap-cms@^3.3.3/dist/decap-cms.js"></script>
+  <script src="https://unpkg.com/netlify-cms@2.10.192/dist/netlify-cms.js"></script>
   <script>
     CMS.init({
       config: {
@@ -55,7 +55,7 @@
               { label: 'Featured Image Alt Text', name: 'featured_image_alt', widget: 'string', required: false, hint: 'Descriptive alt text for the featured image (for accessibility and SEO)' },
               { label: 'SEO Title', name: 'seo_title', widget: 'string', required: false, hint: 'Overrides the browser tab title for SEO (50-60 chars). Leave blank to use the post title.' },
               { label: 'Meta Description', name: 'meta_description', widget: 'text', required: false, hint: 'Shown in Google search results (150-160 chars). Leave blank to use the excerpt.' },
-              { label: 'Body', name: 'body', widget: 'markdown' }
+              { label: 'Body', name: 'body', widget: 'markdown', modes: ['raw'] }
             ]
           }
         ]
