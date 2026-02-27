@@ -4,8 +4,18 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
-  <meta name="google" content="notranslate" />
   <title>FansPedia CMS</title>
+  <style>
+    /* Make the plain-textarea body field tall and comfortable to write in */
+    [class*="StyledTextArea"], [class*="TextWidgetTopBar"] ~ div textarea,
+    textarea[id*="body"], textarea[name="body"] {
+      min-height: 520px !important;
+      font-family: ui-monospace, 'Cascadia Code', 'Fira Code', Consolas, monospace !important;
+      font-size: 14px !important;
+      line-height: 1.6 !important;
+      resize: vertical !important;
+    }
+  </style>
 </head>
 <body>
   <script src="https://unpkg.com/netlify-cms@2.10.192/dist/netlify-cms.js"></script>
@@ -59,49 +69,14 @@
               {
                 label: 'Body',
                 name: 'body',
-                widget: 'markdown',
-                modes: ['raw'],
-                default_mode: 'raw',
-                hint: 'Stable raw markdown mode. Use #, ##, **bold**, and table syntax.'
+                widget: 'text',
+                hint: 'Write your post in plain Markdown here — use #, ##, **bold**, *italic*, [links](url), tables, etc. This is a plain textarea so cursor position always stays where you type.'
               }
             ]
           }
         ]
       }
     });
-
-    // Reduce caret-jump behavior in some browser/extension combinations
-    // by disabling autocorrect/spellcheck on dynamically mounted editor fields.
-    (function hardenEditorInputs() {
-      document.documentElement.classList.add('notranslate');
-      document.body.classList.add('notranslate');
-
-      const apply = (root = document) => {
-        root.querySelectorAll('textarea, input[type="text"], [contenteditable="true"]').forEach((node) => {
-          node.setAttribute('spellcheck', 'false');
-          node.setAttribute('autocorrect', 'off');
-          node.setAttribute('autocapitalize', 'off');
-          node.setAttribute('autocomplete', 'off');
-          node.setAttribute('data-gramm', 'false');
-          node.setAttribute('data-gramm_editor', 'false');
-          node.setAttribute('data-enable-grammarly', 'false');
-          node.setAttribute('translate', 'no');
-          node.classList.add('notranslate');
-        });
-      };
-
-      apply();
-      const observer = new MutationObserver((mutations) => {
-        for (const mutation of mutations) {
-          for (const addedNode of mutation.addedNodes) {
-            if (addedNode.nodeType === 1) {
-              apply(addedNode);
-            }
-          }
-        }
-      });
-      observer.observe(document.body, { childList: true, subtree: true });
-    })();
   </script>
 </body>
 </html>
