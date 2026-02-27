@@ -5,20 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
   <title>FansPedia CMS</title>
-  <style>
-    /* Make the plain-textarea body field tall and comfortable to write in */
-    [class*="StyledTextArea"], [class*="TextWidgetTopBar"] ~ div textarea,
-    textarea[id*="body"], textarea[name="body"] {
-      min-height: 520px !important;
-      font-family: ui-monospace, 'Cascadia Code', 'Fira Code', Consolas, monospace !important;
-      font-size: 14px !important;
-      line-height: 1.6 !important;
-      resize: vertical !important;
-    }
-  </style>
 </head>
 <body>
-  <script src="https://unpkg.com/netlify-cms@2.10.192/dist/netlify-cms.js"></script>
+  <script src="https://unpkg.com/netlify-cms@^2.10.192/dist/netlify-cms.js"></script>
   <script>
     CMS.init({
       config: {
@@ -39,7 +28,6 @@
             label: 'Blog Posts',
             folder: 'content/blog',
             create: true,
-            editor: { preview: false },
             slug: '{{fields.slug}}',
             extension: 'md',
             format: 'frontmatter',
@@ -66,12 +54,7 @@
               { label: 'Featured Image Alt Text', name: 'featured_image_alt', widget: 'string', required: false, hint: 'Descriptive alt text for the featured image (for accessibility and SEO)' },
               { label: 'SEO Title', name: 'seo_title', widget: 'string', required: false, hint: 'Overrides the browser tab title for SEO (50-60 chars). Leave blank to use the post title.' },
               { label: 'Meta Description', name: 'meta_description', widget: 'text', required: false, hint: 'Shown in Google search results (150-160 chars). Leave blank to use the excerpt.' },
-              {
-                label: 'Body',
-                name: 'body',
-                widget: 'text',
-                hint: 'Write your post in plain Markdown here — use #, ##, **bold**, *italic*, [links](url), tables, etc. This is a plain textarea so cursor position always stays where you type.'
-              }
+              { label: 'Body', name: 'body', widget: 'markdown' }
             ]
           }
         ]
