@@ -4,7 +4,7 @@
     "api/blog.js": { "includeFiles": "content/blog/**" },
     "api/blog-post.js": { "includeFiles": "content/blog/**" },
     "api/ssr/category.js": { "includeFiles": "category.html" },
-    "api/ssr/country.js": { "includeFiles": "{united-states,canada,india,japan}.html" }
+    "api/ssr/country.js": { "includeFiles": "*.html" }
   },
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
