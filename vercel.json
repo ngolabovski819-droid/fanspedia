@@ -10,7 +10,9 @@
     "api/ssr/blog-post.js": { "includeFiles": "blog-post.html" },
     "api/ssr/blog.js": { "includeFiles": "content/blog/**,blog.html" },
     "api/ssr/es-category.js": { "includeFiles": "es/category.html" },
-    "api/ssr/es-country.js": { "includeFiles": "es/*.html" }
+    "api/ssr/es-country.js": { "includeFiles": "es/*.html" },
+    "api/ssr/es-home.js": { "includeFiles": "es/index.html" },
+    "api/ssr/es-blog.js": { "includeFiles": "content/blog/**,blog.html" }
   },
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
@@ -39,8 +41,8 @@
     { "source": "/near-me", "destination": "/near-me.html" },
     { "source": "/near-me/", "destination": "/near-me.html" },
     
-    { "source": "/es", "destination": "/es/index.html" },
-    { "source": "/es/", "destination": "/es/index.html" },
+    { "source": "/es", "destination": "/api/ssr/es-home" },
+    { "source": "/es/", "destination": "/api/ssr/es-home" },
     { "source": "/es/categories", "destination": "/es/categories.html" },
     { "source": "/es/categories/", "destination": "/es/categories.html" },
     { "source": "/es/categories/:slug/:page", "destination": "/api/ssr/es-category?slug=:slug&page=:page" },
@@ -64,8 +66,8 @@
 
     { "source": "/blog", "destination": "/api/ssr/blog" },
     { "source": "/blog/", "destination": "/api/ssr/blog" },
-    { "source": "/es/blog", "destination": "/blog.html" },
-    { "source": "/es/blog/", "destination": "/blog.html" },
+    { "source": "/es/blog", "destination": "/api/ssr/es-blog" },
+    { "source": "/es/blog/", "destination": "/api/ssr/es-blog" },
 
     { "source": "/admin", "destination": "/admin/index.html" },
     { "source": "/admin/", "destination": "/admin/index.html" },

@@ -14,6 +14,8 @@ import ssrHomeHandler from './api/ssr/home.js';
 import ssrCategoriesHubHandler from './api/ssr/categories-hub.js';
 import ssrEsCategoryHandler from './api/ssr/es-category.js';
 import ssrEsCountryHandler from './api/ssr/es-country.js';
+import ssrEsHomeHandler from './api/ssr/es-home.js';
+import ssrEsBlogHandler from './api/ssr/es-blog.js';
 import ssrBlogHandler from './api/ssr/blog.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -158,6 +160,26 @@ app.get(['/country/:name', '/country/:name/'], async (req, res) => {
 // Disable /creator route as well
 app.get('/creator', (req, res) => {
   res.redirect(302, '/');
+});
+
+// ES — /es homepage SSR
+app.get(['/es', '/es/'], async (req, res) => {
+  try {
+    await ssrEsHomeHandler(req, res);
+  } catch (err) {
+    console.error('ssr es-home error', err);
+    res.sendFile(path.join(__dirname, 'es', 'index.html'));
+  }
+});
+
+// ES — /es/blog listing SSR
+app.get(['/es/blog', '/es/blog/'], async (req, res) => {
+  try {
+    await ssrEsBlogHandler(req, res);
+  } catch (err) {
+    console.error('ssr es-blog error', err);
+    res.sendFile(path.join(__dirname, 'blog.html'));
+  }
 });
 
 // ES — /es/categories/:slug SSR routes
