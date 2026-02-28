@@ -11,6 +11,7 @@ import ssrCategoryHandler from './api/ssr/category.js';
 import ssrCountryHandler from './api/ssr/country.js';
 import ssrBlogPostHandler from './api/ssr/blog-post.js';
 import ssrHomeHandler from './api/ssr/home.js';
+import ssrCategoriesHubHandler from './api/ssr/categories-hub.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -73,9 +74,14 @@ app.get('/creator.html', (req, res) => {
 // This ensures static assets (HTML, CSS, JS, images) are served first
 app.use(express.static(path.join(__dirname)));
 
-// Handle /categories route explicitly (Vercel rewrite: "/categories" -> "/categories.html")
-app.get('/categories', (req, res) => {
-  res.sendFile(path.join(__dirname, 'categories.html'));
+// Handle /categories route → SSR handler (mirrors Vercel rewrite to /api/ssr/categories-hub)
+app.get(['/categories', '/categories/'], async (req, res) => {
+  try {
+    await ssrCategoriesHubHandler(req, res);
+  } catch (err) {
+    console.error('ssr categories-hub error', err);
+    res.sendFile(path.join(__dirname, 'categories.html'));
+  }
 });
 
 // Handle /categories/:slug/:page route → SSR handler (paginated)

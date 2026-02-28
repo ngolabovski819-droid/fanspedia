@@ -5,7 +5,9 @@
     "api/blog-post.js": { "includeFiles": "content/blog/**" },
     "api/ssr/category.js": { "includeFiles": "category.html" },
     "api/ssr/country.js": { "includeFiles": "*.html" },
-    "api/ssr/home.js": { "includeFiles": "index.html" }
+    "api/ssr/home.js": { "includeFiles": "index.html" },
+    "api/ssr/categories-hub.js": { "includeFiles": "categories.html" },
+    "api/ssr/blog-post.js": { "includeFiles": "blog-post.html" }
   },
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
@@ -13,8 +15,8 @@
     { "source": "/robots.txt", "destination": "/robots.txt" },
     { "source": "/wishlist", "destination": "/wishlist.html" },
     { "source": "/wishlist/", "destination": "/wishlist.html" },
-    { "source": "/categories", "destination": "/categories.html" },
-    { "source": "/categories/", "destination": "/categories.html" },
+    { "source": "/categories", "destination": "/api/ssr/categories-hub" },
+    { "source": "/categories/", "destination": "/api/ssr/categories-hub" },
     { "source": "/categories/:slug/:page", "destination": "/api/ssr/category?slug=:slug&page=:page" },
     { "source": "/categories/:slug/:page/", "destination": "/api/ssr/category?slug=:slug&page=:page" },
     { "source": "/categories/:slug", "destination": "/api/ssr/category?slug=:slug" },
