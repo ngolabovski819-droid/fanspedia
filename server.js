@@ -63,6 +63,18 @@ app.get('/categories', (req, res) => {
   res.sendFile(path.join(__dirname, 'categories.html'));
 });
 
+// Handle /categories/:slug/:page route → SSR handler (paginated)
+app.get(['/categories/:slug/:page', '/categories/:slug/:page/'], async (req, res) => {
+  try {
+    req.query.slug = req.params.slug;
+    req.query.page = req.params.page;
+    await ssrCategoryHandler(req, res);
+  } catch (err) {
+    console.error('ssr category paginated error', err);
+    res.sendFile(path.join(__dirname, 'category.html'));
+  }
+});
+
 // Handle /categories/:slug route → SSR handler (mirrors Vercel rewrite to /api/ssr/category)
 app.get(['/categories/:slug', '/categories/:slug/'], async (req, res) => {
   try {
@@ -77,6 +89,24 @@ app.get(['/categories/:slug', '/categories/:slug/'], async (req, res) => {
 // Handle /locations route (Vercel rewrite: "/locations" -> "/locations.html")
 app.get('/locations', (req, res) => {
   res.sendFile(path.join(__dirname, 'locations.html'));
+});
+
+// Handle /country/:name/:page routes → SSR handler (paginated)
+app.get(['/country/:name/:page', '/country/:name/:page/'], async (req, res) => {
+  try {
+    req.query.name = req.params.name;
+    req.query.page = req.params.page;
+    await ssrCountryHandler(req, res);
+  } catch (err) {
+    console.error('ssr country paginated error', err);
+    const fallbacks = {
+      'united-states': 'united-states.html', canada: 'canada.html',
+      india: 'india.html', japan: 'japan.html',
+    };
+    const file = fallbacks[req.params.name];
+    if (file) res.sendFile(path.join(__dirname, file));
+    else res.redirect(302, '/');
+  }
 });
 
 // Handle /country/:name routes → SSR handler (mirrors Vercel rewrite to /api/ssr/country)

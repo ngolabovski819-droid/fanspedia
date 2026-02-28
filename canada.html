@@ -1968,7 +1968,11 @@
   
   <!-- Main Page Script -->
   <script>
-    let currentPage = 1;
+    // Read page from path e.g. /country/canada/2/ → page 2
+    let currentPage = (function() {
+      const m = location.pathname.match(/\/country\/[^\/]+\/(\d+)\/?$/);
+      return m ? Math.max(1, parseInt(m[1], 10)) : 1;
+    })();
     let isLoading = false;
     let hasMore = true;
     const pageSize = 40;
@@ -2249,6 +2253,9 @@
       loadMoreBtn.addEventListener('click', () => {
         if (isLoading || !hasMore) return;
         currentPage++;
+        // Path-based pagination: /country/canada/2/
+        const basePath = location.pathname.replace(/\/\d+\/?$/, '').replace(/\/?$/, '/');
+        history.replaceState({}, '', `${basePath}${currentPage}/`);
         performSearch(false, true);
       });
     }

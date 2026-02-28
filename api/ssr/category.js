@@ -158,6 +158,8 @@ export default async function handler(req, res) {
 
   try {
     // --- 1. Resolve search terms ---
+    const page = Math.max(1, parseInt(req.query.page || '1', 10));
+    const offset = (page - 1) * PAGE_SIZE;
     const isCompound = compoundCategories && compoundCategories[slug];
     const terms = isCompound
       ? (compoundCategories[slug].synonyms || [compoundCategories[slug].searchTerm])
@@ -179,7 +181,7 @@ export default async function handler(req, res) {
       select: selectCols,
       order: 'favoritedcount.desc,subscribeprice.asc',
       limit: String(PAGE_SIZE),
-      offset: '0',
+      offset: String(offset),
       or: `(${expressions.join(',')})`,
     });
 
@@ -199,17 +201,37 @@ export default async function handler(req, res) {
       },
     });
 
-    if (!supaFetch.ok) throw new Error(`Supabase ${supaFetch.status}`);
-    const creators = await supaFetch.json();
-    const contentRange = supaFetch.headers.get('content-range') || '';
-    const totalCount = parseInt(contentRange.split('/')[1] || '0', 10) || creators.length;
+    // 416 = Range Not Satisfiable: offset is beyond total count → treat as empty page
+    let creators, totalCount;
+    if (supaFetch.status === 416) {
+      creators = [];
+      totalCount = 0;
+    } else {
+      if (!supaFetch.ok) throw new Error(`Supabase ${supaFetch.status}`);
+      creators = await supaFetch.json();
+      const contentRange = supaFetch.headers.get('content-range') || '';
+      totalCount = parseInt(contentRange.split('/')[1] || '0', 10) || creators.length;
+    }
 
     // --- 3. Read template ---
     let html = readFileSync(CATEGORY_HTML, 'utf8');
 
-    const canonicalUrl = `${BASE_URL}/categories/${slug}/`;
-    const titleText = `Best ${label} OnlyFans Creators (${YEAR}) | FansPedia`;
-    const metaDescription = `Browse ${totalCount > 0 ? totalCount + '+' : 'top'} ${label} OnlyFans creators on FansPedia. Filter by verified status, bundles, and price.`;
+    const canonicalUrl = page > 1
+      ? `${BASE_URL}/categories/${slug}/${page}/`
+      : `${BASE_URL}/categories/${slug}/`;
+    const pageLabel = page > 1 ? ` - Page ${page}` : '';
+    const titleText = `Best ${label} OnlyFans Creators${pageLabel} (${YEAR}) | FansPedia`;
+    const metaDescription = `Browse ${totalCount > 0 ? totalCount + '+' : 'top'} ${label} OnlyFans creators on FansPedia. Filter by verified status, bundles, and price.${page > 1 ? ` Page ${page}.` : ''}`;
+
+    // rel prev / next for paginated series
+    const prevLink = page > 2
+      ? `<link rel="prev" href="${BASE_URL}/categories/${slug}/${page - 1}/">`
+      : page === 2
+        ? `<link rel="prev" href="${BASE_URL}/categories/${slug}/">`
+        : '';
+    const nextLink = creators.length === PAGE_SIZE
+      ? `<link rel="next" href="${BASE_URL}/categories/${slug}/${page + 1}/">`
+      : '';
 
     // --- 4. Head injections ---
     html = html.replace(
@@ -226,8 +248,9 @@ export default async function handler(req, res) {
     );
 
     const jsonLd = buildJsonLd(slug, label, creators, canonicalUrl);
-    const ssrFlag = `<script>window.__CATEGORY_SSR={slug:${JSON.stringify(slug)},count:${totalCount},hasMore:${creators.length === PAGE_SIZE}};</script>`;
-    html = html.replace('</head>', `${jsonLd}\n${ssrFlag}\n</head>`);
+    const ssrFlag = `<script>window.__CATEGORY_SSR={slug:${JSON.stringify(slug)},count:${totalCount},hasMore:${creators.length === PAGE_SIZE},page:${page}};</script>`;
+    const paginationLinks = [prevLink, nextLink].filter(Boolean).join('\n');
+    html = html.replace('</head>', `${jsonLd}\n${ssrFlag}\n${paginationLinks ? paginationLinks + '\n' : ''}</head>`);
 
     // --- 5. Body injections ---
     html = html.replace(

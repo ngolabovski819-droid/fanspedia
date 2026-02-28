@@ -792,7 +792,11 @@
       }
     }
 
-    let currentPage = Number(new URLSearchParams(location.search).get('page') || '1');
+    // Read page from path e.g. /categories/big-tits/2/ → page 2
+    let currentPage = (function() {
+      const m = location.pathname.match(/\/categories\/[^\/]+\/(\d+)\/?$/);
+      return m ? Math.max(1, parseInt(m[1], 10)) : 1;
+    })();
     const pageSize = 50;
     let isLoading = false;
     let hasMore = true;
@@ -865,20 +869,22 @@
     });
 
     function updateURL(){
+      // Path-based pagination: /categories/:slug/ for page 1, /categories/:slug/2/ for page 2+
+      const basePath = `/categories/${slug}/`;
+      const pagePath = currentPage > 1 ? `${basePath}${currentPage}/` : basePath;
+
       const params = new URLSearchParams();
-      if (currentPage > 1) params.set('page', String(currentPage));
-      
       // For compound categories, don't add auto-applied filters to URL (keep it clean for SEO)
       const autoFilters = isCompound && compoundCategories[slug]?.filters;
       const userChangedVerified = !autoFilters || autoFilters.verified === undefined;
       const userChangedBundles = !autoFilters || autoFilters.bundles === undefined;
       const userChangedPrice = !autoFilters || autoFilters.maxPrice === undefined;
-      
+
       if (verifiedToggle.checked && userChangedVerified) params.set('verified', 'true');
       if (bundlesToggle.checked && userChangedBundles) params.set('bundles', 'true');
       if (priceRange.value !== '100' && userChangedPrice) params.set('max', priceRange.value);
-      
-      const newURL = params.toString() ? `${location.pathname}?${params.toString()}` : location.pathname;
+
+      const newURL = params.toString() ? `${pagePath}?${params.toString()}` : pagePath;
       history.replaceState({}, '', newURL);
     }
 

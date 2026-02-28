@@ -193,6 +193,8 @@ export default async function handler(req, res) {
 
   try {
     // --- 1. Build Supabase OR query (mirrors client-side country page logic) ---
+    const page = Math.max(1, parseInt(req.query.page || '1', 10));
+    const offset = (page - 1) * PAGE_SIZE;
     const searchCols = ['username', 'name', 'about', 'location'];
     const expressions = config.terms.flatMap(term =>
       searchCols.map(col => `${col}.ilike.*${term}*`)
@@ -207,7 +209,7 @@ export default async function handler(req, res) {
       select: selectCols,
       order: 'favoritedcount.desc,subscribeprice.asc',
       limit: String(PAGE_SIZE),
-      offset: '0',
+      offset: String(offset),
       or: `(${expressions.join(',')})`,
     });
 
@@ -220,18 +222,36 @@ export default async function handler(req, res) {
       },
     });
 
-    if (!supaFetch.ok) throw new Error(`Supabase ${supaFetch.status}`);
-    const creators = await supaFetch.json();
-    const contentRange = supaFetch.headers.get('content-range') || '';
-    const totalCount = parseInt(contentRange.split('/')[1] || '0', 10) || creators.length;
+    // 416 = Range Not Satisfiable: offset is beyond total count → treat as empty page
+    let creators, totalCount;
+    if (supaFetch.status === 416) {
+      creators = [];
+      totalCount = 0;
+    } else {
+      if (!supaFetch.ok) throw new Error(`Supabase ${supaFetch.status}`);
+      creators = await supaFetch.json();
+      const contentRange = supaFetch.headers.get('content-range') || '';
+      totalCount = parseInt(contentRange.split('/')[1] || '0', 10) || creators.length;
+    }
 
     // --- 2. Read template ---
     const htmlPath = join(ROOT, config.htmlFile);
     let html = readFileSync(htmlPath, 'utf8');
 
-    const canonicalUrl = `${BASE_URL}/country/${name}/`;
+    const canonicalUrl = page > 1
+      ? `${BASE_URL}/country/${name}/${page}/`
+      : `${BASE_URL}/country/${name}/`;
 
-    // --- 3. Inject canonical link (update or add) ---
+    const prevLink = page > 2
+      ? `<link rel="prev" href="${BASE_URL}/country/${name}/${page - 1}/">`
+      : page === 2
+        ? `<link rel="prev" href="${BASE_URL}/country/${name}/">`
+        : '';
+    const nextLink = creators.length === PAGE_SIZE
+      ? `<link rel="next" href="${BASE_URL}/country/${name}/${page + 1}/">`
+      : '';
+
+    // --- 3. Inject canonical link (update or add) and page title ---
     if (/<link[^>]+rel="canonical"/.test(html)) {
       html = html.replace(
         /(<link[^>]+rel="canonical"[^>]+href=")[^"]*(")/,
@@ -240,11 +260,18 @@ export default async function handler(req, res) {
     } else {
       html = html.replace('</head>', `  <link rel="canonical" href="${canonicalUrl}">\n</head>`);
     }
+    if (page > 1) {
+      html = html.replace(
+        /<title>([^<]*)<\/title>/,
+        `<title>$1 - Page ${page}</title>`
+      );
+    }
 
-    // --- 4. Inject JSON-LD + SSR flag ---
+    // --- 4. Inject JSON-LD + SSR flag + pagination links ---
     const jsonLd = buildJsonLd(name, config.label, creators, canonicalUrl);
-    const ssrFlag = `<script>window.__COUNTRY_SSR={name:${JSON.stringify(name)},count:${totalCount},hasMore:${creators.length === PAGE_SIZE}};</script>`;
-    html = html.replace('</head>', `${jsonLd}\n${ssrFlag}\n</head>`);
+    const ssrFlag = `<script>window.__COUNTRY_SSR={name:${JSON.stringify(name)},count:${totalCount},hasMore:${creators.length === PAGE_SIZE},page:${page}};</script>`;
+    const paginationLinks = [prevLink, nextLink].filter(Boolean).join('\n');
+    html = html.replace('</head>', `${jsonLd}\n${ssrFlag}\n${paginationLinks ? paginationLinks + '\n' : ''}</head>`);
 
     // --- 5. Pre-rendered creator cards ---
     const cardsHtml = Array.isArray(creators) && creators.length > 0
