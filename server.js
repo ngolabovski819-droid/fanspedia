@@ -9,11 +9,22 @@ import blogHandler from './api/blog.js';
 import blogPostHandler from './api/blog-post.js';
 import ssrCategoryHandler from './api/ssr/category.js';
 import ssrCountryHandler from './api/ssr/country.js';
+import ssrHomeHandler from './api/ssr/home.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+
+// Homepage SSR (must come BEFORE express.static so the route isn't shadowed by index.html)
+app.get(['/', '/index.html'], async (req, res) => {
+  try {
+    await ssrHomeHandler(req, res);
+  } catch (err) {
+    console.error('ssr home error', err);
+    res.sendFile(path.join(__dirname, 'index.html'));
+  }
+});
 
 // Mount the Vercel-style handler at /api/search
 app.all('/api/search', async (req, res) => {

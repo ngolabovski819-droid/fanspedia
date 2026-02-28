@@ -1,0 +1,251 @@
+/**
+ * SSR handler for the homepage (/)
+ *
+ * Pre-renders the homepage with a mixed set of creators so Googlebot sees
+ * real content on the first request, rather than an empty search shell.
+ *
+ * Strategy: two parallel Supabase fetches —
+ *   • 25 most-favourited creators  (order=favoritedcount.desc)
+ *   • 25 newest registrations      (order=joindate.desc)
+ * Results are merged and deduplicated by `id` (max 50 unique creators).
+ *
+ * Flow:
+ *   1. Parallel-fetch both creator sets from Supabase
+ *   2. Merge + dedup by id
+ *   3. Read index.html as a string template
+ *   4. Inject JSON-LD (WebSite + ItemList), window.__HOME_SSR flag,
+ *      `data-ssr` / `data-initial-creators` attrs on <body>, and
+ *      pre-rendered cards into #results
+ *   5. Return complete HTML with 5-minute CDN cache
+ *
+ * On any error the handler serves the plain index.html for transparent
+ * client-side rendering (avoids redirect loops since /index.html 301s to /).
+ */
+
+import { readFileSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const ROOT = join(__dirname, '..', '..');
+
+const BASE_URL = 'https://fanspedia.net';
+const YEAR = new Date().getFullYear();
+const POPULAR_LIMIT = 25;
+const NEWEST_LIMIT = 25;
+
+const SELECT_COLS = [
+  'id', 'username', 'name', 'avatar', 'avatar_c144',
+  'isverified', 'subscribeprice', 'favoritedcount', 'subscriberscount', 'joindate',
+].join(',');
+
+// ---------------------------------------------------------------------------
+// Image helpers (mirrors client-side buildResponsiveSources)
+// ---------------------------------------------------------------------------
+function proxyImg(url, w, h) {
+  try {
+    if (!url || url.startsWith('/static/')) return url;
+    const noScheme = url.replace(/^https?:\/\//, '');
+    return `https://images.weserv.nl/?url=${encodeURIComponent(noScheme)}&w=${w}&h=${h}&fit=cover&output=webp`;
+  } catch { return url; }
+}
+
+function buildResponsiveSources(originalUrl) {
+  const widths = [144, 240, 320, 480, 720];
+  const srcset = widths
+    .map(w => `${proxyImg(originalUrl, w, Math.round(w * 4 / 3))} ${w}w`)
+    .join(', ');
+  const src = proxyImg(originalUrl, 320, Math.round(320 * 4 / 3));
+  const sizes = '(max-width: 480px) 144px, (max-width: 768px) 240px, (max-width: 1200px) 320px, 360px';
+  return { src, srcset, sizes };
+}
+
+// ---------------------------------------------------------------------------
+// String helpers
+// ---------------------------------------------------------------------------
+function escHtml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// ---------------------------------------------------------------------------
+// Card renderer
+// ---------------------------------------------------------------------------
+function renderCard(item, index) {
+  const img = item.avatar || item.avatar_c144 || '';
+  const imgSrc = img && img.startsWith('http') ? img : '/static/no-image.png';
+  const { src, srcset, sizes } = buildResponsiveSources(imgSrc);
+
+  const name = escHtml(item.name || 'Unknown');
+  const username = escHtml(item.username || '');
+  const subscribePrice = item.subscribePrice ?? item.subscribeprice;
+  const priceText = (subscribePrice && !isNaN(subscribePrice))
+    ? `$${parseFloat(subscribePrice).toFixed(2)}`
+    : 'FREE';
+  const isVerified = item.isVerified ?? item.isverified;
+  const verifiedBadge = isVerified ? '<span aria-label="Verified" title="Verified creator">✓ </span>' : '';
+  const profileUrl = username ? `https://onlyfans.com/${encodeURIComponent(username)}` : '#';
+  const loading = index === 0 ? 'eager' : 'lazy';
+  const fetchpriority = index === 0 ? ' fetchpriority="high"' : '';
+  const priceHtml = priceText === 'FREE'
+    ? `<p class="price-free" style="color:#34c759;font-weight:700;font-size:16px;text-transform:uppercase;">FREE</p>`
+    : `<p class="price-tag" style="color:#34c759;font-weight:700;font-size:18px;">${priceText}</p>`;
+
+  return `<div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+  <div class="card h-100">
+    <button class="favorite-btn" data-username="${username}" onclick="event.preventDefault();toggleFavorite('${username}',this);">
+      <span>♡</span>
+    </button>
+    <img src="${src}" srcset="${srcset}" sizes="${sizes}"
+      alt="${name} OnlyFans creator" width="270" height="360"
+      style="aspect-ratio:3/4;" loading="${loading}"${fetchpriority}
+      decoding="async" referrerpolicy="no-referrer"
+      onerror="if(this.src!=='/static/no-image.png'){this.removeAttribute('srcset');this.removeAttribute('sizes');this.src='${escHtml(imgSrc)}';}">
+    <div class="card-body">
+      <h3 style="font-size:1rem;font-weight:700;margin-bottom:4px;">${verifiedBadge}${name}</h3>
+      <p class="username">@${username}</p>
+      ${priceHtml}
+      <a href="${escHtml(profileUrl)}" class="view-profile-btn" target="_blank" rel="noopener noreferrer">View Profile</a>
+    </div>
+  </div>
+</div>`;
+}
+
+// ---------------------------------------------------------------------------
+// JSON-LD structured data
+// ---------------------------------------------------------------------------
+function buildJsonLd(creators) {
+  const website = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'FansPedia',
+    url: `${BASE_URL}/`,
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${BASE_URL}/?q={search_term_string}`,
+      },
+      'query-input': 'required name=search_term_string',
+    },
+  };
+  const itemList = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: `Best OnlyFans Creators (${YEAR})`,
+    url: `${BASE_URL}/`,
+    numberOfItems: creators.length,
+    itemListElement: creators.slice(0, 10).map((c, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: escHtml(c.name || c.username),
+      url: `https://onlyfans.com/${encodeURIComponent(c.username)}`,
+    })),
+  };
+  return [
+    `<script type="application/ld+json">${JSON.stringify(website)}</script>`,
+    `<script type="application/ld+json">${JSON.stringify(itemList)}</script>`,
+  ].join('\n');
+}
+
+// ---------------------------------------------------------------------------
+// Main handler
+// ---------------------------------------------------------------------------
+export default async function handler(req, res) {
+  const SUPABASE_URL = (process.env.SUPABASE_URL || '').replace(/\/+$/, '');
+  const SUPABASE_KEY = process.env.SUPABASE_KEY || '';
+
+  // Read the template once — do this early so errors surface quickly
+  let rawHtml;
+  try {
+    rawHtml = readFileSync(join(ROOT, 'index.html'), 'utf8');
+  } catch (readErr) {
+    console.error('[ssr/home] could not read index.html:', readErr.message);
+    return res.status(500).send('Internal Server Error');
+  }
+
+  if (!SUPABASE_URL || !SUPABASE_KEY) {
+    // No credentials — serve plain HTML for client-side rendering
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    return res.status(200).send(rawHtml);
+  }
+
+  try {
+    const headers = {
+      apikey: SUPABASE_KEY,
+      Authorization: `Bearer ${SUPABASE_KEY}`,
+      'Accept-Profile': 'public',
+      Prefer: 'count=exact',
+    };
+
+    // --- 1. Two parallel fetches ---
+    const popularParams = new URLSearchParams({
+      select: SELECT_COLS,
+      order: 'favoritedcount.desc',
+      limit: String(POPULAR_LIMIT),
+    });
+    const newestParams = new URLSearchParams({
+      select: SELECT_COLS,
+      order: 'joindate.desc',
+      limit: String(NEWEST_LIMIT),
+    });
+
+    const [popularRes, newestRes] = await Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/onlyfans_profiles?${popularParams}`, { headers }),
+      fetch(`${SUPABASE_URL}/rest/v1/onlyfans_profiles?${newestParams}`, { headers }),
+    ]);
+
+    if (!popularRes.ok) throw new Error(`Supabase popular fetch ${popularRes.status}`);
+    if (!newestRes.ok) throw new Error(`Supabase newest fetch ${newestRes.status}`);
+
+    const [popular, newest] = await Promise.all([popularRes.json(), newestRes.json()]);
+
+    // --- 2. Merge + dedup by id (popular first, newest appended if not already present) ---
+    const seen = new Set();
+    const creators = [];
+    for (const c of [...popular, ...newest]) {
+      if (!seen.has(c.id)) {
+        seen.add(c.id);
+        creators.push(c);
+      }
+    }
+
+    // --- 3. Build HTML ---
+    let html = rawHtml;
+
+    // Inject data-ssr + data-initial-creators onto <body>
+    html = html.replace('<body>', `<body data-ssr="true" data-initial-creators="${creators.length}">`);
+
+    // Inject JSON-LD + SSR window flag before </head>
+    const jsonLd = buildJsonLd(creators);
+    const ssrFlag = `<script>window.__HOME_SSR={count:${creators.length},hasMore:true};</script>`;
+    html = html.replace('</head>', `${jsonLd}\n${ssrFlag}\n</head>`);
+
+    // --- 4. Pre-render cards into #results ---
+    const cardsHtml = creators.length > 0
+      ? creators.map((c, i) => renderCard(c, i)).join('\n')
+      : '';
+
+    if (cardsHtml) {
+      html = html.replace(
+        '<div id="results" class="row g-3 justify-content-center"></div>',
+        `<div id="results" class="row g-3 justify-content-center">\n${cardsHtml}\n</div>`
+      );
+    }
+
+    // --- 5. Send ---
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=60');
+    return res.status(200).send(html);
+
+  } catch (err) {
+    console.error('[ssr/home] error:', err.message);
+    // Serve plain HTML directly — do NOT redirect to '/' (would loop)
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    return res.status(200).send(rawHtml);
+  }
+}
