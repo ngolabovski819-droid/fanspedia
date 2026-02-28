@@ -1,20 +1,14 @@
 /**
- * SSR handler for /country/:name pages
+ * SSR handler for /es/country/:name pages
  *
- * Fetches top creators for a given country and returns a fully rendered HTML
- * page so Googlebot sees real content on the first request — matching the
- * structural SEO advantage of Next.js / SSR frameworks.
- *
- * Flow:
- *   1. Resolve slug (e.g. "united-states") → config (terms, label, html file)
- *   2. Fetch top PAGE_SIZE creators from Supabase (OR across all fields)
- *   3. Read the country HTML as a string template
- *   4. Inject JSON-LD (BreadcrumbList + ItemList), pre-rendered cards,
- *      and window.__COUNTRY_SSR so client JS skips the duplicate first fetch
- *   5. Return complete HTML with 5-minute CDN cache
- *
- * On any error the handler falls back to a 302 to the plain HTML page for
- * transparent client-side rendering.
+ * Spanish mirror of api/ssr/country.js.
+ * Differences vs the EN handler:
+ *   - Templates: es/<country>.html  (already have lang="es")
+ *   - Spanish titles are already set in the templates; SSR updates canonical
+ *   - Canonical URL under /es/country/
+ *   - hreflang="en" + hreflang="es" cross-links (prevents Google dedup)
+ *   - JSON-LD breadcrumbs use /es/ paths
+ *   - Fallback: redirect to /es/<country>.html
  */
 
 import { readFileSync } from 'fs';
@@ -29,42 +23,45 @@ const PAGE_SIZE = 50;
 const YEAR = new Date().getFullYear();
 
 // ---------------------------------------------------------------------------
-// Country config map
-// slug → { terms, label, htmlFile, h1, metaDesc }
+// Country config map (Spanish labels + metadata)
 // ---------------------------------------------------------------------------
 const COUNTRIES = {
   'united-states': {
     terms: ['united states', 'usa', 'america', 'american'],
-    label: 'United States',
-    htmlFile: 'united-states.html',
-    h1: 'The Best Onlyfans Creators All Across United States',
-    metaDesc: 'Discover the most popular OnlyFans creators across United States. Browse verified profiles, free accounts, and exclusive content from American creators.',
+    label: 'Estados Unidos',
+    htmlFile: 'es/united-states.html',
+    h1: 'Las Mejores Creadoras de OnlyFans en Estados Unidos',
+    metaDesc: 'Descubre las creadoras de OnlyFans más populares en Estados Unidos. Explora perfiles verificados, cuentas gratis y contenido exclusivo de creadoras americanas.',
+    titleEs: `Mejores Creadoras de OnlyFans en Estados Unidos (${YEAR}) | FansPedia`,
   },
   canada: {
     terms: ['canada', 'canadian'],
-    label: 'Canada',
-    htmlFile: 'canada.html',
-    h1: 'The Best Onlyfans Creators All Across Canada',
-    metaDesc: 'Discover the most popular OnlyFans creators across Canada. Browse verified profiles, free accounts, and exclusive content from Canadian creators.',
+    label: 'Canadá',
+    htmlFile: 'es/canada.html',
+    h1: 'Las Mejores Creadoras de OnlyFans en Canadá',
+    metaDesc: 'Descubre las creadoras de OnlyFans más populares en Canadá. Explora perfiles verificados, cuentas gratis y contenido exclusivo de creadoras canadienses.',
+    titleEs: `Mejores Creadoras de OnlyFans en Canadá (${YEAR}) | FansPedia`,
   },
   india: {
     terms: ['india', 'indian'],
     label: 'India',
-    htmlFile: 'india.html',
-    h1: 'The Best Onlyfans Creators All Across India',
-    metaDesc: 'Discover the most popular OnlyFans creators across India. Browse verified profiles, free accounts, and exclusive content from Indian creators.',
+    htmlFile: 'es/india.html',
+    h1: 'Las Mejores Creadoras de OnlyFans en India',
+    metaDesc: 'Descubre las creadoras de OnlyFans más populares en India. Explora perfiles verificados, cuentas gratis y contenido exclusivo de creadoras de India.',
+    titleEs: `Mejores Creadoras de OnlyFans en India (${YEAR}) | FansPedia`,
   },
   japan: {
     terms: ['japan', 'japanese'],
-    label: 'Japan',
-    htmlFile: 'japan.html',
-    h1: 'The Best Onlyfans Creators All Across Japan',
-    metaDesc: 'Discover the most popular OnlyFans creators across Japan. Browse verified profiles, free accounts, and exclusive content from Japanese creators.',
+    label: 'Japón',
+    htmlFile: 'es/japan.html',
+    h1: 'Las Mejores Creadoras de OnlyFans en Japón',
+    metaDesc: 'Descubre las creadoras de OnlyFans más populares en Japón. Explora perfiles verificados, cuentas gratis y contenido exclusivo de creadoras japonesas.',
+    titleEs: `Mejores Creadoras de OnlyFans en Japón (${YEAR}) | FansPedia`,
   },
 };
 
 // ---------------------------------------------------------------------------
-// Image helpers (mirrors client-side buildResponsiveSources)
+// Image helpers
 // ---------------------------------------------------------------------------
 function proxyImg(url, w, h) {
   try {
@@ -109,14 +106,14 @@ function renderCard(item, index) {
   const subscribePrice = item.subscribePrice ?? item.subscribeprice;
   const priceText = (subscribePrice && !isNaN(subscribePrice))
     ? `$${parseFloat(subscribePrice).toFixed(2)}`
-    : 'FREE';
+    : 'GRATIS';
   const isVerified = item.isVerified ?? item.isverified;
-  const verifiedBadge = isVerified ? '<span aria-label="Verified" title="Verified creator">✓ </span>' : '';
+  const verifiedBadge = isVerified ? '<span aria-label="Verificado" title="Creadora verificada">✓ </span>' : '';
   const profileUrl = username ? `https://onlyfans.com/${encodeURIComponent(username)}` : '#';
   const loading = index === 0 ? 'eager' : 'lazy';
   const fetchpriority = index === 0 ? ' fetchpriority="high"' : '';
-  const priceHtml = priceText === 'FREE'
-    ? `<p class="price-free" style="color:#34c759;font-weight:700;font-size:16px;text-transform:uppercase;">FREE</p>`
+  const priceHtml = priceText === 'GRATIS'
+    ? `<p class="price-free" style="color:#34c759;font-weight:700;font-size:16px;text-transform:uppercase;">GRATIS</p>`
     : `<p class="price-tag" style="color:#34c759;font-weight:700;font-size:18px;">${priceText}</p>`;
 
   return `<div class="col-sm-6 col-md-4 col-lg-3 mb-4">
@@ -125,7 +122,7 @@ function renderCard(item, index) {
       <span>♡</span>
     </button>
     <img src="${src}" srcset="${srcset}" sizes="${sizes}"
-      alt="${name} OnlyFans creator" width="270" height="360"
+      alt="${name} creadora de OnlyFans" width="270" height="360"
       style="aspect-ratio:3/4;" loading="${loading}"${fetchpriority}
       decoding="async" referrerpolicy="no-referrer"
       onerror="if(this.src!=='/static/no-image.png'){this.removeAttribute('srcset');this.removeAttribute('sizes');this.src='${escHtml(imgSrc)}';}">
@@ -133,7 +130,7 @@ function renderCard(item, index) {
       <h3 style="font-size:1rem;font-weight:700;margin-bottom:4px;">${verifiedBadge}${name}</h3>
       <p class="username">@${username}</p>
       ${priceHtml}
-      <a href="${escHtml(profileUrl)}" class="view-profile-btn" target="_blank" rel="noopener noreferrer">View Profile</a>
+      <a href="${escHtml(profileUrl)}" class="view-profile-btn" target="_blank" rel="noopener noreferrer">Ver Perfil</a>
     </div>
   </div>
 </div>`;
@@ -142,20 +139,20 @@ function renderCard(item, index) {
 // ---------------------------------------------------------------------------
 // JSON-LD structured data
 // ---------------------------------------------------------------------------
-function buildJsonLd(slug, label, creators, canonicalUrl) {
+function buildJsonLd(name, label, creators, canonicalUrl) {
   const breadcrumb = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: `${BASE_URL}/` },
-      { '@type': 'ListItem', position: 2, name: 'Countries', item: `${BASE_URL}/country/` },
+      { '@type': 'ListItem', position: 1, name: 'Inicio', item: `${BASE_URL}/es/` },
+      { '@type': 'ListItem', position: 2, name: 'Países', item: `${BASE_URL}/es/` },
       { '@type': 'ListItem', position: 3, name: label, item: canonicalUrl },
     ],
   };
   const itemList = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: `Best ${label} OnlyFans Creators (${YEAR})`,
+    name: `Mejores Creadoras de OnlyFans en ${label} (${YEAR})`,
     url: canonicalUrl,
     numberOfItems: creators.length,
     itemListElement: creators.slice(0, 10).map((c, i) => ({
@@ -179,10 +176,7 @@ export default async function handler(req, res) {
   if (!name) return res.status(400).send('Missing country name');
 
   const config = COUNTRIES[name];
-  if (!config) {
-    // Unknown country — redirect to home
-    return res.redirect(302, '/');
-  }
+  if (!config) return res.redirect(302, '/es/');
 
   const SUPABASE_URL = (process.env.SUPABASE_URL || '').replace(/\/+$/, '');
   const SUPABASE_KEY = process.env.SUPABASE_KEY || '';
@@ -192,7 +186,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    // --- 1. Build Supabase OR query (mirrors client-side country page logic) ---
+    // --- 1. Build Supabase OR query ---
     const page = Math.max(1, parseInt(req.query.page || '1', 10));
     const offset = (page - 1) * PAGE_SIZE;
     const searchCols = ['username', 'name', 'about', 'location'];
@@ -222,7 +216,6 @@ export default async function handler(req, res) {
       },
     });
 
-    // 416 = Range Not Satisfiable: offset is beyond total count → treat as empty page
     let creators, totalCount;
     if (supaFetch.status === 416) {
       creators = [];
@@ -234,24 +227,34 @@ export default async function handler(req, res) {
       totalCount = parseInt(contentRange.split('/')[1] || '0', 10) || creators.length;
     }
 
-    // --- 2. Read template ---
+    // --- 2. Read ES template ---
     const htmlPath = join(ROOT, config.htmlFile);
     let html = readFileSync(htmlPath, 'utf8');
 
     const canonicalUrl = page > 1
+      ? `${BASE_URL}/es/country/${name}/${page}/`
+      : `${BASE_URL}/es/country/${name}/`;
+    const enUrl = page > 1
       ? `${BASE_URL}/country/${name}/${page}/`
       : `${BASE_URL}/country/${name}/`;
 
+    // hreflang cross-links
+    const hreflangLinks = [
+      `<link rel="alternate" hreflang="en" href="${enUrl}">`,
+      `<link rel="alternate" hreflang="es" href="${canonicalUrl}">`,
+      `<link rel="alternate" hreflang="x-default" href="${enUrl}">`,
+    ].join('\n');
+
     const prevLink = page > 2
-      ? `<link rel="prev" href="${BASE_URL}/country/${name}/${page - 1}/">`
+      ? `<link rel="prev" href="${BASE_URL}/es/country/${name}/${page - 1}/">`
       : page === 2
-        ? `<link rel="prev" href="${BASE_URL}/country/${name}/">`
+        ? `<link rel="prev" href="${BASE_URL}/es/country/${name}/">`
         : '';
     const nextLink = creators.length === PAGE_SIZE
-      ? `<link rel="next" href="${BASE_URL}/country/${name}/${page + 1}/">`
+      ? `<link rel="next" href="${BASE_URL}/es/country/${name}/${page + 1}/">`
       : '';
 
-    // --- 3. Inject canonical link (update or add) and page title ---
+    // --- 3. Inject canonical + title ---
     if (/<link[^>]+rel="canonical"/.test(html)) {
       html = html.replace(
         /(<link[^>]+rel="canonical"[^>]+href=")[^"]*(")/,
@@ -260,32 +263,35 @@ export default async function handler(req, res) {
     } else {
       html = html.replace('</head>', `  <link rel="canonical" href="${canonicalUrl}">\n</head>`);
     }
-    if (page > 1) {
+
+    // Spanish title with page suffix
+    const titleSuffix = page > 1 ? ` - Página ${page}` : '';
+    html = html.replace(
+      /<title>([^<]*)<\/title>/,
+      `<title>${escHtml(config.titleEs.replace(` (${YEAR})`, `${titleSuffix} (${YEAR})`))}</title>`
+    );
+
+    // Update meta description on first page only (template already has Spanish text)
+    if (page === 1 && /<meta name="description"/.test(html)) {
       html = html.replace(
-        /<title>([^<]*)<\/title>/,
-        `<title>$1 - Page ${page}</title>`
+        /(<meta name="description" content=")[^"]*(")/,
+        `$1${config.metaDesc}$2`
       );
     }
 
-    // --- 4. Inject JSON-LD + SSR flag + hreflang + pagination links ---
+    // --- 4. Inject JSON-LD + SSR flag + hreflang + pagination ---
     const jsonLd = buildJsonLd(name, config.label, creators, canonicalUrl);
     const ssrFlag = `<script>window.__COUNTRY_SSR={name:${JSON.stringify(name)},count:${totalCount},hasMore:${creators.length === PAGE_SIZE},page:${page}};</script>`;
     const paginationLinks = [prevLink, nextLink].filter(Boolean).join('\n');
-    // hreflang cross-links: tell Google EN and ES are alternates, not duplicates
-    const esCountryUrl = page > 1
-      ? `${BASE_URL}/es/country/${name}/${page}/`
-      : `${BASE_URL}/es/country/${name}/`;
-    const hreflangLinks = [
-      `<link rel="alternate" hreflang="en" href="${canonicalUrl}">`,
-      `<link rel="alternate" hreflang="es" href="${esCountryUrl}">`,
-      `<link rel="alternate" hreflang="x-default" href="${canonicalUrl}">`,
-    ].join('\n');
-    html = html.replace('</head>', `${jsonLd}\n${ssrFlag}\n${hreflangLinks}\n${paginationLinks ? paginationLinks + '\n' : ''}</head>`);
+    html = html.replace(
+      '</head>',
+      `${jsonLd}\n${ssrFlag}\n${hreflangLinks}\n${paginationLinks ? paginationLinks + '\n' : ''}</head>`
+    );
 
     // --- 5. Pre-rendered creator cards ---
     const cardsHtml = Array.isArray(creators) && creators.length > 0
       ? creators.map((c, i) => renderCard(c, i)).join('\n')
-      : `<p class="text-muted text-center w-100 py-4">No creators found from <strong>${escHtml(config.label)}</strong>.</p>`;
+      : `<p class="text-muted text-center w-100 py-4">No se encontraron creadoras de <strong>${escHtml(config.label)}</strong>.</p>`;
 
     html = html.replace(
       '<div class="row" id="results"></div>',
@@ -298,7 +304,7 @@ export default async function handler(req, res) {
     return res.status(200).send(html);
 
   } catch (err) {
-    console.error('[ssr/country] error:', err.message);
+    console.error('[ssr/es-country] error:', err.message);
     return res.redirect(302, `/${config.htmlFile}`);
   }
 }

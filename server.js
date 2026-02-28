@@ -12,6 +12,8 @@ import ssrCountryHandler from './api/ssr/country.js';
 import ssrBlogPostHandler from './api/ssr/blog-post.js';
 import ssrHomeHandler from './api/ssr/home.js';
 import ssrCategoriesHubHandler from './api/ssr/categories-hub.js';
+import ssrEsCategoryHandler from './api/ssr/es-category.js';
+import ssrEsCountryHandler from './api/ssr/es-country.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -150,6 +152,52 @@ app.get(['/country/:name', '/country/:name/'], async (req, res) => {
 // Disable /creator route as well
 app.get('/creator', (req, res) => {
   res.redirect(302, '/');
+});
+
+// ES — /es/categories/:slug SSR routes
+app.get(['/es/categories/:slug/:page', '/es/categories/:slug/:page/'], async (req, res) => {
+  try {
+    req.query.slug = req.params.slug;
+    req.query.page = req.params.page;
+    await ssrEsCategoryHandler(req, res);
+  } catch (err) {
+    console.error('ssr es-category paginated error', err);
+    res.sendFile(path.join(__dirname, 'es', 'category.html'));
+  }
+});
+app.get(['/es/categories/:slug', '/es/categories/:slug/'], async (req, res) => {
+  try {
+    req.query.slug = req.params.slug;
+    await ssrEsCategoryHandler(req, res);
+  } catch (err) {
+    console.error('ssr es-category error', err);
+    res.sendFile(path.join(__dirname, 'es', 'category.html'));
+  }
+});
+
+// ES — /es/country/:name SSR routes
+app.get(['/es/country/:name/:page', '/es/country/:name/:page/'], async (req, res) => {
+  try {
+    req.query.name = req.params.name;
+    req.query.page = req.params.page;
+    await ssrEsCountryHandler(req, res);
+  } catch (err) {
+    console.error('ssr es-country paginated error', err);
+    const fallbacks = { 'united-states': 'es/united-states.html', canada: 'es/canada.html', india: 'es/india.html', japan: 'es/japan.html' };
+    const file = fallbacks[req.params.name];
+    if (file) res.sendFile(path.join(__dirname, file)); else res.redirect(302, '/es/');
+  }
+});
+app.get(['/es/country/:name', '/es/country/:name/'], async (req, res) => {
+  try {
+    req.query.name = req.params.name;
+    await ssrEsCountryHandler(req, res);
+  } catch (err) {
+    console.error('ssr es-country error', err);
+    const fallbacks = { 'united-states': 'es/united-states.html', canada: 'es/canada.html', india: 'es/india.html', japan: 'es/japan.html' };
+    const file = fallbacks[req.params.name];
+    if (file) res.sendFile(path.join(__dirname, file)); else res.redirect(302, '/es/');
+  }
 });
 
 // Catch username-like paths locally and redirect home to mirror production pause

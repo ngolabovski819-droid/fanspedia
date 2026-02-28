@@ -250,7 +250,16 @@ export default async function handler(req, res) {
     const jsonLd = buildJsonLd(slug, label, creators, canonicalUrl);
     const ssrFlag = `<script>window.__CATEGORY_SSR={slug:${JSON.stringify(slug)},count:${totalCount},hasMore:${creators.length === PAGE_SIZE},page:${page}};</script>`;
     const paginationLinks = [prevLink, nextLink].filter(Boolean).join('\n');
-    html = html.replace('</head>', `${jsonLd}\n${ssrFlag}\n${paginationLinks ? paginationLinks + '\n' : ''}</head>`);
+    // hreflang cross-links: tell Google EN and ES are alternates, not duplicates
+    const esUrl = page > 1
+      ? `${BASE_URL}/es/categories/${slug}/${page}/`
+      : `${BASE_URL}/es/categories/${slug}/`;
+    const hreflangLinks = [
+      `<link rel="alternate" hreflang="en" href="${canonicalUrl}">`,
+      `<link rel="alternate" hreflang="es" href="${esUrl}">`,
+      `<link rel="alternate" hreflang="x-default" href="${canonicalUrl}">`,
+    ].join('\n');
+    html = html.replace('</head>', `${jsonLd}\n${ssrFlag}\n${hreflangLinks}\n${paginationLinks ? paginationLinks + '\n' : ''}</head>`);
 
     // --- 5. Body injections ---
     html = html.replace(
