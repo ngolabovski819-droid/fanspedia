@@ -61,8 +61,8 @@
     { "source": "/admin", "destination": "/admin/index.html" },
     { "source": "/admin/", "destination": "/admin/index.html" },
 
-    { "source": "/blog/:slug", "destination": "/blog-post.html" },
-    { "source": "/blog/:slug/", "destination": "/blog-post.html" },
+    { "source": "/blog/:slug", "destination": "/api/ssr/blog-post?slug=:slug" },
+    { "source": "/blog/:slug/", "destination": "/api/ssr/blog-post?slug=:slug" },
     { "source": "/es/blog/:slug", "destination": "/blog-post.html" },
     { "source": "/es/blog/:slug/", "destination": "/blog-post.html" }
   ],

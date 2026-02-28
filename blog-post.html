@@ -768,6 +768,9 @@
   const slug = getSlugFromPath();
   if (!slug) {
     window.location.replace(localizedPath('/blog/'));
+  } else if (window.__BLOG_POST_SSR) {
+    // Content already rendered server-side — skip API fetch, just run Mermaid
+    mermaid.run({ querySelector: '.mermaid' });
   } else {
     fetch('/api/blog-post?slug=' + encodeURIComponent(slug) + '&t=' + Date.now(), { cache: 'no-store' })
       .then(r => {

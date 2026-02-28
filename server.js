@@ -9,6 +9,7 @@ import blogHandler from './api/blog.js';
 import blogPostHandler from './api/blog-post.js';
 import ssrCategoryHandler from './api/ssr/category.js';
 import ssrCountryHandler from './api/ssr/country.js';
+import ssrBlogPostHandler from './api/ssr/blog-post.js';
 import ssrHomeHandler from './api/ssr/home.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -53,11 +54,14 @@ app.get(['/admin', '/admin/'], (req, res) => {
 app.get(['/blog', '/blog/'], (req, res) => {
   res.sendFile(path.join(__dirname, 'blog.html'));
 });
-app.get('/blog/:slug', (req, res) => {
-  res.sendFile(path.join(__dirname, 'blog-post.html'));
-});
-app.get('/blog/:slug/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'blog-post.html'));
+app.get(['/blog/:slug', '/blog/:slug/'], async (req, res) => {
+  try {
+    req.query.slug = req.params.slug;
+    await ssrBlogPostHandler(req, res);
+  } catch (err) {
+    console.error('ssr blog-post error', err);
+    res.sendFile(path.join(__dirname, 'blog-post.html'));
+  }
 });
 
 // Disable direct access to creator.html in local dev to mirror production
