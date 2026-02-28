@@ -7,8 +7,8 @@ import { fileURLToPath } from 'url';
 import searchHandler from './api/search.js';
 import blogHandler from './api/blog.js';
 import blogPostHandler from './api/blog-post.js';
-// Use the catch-all SSR handler for local testing (matches Vercel's [...params] serverless function)
-// creator profiles temporarily disabled; keep SSR handler code in repo but do not mount it
+import ssrCategoryHandler from './api/ssr/category.js';
+import ssrCountryHandler from './api/ssr/country.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -63,9 +63,15 @@ app.get('/categories', (req, res) => {
   res.sendFile(path.join(__dirname, 'categories.html'));
 });
 
-// Handle /categories/:slug route (Vercel rewrite: "/categories/:slug" -> "/category.html")
-app.get('/categories/:slug', (req, res) => {
-  res.sendFile(path.join(__dirname, 'category.html'));
+// Handle /categories/:slug route → SSR handler (mirrors Vercel rewrite to /api/ssr/category)
+app.get(['/categories/:slug', '/categories/:slug/'], async (req, res) => {
+  try {
+    req.query.slug = req.params.slug;
+    await ssrCategoryHandler(req, res);
+  } catch (err) {
+    console.error('ssr category error', err);
+    res.sendFile(path.join(__dirname, 'category.html'));
+  }
 });
 
 // Handle /locations route (Vercel rewrite: "/locations" -> "/locations.html")
@@ -73,24 +79,21 @@ app.get('/locations', (req, res) => {
   res.sendFile(path.join(__dirname, 'locations.html'));
 });
 
-// Handle /country/united-states route (Vercel rewrite: "/country/united-states" -> "/united-states.html")
-app.get('/country/united-states', (req, res) => {
-  res.sendFile(path.join(__dirname, 'united-states.html'));
-});
-
-// Handle /country/canada route (Vercel rewrite: "/country/canada" -> "/canada.html")
-app.get('/country/canada', (req, res) => {
-  res.sendFile(path.join(__dirname, 'canada.html'));
-});
-
-// Handle /country/india route (Vercel rewrite: "/country/india" -> "/india.html")
-app.get('/country/india', (req, res) => {
-  res.sendFile(path.join(__dirname, 'india.html'));
-});
-
-// Handle /country/japan route (Vercel rewrite: "/country/japan" -> "/japan.html")
-app.get('/country/japan', (req, res) => {
-  res.sendFile(path.join(__dirname, 'japan.html'));
+// Handle /country/:name routes → SSR handler (mirrors Vercel rewrite to /api/ssr/country)
+app.get(['/country/:name', '/country/:name/'], async (req, res) => {
+  try {
+    req.query.name = req.params.name;
+    await ssrCountryHandler(req, res);
+  } catch (err) {
+    console.error('ssr country error', err);
+    const fallbacks = {
+      'united-states': 'united-states.html', canada: 'canada.html',
+      india: 'india.html', japan: 'japan.html',
+    };
+    const file = fallbacks[req.params.name];
+    if (file) res.sendFile(path.join(__dirname, file));
+    else res.redirect(302, '/');
+  }
 });
 
 // Disable /creator route as well

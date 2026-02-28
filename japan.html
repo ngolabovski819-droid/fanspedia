@@ -2281,7 +2281,23 @@
     }
     
     // Initial load
-    performSearch(true);
+    // If SSR pre-rendered by api/ssr/country.js, skip the initial client fetch —
+    // cards are already in the DOM. window.__COUNTRY_SSR = { name, count, hasMore }
+    const ssrData = window.__COUNTRY_SSR;
+    if (ssrData && ssrData.name === 'japan') {
+      hasMore = ssrData.hasMore !== false;
+      statusDiv.textContent = '';
+      try {
+        const favSet = getFavoritesSet();
+        resultsDiv.querySelectorAll('.favorite-btn[data-username]').forEach(btn => {
+          const u = btn.dataset.username;
+          if (u && favSet.has(u)) { btn.classList.add('active'); const s = btn.querySelector('span'); if (s) s.textContent = '♥'; }
+        });
+      } catch (e) { /* non-critical */ }
+      updateLoadMoreButton();
+    } else {
+      performSearch(true);
+    }
   </script>
 
   <!-- Anchor target for sticky nav: Wishlist -->

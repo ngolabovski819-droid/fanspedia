@@ -458,7 +458,7 @@
   <!-- Mobile Drawer -->
   <div id="drawerOverlay" class="drawer-overlay" tabindex="-1" aria-hidden="true"></div>
   <nav id="mobileDrawer" class="mobile-drawer" aria-hidden="true" aria-labelledby="mobileMenuToggle">
-    <button class="drawer-close" id="drawerClose" aria-label="Close menu">×</button>
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">ï¿½</button>
     <a href="/">Home</a>
     
     <div class="drawer-categories-toggle" id="drawerCategoriesToggle">
@@ -886,8 +886,8 @@
       const wrap = document.getElementById('activeFilters');
       if (!wrap) return;
       const chips = [];
-      if (verifiedToggle.checked) chips.push(`<div class="search-chip" data-filter="verified">Verified only <span class="remove" aria-label="Remove">×</span></div>`);
-      if (bundlesToggle.checked) chips.push(`<div class="search-chip" data-filter="bundles">Bundles <span class="remove" aria-label="Remove">×</span></div>`);
+      if (verifiedToggle.checked) chips.push(`<div class="search-chip" data-filter="verified">Verified only <span class="remove" aria-label="Remove">ï¿½</span></div>`);
+      if (bundlesToggle.checked) chips.push(`<div class="search-chip" data-filter="bundles">Bundles <span class="remove" aria-label="Remove">ï¿½</span></div>`);
       
       // For compound categories with auto-maxPrice, show a non-removable chip
       const autoMaxPrice = isCompound && compoundCategories[slug]?.filters?.maxPrice !== undefined;
@@ -896,7 +896,7 @@
         const label = maxVal === 0 ? 'Free Only' : `Max $${maxVal}`;
         chips.push(`<div class="search-chip" aria-label="Price filter">${label}</div>`);
       } else if (priceRange.value !== '100') {
-        chips.push(`<div class="search-chip" data-filter="max">Max $${priceRange.value} <span class="remove" aria-label="Remove">×</span></div>`);
+        chips.push(`<div class="search-chip" data-filter="max">Max $${priceRange.value} <span class="remove" aria-label="Remove">ï¿½</span></div>`);
       }
       
       wrap.innerHTML = chips.join('');
@@ -965,15 +965,15 @@
           const imgSrc = img && img.startsWith('http') ? img : '/static/no-image.png';
           const responsive = buildResponsiveSources(imgSrc);
           const name = item.name || 'Unknown';
-          const username = item.username || '—';
+          const username = item.username || 'ï¿½';
           const priceText = (item.subscribePrice && !isNaN(item.subscribePrice)) ? `$${parseFloat(item.subscribePrice).toFixed(2)}` : 'FREE';
           const verifiedIcon = item.isVerified ? '? ' : '';
-          const profileUrl = username !== '—' ? `https://onlyfans.com/${encodeURIComponent(username)}` : '#';
+          const profileUrl = username !== 'ï¿½' ? `https://onlyfans.com/${encodeURIComponent(username)}` : '#';
           const col = document.createElement('div');
           col.className = 'col-sm-6 col-md-4 col-lg-3 mb-4';
           const safeUsername = String(username).replace(/'/g, "\\'");
           const favSet = getFavoritesSet();
-          const favActive = username !== '—' && favSet.has(username);
+          const favActive = username !== 'ï¿½' && favSet.has(username);
           const favChar = favActive ? '?' : '?';
           col.innerHTML = `
             <div class=\"card h-100\">
@@ -1013,11 +1013,32 @@
     if (backToTopBtn) backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
   // Initial load
+  // If this page was SSR pre-rendered (via api/ssr/category.js), skip the initial
+  // client-side fetch â€” the cards are already in the DOM from the server.
+  // The SSR flag is injected by the handler: window.__CATEGORY_SSR = { slug, count, hasMore }
+  const ssrData = window.__CATEGORY_SSR;
+  if (ssrData && ssrData.slug === slug) {
+    hasMore = ssrData.hasMore !== false;
+    document.getElementById('status').textContent = '';
+    initBreadcrumbs();
+    renderFavoritesBar();
+    updateWishlistBadge();
+    // Reattach favorite state to pre-rendered cards
+    try {
+      const favSet = getFavoritesSet();
+      resultsDiv.querySelectorAll('.favorite-btn[data-username]').forEach(btn => {
+        const u = btn.dataset.username;
+        if (u && favSet.has(u)) { btn.classList.add('active'); const s = btn.querySelector('span'); if (s) s.textContent = 'â™¥'; }
+      });
+    } catch (e) { /* non-critical */ }
+    updateLoadMoreButton();
+  } else {
     document.getElementById('status').textContent = label ? `Loading ${label} creators...` : 'Loading...';
-  initBreadcrumbs();
-  renderFavoritesBar();
-  updateWishlistBadge();
+    initBreadcrumbs();
+    renderFavoritesBar();
+    updateWishlistBadge();
     performSearch(true);
+  }
 
   // ============================================
   // DARK MODE THEME TOGGLE
@@ -1367,7 +1388,7 @@
       <div class="footer-bottom">
         <div class="footer-bottom-content">
           <p class="footer-copyright">
-            © 2026 fanspedia.net - All rights reserved
+            ï¿½ 2026 fanspedia.net - All rights reserved
           </p>
           <div class="footer-stats">
             <span class="stat-badge">
