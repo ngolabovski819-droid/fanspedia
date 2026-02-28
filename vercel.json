@@ -4,7 +4,8 @@
     "api/blog.js": { "includeFiles": "content/blog/**" },
     "api/blog-post.js": { "includeFiles": "content/blog/**" },
     "api/ssr/category.js": { "includeFiles": "category.html" },
-    "api/ssr/country.js": { "includeFiles": "*.html" }
+    "api/ssr/country.js": { "includeFiles": "*.html" },
+    "api/ssr/home.js": { "includeFiles": "index.html" }
   },
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
