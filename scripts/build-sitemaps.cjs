@@ -11,13 +11,67 @@ const BASE_URL = 'https://fanspedia.net';
 const CREATOR_PAGE_SIZE = 1000; // Supabase page size per request
 const SITEMAP_CHUNK_SIZE = 40000; // URLs per creator sitemap file (well below 50k cap)
 
+// Sitemap XML namespace string including xhtml for hreflang support
+const URLSET_NS = `xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml"`;
+
 function today() {
   const d = new Date();
   return d.toISOString().split('T')[0];
 }
 
-function wrapUrl(loc, changefreq, priority, lastmod) {
-  return `  <url>\n    <loc>${loc}</loc>\n    ${lastmod ? `<lastmod>${lastmod}</lastmod>` : ''}\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>\n`;
+/**
+ * Read all blog post slugs from content/blog/*.md frontmatter.
+ * Falls back to filename (without .md) if no slug field found.
+ */
+function getBlogSlugs() {
+  const blogDir = path.join(__dirname, '..', 'content', 'blog');
+  const slugs = [];
+  try {
+    const files = fs.readdirSync(blogDir).filter(f => f.endsWith('.md'));
+    for (const file of files) {
+      const raw = fs.readFileSync(path.join(blogDir, file), 'utf8');
+      const fmMatch = raw.match(/^---\s*\n([\s\S]*?)\n---/);
+      if (fmMatch) {
+        const slugLine = fmMatch[1].match(/^slug:\s*(.+)$/m);
+        slugs.push(slugLine ? slugLine[1].trim() : file.replace('.md', ''));
+      } else {
+        slugs.push(file.replace('.md', ''));
+      }
+    }
+  } catch (e) {
+    console.warn('⚠️  Could not read blog slugs from content/blog/:', e.message);
+  }
+  return slugs;
+}
+
+/**
+ * Build the three xhtml:link alternate entries (x-default, en, es) for a URL pair.
+ */
+function alts(enUrl, esUrl) {
+  return [
+    { hreflang: 'x-default', href: enUrl },
+    { hreflang: 'en',        href: enUrl },
+    { hreflang: 'es',        href: esUrl },
+  ];
+}
+
+/**
+ * Wrap a single <url> entry with optional hreflang xhtml:link annotations.
+ * @param {string}   loc         - Canonical URL for this entry
+ * @param {string}   changefreq
+ * @param {string}   priority
+ * @param {string}   lastmod
+ * @param {Array}    alternates  - [{hreflang, href}, ...] — omit for no annotations
+ */
+function wrapUrl(loc, changefreq, priority, lastmod, alternates = []) {
+  let xml = `  <url>\n    <loc>${loc}</loc>\n`;
+  if (lastmod) xml += `    <lastmod>${lastmod}</lastmod>\n`;
+  xml += `    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n`;
+  for (const alt of alternates) {
+    xml += `    <xhtml:link rel="alternate" hreflang="${alt.hreflang}" href="${alt.href}"/>\n`;
+  }
+  xml += `  </url>\n`;
+  return xml;
 }
 
 async function fetchAllCreatorUsernames() {
@@ -50,61 +104,98 @@ function outputDir() {
   return path.join(__dirname, '..');
 }
 
-function buildBaseSitemap() {
-  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+/**
+ * English base sitemap — every URL carries hreflang xhtml:link pointing to
+ * both the EN canonical and its ES mirror (plus x-default = EN).
+ */
+function buildBaseSitemap(blogSlugs) {
+  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset ${URLSET_NS}>\n`;
   const d = today();
-  const newestBlogSlug = 'verified-vs-unverified-onlyfans-creators';
   const countries = ['united-states', 'canada', 'india', 'japan'];
+
   // Homepage
-  xml += wrapUrl(`${BASE_URL}/`, 'daily', '1.0', d);
+  xml += wrapUrl(`${BASE_URL}/`, 'daily', '1.0', d,
+    alts(`${BASE_URL}/`, `${BASE_URL}/es/`));
+
   // Categories hub
-  xml += wrapUrl(`${BASE_URL}/categories/`, 'weekly', '0.9', d);
+  xml += wrapUrl(`${BASE_URL}/categories/`, 'weekly', '0.9', d,
+    alts(`${BASE_URL}/categories/`, `${BASE_URL}/es/categories/`));
+
   // Category pages
   for (const c of categories) {
     const slug = categoryToSlug(c);
-    xml += wrapUrl(`${BASE_URL}/categories/${slug}/`, 'weekly', '0.8', d);
+    xml += wrapUrl(`${BASE_URL}/categories/${slug}/`, 'weekly', '0.8', d,
+      alts(`${BASE_URL}/categories/${slug}/`, `${BASE_URL}/es/categories/${slug}/`));
   }
+
   // Locations hub
-  xml += wrapUrl(`${BASE_URL}/locations/`, 'weekly', '0.8', d);
-  // Blog hub + newest post
-  xml += wrapUrl(`${BASE_URL}/blog/`, 'weekly', '0.8', d);
-  xml += wrapUrl(`${BASE_URL}/blog/${newestBlogSlug}/`, 'weekly', '0.7', d);
+  xml += wrapUrl(`${BASE_URL}/locations/`, 'weekly', '0.8', d,
+    alts(`${BASE_URL}/locations/`, `${BASE_URL}/es/locations/`));
+
+  // Blog hub
+  xml += wrapUrl(`${BASE_URL}/blog/`, 'weekly', '0.8', d,
+    alts(`${BASE_URL}/blog/`, `${BASE_URL}/es/blog/`));
+
+  // Blog posts (dynamically read from content/blog/*.md)
+  for (const slug of blogSlugs) {
+    xml += wrapUrl(`${BASE_URL}/blog/${slug}/`, 'weekly', '0.7', d,
+      alts(`${BASE_URL}/blog/${slug}/`, `${BASE_URL}/es/blog/${slug}/`));
+  }
+
   // Country pages
   for (const country of countries) {
-    xml += wrapUrl(`${BASE_URL}/country/${country}/`, 'weekly', '0.8', d);
+    xml += wrapUrl(`${BASE_URL}/country/${country}/`, 'weekly', '0.8', d,
+      alts(`${BASE_URL}/country/${country}/`, `${BASE_URL}/es/country/${country}/`));
   }
+
   xml += '</urlset>';
   return xml;
 }
 
-function buildSpanishBaseSitemap() {
-  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+/**
+ * Spanish base sitemap — mirrors the EN sitemap but with /es/ URLs as <loc>,
+ * while hreflang xhtml:link annotations reference the same EN↔ES pairs.
+ */
+function buildSpanishBaseSitemap(blogSlugs) {
+  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset ${URLSET_NS}>\n`;
   const d = today();
-  const newestBlogSlug = 'verified-vs-unverified-onlyfans-creators';
+  const countries = ['united-states', 'canada', 'india', 'japan'];
+
   // Spanish Homepage
-  xml += wrapUrl(`${BASE_URL}/es/`, 'daily', '1.0', d);
+  xml += wrapUrl(`${BASE_URL}/es/`, 'daily', '1.0', d,
+    alts(`${BASE_URL}/`, `${BASE_URL}/es/`));
+
   // Spanish Categories hub
-  xml += wrapUrl(`${BASE_URL}/es/categories/`, 'weekly', '0.9', d);
+  xml += wrapUrl(`${BASE_URL}/es/categories/`, 'weekly', '0.9', d,
+    alts(`${BASE_URL}/categories/`, `${BASE_URL}/es/categories/`));
+
   // Spanish Category pages
   for (const c of categories) {
     const slug = categoryToSlug(c);
-    xml += wrapUrl(`${BASE_URL}/es/categories/${slug}/`, 'weekly', '0.8', d);
+    xml += wrapUrl(`${BASE_URL}/es/categories/${slug}/`, 'weekly', '0.8', d,
+      alts(`${BASE_URL}/categories/${slug}/`, `${BASE_URL}/es/categories/${slug}/`));
   }
-  // Spanish Locations
-  xml += wrapUrl(`${BASE_URL}/es/locations/`, 'weekly', '0.8', d);
-  // Spanish Blog hub + newest post
-  xml += wrapUrl(`${BASE_URL}/es/blog/`, 'weekly', '0.8', d);
-  xml += wrapUrl(`${BASE_URL}/es/blog/${newestBlogSlug}/`, 'weekly', '0.7', d);
+
+  // Spanish Locations hub
+  xml += wrapUrl(`${BASE_URL}/es/locations/`, 'weekly', '0.8', d,
+    alts(`${BASE_URL}/locations/`, `${BASE_URL}/es/locations/`));
+
+  // Spanish Blog hub
+  xml += wrapUrl(`${BASE_URL}/es/blog/`, 'weekly', '0.8', d,
+    alts(`${BASE_URL}/blog/`, `${BASE_URL}/es/blog/`));
+
+  // Spanish Blog posts
+  for (const slug of blogSlugs) {
+    xml += wrapUrl(`${BASE_URL}/es/blog/${slug}/`, 'weekly', '0.7', d,
+      alts(`${BASE_URL}/blog/${slug}/`, `${BASE_URL}/es/blog/${slug}/`));
+  }
+
   // Spanish Country pages
-  const countries = [
-    { slug: 'united-states', es: 'Estados Unidos' },
-    { slug: 'canada', es: 'Canadá' },
-    { slug: 'india', es: 'India' },
-    { slug: 'japan', es: 'Japón' }
-  ];
   for (const country of countries) {
-    xml += wrapUrl(`${BASE_URL}/es/country/${country.slug}/`, 'weekly', '0.8', d);
+    xml += wrapUrl(`${BASE_URL}/es/country/${country}/`, 'weekly', '0.8', d,
+      alts(`${BASE_URL}/country/${country}/`, `${BASE_URL}/es/country/${country}/`));
   }
+
   xml += '</urlset>';
   return xml;
 }
@@ -134,27 +225,21 @@ function buildSitemapIndex(files) {
     console.log('🔄 Building sitemap index and parts...');
     const outDir = outputDir();
 
-    // 1) Base sitemap
-    const baseXml = buildBaseSitemap();
-    const baseName = 'sitemap_base.xml';
-  fs.writeFileSync(path.join(outDir, baseName), baseXml, 'utf8');
+    // Read blog slugs dynamically from content/blog/*.md
+    const blogSlugs = getBlogSlugs();
+    console.log(`📝 Blog posts found: ${blogSlugs.length} — ${blogSlugs.join(', ') || 'none'}`);
 
-    // 1b) Spanish Base sitemap
-    const spanishBaseXml = buildSpanishBaseSitemap();
+    // 1) Base sitemap (EN with hreflang)
+    const baseXml = buildBaseSitemap(blogSlugs);
+    const baseName = 'sitemap_base.xml';
+    fs.writeFileSync(path.join(outDir, baseName), baseXml, 'utf8');
+
+    // 1b) Spanish Base sitemap (ES with hreflang)
+    const spanishBaseXml = buildSpanishBaseSitemap(blogSlugs);
     const spanishBaseName = 'sitemap_base_es.xml';
     fs.writeFileSync(path.join(outDir, spanishBaseName), spanishBaseXml, 'utf8');
 
     // 2) Creators - DISABLED: Do not index creator profiles
-    // const allUsernames = await fetchAllCreatorUsernames();
-    // console.log(`Found ${allUsernames.length} creators.`);
-    // const partFiles = [];
-    // for (let i = 0; i < allUsernames.length; i += SITEMAP_CHUNK_SIZE) {
-    //   const chunk = allUsernames.slice(i, i + SITEMAP_CHUNK_SIZE);
-    //   const xml = buildCreatorSitemap(chunk);
-    //   const name = `sitemap_creators_${Math.floor(i / SITEMAP_CHUNK_SIZE) + 1}.xml`;
-    //   fs.writeFileSync(path.join(outDir, name), xml, 'utf8');
-    //   partFiles.push(name);
-    // }
     const partFiles = [];  // Empty array since we're not generating creator sitemaps
 
     // 3) Build index file referencing base + Spanish base + parts
@@ -163,11 +248,12 @@ function buildSitemapIndex(files) {
     const indexName = 'sitemap-index.xml';
     fs.writeFileSync(path.join(outDir, indexName), indexXml, 'utf8');
 
-    // Also write root sitemap.xml as index for convenience
-  fs.writeFileSync(path.join(outDir, 'sitemap.xml'), indexXml, 'utf8');
+    // Also write root sitemap.xml as index for convenience (referenced by robots.txt)
+    fs.writeFileSync(path.join(outDir, 'sitemap.xml'), indexXml, 'utf8');
 
     console.log('✅ Sitemaps built:');
     console.log(`- ${indexName}`);
+    console.log(`- sitemap.xml (copy of index)`);
     console.log(`- ${baseName}`);
     console.log(`- ${spanishBaseName}`);
     partFiles.forEach(f => console.log(`- ${f}`));
