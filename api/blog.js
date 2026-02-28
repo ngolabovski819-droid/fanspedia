@@ -85,6 +85,8 @@ async function readAllPosts() {
   return filtered.sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
+export { readAllPosts };
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
 

@@ -1077,18 +1077,24 @@
     }, 300);
   });
 
-  // Load posts from API
-  fetch('/api/blog?t=' + Date.now(), { cache: 'no-store' })
-    .then(function(r) { return r.ok ? r.json() : Promise.reject(r.status); })
-    .then(function(posts) {
-      POSTS = posts;
-      renderPage();
-    })
-    .catch(function() {
-      removeSkeletons();
-      document.getElementById('blogGrid').innerHTML =
-        '<div class="state-box"><div class="state-icon">⚠️</div><h3>' + i18nText('blog_unableToLoadArticles', 'Unable to load articles') + '</h3><p>' + i18nText('blog_tryAgainLater', 'Please try again later.') + '</p></div>';
-    });
+  // Hydration: SSR pre-injected the full post list — skip the API roundtrip
+  if (window.__BLOG_SSR_POSTS) {
+    POSTS = window.__BLOG_SSR_POSTS;
+    renderPage();
+  } else {
+    // Client-side fallback (direct page loads without SSR, or local dev without SSR)
+    fetch('/api/blog?t=' + Date.now(), { cache: 'no-store' })
+      .then(function(r) { return r.ok ? r.json() : Promise.reject(r.status); })
+      .then(function(posts) {
+        POSTS = posts;
+        renderPage();
+      })
+      .catch(function() {
+        removeSkeletons();
+        document.getElementById('blogGrid').innerHTML =
+          '<div class="state-box"><div class="state-icon">⚠️</div><h3>' + i18nText('blog_unableToLoadArticles', 'Unable to load articles') + '</h3><p>' + i18nText('blog_tryAgainLater', 'Please try again later.') + '</p></div>';
+      });
+  }
 </script>
 
 </body>

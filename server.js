@@ -14,6 +14,7 @@ import ssrHomeHandler from './api/ssr/home.js';
 import ssrCategoriesHubHandler from './api/ssr/categories-hub.js';
 import ssrEsCategoryHandler from './api/ssr/es-category.js';
 import ssrEsCountryHandler from './api/ssr/es-country.js';
+import ssrBlogHandler from './api/ssr/blog.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -54,8 +55,13 @@ app.get(['/admin', '/admin/'], (req, res) => {
 });
 
 // Blog routes
-app.get(['/blog', '/blog/'], (req, res) => {
-  res.sendFile(path.join(__dirname, 'blog.html'));
+app.get(['/blog', '/blog/'], async (req, res) => {
+  try {
+    await ssrBlogHandler(req, res);
+  } catch (err) {
+    console.error('ssr blog listing error', err);
+    res.sendFile(path.join(__dirname, 'blog.html'));
+  }
 });
 app.get(['/blog/:slug', '/blog/:slug/'], async (req, res) => {
   try {
