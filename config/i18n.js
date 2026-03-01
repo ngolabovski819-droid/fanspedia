@@ -13,12 +13,12 @@ const defaultLanguage = 'en';
  */
 async function initI18n() {
   try {
-    // Load EN
-    const enRes = await fetch('/config/translations/en.json?v=20260217-1');
+    // Load EN and ES in parallel — avoids the sequential en→es chain in the critical path
+    const [enRes, esRes] = await Promise.all([
+      fetch('/config/translations/en.json?v=20260217-1'),
+      fetch('/config/translations/es.json?v=20260217-1'),
+    ]);
     translations.en = await enRes.json();
-    
-    // Load ES
-    const esRes = await fetch('/config/translations/es.json?v=20260217-1');
     translations.es = await esRes.json();
     
     // Load saved language preference from localStorage
