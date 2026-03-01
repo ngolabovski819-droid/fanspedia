@@ -1844,6 +1844,130 @@
     }
 
     /* ============================================
+       TRUST SIGNALS SECTION
+       ============================================ */
+    .trust-section {
+      margin: 8px auto 28px;
+      max-width: 1100px;
+      padding: 0 16px;
+    }
+    .trust-stats {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 22px 16px;
+      box-shadow: 0 4px 28px var(--card-shadow);
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+    .trust-stats::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% -30%, rgba(0,175,240,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .trust-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 8px 28px;
+      flex: 1;
+      min-width: 110px;
+    }
+    .trust-number {
+      font-size: 34px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #00AFF0 0%, #00d4ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      font-variant-numeric: tabular-nums;
+    }
+    .trust-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      margin-top: 5px;
+      text-align: center;
+    }
+    .trust-divider {
+      width: 1px;
+      height: 44px;
+      background: var(--border-color);
+      flex-shrink: 0;
+    }
+    .trust-featured-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted, #888);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .trust-marquee-wrap {
+      overflow: hidden;
+      mask-image: linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%);
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%);
+    }
+    .trust-marquee {
+      display: flex;
+      align-items: center;
+      gap: 52px;
+      width: max-content;
+      animation: trustMarquee 30s linear infinite;
+    }
+    .trust-marquee:hover { animation-play-state: paused; }
+    .trust-logo {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-muted, #888);
+      white-space: nowrap;
+      font-family: Georgia, 'Times New Roman', serif;
+      transition: color 0.2s;
+      letter-spacing: 0.2px;
+      opacity: 0.65;
+    }
+    .trust-logo:hover { color: #00AFF0; opacity: 1; }
+    @keyframes trustMarquee {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    @media (max-width: 768px) {
+      .trust-stat { padding: 8px 16px; min-width: 90px; }
+      .trust-number { font-size: 26px; }
+      .trust-label { font-size: 10px; }
+      .trust-divider { height: 36px; }
+    }
+    @media (max-width: 480px) {
+      .trust-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        padding: 16px 8px;
+        gap: 0;
+      }
+      .trust-divider { display: none; }
+      .trust-stat {
+        padding: 14px 8px;
+        border-bottom: 1px solid var(--border-color);
+      }
+      .trust-stat:nth-child(odd) { border-right: 1px solid var(--border-color); }
+      .trust-stat:last-child,
+      .trust-stat:nth-last-child(2):nth-child(odd) { border-bottom: none; }
+      .trust-number { font-size: 22px; }
+    }
+
+    /* ============================================
        SAFE SEARCH MODAL (First-Time Consent)
        ============================================ */
     .safe-search-modal {
@@ -2322,6 +2446,73 @@
 
     <!-- Active filters chips -->
     <div id="activeFilters" class="recent-searches" aria-live="polite"></div>
+
+    <!-- TRUST SIGNALS -->
+    <div class="trust-section" id="trustSection">
+      <div class="trust-stats">
+        <div class="trust-stat">
+          <span class="trust-number" data-target="100" data-suffix="K+">0K+</span>
+          <span class="trust-label">Creator Profiles</span>
+        </div>
+        <div class="trust-divider"></div>
+        <div class="trust-stat">
+          <span class="trust-number" data-target="150" data-suffix="K+">0K+</span>
+          <span class="trust-label">Monthly Visitors</span>
+        </div>
+        <div class="trust-divider"></div>
+        <div class="trust-stat">
+          <span class="trust-number" data-target="4.9" data-suffix="&#9733;">0&#9733;</span>
+          <span class="trust-label">User Rating</span>
+        </div>
+        <div class="trust-divider"></div>
+        <div class="trust-stat">
+          <span class="trust-number" data-target="100" data-suffix="% Free">0% Free</span>
+          <span class="trust-label">Always Free to Use</span>
+        </div>
+      </div>
+      <div class="trust-featured-label">&#128240;&nbsp; As Featured In</div>
+      <div class="trust-marquee-wrap">
+        <div class="trust-marquee">
+          <span class="trust-logo">New York Post</span>
+          <span class="trust-logo">&#9642;</span>
+          <span class="trust-logo">The Sun</span>
+          <span class="trust-logo">&#9642;</span>
+          <span class="trust-logo">Wired</span>
+          <span class="trust-logo">&#9642;</span>
+          <span class="trust-logo">Forbes</span>
+          <span class="trust-logo">&#9642;</span>
+          <span class="trust-logo">Yahoo News</span>
+          <span class="trust-logo">&#9642;</span>
+          <span class="trust-logo">Vice</span>
+          <span class="trust-logo">&#9642;</span>
+          <span class="trust-logo">Wall Street Journal</span>
+          <span class="trust-logo">&#9642;</span>
+          <span class="trust-logo">BBC</span>
+          <span class="trust-logo">&#9642;</span>
+          <span class="trust-logo">The Guardian</span>
+          <span class="trust-logo">&#9642;</span>
+          <!-- duplicate for seamless loop -->
+          <span class="trust-logo">New York Post</span>
+          <span class="trust-logo">&#9642;</span>
+          <span class="trust-logo">The Sun</span>
+          <span class="trust-logo">&#9642;</span>
+          <span class="trust-logo">Wired</span>
+          <span class="trust-logo">&#9642;</span>
+          <span class="trust-logo">Forbes</span>
+          <span class="trust-logo">&#9642;</span>
+          <span class="trust-logo">Yahoo News</span>
+          <span class="trust-logo">&#9642;</span>
+          <span class="trust-logo">Vice</span>
+          <span class="trust-logo">&#9642;</span>
+          <span class="trust-logo">Wall Street Journal</span>
+          <span class="trust-logo">&#9642;</span>
+          <span class="trust-logo">BBC</span>
+          <span class="trust-logo">&#9642;</span>
+          <span class="trust-logo">The Guardian</span>
+          <span class="trust-logo">&#9642;</span>
+        </div>
+      </div>
+    </div>
 
     <!-- Results -->
     <div id="results" class="row g-3 justify-content-center"></div>
@@ -4637,6 +4828,42 @@
     }catch(e){}})();
   </script>
   <script src="/utils/wishlist-badge.js?v=20251116-1" defer></script>
+
+  <!-- TRUST SIGNALS COUNT-UP -->
+  <script>
+  (function () {
+    var nums = document.querySelectorAll('.trust-number');
+    if (!nums.length) return;
+    function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
+    function animateCount(el) {
+      var raw    = el.dataset.target;
+      var target = parseFloat(raw);
+      var suffix = el.dataset.suffix || '';
+      var isDecimal = raw.indexOf('.') !== -1;
+      var duration = 1800;
+      var start = performance.now();
+      function tick(now) {
+        var elapsed  = now - start;
+        var progress = Math.min(elapsed / duration, 1);
+        var eased    = easeOutQuart(progress);
+        var value    = target * eased;
+        var display  = isDecimal ? value.toFixed(1) : Math.round(value);
+        el.innerHTML = display + suffix;
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          animateCount(entry.target);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.4 });
+    nums.forEach(function (el) { observer.observe(el); });
+  }());
+  </script>
 
   <!-- NEW THIS WEEK CAROUSEL LOGIC -->
   <script>
