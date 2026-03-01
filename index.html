@@ -1968,6 +1968,92 @@
     }
 
     /* ============================================
+       CATEGORY EXPLORER GRID
+       ============================================ */
+    .cat-explorer {
+      margin: 0 auto 52px;
+      max-width: 1100px;
+      padding: 0 16px;
+    }
+    .cat-explorer-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 22px;
+    }
+    .cat-explorer-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin: 0;
+    }
+    .cat-explorer-view-all {
+      font-size: 13px;
+      font-weight: 600;
+      color: #00AFF0;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .cat-explorer-view-all:hover { opacity: 0.7; }
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 12px;
+    }
+    .cat-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 20px 6px 16px;
+      background: var(--card-bg, #fff);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      text-decoration: none;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .cat-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 50% 0%, rgba(0,175,240,0.1) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.22s;
+      pointer-events: none;
+    }
+    .cat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 36px rgba(0,175,240,0.22);
+      border-color: rgba(0,175,240,0.7);
+    }
+    .cat-card:hover::before { opacity: 1; }
+    .cat-emoji {
+      font-size: 30px;
+      line-height: 1;
+      transition: transform 0.2s;
+    }
+    .cat-card:hover .cat-emoji { transform: scale(1.18); }
+    .cat-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-align: center;
+      line-height: 1.3;
+      letter-spacing: 0.2px;
+    }
+    @media (max-width: 900px) {
+      .cat-grid { grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    }
+    @media (max-width: 480px) {
+      .cat-grid { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+      .cat-card { padding: 14px 4px 12px; border-radius: 14px; }
+      .cat-emoji { font-size: 24px; }
+      .cat-label { font-size: 10px; }
+    }
+
+    /* ============================================
        SAFE SEARCH MODAL (First-Time Consent)
        ============================================ */
     .safe-search-modal {
@@ -2520,6 +2606,80 @@
       </button>
       <p id="loadedCount" class="mt-2" style="color: #888; font-size: 14px; margin-bottom: 0;"></p>
     </div>
+
+    <!-- CATEGORY EXPLORER -->
+    <section class="cat-explorer" id="categoryExplorer" aria-label="Browse OnlyFans creators by category">
+      <div class="cat-explorer-header">
+        <h2 class="cat-explorer-title">Browse by <span style="color:#00AFF0">Category</span></h2>
+        <a href="/categories/" class="cat-explorer-view-all">View all categories &rarr;</a>
+      </div>
+      <nav class="cat-grid" aria-label="Category navigation">
+        <a href="/categories/big-ass/" class="cat-card">
+          <span class="cat-emoji">&#127821;</span>
+          <span class="cat-label">Big Ass</span>
+        </a>
+        <a href="/categories/big-tits/" class="cat-card">
+          <span class="cat-emoji">&#128525;</span>
+          <span class="cat-label">Big Tits</span>
+        </a>
+        <a href="/categories/milf/" class="cat-card">
+          <span class="cat-emoji">&#128139;</span>
+          <span class="cat-label">MILF</span>
+        </a>
+        <a href="/categories/pawg/" class="cat-card">
+          <span class="cat-emoji">&#128293;</span>
+          <span class="cat-label">PAWG</span>
+        </a>
+        <a href="/categories/ebony/" class="cat-card">
+          <span class="cat-emoji">&#10084;&#65039;</span>
+          <span class="cat-label">Ebony</span>
+        </a>
+        <a href="/categories/bbw/" class="cat-card">
+          <span class="cat-emoji">&#128522;</span>
+          <span class="cat-label">BBW</span>
+        </a>
+        <a href="/categories/blonde/" class="cat-card">
+          <span class="cat-emoji">&#128049;&#8205;&#9792;&#65039;</span>
+          <span class="cat-label">Blonde</span>
+        </a>
+        <a href="/categories/redhead/" class="cat-card">
+          <span class="cat-emoji">&#128105;&#8205;&#129747;</span>
+          <span class="cat-label">Redhead</span>
+        </a>
+        <a href="/categories/lesbian/" class="cat-card">
+          <span class="cat-emoji">&#127801;</span>
+          <span class="cat-label">Lesbian</span>
+        </a>
+        <a href="/categories/trans/" class="cat-card">
+          <span class="cat-emoji">&#127987;&#65039;&#8205;&#9895;&#65039;</span>
+          <span class="cat-label">Trans</span>
+        </a>
+        <a href="/categories/feet/" class="cat-card">
+          <span class="cat-emoji">&#129463;</span>
+          <span class="cat-label">Feet</span>
+        </a>
+        <a href="/categories/amateur/" class="cat-card">
+          <span class="cat-emoji">&#127909;</span>
+          <span class="cat-label">Amateur</span>
+        </a>
+        <a href="/categories/squirt/" class="cat-card">
+          <span class="cat-emoji">&#128166;</span>
+          <span class="cat-label">Squirt</span>
+        </a>
+        <a href="/categories/goth-free/" class="cat-card">
+          <span class="cat-emoji">&#128149;</span>
+          <span class="cat-label">Goth Free</span>
+        </a>
+        <a href="/categories/blowjobs/" class="cat-card">
+          <span class="cat-emoji">&#128065;&#65039;</span>
+          <span class="cat-label">Blowjobs</span>
+        </a>
+        <a href="/categories/anal/" class="cat-card">
+          <span class="cat-emoji">&#129395;</span>
+          <span class="cat-label">Anal</span>
+        </a>
+      </nav>
+    </section>
 
     <!-- Trending Reels Section -->
     <section id="trendingReels" class="trending-reels-section">
