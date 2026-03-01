@@ -2128,6 +2128,126 @@
     }
 
     /* ============================================
+       TESTIMONIALS
+       ============================================ */
+    .testimonials-section {
+      padding: 52px 0 48px;
+      text-align: center;
+    }
+    .testimonials-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 0 0 8px;
+    }
+    .testimonials-sub {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin: 0 0 40px;
+    }
+    .testimonial-stage {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0 24px;
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .testimonial-item {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      animation: tFadeIn 0.55s ease;
+    }
+    .testimonial-item.active { display: flex; }
+    @keyframes tFadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .testimonial-quote {
+      font-size: 21px;
+      line-height: 1.6;
+      color: var(--text-primary);
+      font-style: italic;
+      margin: 0 0 28px;
+      position: relative;
+      padding-left: 10px;
+    }
+    .testimonial-quote::before {
+      content: '\201C';
+      font-size: 80px;
+      line-height: 0;
+      color: #00AFF0;
+      opacity: 0.28;
+      position: absolute;
+      top: 32px;
+      left: -14px;
+      font-style: normal;
+      font-family: Georgia, serif;
+    }
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .testimonial-avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #00AFF0 0%, #0077b6 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .testimonial-meta { text-align: left; }
+    .testimonial-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .testimonial-handle {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+    .testimonial-stars {
+      color: #f59e0b;
+      font-size: 13px;
+      margin-top: 3px;
+      letter-spacing: 1px;
+    }
+    .testimonial-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 32px;
+    }
+    .t-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--border-color, #ddd);
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      transition: background 0.2s, width 0.2s;
+    }
+    .t-dot.active {
+      background: #00AFF0;
+      width: 26px;
+      border-radius: 5px;
+    }
+    @media (max-width: 600px) {
+      .testimonial-quote { font-size: 17px; }
+    }
+
+    /* ============================================
        SAFE SEARCH MODAL (First-Time Consent)
        ============================================ */
     .safe-search-modal {
@@ -2737,6 +2857,70 @@
         <button class="ntw-arrow ntw-arrow-right" id="ntwNext" aria-label="Next creators">&#8250;</button>
       </div>
       <div class="ntw-dots" id="ntwDots"></div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="testimonials-section" aria-label="User testimonials">
+      <h2 class="testimonials-title">What Our <span style="color:#00AFF0">Users Say</span></h2>
+      <p class="testimonials-sub">Thousands of fans use Fanspedia every day</p>
+      <div class="testimonial-stage" id="testimonialStage">
+        <div class="testimonial-item active">
+          <p class="testimonial-quote">Fanspedia is the only search engine I trust when I want to find new creators. The filters are super clean and it actually works &mdash; unlike some other sites that are just clickbait.</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">JR</div>
+            <div class="testimonial-meta">
+              <div class="testimonial-name">Jake R.</div>
+              <div class="testimonial-handle">Reddit &middot; r/OnlyFansAdvice</div>
+              <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-item">
+          <p class="testimonial-quote">I found three of my absolute favorite creators on here in one afternoon. The category browsing is genuinely great and the verified badge filter is a game changer.</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">MT</div>
+            <div class="testimonial-meta">
+              <div class="testimonial-name">Marcus T.</div>
+              <div class="testimonial-handle">Twitter / X &middot; @marcust_real</div>
+              <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-item">
+          <p class="testimonial-quote">Been using this site for months. It&rsquo;s free, fast, and doesn&rsquo;t spam you with garbage. The price filter alone saves me so much time.</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">DK</div>
+            <div class="testimonial-meta">
+              <div class="testimonial-name">Dan K.</div>
+              <div class="testimonial-handle">Discord &middot; OF Community Server</div>
+              <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-item">
+          <p class="testimonial-quote">Finally a site where you can actually search by category without having to scroll through hundreds of irrelevant results. Bookmarked and using daily.</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">AL</div>
+            <div class="testimonial-meta">
+              <div class="testimonial-name">Alex L.</div>
+              <div class="testimonial-handle">Trustpilot &middot; Verified Review</div>
+              <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-item">
+          <p class="testimonial-quote">Showed this to my friend group and now we all use it. It&rsquo;s clean, no ads shoved in your face, and the search actually returns relevant results.</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">SC</div>
+            <div class="testimonial-meta">
+              <div class="testimonial-name">Sam C.</div>
+              <div class="testimonial-handle">Reddit &middot; r/FindAnOnlyFans</div>
+              <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-nav" id="testimonialNav"></div>
     </section>
 
     <!-- SEO Content Section -->
@@ -5164,6 +5348,45 @@
     } else {
       setTimeout(loadImages, 500);
     }
+  }());
+  </script>
+
+  <!-- TESTIMONIALS LOGIC -->
+  <script>
+  (function () {
+    var items = document.querySelectorAll('.testimonial-item');
+    var nav   = document.getElementById('testimonialNav');
+    var cur   = 0;
+    var timer;
+
+    if (!items.length || !nav) return;
+
+    nav.innerHTML = Array.from(items).map(function (_, i) {
+      return '<button class="t-dot' + (i === 0 ? ' active' : '') + '" aria-label="Review ' + (i + 1) + '"></button>';
+    }).join('');
+
+    var dotEls = nav.querySelectorAll('.t-dot');
+
+    function show(n) {
+      items[cur].classList.remove('active');
+      dotEls[cur].classList.remove('active');
+      cur = (n + items.length) % items.length;
+      items[cur].classList.add('active');
+      dotEls[cur].classList.add('active');
+    }
+
+    dotEls.forEach(function (d, i) {
+      d.addEventListener('click', function () {
+        clearInterval(timer);
+        show(i);
+        startTimer();
+      });
+    });
+
+    function startTimer() {
+      timer = setInterval(function () { show(cur + 1); }, 5000);
+    }
+    startTimer();
   }());
   </script>
 
