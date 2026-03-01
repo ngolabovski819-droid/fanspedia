@@ -5,6 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import searchHandler from './api/search.js';
+import reelHandler from './api/reel.js';
 import blogHandler from './api/blog.js';
 import blogPostHandler from './api/blog-post.js';
 import ssrCategoryHandler from './api/ssr/category.js';
@@ -41,6 +42,11 @@ app.all('/api/search', async (req, res) => {
     console.error('local search handler error', err);
     res.status(500).json({ error: 'local_handler_error', message: String(err) });
   }
+});
+
+// Reel API route
+app.all('/api/reel', async (req, res) => {
+  try { await reelHandler(req, res); } catch (err) { res.status(500).json({ error: String(err) }); }
 });
 
 // Blog API routes
