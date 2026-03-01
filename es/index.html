@@ -1968,108 +1968,163 @@
     }
 
     /* ============================================
-       CATEGORY EXPLORER — IMAGE CARDS
+       CATEGORY CAROUSEL
        ============================================ */
-    .cat-explorer {
-      margin: 0 auto 56px;
+    .cat-section {
+      padding: 0 0 40px;
+    }
+    .cat-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
       max-width: 1100px;
+      margin: 0 auto 24px;
       padding: 0 16px;
     }
-    .cat-explorer-header {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      margin-bottom: 24px;
-    }
-    .cat-explorer-title {
-      font-size: 26px;
-      font-weight: 800;
+    .cat-header-title {
+      font-size: 28px;
+      font-weight: 700;
       color: var(--text-primary);
       margin: 0;
     }
-    .cat-explorer-view-all {
+    .cat-header-sub {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin: 6px 0 0;
+    }
+    .cat-view-all {
       font-size: 13px;
       font-weight: 600;
       color: #00AFF0;
       text-decoration: none;
+      white-space: nowrap;
       transition: opacity 0.2s;
     }
-    .cat-explorer-view-all:hover { opacity: 0.7; }
-    .cat-grid {
+    .cat-view-all:hover { opacity: 0.7; }
+    .cat-carousel-wrap {
+      position: relative;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 60px;
+    }
+    .cat-cards {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 16px;
     }
-    .cat-card {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      aspect-ratio: 3/4;
-      border-radius: 20px;
-      overflow: hidden;
+    /* photo card */
+    .cat-photo-card {
+      display: block;
       text-decoration: none;
-      background: var(--cat-bg);
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: 2/3;
+      background: var(--bg-secondary);
       transition: transform 0.22s ease, box-shadow 0.22s ease;
     }
-    /* bottom scrim for label legibility */
-    .cat-card::after {
-      content: '';
+    .cat-photo-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 18px 48px rgba(0,0,0,0.28);
+    }
+    .cat-photo-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .cat-photo-card .cat-scrim {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.1) 55%, transparent 100%);
+      background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.08) 55%, transparent 100%);
       pointer-events: none;
-      z-index: 1;
     }
-    .cat-card:hover {
-      transform: translateY(-6px) scale(1.025);
-      box-shadow: 0 22px 52px rgba(0,0,0,0.38);
-    }
-    .cat-emoji {
-      font-size: 46px;
-      position: relative;
-      z-index: 2;
-      filter: drop-shadow(0 3px 10px rgba(0,0,0,0.4));
-      transition: transform 0.22s ease;
-      /* nudge up slightly so it sits above center-ish */
-      margin-bottom: 28px;
-    }
-    .cat-card:hover .cat-emoji {
-      transform: scale(1.16) translateY(-5px);
-    }
-    .cat-footer {
+    .cat-photo-label {
       position: absolute;
       bottom: 0; left: 0; right: 0;
-      z-index: 3;
-      padding: 10px 14px 12px;
+      padding: 12px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-    .cat-name {
+    .cat-photo-name {
       font-size: 13px;
       font-weight: 700;
       color: #fff;
-      text-shadow: 0 1px 5px rgba(0,0,0,0.6);
-      letter-spacing: 0.3px;
+      text-shadow: 0 1px 5px rgba(0,0,0,0.5);
+      letter-spacing: 0.2px;
     }
-    .cat-arrow {
+    .cat-photo-arrow {
       font-size: 15px;
-      color: rgba(255,255,255,0.65);
+      color: rgba(255,255,255,0.6);
       transition: transform 0.2s, color 0.2s;
     }
-    .cat-card:hover .cat-arrow {
+    .cat-photo-card:hover .cat-photo-arrow {
       transform: translateX(4px);
       color: #fff;
     }
-    @media (max-width: 800px) {
-      .cat-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-      .cat-emoji { font-size: 36px; margin-bottom: 22px; }
-      .cat-name { font-size: 12px; }
+    /* skeleton */
+    .cat-skeleton {
+      aspect-ratio: 2/3;
+      border-radius: 16px;
+      background: linear-gradient(90deg,#e8e8e8 25%,#f0f0f0 50%,#e8e8e8 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
     }
-    @media (max-width: 400px) {
-      .cat-grid { gap: 10px; }
-      .cat-card { border-radius: 16px; }
+    [data-theme="dark"] .cat-skeleton {
+      background: linear-gradient(90deg,#2a2a3e 25%,#323246 50%,#2a2a3e 75%);
+      background-size: 200% 100%;
+    }
+    /* reuse ntw-arrow styles — just alias */
+    .cat-arrow-btn {
+      position: absolute;
+      top: 40%;
+      transform: translateY(-50%);
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: none;
+      background: var(--card-bg, #fff);
+      box-shadow: 0 2px 14px rgba(0,0,0,0.14);
+      font-size: 26px;
+      cursor: pointer;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+      z-index: 2;
+    }
+    .cat-arrow-btn:hover { background: #00AFF0; color: #fff; box-shadow: 0 4px 18px rgba(0,175,240,0.45); }
+    .cat-arrow-btn:disabled { opacity: 0.28; cursor: default; pointer-events: none; }
+    .cat-arrow-left  { left: 4px; }
+    .cat-arrow-right { right: 4px; }
+    .cat-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+    }
+    .cat-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--border-color, #ddd);
+      transition: background 0.2s, width 0.2s;
+      cursor: pointer;
+    }
+    .cat-dot.active {
+      background: #00AFF0;
+      width: 26px;
+      border-radius: 5px;
+    }
+    @media (max-width: 767px) {
+      .cat-cards { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .cat-carousel-wrap { padding: 0 48px; }
+      .cat-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+    }
+    @media (max-width: 480px) {
+      .cat-carousel-wrap { padding: 0 44px; }
     }
 
     /* ============================================
@@ -2633,78 +2688,26 @@
       <p id="loadedCount" class="mt-2" style="color: #888; font-size: 14px; margin-bottom: 0;"></p>
     </div>
 
-    <!-- CATEGORY EXPLORER -->
-    <section class="cat-explorer" id="categoryExplorer" aria-label="Browse OnlyFans creators by category">
-      <div class="cat-explorer-header">
-        <h2 class="cat-explorer-title">Browse by <span style="color:#00AFF0">Category</span></h2>
-        <a href="/categories/" class="cat-explorer-view-all">View all &rarr;</a>
+    <!-- CATEGORY CAROUSEL -->
+    <section class="cat-section" id="catSection" aria-label="Browse OnlyFans creators by category">
+      <div class="cat-header">
+        <div>
+          <h2 class="cat-header-title">Browse by <span style="color:#00AFF0">Category</span></h2>
+          <p class="cat-header-sub">Find creators matching your taste</p>
+        </div>
+        <a href="/categories/" class="cat-view-all">View all categories &rarr;</a>
       </div>
-      <nav class="cat-grid" aria-label="Category navigation">
-        <a href="/categories/big-ass/" class="cat-card" style="--cat-bg:linear-gradient(145deg,#f093fb 0%,#f5576c 100%)">
-          <span class="cat-emoji">&#127821;</span>
-          <div class="cat-footer"><span class="cat-name">Big Ass</span><span class="cat-arrow">&#8594;</span></div>
-        </a>
-        <a href="/categories/big-tits/" class="cat-card" style="--cat-bg:linear-gradient(145deg,#c471ed 0%,#f64f59 100%)">
-          <span class="cat-emoji">&#128525;</span>
-          <div class="cat-footer"><span class="cat-name">Big Tits</span><span class="cat-arrow">&#8594;</span></div>
-        </a>
-        <a href="/categories/milf/" class="cat-card" style="--cat-bg:linear-gradient(145deg,#f6d365 0%,#f76b1c 100%)">
-          <span class="cat-emoji">&#128139;</span>
-          <div class="cat-footer"><span class="cat-name">MILF</span><span class="cat-arrow">&#8594;</span></div>
-        </a>
-        <a href="/categories/pawg/" class="cat-card" style="--cat-bg:linear-gradient(145deg,#ff9a9e 0%,#e040a0 100%)">
-          <span class="cat-emoji">&#128293;</span>
-          <div class="cat-footer"><span class="cat-name">PAWG</span><span class="cat-arrow">&#8594;</span></div>
-        </a>
-        <a href="/categories/ebony/" class="cat-card" style="--cat-bg:linear-gradient(145deg,#4a1272 0%,#8e3cba 100%)">
-          <span class="cat-emoji">&#10084;&#65039;</span>
-          <div class="cat-footer"><span class="cat-name">Ebony</span><span class="cat-arrow">&#8594;</span></div>
-        </a>
-        <a href="/categories/bbw/" class="cat-card" style="--cat-bg:linear-gradient(145deg,#ee9ca7 0%,#d4698f 100%)">
-          <span class="cat-emoji">&#128522;</span>
-          <div class="cat-footer"><span class="cat-name">BBW</span><span class="cat-arrow">&#8594;</span></div>
-        </a>
-        <a href="/categories/blonde/" class="cat-card" style="--cat-bg:linear-gradient(145deg,#f7971e 0%,#ffd200 100%)">
-          <span class="cat-emoji">&#128049;</span>
-          <div class="cat-footer"><span class="cat-name">Blonde</span><span class="cat-arrow">&#8594;</span></div>
-        </a>
-        <a href="/categories/redhead/" class="cat-card" style="--cat-bg:linear-gradient(145deg,#cb2d3e 0%,#ef473a 100%)">
-          <span class="cat-emoji">&#128105;</span>
-          <div class="cat-footer"><span class="cat-name">Redhead</span><span class="cat-arrow">&#8594;</span></div>
-        </a>
-        <a href="/categories/lesbian/" class="cat-card" style="--cat-bg:linear-gradient(145deg,#f093fb 0%,#f5576c 50%,#4facfe 100%)">
-          <span class="cat-emoji">&#127801;</span>
-          <div class="cat-footer"><span class="cat-name">Lesbian</span><span class="cat-arrow">&#8594;</span></div>
-        </a>
-        <a href="/categories/trans/" class="cat-card" style="--cat-bg:linear-gradient(145deg,#74b9ff 0%,#fd79a8 100%)">
-          <span class="cat-emoji">&#127987;&#65039;</span>
-          <div class="cat-footer"><span class="cat-name">Trans</span><span class="cat-arrow">&#8594;</span></div>
-        </a>
-        <a href="/categories/feet/" class="cat-card" style="--cat-bg:linear-gradient(145deg,#d4956a 0%,#a0522d 100%)">
-          <span class="cat-emoji">&#129463;</span>
-          <div class="cat-footer"><span class="cat-name">Feet</span><span class="cat-arrow">&#8594;</span></div>
-        </a>
-        <a href="/categories/amateur/" class="cat-card" style="--cat-bg:linear-gradient(145deg,#43e97b 0%,#0fa3b1 100%)">
-          <span class="cat-emoji">&#127909;</span>
-          <div class="cat-footer"><span class="cat-name">Amateur</span><span class="cat-arrow">&#8594;</span></div>
-        </a>
-        <a href="/categories/squirt/" class="cat-card" style="--cat-bg:linear-gradient(145deg,#4facfe 0%,#00d2ff 100%)">
-          <span class="cat-emoji">&#128166;</span>
-          <div class="cat-footer"><span class="cat-name">Squirt</span><span class="cat-arrow">&#8594;</span></div>
-        </a>
-        <a href="/categories/goth-free/" class="cat-card" style="--cat-bg:linear-gradient(145deg,#1a1a2e 0%,#6c3fa0 100%)">
-          <span class="cat-emoji">&#128149;</span>
-          <div class="cat-footer"><span class="cat-name">Goth Free</span><span class="cat-arrow">&#8594;</span></div>
-        </a>
-        <a href="/categories/blowjobs/" class="cat-card" style="--cat-bg:linear-gradient(145deg,#f64f59 0%,#c471ed 100%)">
-          <span class="cat-emoji">&#128065;&#65039;</span>
-          <div class="cat-footer"><span class="cat-name">Blowjobs</span><span class="cat-arrow">&#8594;</span></div>
-        </a>
-        <a href="/categories/anal/" class="cat-card" style="--cat-bg:linear-gradient(145deg,#d31027 0%,#ea384d 100%)">
-          <span class="cat-emoji">&#129395;</span>
-          <div class="cat-footer"><span class="cat-name">Anal</span><span class="cat-arrow">&#8594;</span></div>
-        </a>
-      </nav>
+      <div class="cat-carousel-wrap">
+        <button class="cat-arrow-btn cat-arrow-left" id="catPrev" aria-label="Previous categories">&#8249;</button>
+        <div class="cat-cards" id="catCards">
+          <div class="cat-skeleton"></div>
+          <div class="cat-skeleton"></div>
+          <div class="cat-skeleton"></div>
+          <div class="cat-skeleton"></div>
+        </div>
+        <button class="cat-arrow-btn cat-arrow-right" id="catNext" aria-label="Next categories">&#8250;</button>
+      </div>
+      <div class="cat-dots" id="catDots"></div>
     </section>
 
     <!-- Trending Reels Section -->
@@ -5041,6 +5044,126 @@
       });
     }, { threshold: 0.4 });
     nums.forEach(function (el) { observer.observe(el); });
+  }());
+  </script>
+
+  <!-- CATEGORY CAROUSEL LOGIC -->
+  <script>
+  (function () {
+    var CATS = [
+      { label: 'Big Ass',   slug: 'big-ass',   q: 'big ass'  },
+      { label: 'Big Tits',  slug: 'big-tits',  q: 'big tits' },
+      { label: 'MILF',      slug: 'milf',      q: 'milf'     },
+      { label: 'PAWG',      slug: 'pawg',      q: 'pawg'     },
+      { label: 'Ebony',     slug: 'ebony',     q: 'ebony'    },
+      { label: 'BBW',       slug: 'bbw',       q: 'bbw'      },
+      { label: 'Blonde',    slug: 'blonde',    q: 'blonde'   },
+      { label: 'Redhead',   slug: 'redhead',   q: 'redhead'  },
+      { label: 'Lesbian',   slug: 'lesbian',   q: 'lesbian'  },
+      { label: 'Trans',     slug: 'trans',     q: 'trans'    },
+      { label: 'Feet',      slug: 'feet',      q: 'feet'     },
+      { label: 'Amateur',   slug: 'amateur',   q: 'amateur'  },
+      { label: 'Squirt',    slug: 'squirt',    q: 'squirt'   },
+      { label: 'Goth Free', slug: 'goth-free', q: 'goth'     },
+      { label: 'Blowjobs',  slug: 'blowjobs',  q: 'blowjob'  },
+      { label: 'Anal',      slug: 'anal',      q: 'anal'     }
+    ];
+
+    var pool = CATS.map(function (c) { return { label: c.label, slug: c.slug, img: null }; });
+    var idx  = 0;
+
+    var wrap    = document.getElementById('catCards');
+    var dots    = document.getElementById('catDots');
+    var prevBtn = document.getElementById('catPrev');
+    var nextBtn = document.getElementById('catNext');
+
+    function perPage() {
+      return (window.innerWidth < 768) ? 2 : 4;
+    }
+
+    function thumb(url) {
+      if (!url || !url.startsWith('http')) return null;
+      return 'https://images.weserv.nl/?url=' + encodeURIComponent(url) + '&w=360&h=480&fit=cover&output=webp';
+    }
+
+    function renderCards() {
+      if (!wrap) return;
+      var pp    = perPage();
+      var slice = pool.slice(idx, idx + pp);
+      wrap.innerHTML = slice.map(function (c, i) {
+        var t = c.img ? thumb(c.img) : null;
+        var style = t ? '' : 'background:var(--bg-secondary);';
+        var imgHtml = t
+          ? '<img src="' + t + '" alt="' + c.label + ' OnlyFans creators" loading="' + (i === 0 ? 'eager' : 'lazy') + '" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display=\'none\';">'
+          : '';
+        return [
+          '<a href="/categories/' + c.slug + '/" class="cat-photo-card" style="' + style + '">',
+            imgHtml,
+            '<div class="cat-scrim"></div>',
+            '<div class="cat-photo-label">',
+              '<span class="cat-photo-name">' + c.label + '</span>',
+              '<span class="cat-photo-arrow">&#8594;</span>',
+            '</div>',
+          '</a>'
+        ].join('');
+      }).join('');
+      renderDots(pp);
+      updateArrows(pp);
+    }
+
+    function renderDots(pp) {
+      if (!dots) return;
+      var total   = Math.ceil(pool.length / pp);
+      var current = Math.floor(idx / pp);
+      dots.innerHTML = Array.from({ length: total }, function (_, i) {
+        return '<div class="cat-dot' + (i === current ? ' active' : '') + '" data-i="' + (i * pp) + '"></div>';
+      }).join('');
+      dots.querySelectorAll('.cat-dot').forEach(function (d) {
+        d.addEventListener('click', function () {
+          idx = parseInt(d.dataset.i, 10);
+          renderCards();
+        });
+      });
+    }
+
+    function updateArrows(pp) {
+      if (prevBtn) prevBtn.disabled = idx === 0;
+      if (nextBtn) nextBtn.disabled = idx + pp >= pool.length;
+    }
+
+    if (prevBtn) prevBtn.addEventListener('click', function () {
+      idx = Math.max(0, idx - perPage());
+      renderCards();
+    });
+    if (nextBtn) nextBtn.addEventListener('click', function () {
+      var pp = perPage();
+      if (idx + pp < pool.length) { idx += pp; renderCards(); }
+    });
+    window.addEventListener('resize', function () { renderCards(); });
+
+    // Initial render with skeletons replaced by label-only cards
+    renderCards();
+
+    // Fetch real images on idle
+    function loadImages() {
+      var fetches = CATS.map(function (c, i) {
+        return fetch('/api/search?q=' + encodeURIComponent(c.q) + '&page_size=5&page=1')
+          .then(function (r) { return r.ok ? r.json() : []; })
+          .then(function (data) {
+            var list = Array.isArray(data) ? data : [];
+            var hit  = list.find(function (cr) { return cr.avatar && cr.avatar.startsWith('http'); });
+            if (hit) { pool[i].img = hit.avatar; }
+          })
+          .catch(function () {});
+      });
+      Promise.all(fetches).then(function () { renderCards(); });
+    }
+
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(loadImages, { timeout: 5000 });
+    } else {
+      setTimeout(loadImages, 500);
+    }
   }());
   </script>
 
