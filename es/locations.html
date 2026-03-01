@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ubicaciones de OnlyFans | FansPedia</title>
-  <meta name="description" content="Explora modelos por ubicación en FansPedia. Descubre creadoras de todo el mundo y encuentra talento cerca de ti." />
+  <title>OnlyFans Locations | FansPedia</title>
+  <meta name="description" content="Explore models by location on FansPedia. Discover creators from around the world and find nearby talent." />
   <link rel="canonical" href="https://fanspedia.net/locations/" />
   <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg" />
 
@@ -1014,7 +1014,7 @@
     .sticky-bottom-nav .label{font-size:11px;font-weight:700;color:var(--text-primary)}
   </style>
   <!-- i18n Translation Module -->
-  <script src="/config/i18n.js?v=20260217-1"></script>
+  <script src="/config/i18n.js?v=20260217-1" defer></script>
     <link rel="alternate" hreflang="en" href="https://fanspedia.net/" />
   <link rel="alternate" hreflang="es" href="https://fanspedia.net/es/" />
   <link rel="alternate" hreflang="x-default" href="https://fanspedia.net/" />
@@ -1069,7 +1069,7 @@
         <!-- Desktop categories -->
         <div class="desktop-nav">
           <button id="categoriesToggle" class="nav-btn" aria-haspopup="true" aria-expanded="false">
-            Categorías <i class="fas fa-chevron-down" aria-hidden="true"></i>
+            Categories <i class="fas fa-chevron-down" aria-hidden="true"></i>
           </button>
           <div id="categoriesMenu" class="dropdown-menu" role="menu" aria-hidden="true">
             <!-- Populated dynamically from config/categories.js -->
@@ -1078,7 +1078,7 @@
 
         <div class="desktop-nav">
           <a href="/locations/" class="nav-btn">
-            Ubicaciones <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+            Locations <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
           </a>
         </div>
 
@@ -1089,7 +1089,7 @@
             <input
               type="text"
               class="header-search-input"
-              placeholder="Buscar por nombre, ubicación, categoría..."
+              placeholder="Search by name, location, category..."
               id="headerSearch"
               autocomplete="off"
               autocapitalize="none"
@@ -1100,17 +1100,17 @@
 
         <!-- Actions -->
         <div class="header-actions">
-          <button class="mobile-search-trigger" id="mobileSearchTrigger" aria-label="Buscar">
+          <button class="mobile-search-trigger" id="mobileSearchTrigger" aria-label="Search">
             <i class="fas fa-search"></i>
           </button>
           <button class="lang-toggle" id="langToggle" onclick="toggleLanguage()"><span id="langIndicator">EN</span></button>
-          <button class="safe-search-toggle" id="safeSearchToggle" aria-label="Alternar Búsqueda Segura (desenfocar imágenes)" title="Búsqueda Segura: navega cómodamente en público">
+          <button class="safe-search-toggle" id="safeSearchToggle" aria-label="Toggle Safe Search (blur images)" title="Safe Search: Browse comfortably in public">
             <i class="fas fa-eye-slash"></i>
           </button>
-          <button class="theme-toggle" id="themeToggle" aria-label="Cambiar modo oscuro">
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
             <i class="fas fa-moon"></i>
           </button>
-          <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menú">
+          <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
             <i class="fas fa-bars"></i>
           </button>
         </div>
@@ -1121,16 +1121,16 @@
   <!-- Mobile Search Modal -->
   <div class="mobile-search-modal" id="mobileSearchModal">
     <div class="mobile-search-header">
-      <button class="mobile-search-back" id="mobileSearchBack" aria-label="Cerrar búsqueda">
+      <button class="mobile-search-back" id="mobileSearchBack" aria-label="Close search">
         <i class="fas fa-arrow-left"></i>
       </button>
       <div class="mobile-search-input-wrapper">
         <i class="fas fa-search mobile-search-icon"></i>
-        <input type="text" class="mobile-search-input" id="mobileSearchInput" placeholder="Buscar por nombre, ubicación, categoría..." autocomplete="off" autocapitalize="none" spellcheck="false">
+        <input type="text" class="mobile-search-input" id="mobileSearchInput" placeholder="Search by name, location, category..." autocomplete="off" autocapitalize="none" spellcheck="false">
       </div>
     </div>
     <div class="mobile-search-content">
-      <div class="mobile-search-label">BÚSQUEDAS POPULARES</div>
+      <div class="mobile-search-label">POPULAR SEARCHES</div>
       <div class="mobile-search-suggestions" id="mobileSearchSuggestions">
         <!-- Populated dynamically -->
       </div>
@@ -1143,21 +1143,21 @@
       <div class="safe-search-modal-icon">
         <i class="fas fa-shield-alt"></i>
       </div>
-      <h2 id="safeSearchModalTitle">¿Navegar con seguridad en público?</h2>
+      <h2 id="safeSearchModalTitle">Browse Safely in Public?</h2>
       <p>
-        Activa la <strong>Búsqueda Segura</strong> para desenfocar imágenes y navegar cómodamente en el trabajo, transporte o lugares públicos.
-        Puedes cambiar esto cuando quieras con el ícono de escudo en el encabezado.
+        Enable <strong>Safe Search</strong> to blur images so you can comfortably browse at work, on the bus, or anywhere public.
+        You can toggle this anytime using the shield icon in the header.
       </p>
       <div class="safe-search-modal-actions">
         <button class="safe-search-modal-btn safe-search-modal-btn-primary" id="enableSafeSearch">
-          <i class="fas fa-shield-alt"></i> Activar Búsqueda Segura
+          <i class="fas fa-shield-alt"></i> Enable Safe Search
         </button>
         <button class="safe-search-modal-btn safe-search-modal-btn-secondary" id="dismissSafeSearch">
-          No gracias, estoy en privado
+          No Thanks, I'm in Private
         </button>
       </div>
       <div class="safe-search-modal-footer">
-        Puedes cambiar esta opción cuando quieras haciendo clic en el ícono <i class="fas fa-eye-slash"></i> del encabezado
+        You can change this setting anytime by clicking the <i class="fas fa-eye-slash"></i> icon in the header
       </div>
     </div>
   </div>
@@ -1165,41 +1165,41 @@
   <!-- Mobile Drawer -->
   <div id="drawerOverlay" class="drawer-overlay" tabindex="-1" aria-hidden="true"></div>
   <nav id="mobileDrawer" class="mobile-drawer" aria-hidden="true" aria-labelledby="mobileMenuToggle">
-    <button class="drawer-close" id="drawerClose" aria-label="Cerrar menú">×</button>
-    <a href="/">Inicio</a>
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">×</button>
+    <a href="/">Home</a>
 
     <div class="drawer-categories-toggle" id="drawerCategoriesToggle">
       <div class="icon-text">
         <i class="fas fa-th"></i>
-        <span>Categorías</span>
+        <span>Categories</span>
       </div>
       <i class="fas fa-chevron-down chevron"></i>
     </div>
     <div id="drawerCategoriesSection">
-      <div class="drawer-categories-label">CATEGORÍAS MÁS POPULARES</div>
+      <div class="drawer-categories-label">MOST POPULAR CATEGORIES</div>
       <div id="drawerCategories">
         <!-- Populated dynamically from config/categories.js -->
       </div>
-      <a href="/categories/" class="drawer-view-all-btn">Ver todas las categorías</a>
+      <a href="/categories/" class="drawer-view-all-btn">View All Categories</a>
     </div>
 
     <div class="drawer-locations-toggle" id="drawerLocationsToggle">
       <div class="icon-text">
         <i class="fas fa-map-marker-alt"></i>
-        <span>Ubicaciones</span>
+        <span>Locations</span>
       </div>
       <i class="fas fa-chevron-down chevron"></i>
     </div>
     <div id="drawerLocationsSection">
-      <div class="drawer-locations-label">UBICACIONES POPULARES</div>
+      <div class="drawer-locations-label">POPULAR LOCATIONS</div>
       <div id="drawerLocations">
-        <a href="/near-me/">Cerca de mí</a>
-        <a href="/country/united-states/">Estados Unidos</a>
+        <a href="/near-me/">Near Me</a>
+        <a href="/country/united-states/">United States</a>
         <a href="/country/canada/">Canada</a>
         <a href="/country/india/">India</a>
         <a href="/country/japan/">Japan</a>
       </div>
-      <a href="/locations/" class="drawer-view-all-btn">Ver todas las ubicaciones</a>
+      <a href="/locations/" class="drawer-view-all-btn">View All Locations</a>
     </div>
   </nav>
 
@@ -1208,26 +1208,26 @@
       <div>
         <div class="hero-title">
           <span class="hero-icon"><i class="fa-solid fa-globe"></i></span>
-          <h1>Explora modelos por ubicación</h1>
+          <h1>Explore Models by Location</h1>
         </div>
-        <p>Descubre creadoras de todo el mundo y entra en la exploración por regiones.</p>
+        <p>Discover creators from around the world and jump into regional discovery.</p>
       </div>
     </section>
 
     <section class="locations-panel">
       <div class="panel-header">
         <i class="fa-solid fa-location-arrow"></i>
-        <span>Todos los países</span>
+        <span>All Countries</span>
       </div>
       <div id="countries" class="country-grid"></div>
     </section>
 
     <section class="cta-panel">
       <div>
-        <h3>Encuentra creadoras cerca de ti</h3>
-        <p>Descubre creadoras de FansPedia en tu zona local. Conecta con modelos de tu ciudad o región.</p>
+        <h3>Find Creators Near You</h3>
+        <p>Discover FansPedia creators in your local area. Connect with models from your city or region.</p>
       </div>
-      <a class="cta-btn" href="/near-me">Encontrar modelos cerca de mí</a>
+      <a class="cta-btn" href="/near-me">Find Models Near Me</a>
     </section>
   </main>
 
@@ -1344,88 +1344,13 @@
   <script type="module">
     import { popularCategories, categoryToSlug } from '/config/categories.js?v=20260226-1';
 
-    const categoryLabelMapEs = {
-      'nude': 'Desnudo',
-      'reddit': 'Reddit',
-      'models': 'Modelos',
-      'sex': 'Sexo',
-      'gay': 'Gay',
-      'anal': 'Anal',
-      'feet': 'Pies',
-      'twitter': 'Twitter',
-      'trans': 'Trans',
-      'lesbian': 'Lesbiana',
-      'squirt': 'Squirt',
-      'couple': 'Pareja',
-      'milf': 'MILF',
-      'tiktok': 'TikTok',
-      'girl': 'Chica',
-      'big tits': 'Pechos Grandes',
-      'blowjobs': 'Felaciones',
-      'boobs': 'Pechos',
-      'sextape': 'Sex Tape',
-      'creampie': 'Creampie',
-      'joi': 'JOI',
-      'threesome': 'Trío',
-      'teen (18+)': 'Joven (18+)',
-      'shemale': 'Trans',
-      'bbc': 'BBC',
-      'tits': 'Tetas',
-      'ebony': 'Ébano',
-      'pornhub': 'Pornhub',
-      'footjob': 'Footjob',
-      'foot fetish': 'Fetiche de Pies',
-      'dick ratings': 'Calificación de Penes',
-      'bbw': 'BBW',
-      'mature': 'Madura',
-      'teacher': 'Profesora',
-      'pussy': 'Coño',
-      'cuckold': 'Cuckold',
-      'big ass': 'Culo Grande',
-      'squirting': 'Squirting',
-      'hottest': 'Más Hot',
-      'amateur': 'Amateur',
-      'blonde': 'Rubia',
-      'instagram': 'Instagram',
-      'pawg': 'PAWG',
-      'gangbang': 'Gangbang',
-      'redhead': 'Pelirroja',
-      'male': 'Hombre',
-      'vip': 'VIP',
-      'famous': 'Famosa',
-      'twins': 'Gemelas',
-      'ass': 'Culo',
-      'deepthroat': 'Garganta Profunda',
-      'pregnant': 'Embarazada',
-      'handjob': 'Paja',
-      'facial': 'Facial',
-      'asmr': 'ASMR',
-      'pegging': 'Pegging',
-      'no ppv': 'Sin PPV',
-      'nurse': 'Enfermera',
-      'smoking fetish': 'Fetiche de Fumar',
-      'goth-free': 'Gótica (Gratis)',
-      'big natural boobs': 'Pechos Naturales Grandes',
-      'olympian': 'Olímpica',
-      'pussy-play': 'Juego con el Coño'
-    };
-
-    function toTitleCase(label) {
-      return label.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-    }
-
-    function getCategoryDisplayLabel(label) {
-      const normalized = String(label || '').toLowerCase().trim();
-      return categoryLabelMapEs[normalized] || toTitleCase(label);
-    }
-
     const catMenu = document.getElementById('categoriesMenu');
     if (catMenu) {
       const menuHTML = popularCategories.map(cat => {
         const slug = categoryToSlug(cat);
-        const label = getCategoryDisplayLabel(cat);
+        const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
         return `<a role="menuitem" href="/categories/${slug}/">${label}</a>`;
-      }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Ver todas las categorías →</a>';
+      }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Browse all categories →</a>';
       catMenu.innerHTML = menuHTML;
     }
 
@@ -1433,7 +1358,7 @@
     if (drawerCats) {
       const drawerHTML = popularCategories.map(cat => {
         const slug = categoryToSlug(cat);
-        const label = getCategoryDisplayLabel(cat);
+        const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
         return `<a href="/categories/${slug}/">${label}</a>`;
       }).join('');
       drawerCats.innerHTML = drawerHTML;
@@ -1472,10 +1397,10 @@
       const icon = themeToggle.querySelector('i');
       if (theme === 'dark') {
         icon.className = 'fas fa-sun';
-        themeToggle.setAttribute('aria-label', 'Cambiar a modo claro');
+        themeToggle.setAttribute('aria-label', 'Switch to light mode');
       } else {
         icon.className = 'fas fa-moon';
-        themeToggle.setAttribute('aria-label', 'Cambiar a modo oscuro');
+        themeToggle.setAttribute('aria-label', 'Switch to dark mode');
       }
     }
 
@@ -1544,14 +1469,14 @@
         document.body.classList.add('safe-search-active');
         safeSearchToggle.classList.add('active');
         safeSearchToggle.querySelector('i').className = 'fas fa-eye-slash';
-        safeSearchToggle.setAttribute('aria-label', 'Desactivar Búsqueda Segura (mostrar imágenes)');
-        safeSearchToggle.setAttribute('title', 'Búsqueda Segura: ACTIVADA (imágenes desenfocadas)');
+        safeSearchToggle.setAttribute('aria-label', 'Disable Safe Search (show images)');
+        safeSearchToggle.setAttribute('title', 'Safe Search: ON (images blurred)');
       } else {
         document.body.classList.remove('safe-search-active');
         safeSearchToggle.classList.remove('active');
         safeSearchToggle.querySelector('i').className = 'fas fa-eye';
-        safeSearchToggle.setAttribute('aria-label', 'Activar Búsqueda Segura (desenfocar imágenes)');
-        safeSearchToggle.setAttribute('title', 'Búsqueda Segura: DESACTIVADA (imágenes visibles)');
+        safeSearchToggle.setAttribute('aria-label', 'Enable Safe Search (blur images)');
+        safeSearchToggle.setAttribute('title', 'Safe Search: OFF (images visible)');
       }
       localStorage.setItem('safeSearch', enabled.toString());
     }
@@ -1788,40 +1713,40 @@
 
         <!-- Column 2: Popular Categories -->
         <div class="footer-column">
-          <h3 class="footer-heading">Categorías Populares</h3>
+          <h3 class="footer-heading">Popular Categories</h3>
           <ul class="footer-links">
-            <li><a href="/categories/verified">Creadoras Verificadas</a></li>
-            <li><a href="/categories/free">OnlyFans Gratis</a></li>
-            <li><a href="/categories/cosplay">Modelos Cosplay</a></li>
-            <li><a href="/categories/fitness">Fitness y Bienestar</a></li>
-            <li><a href="/categories/gaming">Creadoras Gaming</a></li>
-            <li><a href="/categories">Ver todas las categorías</a></li>
+            <li><a href="/categories/verified">Verified Creators</a></li>
+            <li><a href="/categories/free">Free OnlyFans</a></li>
+            <li><a href="/categories/cosplay">Cosplay Models</a></li>
+            <li><a href="/categories/fitness">Fitness & Wellness</a></li>
+            <li><a href="/categories/gaming">Gaming Creators</a></li>
+            <li><a href="/categories">View All Categories</a></li>
           </ul>
         </div>
 
         <!-- Column 3: Resources -->
         <div class="footer-column">
-          <h3 class="footer-heading">Recursos</h3>
+          <h3 class="footer-heading">Resources</h3>
           <ul class="footer-links">
-            <li><a href="#" onclick="alert('¡Próximamente!'); return false;">Guía para Creadores</a></li>
-            <li><a href="#" onclick="alert('¡Próximamente!'); return false;">Cómo Suscribirte</a></li>
-            <li><a href="#" onclick="alert('¡Próximamente!'); return false;">Consejos de Seguridad</a></li>
-            <li><a href="#" onclick="alert('¡Próximamente!'); return false;">FAQ</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Creator Guide</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">How to Subscribe</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Safety Tips</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">FAQ</a></li>
             <li><a href="/blog/">Blog</a></li>
-            <li><a href="#" onclick="alert('¡Próximamente!'); return false;">Soporte</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Support</a></li>
           </ul>
         </div>
 
         <!-- Column 4: Legal & Info -->
         <div class="footer-column">
-          <h3 class="footer-heading">Legal e Información</h3>
+          <h3 class="footer-heading">Legal & Info</h3>
           <ul class="footer-links">
-            <li><a href="#" onclick="alert('¡Próximamente!'); return false;">Sobre Nosotros</a></li>
-            <li><a href="#" onclick="alert('¡Próximamente!'); return false;">Contacto</a></li>
-            <li><a href="#" onclick="alert('¡Próximamente!'); return false;">Términos del Servicio</a></li>
-            <li><a href="#" onclick="alert('¡Próximamente!'); return false;">Política de Privacidad</a></li>
-            <li><a href="#" onclick="alert('¡Próximamente!'); return false;">Política DMCA</a></li>
-            <li><a href="#" onclick="alert('¡Próximamente!'); return false;">Política de Cookies</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">About Us</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Contact</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Terms of Service</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Privacy Policy</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">DMCA Policy</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Cookie Policy</a></li>
           </ul>
         </div>
       </div>
@@ -1830,16 +1755,16 @@
       <div class="footer-bottom">
         <div class="footer-bottom-content">
           <p class="footer-copyright">
-            © 2026 fanspedia.net - Todos los derechos reservados
+            © 2026 fanspedia.net - All rights reserved
           </p>
           <div class="footer-stats">
             <span class="stat-badge">
               <i class="fas fa-check-circle"></i>
-              10,000+ Creadoras Verificadas
+              10,000+ Verified Creators
             </span>
             <span class="stat-badge">
               <i class="fas fa-sync-alt"></i>
-              Actualizado a Diario
+              Updated Daily
             </span>
           </div>
         </div>
@@ -1852,23 +1777,23 @@
   <nav class="sticky-bottom-nav" role="navigation" aria-label="Bottom navigation">
     <a href="#headerSearch" class="nav-item" data-nav="search">
       <span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span>
-      <span class="label">Buscar</span>
+      <span class="label">Search</span>
     </a>
     <a href="/near-me/" class="nav-item" data-nav="near">
       <span class="icon"><i class="fa-solid fa-location-arrow"></i></span>
-      <span class="label">Cerca de mí</span>
+      <span class="label">Near Me</span>
     </a>
     <a href="/?sort=best" class="nav-item" data-nav="best">
       <span class="icon"><i class="fa-solid fa-trophy"></i></span>
-      <span class="label">Mejor</span>
+      <span class="label">Best</span>
     </a>
     <a href="/?sort=hot" class="nav-item" data-nav="hot">
       <span class="icon"><i class="fa-solid fa-fire"></i></span>
-      <span class="label">¡Hot!</span>
+      <span class="label">Hot!</span>
     </a>
     <a href="/wishlist/" class="nav-item" data-nav="wishlist">
       <span class="icon position-relative"><i class="fa-solid fa-heart"></i><span class="wishlist-count" style="display:none;position:absolute;top:-6px;right:-6px;background:#ff3b30;color:#fff;font-size:10px;font-weight:700;border-radius:10px;min-width:18px;height:18px;align-items:center;justify-content:center;padding:0 5px;border:2px solid var(--bg-secondary);box-shadow:0 2px 8px rgba(255,59,48,0.4)">0</span></span>
-      <span class="label">Favoritos</span>
+      <span class="label">Wishlist</span>
     </a>
   </nav>
 
@@ -1902,7 +1827,7 @@
       }
     }catch(e){}})();
   </script>
-  <script src="/utils/wishlist-badge.js?v=20251116-1"></script>
+  <script src="/utils/wishlist-badge.js?v=20251116-1" defer></script>
   <script type="module">
     import { inject } from '@vercel/analytics';
     inject();

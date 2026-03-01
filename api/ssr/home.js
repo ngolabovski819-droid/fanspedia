@@ -100,11 +100,12 @@ function renderCard(item, index) {
     <button class="favorite-btn" data-username="${username}" onclick="event.preventDefault();toggleFavorite('${username}',this);">
       <span>♡</span>
     </button>
-    <img src="${src}" srcset="${srcset}" sizes="${sizes}"
-      alt="${name} OnlyFans creator" width="270" height="360"
-      style="aspect-ratio:3/4;" loading="${loading}"${fetchpriority}
-      decoding="async" referrerpolicy="no-referrer"
-      onerror="if(this.src!=='/static/no-image.png'){this.removeAttribute('srcset');this.removeAttribute('sizes');this.src='${escHtml(imgSrc)}';}">
+    <div class="card-img-wrap">
+      <img src="${src}" srcset="${srcset}" sizes="${sizes}"
+        alt="${name} OnlyFans creator" loading="${loading}"${fetchpriority}
+        decoding="async" referrerpolicy="no-referrer"
+        onerror="if(this.src!=='/static/no-image.png'){this.removeAttribute('srcset');this.removeAttribute('sizes');this.src='${escHtml(imgSrc)}';this.style.opacity='0.4';}">
+    </div>
     <div class="card-body">
       <h3 style="font-size:1rem;font-weight:700;margin-bottom:4px;">${verifiedBadge}${name}</h3>
       <p class="username">@${username}</p>
@@ -222,8 +223,14 @@ export default async function handler(req, res) {
 
     // Inject JSON-LD + SSR window flag before </head>
     const jsonLd = buildJsonLd(creators);
+    // LCP preload: send browser a hint to start fetching the first creator's image from <head>
+    const _lcpImg = creators[0]?.avatar || creators[0]?.avatar_c144 || '';
+    const _lcpSrc = _lcpImg.startsWith('http') ? _lcpImg : '';
+    const preloadLink = _lcpSrc
+      ? (() => { const { src, srcset, sizes } = buildResponsiveSources(_lcpSrc); return `<link rel="preload" as="image" fetchpriority="high" href="${src}" imagesrcset="${srcset}" imagesizes="${sizes}">`; })()
+      : '';
     const ssrFlag = `<script>window.__HOME_SSR={count:${creators.length},hasMore:true};</script>`;
-    html = html.replace('</head>', `${jsonLd}\n${ssrFlag}\n</head>`);
+    html = html.replace('</head>', `${preloadLink ? preloadLink + '\n' : ''}${jsonLd}\n${ssrFlag}\n</head>`);
 
     // --- 4. Pre-render cards into #results ---
     const cardsHtml = creators.length > 0

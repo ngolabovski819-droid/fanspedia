@@ -726,15 +726,23 @@
       transform: translateY(-4px);
       box-shadow: 0 8px 24px var(--card-shadow-hover);
     }
-    .card img {
+    .card-img-wrap {
+      aspect-ratio: 3/4;
+      overflow: hidden;
       border-radius: 20px 20px 0 0;
-      height: 360px;
-      object-fit: cover;
-      width: 100%;
-      min-height: 360px;
       background: linear-gradient(90deg, #e8e8e8 25%, #f0f0f0 50%, #e8e8e8 75%);
       background-size: 200% 100%;
       animation: shimmer 1.5s infinite;
+    }
+    [data-theme="dark"] .card-img-wrap {
+      background: linear-gradient(90deg, #2a2a3e 25%, #323246 50%, #2a2a3e 75%);
+    }
+    .card img {
+      border-radius: 0;
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+      display: block;
       transition: filter 0.3s ease, opacity 0.3s ease;
     }
     @keyframes shimmer {
@@ -1221,9 +1229,9 @@
   .search-group .btn-search { width: 100%; margin-top: 8px; border-radius: 9999px; }
   .clear-search { right: 15px; top: 14px; transform: none; }
     }
-    /* Smaller card image on tiny devices */
+    /* Smaller card image on tiny devices — aspect-ratio wrapper handles proportional sizing */
     @media (max-width: 400px) {
-      .card img { height: 320px; min-height: 320px; }
+      .card-img-wrap { aspect-ratio: 4/5; }
     }
     
     /* ============================================
@@ -1932,7 +1940,7 @@
     @media (max-width: 480px) { .breadcrumbs { font-size: 12px; padding: 10px 16px; gap: 4px; } .breadcrumb-separator { margin: 0 1px; } }
   </style>
   <!-- i18n Translation Module -->
-  <script src="/config/i18n.js?v=20260217-1"></script>
+  <script src="/config/i18n.js?v=20260217-1" defer></script>
     <link rel="alternate" hreflang="en" href="https://fanspedia.net/" />
   <link rel="alternate" hreflang="es" href="https://fanspedia.net/es/" />
   <link rel="alternate" hreflang="x-default" href="https://fanspedia.net/" />
@@ -1993,7 +2001,7 @@
         <!-- Desktop navigation (moved next to logo) -->
         <div class="desktop-nav">
           <button id="categoriesToggle" class="nav-btn" aria-haspopup="true" aria-expanded="false" data-i18n-key="nav_categories">
-            Categor�as <i class="fas fa-chevron-down" aria-hidden="true"></i>
+            Categories <i class="fas fa-chevron-down" aria-hidden="true"></i>
           </button>
           <div id="categoriesMenu" class="dropdown-menu" role="menu" aria-hidden="true">
             <!-- Populated dynamically from config/categories.js -->
@@ -2002,7 +2010,7 @@
 
         <div class="desktop-nav">
           <a href="/locations/" class="nav-btn" data-i18n-key="nav_locations">
-            Ubicaciones <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+            Locations <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
           </a>
         </div>
 
@@ -2013,7 +2021,7 @@
             <input 
               type="text" 
               class="header-search-input" 
-              placeholder="Busca por nombre, ubicaci�n, categor�a..."
+              placeholder="Search by name, location, category..."
               id="headerSearch"
               data-i18n-placeholder="searchPlaceholder"
               autocomplete="off"
@@ -2059,11 +2067,11 @@
       </button>
       <div class="mobile-search-input-wrapper">
         <i class="fas fa-search mobile-search-icon"></i>
-        <input type="text" class="mobile-search-input" id="mobileSearchInput" placeholder="Busca por nombre, ubicaci�n, categor�a..." autocomplete="off" autocapitalize="none" spellcheck="false">
+        <input type="text" class="mobile-search-input" id="mobileSearchInput" placeholder="Search by name, location, category..." autocomplete="off" autocapitalize="none" spellcheck="false">
       </div>
     </div>
     <div class="mobile-search-content">
-      <div class="mobile-search-label">B�SQUEDAS POPULARES</div>
+      <div class="mobile-search-label">POPULAR SEARCHES</div>
       <div class="mobile-search-suggestions" id="mobileSearchSuggestions">
         <!-- Populated dynamically -->
       </div>
@@ -2099,42 +2107,42 @@
   <div id="drawerOverlay" class="drawer-overlay" tabindex="-1" aria-hidden="true"></div>
   <nav id="mobileDrawer" class="mobile-drawer" aria-hidden="true" aria-labelledby="mobileMenuToggle">
     <button class="drawer-close" id="drawerClose" aria-label="Close menu">�</button>
-    <a href="/">Inicio</a>
+    <a href="/">Home</a>
     
     <!-- Categories collapsible section -->
     <div class="drawer-categories-toggle" id="drawerCategoriesToggle">
       <div class="icon-text">
         <i class="fas fa-th"></i>
-        <span>Categor�as</span>
+        <span>Categories</span>
       </div>
       <i class="fas fa-chevron-down chevron"></i>
     </div>
     <div id="drawerCategoriesSection">
-      <div class="drawer-categories-label">CATEGOR�AS M�S POPULARES</div>
+      <div class="drawer-categories-label">MOST POPULAR CATEGORIES</div>
       <div id="drawerCategories">
         <!-- Populated dynamically from config/categories.js -->
       </div>
-      <a href="/categories/" class="drawer-view-all-btn">Ver Todas las Categor�as</a>
+      <a href="/categories/" class="drawer-view-all-btn">View All Categories</a>
     </div>
 
     <!-- Locations collapsible section -->
     <div class="drawer-locations-toggle" id="drawerLocationsToggle">
       <div class="icon-text">
         <i class="fas fa-map-marker-alt"></i>
-        <span>Ubicaciones</span>
+        <span>Locations</span>
       </div>
       <i class="fas fa-chevron-down chevron"></i>
     </div>
     <div id="drawerLocationsSection">
-      <div class="drawer-locations-label">UBICACIONES POPULARES</div>
+      <div class="drawer-locations-label">POPULAR LOCATIONS</div>
       <div id="drawerLocations">
-        <a href="/near-me/">Cerca de M�</a>
-        <a href="/country/united-states/">Estados Unidos</a>
+        <a href="/near-me/">Near Me</a>
+        <a href="/country/united-states/">United States</a>
         <a href="/country/canada/">Canada</a>
         <a href="/country/india/">India</a>
         <a href="/country/japan/">Japan</a>
       </div>
-      <a href="/locations/" class="drawer-view-all-btn">Ver Todas las Ubicaciones</a>
+      <a href="/locations/" class="drawer-view-all-btn">View All Locations</a>
     </div>
   </nav>
 
@@ -2144,14 +2152,14 @@
       <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
         <a href="/" itemprop="item" class="breadcrumb-home">
           <i class="fas fa-home" aria-hidden="true"></i>
-          <span itemprop="name">Inicio</span>
+          <span itemprop="name">Home</span>
         </a>
         <meta itemprop="position" content="1" />
       </li>
       <li class="breadcrumb-separator" aria-hidden="true">/</li>
       <li class="breadcrumb-item active" aria-current="page" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
         <span itemprop="item" itemscope itemtype="https://schema.org/WebPage" itemid="https://fanspedia.net/">
-          <span itemprop="name">Buscar</span>
+          <span itemprop="name">Search</span>
         </span>
         <meta itemprop="position" content="2" />
       </li>
@@ -2159,12 +2167,12 @@
   </nav>
 
   <div class="container text-center">
-  <h1 class="mb-4" style="color:#00aff0; font-weight:800;" data-i18n-key="hero_title">El Mejor Motor de B�squeda OnlyFans - Encuentra Cuentas OF R�PIDO</h1>
+  <h1 class="mb-4" style="color:#00aff0; font-weight:800;" data-i18n-key="hero_title">El Mejor Motor de Búsqueda OnlyFans - Encuentra Cuentas OF RÁPIDO</h1>
 
     <!-- Search bar -->
     <div class="mb-3 search-group">
       <div class="input-group input-group-lg">
-        <input id="search" type="text" class="form-control" placeholder='Escribe: "milf" "Texas" "piercings"' aria-label="Buscar creadoras" inputmode="search" enterkeyhint="search" autocomplete="off" autocapitalize="none" spellcheck="false" />
+        <input id="search" type="text" class="form-control" placeholder='Type: "milf" "Texas" "piercings"' aria-label="Search creators" inputmode="search" enterkeyhint="search" autocomplete="off" autocapitalize="none" spellcheck="false" />
   <button class="clear-search" id="clearSearch" type="button" aria-label="Clear search">�</button>
         <button id="searchBtn" class="btn btn-search" type="button">
           <span class="spinner" aria-hidden="true"></span>
@@ -2213,7 +2221,7 @@
     <!-- Load More Button -->
     <div id="loadMoreContainer" class="text-center my-4" style="display: none;">
       <button id="loadMoreBtn" class="load-more-btn">
-        <span class="btn-text" data-i18n-key="loadMore">Cargar M�s</span>
+        <span class="btn-text" data-i18n-key="loadMore">Cargar Más</span>
         <span class="btn-icon">↓</span>
       </button>
       <p id="loadedCount" class="mt-2" style="color: #888; font-size: 14px; margin-bottom: 0;"></p>
@@ -2229,35 +2237,35 @@
     
     <!-- SEO Content Section -->
     <section class="mt-5 pt-5" style="max-width: 900px; margin-left: auto; margin-right: auto; text-align: left; border-top: 1px solid var(--border-color);">
-      <h2 style="color: #00AFF0; font-weight: 700; font-size: 28px; margin-bottom: 20px;" data-i18n-key="hero_heading">Encuentra los Mejores Creadores de OnlyFans - Motor de B�squeda Gratis</h2>
+      <h2 style="color: #00AFF0; font-weight: 700; font-size: 28px; margin-bottom: 20px;" data-i18n-key="hero_heading">Encuentra los Mejores Creadores de OnlyFans - Motor de Búsqueda Gratis</h2>
       
       <p style="color: var(--text-primary); font-size: 16px; line-height: 1.7; margin-bottom: 20px;" data-i18n-key="hero_intro">
-        Bienvenido a <strong>fanspedia.net</strong>, el principal <strong>motor de b�squeda de OnlyFans</strong> con m�s de <strong>10,000 creadores verificados</strong>. Nuestra plataforma ayuda a los fans a descubrir y conectar con sus <strong>modelos de OnlyFans</strong> favoritos mediante filtros avanzados como categor�as, rangos de precio, estado verificado, suscripciones en bundle y m�s.
+        Welcome to <strong>fanspedia.net</strong>, the leading <strong>OnlyFans search engine</strong> with over <strong>10,000 verified creators</strong>. Our platform helps fans discover and connect with their favorite <strong>OnlyFans models</strong> through advanced filtering options including categories, price ranges, verified status, bundle subscriptions, and more.
       </p>
 
-      <h3 style="color: #00AFF0; font-weight: 600; font-size: 22px; margin-bottom: 15px; margin-top: 30px;" data-i18n-key="hero_search_title">C�mo Buscar Creadores de OnlyFans</h3>
+      <h3 style="color: #00AFF0; font-weight: 600; font-size: 22px; margin-bottom: 15px; margin-top: 30px;" data-i18n-key="hero_search_title">Cómo Buscar Creadores de OnlyFans</h3>
       
       <p style="color: var(--text-primary); font-size: 16px; line-height: 1.7; margin-bottom: 15px;" data-i18n-key="hero_search_desc">
-        Nuestro <strong>buscador de OnlyFans</strong> te permite explorar miles de perfiles f�cilmente. Solo escribe palabras clave como ubicaci�n (ej., "Texas", "California"), categor�as (ej., "fitness", "cosplay", "MILF") o nombres de usuario de redes sociales (TikTok, Instagram) para encontrar creadores que coincidan con tus intereses.
+        Our <strong>OnlyFans finder</strong> makes it easy to search through thousands of profiles. Simply enter keywords like location (e.g., "Texas", "California"), categories (e.g., "fitness", "cosplay", "MILF"), or social media usernames (TikTok, Instagram) to find creators that match your interests.
       </p>
 
-      <h3 style="color: #00AFF0; font-weight: 600; font-size: 22px; margin-bottom: 15px; margin-top: 30px;" data-i18n-key="hero_filter_title">Filtra por Precio, Estado Verificado y M�s</h3>
+      <h3 style="color: #00AFF0; font-weight: 600; font-size: 22px; margin-bottom: 15px; margin-top: 30px;" data-i18n-key="hero_filter_title">Filtra por Precio, Estado Verificado y Más</h3>
       
       <ul style="color: var(--text-primary); font-size: 16px; line-height: 1.8; margin-bottom: 20px;">
-        <li data-i18n-key="hero_filter_1"><strong>Modelos Verificados:</strong> Encuentra solo creadores verificados de OnlyFans con insignia de verificaci�n</li>
-        <li data-i18n-key="hero_filter_2"><strong>Filtro de Precio:</strong> Busca cuentas gratis de OnlyFans o define tu precio m�ximo de suscripci�n</li>
-        <li data-i18n-key="hero_filter_3"><strong>Suscripciones Bundle:</strong> Descubre creadores con ofertas especiales y descuentos por paquetes</li>
-        <li data-i18n-key="hero_filter_4"><strong>B�squeda por Categor�a:</strong> Filtra por intereses, ubicaci�n, tipo de cuerpo y otras preferencias</li>
+        <li data-i18n-key="hero_filter_1"><strong>Verified Models:</strong> Find only verified OnlyFans creators with the checkmark badge</li>
+        <li data-i18n-key="hero_filter_2"><strong>Price Filtering:</strong> Search for free OnlyFans accounts or set your max subscription price</li>
+        <li data-i18n-key="hero_filter_3"><strong>Bundle Subscriptions:</strong> Discover creators offering special bundle deals and discounts</li>
+        <li data-i18n-key="hero_filter_4"><strong>Category Search:</strong> Filter by interests, location, body type, and other preferences</li>
       </ul>
 
-      <h3 style="color: #00AFF0; font-weight: 600; font-size: 22px; margin-bottom: 15px; margin-top: 30px;" data-i18n-key="hero_why_title">�Por Qu� Usar Nuestro Motor de B�squeda de OnlyFans?</h3>
+      <h3 style="color: #00AFF0; font-weight: 600; font-size: 22px; margin-bottom: 15px; margin-top: 30px;" data-i18n-key="hero_why_title">¿Por Qué Usar Nuestro Motor de Búsqueda de OnlyFans?</h3>
       
       <p style="color: var(--text-primary); font-size: 16px; line-height: 1.7; margin-bottom: 20px;" data-i18n-key="hero_why_desc">
-        A diferencia de la b�squeda nativa limitada de OnlyFans, nuestra plataforma indexa <strong>m�s de 10k creadoras de OnlyFans</strong> y ofrece filtros potentes para ayudarte a encontrar exactamente lo que buscas. Ya sea que busques <strong>las mejores creadoras de OnlyFans</strong>, cuentas gratis o categor�as espec�ficas, nuestra base de datos se actualiza a diario con los perfiles m�s recientes.
+        Unlike OnlyFans' limited native search, our platform indexes <strong>10k+ OnlyFans girls</strong> and provides powerful search filters to help you find exactly what you're looking for. Whether you're searching for <strong>top OnlyFans creators</strong>, free accounts, or specific categories, our database is updated daily with the latest profiles.
       </p>
 
       <p style="color: var(--text-primary); font-size: 16px; line-height: 1.7; margin-bottom: 20px;">
-        Empieza tu b�squeda ahora y descubre las <strong>mejores creadoras de OnlyFans</strong> seg�n tus preferencias. Nuestra herramienta gratuita te ayuda a explorar creadores verificados, comparar precios de suscripci�n y encontrar contenido exclusivo entre miles de modelos en todo el mundo.
+        Start your search now and discover the <strong>best OnlyFans girls</strong> matching your preferences. Our free OnlyFans search tool helps you explore verified creators, compare subscription prices, and find exclusive content from thousands of models worldwide.
       </p>
     </section>
     
@@ -3349,7 +3357,7 @@
         // Reset Load More button state on new search
         if (loadMoreBtn) {
           loadMoreBtn.disabled = false;
-          loadMoreBtn.querySelector('.btn-text').textContent = 'Cargar M�s Creadores';
+          loadMoreBtn.querySelector('.btn-text').textContent = 'Load More Creators';
         }
         if (loadMoreContainer) loadMoreContainer.style.display = 'none';
       }
@@ -3444,7 +3452,7 @@
           const username = item.username || "—";
           const priceText = (item.subscribePrice && !isNaN(item.subscribePrice))
             ? `$${parseFloat(item.subscribePrice).toFixed(2)}`
-            : "GRATIS";
+            : "FREE";
           const verifiedIcon = item.isVerified ? "✅ " : "";
           const location = item.location || "";
           // Link directly to OnlyFans profile (not to internal creator page)
@@ -3475,21 +3483,20 @@
               <button class="favorite-btn ${favActive ? 'active' : ''}" data-username="${safeUsername}" onclick="event.preventDefault(); toggleFavorite('${safeUsername}', this);">
                 <span>${favChar}</span>
               </button>
-              <img src="${responsive.src}" 
+              <div class="card-img-wrap">
+                <img src="${responsive.src}" 
                    srcset="${responsive.srcset}"
                    sizes="${responsive.sizes}"
                    alt="${name}" 
-                   width="270" 
-                   height="360"
-                   style="aspect-ratio: 3 / 4;"
                    ${isFirstCard ? 'loading="eager" fetchpriority="high"' : 'loading="lazy" fetchpriority="low"'} decoding="async"
                    referrerpolicy="no-referrer" 
                    onerror="if(this.src!='/static/no-image.png'){this.removeAttribute('srcset'); this.removeAttribute('sizes'); this.src='${imgSrc}';}"
-                   onload="if(this.naturalWidth<=10||this.naturalHeight<=10){this.parentElement.parentElement.remove();}">
+                   onload="if(this.naturalWidth<=10||this.naturalHeight<=10){this.parentElement.parentElement.parentElement.remove();}">
+              </div>
               <div class="card-body">
                 <h5>${verifiedIcon}${name}</h5>
                 <p class="username">@${username}</p>
-                ${priceText === "GRATIS" 
+                ${priceText === "FREE" 
                   ? `<p class="price-free">${priceText}</p>` 
                   : `<p class="price-tag">${priceText}</p>`}
                 <a href="${profileUrl}" class="view-profile-btn">
@@ -3688,19 +3695,19 @@
       
       if (hasMore && totalLoaded > 0) {
         loadMoreContainer.style.display = 'block';
-        loadedCountEl.textContent = `Mostrando ${totalLoaded} creadores`;
+        loadedCountEl.textContent = `Showing ${totalLoaded} creators`;
         // Hide the status text only after results are loaded
         if (statusDiv) statusDiv.style.display = 'none';
         
         // After 200 results, add motivational message
         if (totalLoaded >= 200) {
-          loadedCountEl.textContent = `�Has explorado ${totalLoaded} creadores! ??`;
+          loadedCountEl.textContent = `You've explored ${totalLoaded} creators! ??`;
         }
       } else if (totalLoaded > 0 && !hasMore) {
         loadMoreContainer.style.display = 'block';
         loadMoreBtn.disabled = true;
-        loadMoreBtn.querySelector('.btn-text').textContent = 'Todos los Resultados Cargados';
-        loadedCountEl.textContent = `Ya viste todos los ${totalLoaded} creadores que coinciden`;
+        loadMoreBtn.querySelector('.btn-text').textContent = 'All Results Loaded';
+        loadedCountEl.textContent = `You've seen all ${totalLoaded} matching creators`;
         // Hide the status text
         if (statusDiv) statusDiv.style.display = 'none';
       } else {
@@ -3936,7 +3943,7 @@
       // Show Load More button if we have results
       if (loadMoreContainer && resultsDiv.children.length > 0) {
         loadMoreContainer.style.display = 'block';
-        updateLoadedCount();
+        updateLoadMoreButton();
       }
       
       // Load URL params for filters (user might have bookmarked a filtered view)
@@ -3966,10 +3973,10 @@
             </div>
             <div class="footer-logo-text">
               <span class="footer-logo-main">FansPedia</span>
-              <span class="footer-logo-sub">Tu Directorio Premium de Creadoras</span>
+              <span class="footer-logo-sub">Your Premium Creator Directory</span>
             </div>
           </div>
-          <p class="footer-description" data-i18n-key="footer_description">Descubre y conecta con creadores verificados de OnlyFans. Actualizado diariamente con m�s de 10,000 perfiles en todas las categor�as.</p>
+          <p class="footer-description" data-i18n-key="footer_description">Descubre y conecta con creadores verificados de OnlyFans. Actualizado diariamente con más de 10,000 perfiles en todas las categorías.</p>
           <!-- Social Links -->
           <div class="footer-social">
             <a href="https://x.com/fanspedia" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="X (Twitter)">
@@ -3992,40 +3999,40 @@
 
         <!-- Column 2: Popular Categories -->
         <div class="footer-column">
-          <h3 class="footer-heading">Categor�as Populares</h3>
+          <h3 class="footer-heading">Popular Categories</h3>
           <ul class="footer-links">
-            <li><a href="/categories/verified">Creadoras Verificadas</a></li>
-            <li><a href="/categories/free">OnlyFans Gratis</a></li>
-            <li><a href="/categories/cosplay">Modelos Cosplay</a></li>
-            <li><a href="/categories/fitness">Fitness y Bienestar</a></li>
-            <li><a href="/categories/gaming">Creadoras Gaming</a></li>
-            <li><a href="/categories">Ver Todas las Categor�as</a></li>
+            <li><a href="/categories/verified">Verified Creators</a></li>
+            <li><a href="/categories/free">Free OnlyFans</a></li>
+            <li><a href="/categories/cosplay">Cosplay Models</a></li>
+            <li><a href="/categories/fitness">Fitness & Wellness</a></li>
+            <li><a href="/categories/gaming">Gaming Creators</a></li>
+            <li><a href="/categories">View All Categories</a></li>
           </ul>
         </div>
 
         <!-- Column 3: Resources -->
         <div class="footer-column">
-          <h3 class="footer-heading">Recursos</h3>
+          <h3 class="footer-heading">Resources</h3>
           <ul class="footer-links">
-            <li><a href="#" onclick="alert('�Pr�ximamente!'); return false;">Gu�a para Creadores</a></li>
-            <li><a href="#" onclick="alert('�Pr�ximamente!'); return false;">C�mo Suscribirte</a></li>
-            <li><a href="#" onclick="alert('�Pr�ximamente!'); return false;">Consejos de Seguridad</a></li>
-            <li><a href="#" onclick="alert('�Pr�ximamente!'); return false;">Preguntas Frecuentes</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Creator Guide</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">How to Subscribe</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Safety Tips</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">FAQ</a></li>
             <li><a href="/blog/">Blog</a></li>
-            <li><a href="#" onclick="alert('�Pr�ximamente!'); return false;">Soporte</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Support</a></li>
           </ul>
         </div>
 
         <!-- Column 4: Legal & Info -->
         <div class="footer-column">
-          <h3 class="footer-heading">Legal e Informaci�n</h3>
+          <h3 class="footer-heading">Legal & Info</h3>
           <ul class="footer-links">
-            <li><a href="#" onclick="alert('�Pr�ximamente!'); return false;">Sobre Nosotros</a></li>
-            <li><a href="#" onclick="alert('�Pr�ximamente!'); return false;">Contacto</a></li>
-            <li><a href="#" onclick="alert('�Pr�ximamente!'); return false;">T�rminos del Servicio</a></li>
-            <li><a href="#" onclick="alert('�Pr�ximamente!'); return false;">Pol�tica de Privacidad</a></li>
-            <li><a href="#" onclick="alert('�Pr�ximamente!'); return false;">Pol�tica de DMCA</a></li>
-            <li><a href="#" onclick="alert('�Pr�ximamente!'); return false;">Pol�tica de Cookies</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">About Us</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Contact</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Terms of Service</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Privacy Policy</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">DMCA Policy</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Cookie Policy</a></li>
           </ul>
         </div>
       </div>
@@ -4034,20 +4041,20 @@
       <div class="footer-bottom">
         <div class="footer-bottom-content">
           <p class="footer-copyright">
-            � 2026 fanspedia.net - Todos los derechos reservados
+            � 2026 fanspedia.net - All rights reserved
           </p>
           <div class="footer-stats">
             <span class="stat-badge">
               <i class="fas fa-check-circle"></i>
-              10,000+ Creadoras Verificadas
+              10,000+ Verified Creators
             </span>
             <span class="stat-badge">
               <i class="fas fa-sync-alt"></i>
-              Actualizado Diariamente
+              Updated Daily
             </span>
           </div>
         </div>
-        <p class="footer-disclaimer" data-i18n-key="footer_disclaimer">Este sitio web es un directorio independiente y no est� afiliado a OnlyFans. Todos los nombres comerciales pertenecen a sus respectivos propietarios.</p>
+        <p class="footer-disclaimer" data-i18n-key="footer_disclaimer">Este sitio web es un directorio independiente y no está afiliado a OnlyFans. Todos los nombres comerciales pertenecen a sus respectivos propietarios.</p>
       </div>
     </div>
   </footer>
@@ -4425,20 +4432,20 @@
     }
   </style>
   <!-- Anchor target for sticky nav: Wishlist -->
-  <section id="wishlist" aria-label="Lista de deseos" style="position: relative; top: -1px;"></section>
+  <section id="wishlist" aria-label="Wishlist" style="position: relative; top: -1px;"></section>
 
   <nav class="sticky-bottom-nav" role="navigation" aria-label="Bottom navigation">
     <a href="#headerSearch" class="nav-item" data-nav="search">
       <span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span>
-      <span class="label">Buscar</span>
+      <span class="label">Search</span>
     </a>
     <a href="/near-me/" class="nav-item" data-nav="near">
       <span class="icon"><i class="fa-solid fa-location-arrow"></i></span>
-      <span class="label">Cerca de M�</span>
+      <span class="label">Near Me</span>
     </a>
     <a href="/?sort=best" class="nav-item" data-nav="best">
       <span class="icon"><i class="fa-solid fa-trophy"></i></span>
-      <span class="label">Mejor</span>
+      <span class="label">Best</span>
     </a>
     <a href="/?sort=hot" class="nav-item" data-nav="hot">
       <span class="icon"><i class="fa-solid fa-fire"></i></span>
@@ -4446,7 +4453,7 @@
     </a>
     <a href="/wishlist/" class="nav-item" data-nav="wishlist">
       <span class="icon position-relative"><i class="fa-solid fa-heart"></i><span class="wishlist-count" style="display:none;position:absolute;top:-6px;right:-6px;background:#ff3b30;color:#fff;font-size:10px;font-weight:700;border-radius:10px;min-width:18px;height:18px;align-items:center;justify-content:center;padding:0 5px;border:2px solid var(--bg-secondary);box-shadow:0 2px 8px rgba(255,59,48,0.4)">0</span></span>
-      <span class="label">Favoritos</span>
+      <span class="label">Wishlist</span>
     </a>
   </nav>
   <style>
@@ -4490,7 +4497,7 @@
       }
     }catch(e){}})();
   </script>
-  <script src="/utils/wishlist-badge.js?v=20251116-1"></script>
+  <script src="/utils/wishlist-badge.js?v=20251116-1" defer></script>
   <script type="module">
     import { inject } from '@vercel/analytics';
     inject();

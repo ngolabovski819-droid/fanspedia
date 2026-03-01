@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mejores Creadoras de OnlyFans en India | FansPedia</title>
-  <meta name="description" content="Descubre las creadoras de OnlyFans mas populares en India. Explora perfiles verificados, cuentas gratis y contenido exclusivo de creadoras indias.">
+  <title>Best OnlyFans Creators in India | FansPedia</title>
+  <meta name="description" content="Discover the most popular OnlyFans creators across India. Browse verified profiles, free accounts, and exclusive content from Indian creators.">
   
   <!-- Bootstrap 5.3 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -706,15 +706,23 @@
       transform: translateY(-4px);
       box-shadow: 0 8px 24px var(--card-shadow-hover);
     }
-    .card img {
+    .card-img-wrap {
+      aspect-ratio: 3/4;
+      overflow: hidden;
       border-radius: 20px 20px 0 0;
-      height: 360px;
-      object-fit: cover;
-      width: 100%;
-      min-height: 360px;
       background: linear-gradient(90deg, #e8e8e8 25%, #f0f0f0 50%, #e8e8e8 75%);
       background-size: 200% 100%;
       animation: shimmer 1.5s infinite;
+    }
+    [data-theme="dark"] .card-img-wrap {
+      background: linear-gradient(90deg, #2a2a3e 25%, #323246 50%, #2a2a3e 75%);
+    }
+    .card img {
+      border-radius: 0;
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+      display: block;
       transition: filter 0.3s ease, opacity 0.3s ease;
     }
     @keyframes shimmer {
@@ -1316,7 +1324,7 @@
         <!-- Desktop navigation (moved next to logo) -->
         <div class="desktop-nav">
           <button id="categoriesToggle" class="nav-btn" aria-haspopup="true" aria-expanded="false">
-            Categorias <i class="fas fa-chevron-down" aria-hidden="true"></i>
+            Categories <i class="fas fa-chevron-down" aria-hidden="true"></i>
           </button>
           <div id="categoriesMenu" class="dropdown-menu" role="menu" aria-hidden="true">
             <!-- Populated dynamically from config/categories.js -->
@@ -1325,7 +1333,7 @@
 
         <div class="desktop-nav">
           <a href="/locations/" class="nav-btn">
-            Ubicaciones <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+            Locations <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
           </a>
         </div>
 
@@ -1336,7 +1344,7 @@
             <input 
               type="text" 
               class="header-search-input" 
-              placeholder="Buscar por nombre, ubicacion, categoria..."
+              placeholder="Search by name, location, category..."
               id="headerSearch"
               autocomplete="off"
               autocapitalize="none"
@@ -1348,16 +1356,22 @@
 
         <!-- Actions -->
         <div class="header-actions">
-          <button class="mobile-search-trigger" id="mobileSearchTrigger" aria-label="Buscar">
+          <!-- Mobile Search Trigger (visible only on mobile) -->
+          <button class="mobile-search-trigger" id="mobileSearchTrigger" aria-label="Search">
             <i class="fas fa-search"></i>
           </button>
-          <button class="lang-toggle" id="langToggle" onclick="toggleLanguage()"><span id="langIndicator">EN</span></button>
-          <button class="safe-search-toggle" id="safeSearchToggle" aria-label="Alternar Busqueda Segura (desenfocar imagenes)" title="Busqueda Segura: navega comodamente en publico">
-            <i class="fas fa-eye-slash"></i>
+          <button class="lang-toggle" id="langToggle" aria-label="Toggle Language" title="EN / ES" onclick="toggleLanguage()">
+            <span id="langIndicator">EN</span>
           </button>
-          <button class="theme-toggle" id="themeToggle" aria-label="Cambiar modo oscuro">
+          <!-- Safe Search toggle -->
+          <button class="safe-search-toggle" id="safeSearchToggle" aria-label="Enable Safe Search (blur images)" title="Safe Search: OFF (images visible)">
+            <i class="fas fa-eye"></i>
+          </button>
+          <!-- Dark mode toggle -->
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
             <i class="fas fa-moon"></i>
           </button>
+          <!-- Mobile menu toggle only -->
           <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
             <i class="fas fa-bars"></i>
           </button>
@@ -1369,16 +1383,16 @@
   <!-- Mobile Search Modal -->
   <div class="mobile-search-modal" id="mobileSearchModal">
     <div class="mobile-search-header">
-      <button class="mobile-search-back" id="mobileSearchBack" aria-label="Cerrar busqueda">
+      <button class="mobile-search-back" id="mobileSearchBack" aria-label="Close search">
         <i class="fas fa-arrow-left"></i>
       </button>
       <div class="mobile-search-input-wrapper">
         <i class="fas fa-search mobile-search-icon"></i>
-        <input type="text" class="mobile-search-input" id="mobileSearchInput" placeholder="Buscar por nombre, ubicacion, categoria..." autocomplete="off" autocapitalize="none" spellcheck="false">
+        <input type="text" class="mobile-search-input" id="mobileSearchInput" placeholder="Search by name, location, category..." autocomplete="off" autocapitalize="none" spellcheck="false">
       </div>
     </div>
     <div class="mobile-search-content">
-      <div class="mobile-search-label">BUSQUEDAS POPULARES</div>
+      <div class="mobile-search-label">POPULAR SEARCHES</div>
       <div class="mobile-search-suggestions" id="mobileSearchSuggestions">
         <!-- Populated dynamically -->
       </div>
@@ -1391,21 +1405,21 @@
       <div class="safe-search-modal-icon">
         <i class="fas fa-shield-alt"></i>
       </div>
-      <h2 id="safeSearchModalTitle">¿Navegar con seguridad en publico?</h2>
+      <h2 id="safeSearchModalTitle">Browse Safely in Public?</h2>
       <p>
-        Activa la <strong>Busqueda Segura</strong> para desenfocar imagenes y navegar comodamente en el trabajo, transporte o lugares publicos.
-        Puedes cambiar esto cuando quieras con el icono de escudo en el encabezado.
+        Enable <strong>Safe Search</strong> to blur images so you can comfortably browse at work, on the bus, or anywhere public. 
+        You can toggle this anytime using the shield icon in the header.
       </p>
       <div class="safe-search-modal-actions">
         <button class="safe-search-modal-btn safe-search-modal-btn-primary" id="enableSafeSearch">
-          <i class="fas fa-shield-alt"></i> Activar Busqueda Segura
+          <i class="fas fa-shield-alt"></i> Enable Safe Search
         </button>
         <button class="safe-search-modal-btn safe-search-modal-btn-secondary" id="dismissSafeSearch">
-          No gracias, estoy en privado
+          No Thanks, I'm in Private
         </button>
       </div>
       <div class="safe-search-modal-footer">
-        Puedes cambiar esta opcion cuando quieras haciendo clic en el icono <i class="fas fa-eye-slash"></i> del encabezado
+        You can change this setting anytime by clicking the <i class="fas fa-eye-slash"></i> icon in the header
       </div>
     </div>
   </div>
@@ -1413,52 +1427,52 @@
   <!-- Mobile Drawer -->
   <div id="drawerOverlay" class="drawer-overlay" tabindex="-1" aria-hidden="true"></div>
   <nav id="mobileDrawer" class="mobile-drawer" aria-hidden="true" aria-labelledby="mobileMenuToggle">
-    <button class="drawer-close" id="drawerClose" aria-label="Cerrar menu">×</button>
-    <a href="/">Inicio</a>
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">×</button>
+    <a href="/">Home</a>
     
     <!-- Categories collapsible section -->
     <div class="drawer-categories-toggle" id="drawerCategoriesToggle">
       <div class="icon-text">
         <i class="fas fa-th"></i>
-        <span>Categorias</span>
+        <span>Categories</span>
       </div>
       <i class="fas fa-chevron-down chevron"></i>
     </div>
     <div id="drawerCategoriesSection">
-      <div class="drawer-categories-label">CATEGORIAS MAS POPULARES</div>
+      <div class="drawer-categories-label">MOST POPULAR CATEGORIES</div>
       <div id="drawerCategories">
         <!-- Populated dynamically from config/categories.js -->
       </div>
-      <a href="/categories/" class="drawer-view-all-btn">Ver todas las categorias</a>
+      <a href="/categories/" class="drawer-view-all-btn">View All Categories</a>
     </div>
 
     <!-- Locations collapsible section -->
     <div class="drawer-locations-toggle" id="drawerLocationsToggle">
       <div class="icon-text">
         <i class="fas fa-map-marker-alt"></i>
-        <span>Ubicaciones</span>
+        <span>Locations</span>
       </div>
       <i class="fas fa-chevron-down chevron"></i>
     </div>
     <div id="drawerLocationsSection">
-      <div class="drawer-locations-label">UBICACIONES POPULARES</div>
+      <div class="drawer-locations-label">POPULAR LOCATIONS</div>
       <div id="drawerLocations">
-        <a href="/near-me/">Cerca de mi</a>
-        <a href="/country/united-states/">Estados Unidos</a>
+        <a href="/near-me/">Near Me</a>
+        <a href="/country/united-states/">United States</a>
         <a href="/country/canada/">Canada</a>
         <a href="/country/india/">India</a>
         <a href="/country/japan/">Japan</a>
       </div>
-      <a href="/locations/" class="drawer-view-all-btn">Ver todas las ubicaciones</a>
+      <a href="/locations/" class="drawer-view-all-btn">View All Locations</a>
     </div>
   </nav>
   
   <!-- Main Content -->
   <div class="container-main">
-    <h1 class="page-title">Las mejores creadoras de OnlyFans en India</h1>
+    <h1 class="page-title">The Best Onlyfans Creators All Across India</h1>
     
     <div id="error"></div>
-    <div id="status">Cargando creadoras de India...</div>
+    <div id="status">Loading creators from India...</div>
     
     <div class="row" id="results"></div>
     
@@ -1466,47 +1480,51 @@
     <div id="loadMoreContainer">
       <div id="loadedCount"></div>
       <button id="loadMoreBtn">
-        <span class="btn-text">Cargar mas creadoras</span>
+        <span class="btn-text">Load More Creators</span>
       </button>
     </div>
   </div>
 
   <!-- SEO Content Section -->
   <section class="mt-5 pt-5" style="max-width: 900px; margin-left: auto; margin-right: auto; text-align: left; border-top: 1px solid var(--border-color);">
-    <h2 id="india-seo-title" style="color: #00AFF0; font-weight: 700; font-size: 28px; margin-bottom: 20px;">Creadoras de OnlyFans en India: descubre los mejores perfiles indios</h2>
+    <h2 id="india-seo-title" style="color: #00AFF0; font-weight: 700; font-size: 28px; margin-bottom: 20px;">Indian OnlyFans Creators: Discover the Best Indian OnlyFans Profiles</h2>
 
     <p style="color: var(--text-primary); font-size: 16px; line-height: 1.7; margin-bottom: 20px;">
-      Las creadoras de OnlyFans en India combinan diversidad cultural con contenido moderno. La escena de OnlyFans en India abarca moda, glamour, cosplay y fitness, ofreciendo muchas opciones para explorar.
+      Indian OnlyFans creators are building a fast growing, globally visible creator scene that blends cultural confidence with modern content strategy. From major cities to emerging creative communities, Indian OnlyFans profiles stand out for consistent branding, clear niches, and authentic storytelling.
     </p>
 
-    <h2 style="color: #00AFF0; font-weight: 600; font-size: 22px; margin-bottom: 15px; margin-top: 30px;">Por que las creadoras de OnlyFans en India crecen tan rapido</h2>
+    <h2 style="color: #00AFF0; font-weight: 600; font-size: 22px; margin-bottom: 15px; margin-top: 30px;">Why Indian OnlyFans Is Growing So Fast</h2>
 
     <p style="color: var(--text-primary); font-size: 16px; line-height: 1.7; margin-bottom: 15px;">
-      Muchas creadoras indias construyen audiencias leales con actualizaciones constantes y una comunidad activa. Ese enfoque mejora la retencion y crea experiencias mas personalizadas para los fans.
+      The Indian OnlyFans market is powered by variety. You will find creators focused on glamour, fitness, fashion, cosplay, art, and lifestyle content, each with a distinct look and audience. This diversity makes it easier for fans to find the exact style they want while giving creators room to differentiate.
     </p>
 
     <p style="color: var(--text-primary); font-size: 16px; line-height: 1.7; margin-bottom: 20px;">
-      Los mejores perfiles de OnlyFans en India priorizan la autenticidad, con contenido que combina cultura local y tendencias globales. Ese equilibrio las hace destacar y aumenta el valor a largo plazo.
+      Many top Indian OnlyFans creators combine personality with professionalism. Strong visuals, consistent posting schedules, and real engagement help build trust, which is critical for long term subscriber growth and retention.
     </p>
 
-    <h2 style="color: #00AFF0; font-weight: 600; font-size: 22px; margin-bottom: 15px; margin-top: 30px;">Como encontrar las mejores creadoras de OnlyFans en India</h2>
+    <h2 style="color: #00AFF0; font-weight: 600; font-size: 22px; margin-bottom: 15px; margin-top: 30px;">How to Find the Best Indian OnlyFans Creators</h2>
 
     <ul style="color: var(--text-primary); font-size: 16px; line-height: 1.8; margin-bottom: 20px;">
-      <li><strong>Busca con intencion:</strong> usa palabras clave como "OnlyFans India" y nichos como cosplay, fitness o glamour.</li>
-      <li><strong>Revisa la calidad del perfil:</strong> bios claras, buenas imagenes y subidas constantes indican una creadora confiable.</li>
-      <li><strong>Usa filtros:</strong> aplica verificado y packs para encontrar creadoras con mas valor.</li>
-      <li><strong>Compara precios:</strong> ajusta la suscripcion a tus expectativas y preferencias.</li>
-      <li><strong>Busca interaccion:</strong> creadoras activas que responden y publican seguido suelen ser las mejores.</li>
+      <li><strong>Search smart:</strong> Use keywords like "Indian OnlyFans", "Indian creators", and niche terms (fitness, cosplay, glamour).</li>
+      <li><strong>Check profile quality:</strong> Clear bios, consistent uploads, and strong visuals signal a reliable creator.</li>
+      <li><strong>Use filters:</strong> Apply verified and bundle filters to find trusted creators with extra value.</li>
+      <li><strong>Compare pricing:</strong> Match subscription price points to your expectations and content preferences.</li>
+      <li><strong>Look for engagement:</strong> Active creators who reply to fans and host interactive content tend to be the best long term picks.</li>
     </ul>
 
-    <h2 style="color: #00AFF0; font-weight: 600; font-size: 22px; margin-bottom: 15px; margin-top: 30px;">Consejos practicos para explorar OnlyFans India</h2>
+    <h2 style="color: #00AFF0; font-weight: 600; font-size: 22px; margin-bottom: 15px; margin-top: 30px;">Practical Advice for Browsing OnlyFans India</h2>
 
     <p style="color: var(--text-primary); font-size: 16px; line-height: 1.7; margin-bottom: 20px;">
-      Busca creadoras con nichos definidos y publicaciones regulares. Los perfiles que explican su contenido y frecuencia suelen ofrecer mejores resultados. Usa los filtros de FansPedia para verificacion, packs y rangos de precio para acotar tu lista rapidamente.
+      If you are comparing Indian OnlyFans models, prioritize creators with clear niche positioning and consistent updates. Profiles that highlight what makes their content unique usually deliver higher satisfaction. Use FansPedia filters for verified status, bundle deals, and price ranges to narrow your list quickly.
     </p>
 
     <p style="color: var(--text-primary); font-size: 16px; line-height: 1.7; margin-bottom: 20px;">
-      Empieza con los listados de arriba para descubrir los mejores perfiles de OnlyFans en India. Hay opciones para glamour, fitness, moda y estilos alternativos.
+      Fans searching for Indian OnlyFans creators often want authenticity and variety. Many creators share themed drops, behind the scenes content, and interactive sessions like Q and A or custom requests. These signals help you identify creators who are invested in their community.
+    </p>
+
+    <p style="color: var(--text-primary); font-size: 16px; line-height: 1.7; margin-bottom: 20px;">
+      Start with the listings above to explore the best Indian OnlyFans profiles. Whether you are looking for fashion forward creators, fitness focused accounts, or bold alternative styles, the Indian OnlyFans scene offers something for everyone.
     </p>
   </section>
   
@@ -1554,40 +1572,40 @@
 
         <!-- Popular Categories -->
         <div class="footer-column">
-          <h3 class="footer-heading">Categorias Populares</h3>
+          <h3 class="footer-heading">Popular Categories</h3>
           <ul class="footer-links">
-            <li><a href="/categories/verified">Creadoras Verificadas</a></li>
-            <li><a href="/categories/free">OnlyFans Gratis</a></li>
-            <li><a href="/categories/cosplay">Modelos Cosplay</a></li>
-            <li><a href="/categories/fitness">Fitness y Bienestar</a></li>
-            <li><a href="/categories/gaming">Creadoras Gaming</a></li>
-            <li><a href="/categories">Ver todas las categorias</a></li>
+            <li><a href="/categories/verified">Verified Creators</a></li>
+            <li><a href="/categories/free">Free OnlyFans</a></li>
+            <li><a href="/categories/cosplay">Cosplay Models</a></li>
+            <li><a href="/categories/fitness">Fitness & Wellness</a></li>
+            <li><a href="/categories/gaming">Gaming Creators</a></li>
+            <li><a href="/categories">View All Categories</a></li>
           </ul>
         </div>
 
         <!-- Resources -->
         <div class="footer-column">
-          <h3 class="footer-heading">Recursos</h3>
+          <h3 class="footer-heading">Resources</h3>
           <ul class="footer-links">
-            <li><a href="#" onclick="alert('¡Proximamente!'); return false;">Guia para Creadores</a></li>
-            <li><a href="#" onclick="alert('¡Proximamente!'); return false;">Como Suscribirte</a></li>
-            <li><a href="#" onclick="alert('¡Proximamente!'); return false;">Consejos de Seguridad</a></li>
-            <li><a href="#" onclick="alert('¡Proximamente!'); return false;">FAQ</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Creator Guide</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">How to Subscribe</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Safety Tips</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">FAQ</a></li>
             <li><a href="/blog/">Blog</a></li>
-            <li><a href="#" onclick="alert('¡Proximamente!'); return false;">Soporte</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Support</a></li>
           </ul>
         </div>
 
         <!-- Legal & Info -->
         <div class="footer-column">
-          <h3 class="footer-heading">Legal e Informacion</h3>
+          <h3 class="footer-heading">Legal & Info</h3>
           <ul class="footer-links">
-            <li><a href="#" onclick="alert('¡Proximamente!'); return false;">Sobre Nosotros</a></li>
-            <li><a href="#" onclick="alert('¡Proximamente!'); return false;">Contacto</a></li>
-            <li><a href="#" onclick="alert('¡Proximamente!'); return false;">Terminos del Servicio</a></li>
-            <li><a href="#" onclick="alert('¡Proximamente!'); return false;">Politica de Privacidad</a></li>
-            <li><a href="#" onclick="alert('¡Proximamente!'); return false;">Politica DMCA</a></li>
-            <li><a href="#" onclick="alert('¡Proximamente!'); return false;">Politica de Cookies</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">About Us</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Contact</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Terms of Service</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Privacy Policy</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">DMCA Policy</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Cookie Policy</a></li>
           </ul>
         </div>
       </div>
@@ -1596,16 +1614,16 @@
       <div class="footer-bottom">
         <div class="footer-bottom-content">
           <p class="footer-copyright">
-            © 2026 fanspedia.net - Todos los derechos reservados
+            © 2025 fanspedia.net - All rights reserved
           </p>
           <div class="footer-stats">
             <span class="stat-badge">
               <i class="fas fa-check-circle"></i>
-              10,000+ Creadoras Verificadas
+              9,500+ Verified Creators
             </span>
             <span class="stat-badge">
               <i class="fas fa-sync-alt"></i>
-              Actualizado a Diario
+              Updated Daily
             </span>
           </div>
         </div>
@@ -1616,98 +1634,26 @@
   
   <!-- Header JavaScript -->
   <script type="module">
+    // Load categories dynamically
     import { popularCategories, categoryToSlug } from '/config/categories.js?v=20260226-1';
-
-    const categoryLabelMapEs = {
-      'nude': 'Desnudo',
-      'reddit': 'Reddit',
-      'models': 'Modelos',
-      'sex': 'Sexo',
-      'gay': 'Gay',
-      'anal': 'Anal',
-      'feet': 'Pies',
-      'twitter': 'Twitter',
-      'trans': 'Trans',
-      'lesbian': 'Lesbiana',
-      'squirt': 'Squirt',
-      'couple': 'Pareja',
-      'milf': 'MILF',
-      'tiktok': 'TikTok',
-      'girl': 'Chica',
-      'big tits': 'Pechos Grandes',
-      'blowjobs': 'Felaciones',
-      'boobs': 'Pechos',
-      'sextape': 'Sex Tape',
-      'creampie': 'Creampie',
-      'joi': 'JOI',
-      'threesome': 'Trío',
-      'teen (18+)': 'Joven (18+)',
-      'shemale': 'Trans',
-      'bbc': 'BBC',
-      'tits': 'Tetas',
-      'ebony': 'Ébano',
-      'pornhub': 'Pornhub',
-      'footjob': 'Footjob',
-      'foot fetish': 'Fetiche de Pies',
-      'dick ratings': 'Calificación de Penes',
-      'bbw': 'BBW',
-      'mature': 'Madura',
-      'teacher': 'Profesora',
-      'pussy': 'Coño',
-      'cuckold': 'Cuckold',
-      'big ass': 'Culo Grande',
-      'squirting': 'Squirting',
-      'hottest': 'Más Hot',
-      'amateur': 'Amateur',
-      'blonde': 'Rubia',
-      'instagram': 'Instagram',
-      'pawg': 'PAWG',
-      'gangbang': 'Gangbang',
-      'redhead': 'Pelirroja',
-      'male': 'Hombre',
-      'vip': 'VIP',
-      'famous': 'Famosa',
-      'twins': 'Gemelas',
-      'ass': 'Culo',
-      'deepthroat': 'Garganta Profunda',
-      'pregnant': 'Embarazada',
-      'handjob': 'Paja',
-      'facial': 'Facial',
-      'asmr': 'ASMR',
-      'pegging': 'Pegging',
-      'no ppv': 'Sin PPV',
-      'nurse': 'Enfermera',
-      'smoking fetish': 'Fetiche de Fumar',
-      'goth-free': 'Gótica (Gratis)',
-      'big natural boobs': 'Pechos Naturales Grandes',
-      'olympian': 'Olímpica',
-      'pussy-play': 'Juego con el Coño'
-    };
-
-    function toTitleCase(label) {
-      return label.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-    }
-
-    function getCategoryDisplayLabel(label) {
-      const normalized = String(label || '').toLowerCase().trim();
-      return categoryLabelMapEs[normalized] || toTitleCase(label);
-    }
-
+    
+    // Populate desktop categories dropdown
     const categoriesMenu = document.getElementById('categoriesMenu');
     if (categoriesMenu) {
       const menuHTML = popularCategories.map(cat => {
         const slug = categoryToSlug(cat);
-        const label = getCategoryDisplayLabel(cat);
+        const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
         return `<a role="menuitem" href="/categories/${slug}/">${label}</a>`;
-      }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Ver todas las categorias →</a>';
+      }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Browse all categories →</a>';
       categoriesMenu.innerHTML = menuHTML;
     }
-
+    
+    // Populate mobile drawer categories
     const drawerCats = document.getElementById('drawerCategories');
     if (drawerCats) {
       const drawerHTML = popularCategories.map(cat => {
         const slug = categoryToSlug(cat);
-        const label = getCategoryDisplayLabel(cat);
+        const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
         return `<a href="/categories/${slug}/">${label}</a>`;
       }).join('');
       drawerCats.innerHTML = drawerHTML;
@@ -1774,10 +1720,10 @@
       const icon = themeToggle.querySelector('i');
       if (theme === 'dark') {
         icon.className = 'fas fa-sun';
-        themeToggle.setAttribute('aria-label', 'Cambiar a modo claro');
+        themeToggle.setAttribute('aria-label', 'Switch to light mode');
       } else {
         icon.className = 'fas fa-moon';
-        themeToggle.setAttribute('aria-label', 'Cambiar a modo oscuro');
+        themeToggle.setAttribute('aria-label', 'Switch to dark mode');
       }
     }
     
@@ -1817,7 +1763,7 @@
         const enPath = (location.pathname.replace(/^\/es/, '') || '/') + location.search;
         location.href = enPath;
       }
-    };
+    }
     
     function updateLanguageIndicator(lang) {
       const indicator = document.getElementById('langIndicator');
@@ -1857,14 +1803,14 @@
         document.body.classList.add('safe-search-active');
         safeSearchToggle.classList.add('active');
         safeSearchToggle.querySelector('i').className = 'fas fa-eye-slash';
-        safeSearchToggle.setAttribute('aria-label', 'Desactivar Busqueda Segura (mostrar imagenes)');
-        safeSearchToggle.setAttribute('title', 'Busqueda Segura: ACTIVADA (imagenes desenfocadas)');
+        safeSearchToggle.setAttribute('aria-label', 'Disable Safe Search (show images)');
+        safeSearchToggle.setAttribute('title', 'Safe Search: ON (images blurred)');
       } else {
         document.body.classList.remove('safe-search-active');
         safeSearchToggle.classList.remove('active');
         safeSearchToggle.querySelector('i').className = 'fas fa-eye';
-        safeSearchToggle.setAttribute('aria-label', 'Activar Busqueda Segura (desenfocar imagenes)');
-        safeSearchToggle.setAttribute('title', 'Busqueda Segura: DESACTIVADA (imagenes visibles)');
+        safeSearchToggle.setAttribute('aria-label', 'Enable Safe Search (blur images)');
+        safeSearchToggle.setAttribute('title', 'Safe Search: OFF (images visible)');
       }
       localStorage.setItem('safeSearch', enabled.toString());
     }
@@ -2064,10 +2010,14 @@
   
   <!-- Main Page Script -->
   <script>
-    let currentPage = 1;
+    // Read page from path e.g. /country/india/2/ → page 2
+    let currentPage = (function() {
+      const m = location.pathname.match(/\/country\/[^\/]+\/(\d+)\/?$/);
+      return m ? Math.max(1, parseInt(m[1], 10)) : 1;
+    })();
     let isLoading = false;
     let hasMore = true;
-    const pageSize = 40;
+    const pageSize = 50;
     let lcpBoostApplied = false;
     
     const resultsDiv = document.getElementById('results');
@@ -2162,7 +2112,7 @@
       }
       
       errorDiv.textContent = '';
-      statusDiv.textContent = append ? 'Cargando mas...' : 'Cargando creadoras de India...';
+      statusDiv.textContent = append ? 'Loading more...' : 'Loading creators from India...';
       
       try {
         // Search by country synonyms (full-text across all fields)
@@ -2201,13 +2151,13 @@
         
         if (!Array.isArray(data)) {
           console.error('Unexpected data format:', data);
-          errorDiv.textContent = 'Formato de datos invalido.';
+          errorDiv.textContent = 'Invalid data format.';
           isLoading = false;
           return;
         }
 
         if (data.length === 0 && currentPage === 1) {
-          resultsDiv.innerHTML = `<p class='text-muted' style='grid-column: 1/-1; text-align: center; padding: 40px 20px;'>No se encontraron creadoras de India.</p>`;
+          resultsDiv.innerHTML = `<p class='text-muted' style='grid-column: 1/-1; text-align: center; padding: 40px 20px;'>No creators found from India.</p>`;
           statusDiv.textContent = '';
           isLoading = false;
           hasMore = false;
@@ -2222,11 +2172,11 @@
           const imgSrc = img && img.startsWith('http') ? img : '/static/no-image.png';
           const responsive = buildResponsiveSources(imgSrc);
           
-          const name = item.name || 'Desconocido';
+          const name = item.name || 'Unknown';
           const username = item.username || '—';
           const priceText = (item.subscribePrice && !isNaN(item.subscribePrice))
             ? `$${parseFloat(item.subscribePrice).toFixed(2)}`
-            : 'GRATIS';
+            : 'FREE';
           const verifiedIcon = item.isVerified ? '✅ ' : '';
           const profileUrl = username !== '—' ? `https://onlyfans.com/${encodeURIComponent(username)}` : '#';
           
@@ -2244,26 +2194,26 @@
               <button class="favorite-btn ${favActive ? 'active' : ''}" data-username="${safeUsername}" onclick="event.preventDefault(); toggleFavorite('${safeUsername}', this);">
                 <span>${favChar}</span>
               </button>
-              <img src="${responsive.src}" 
+              <div class="card-img-wrap">
+                <img src="${responsive.src}" 
                    srcset="${responsive.srcset}"
                    sizes="${responsive.sizes}"
-                   alt="${name}" 
-                   width="270" 
-                   height="360"
-                   style="aspect-ratio: 3 / 4;"
+                   alt="${name}"
                    ${isFirstCard ? 'loading="eager" fetchpriority="high"' : 'loading="lazy" fetchpriority="low"'} 
                    decoding="async"
                    referrerpolicy="no-referrer" 
                    onerror="if(this.src!='/static/no-image.png'){this.removeAttribute('srcset'); this.removeAttribute('sizes'); this.src='${imgSrc}';}"
-                   onload="if(this.naturalWidth<=10||this.naturalHeight<=10){this.parentElement.parentElement.remove();}">
+                   onload="if(this.naturalWidth<=10||this.naturalHeight<=10){this.parentElement.parentElement.parentElement.remove();}">
+
+              </div>
               <div class="card-body">
                 <h5>${verifiedIcon}${name}</h5>
                 <p class="username">@${username}</p>
-                ${priceText === 'GRATIS' 
+                ${priceText === 'FREE' 
                   ? `<p class="price-free">${priceText}</p>` 
                   : `<p class="price-tag">${priceText}</p>`}
                 <a href="${profileUrl}" class="view-profile-btn">
-                  Ver perfil
+                  View Profile
                 </a>
               </div>
             </div>`;
@@ -2310,7 +2260,7 @@
         updateLoadMoreButton();
       } catch (err) {
         console.error('Error:', err);
-        errorDiv.textContent = 'Error al cargar resultados.';
+        errorDiv.textContent = 'Error loading results.';
         statusDiv.textContent = '';
         isLoading = false;
         loadMoreContainer.style.display = 'none';
@@ -2322,17 +2272,17 @@
       
       if (hasMore && totalLoaded > 0) {
         loadMoreContainer.style.display = 'block';
-        loadedCountEl.textContent = `Mostrando ${totalLoaded} creadoras`;
+        loadedCountEl.textContent = `Showing ${totalLoaded} creators`;
         statusDiv.style.display = 'none';
         
         if (totalLoaded >= 200) {
-          loadedCountEl.textContent = `¡Has explorado ${totalLoaded} creadoras! 🔥`;
+          loadedCountEl.textContent = `You've explored ${totalLoaded} creators! 🔥`;
         }
       } else if (totalLoaded > 0 && !hasMore) {
         loadMoreContainer.style.display = 'block';
         loadMoreBtn.disabled = true;
-        loadMoreBtn.querySelector('.btn-text').textContent = 'Todos los resultados cargados';
-        loadedCountEl.textContent = `Has visto todas las ${totalLoaded} creadoras que coinciden`;
+        loadMoreBtn.querySelector('.btn-text').textContent = 'All Results Loaded';
+        loadedCountEl.textContent = `You've seen all ${totalLoaded} matching creators`;
         statusDiv.style.display = 'none';
       } else {
         loadMoreContainer.style.display = 'none';
@@ -2344,12 +2294,31 @@
       loadMoreBtn.addEventListener('click', () => {
         if (isLoading || !hasMore) return;
         currentPage++;
+        // Path-based pagination: /country/india/2/
+        const basePath = location.pathname.replace(/\/\d+\/?$/, '').replace(/\/?$/, '/');
+        history.replaceState({}, '', `${basePath}${currentPage}/`);
         performSearch(false, true);
       });
     }
     
     // Initial load
-    performSearch(true);
+    // If SSR pre-rendered by api/ssr/country.js, skip the initial client fetch —
+    // cards are already in the DOM. window.__COUNTRY_SSR = { name, count, hasMore }
+    const ssrData = window.__COUNTRY_SSR;
+    if (ssrData && ssrData.name === 'india') {
+      hasMore = ssrData.hasMore !== false;
+      statusDiv.textContent = '';
+      try {
+        const favSet = getFavoritesSet();
+        resultsDiv.querySelectorAll('.favorite-btn[data-username]').forEach(btn => {
+          const u = btn.dataset.username;
+          if (u && favSet.has(u)) { btn.classList.add('active'); const s = btn.querySelector('span'); if (s) s.textContent = '♥'; }
+        });
+      } catch (e) { /* non-critical */ }
+      updateLoadMoreButton();
+    } else {
+      performSearch(true);
+    }
   </script>
 
   <!-- Anchor target for sticky nav: Wishlist -->
@@ -2358,23 +2327,23 @@
   <nav class="sticky-bottom-nav" role="navigation" aria-label="Bottom navigation">
     <a href="#headerSearch" class="nav-item" data-nav="search">
       <span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span>
-      <span class="label">Buscar</span>
+      <span class="label">Search</span>
     </a>
     <a href="/near-me/" class="nav-item" data-nav="near">
       <span class="icon"><i class="fa-solid fa-location-arrow"></i></span>
-      <span class="label">Cerca de mi</span>
+      <span class="label">Near Me</span>
     </a>
     <a href="/?sort=best" class="nav-item" data-nav="best">
       <span class="icon"><i class="fa-solid fa-trophy"></i></span>
-      <span class="label">Mejor</span>
+      <span class="label">Best</span>
     </a>
     <a href="/?sort=hot" class="nav-item" data-nav="hot">
       <span class="icon"><i class="fa-solid fa-fire"></i></span>
-      <span class="label">¡Hot!</span>
+      <span class="label">Hot!</span>
     </a>
     <a href="/wishlist/" class="nav-item" data-nav="wishlist">
       <span class="icon position-relative"><i class="fa-solid fa-heart"></i><span class="wishlist-count" style="display:none;position:absolute;top:-6px;right:-6px;background:#ff3b30;color:#fff;font-size:10px;font-weight:700;border-radius:10px;min-width:18px;height:18px;align-items:center;justify-content:center;padding:0 5px;border:2px solid var(--bg-secondary);box-shadow:0 2px 8px rgba(255,59,48,0.4)">0</span></span>
-      <span class="label">Favoritos</span>
+      <span class="label">Wishlist</span>
     </a>
   </nav>
   <style>
@@ -2418,7 +2387,7 @@
       }
     }catch(e){}})();
   </script>
-  <script src="/utils/wishlist-badge.js?v=20251116-1"></script>
+  <script src="/utils/wishlist-badge.js?v=20251116-1" defer></script>
 </body>
 </html>
 

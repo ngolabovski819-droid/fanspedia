@@ -247,7 +247,9 @@
   /* Card styles (match homepage) */
     .card { background:var(--bg-secondary); color:var(--text-primary); border:none; border-radius:20px; transition:all .3s ease; overflow:hidden; box-shadow:0 2px 8px var(--card-shadow); position:relative; }
     .card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px var(--card-shadow-hover); }
-    .card img { border-radius: 20px 20px 0 0; height: 360px; object-fit: cover; width: 100%; min-height: 360px; background: linear-gradient(90deg, #e8e8e8 25%, #f0f0f0 50%, #e8e8e8 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; transition:filter 0.3s ease; }
+    .card-img-wrap { aspect-ratio: 3/4; overflow: hidden; border-radius: 20px 20px 0 0; background: linear-gradient(90deg, #e8e8e8 25%, #f0f0f0 50%, #e8e8e8 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+    [data-theme="dark"] .card-img-wrap { background: linear-gradient(90deg, #2a2a3e 25%, #323246 50%, #2a2a3e 75%); }
+    .card img { border-radius:0; object-fit: cover; width: 100%; height: 100%; display: block; transition:filter 0.3s ease; }
     @keyframes shimmer { 0%{ background-position:200% 0; } 100%{ background-position:-200% 0; } }
     /* Safe Search Blur */
     body.safe-search-active .card img { filter:blur(20px) saturate(0.7); opacity:0.85; }
@@ -986,8 +988,8 @@
               <button class=\"favorite-btn ${favActive ? 'active' : ''}\" data-username=\"${safeUsername}\" onclick=\"event.preventDefault(); toggleFavorite('${safeUsername}', this);\">
                 <span>${favChar}</span>
               </button>
-              <img src=\"${responsive.src}\" srcset=\"${responsive.srcset}\" sizes=\"${responsive.sizes}\" alt=\"${name}\" width=\"270\" height=\"360\" style=\"aspect-ratio:3/4;\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\" onerror=\"if(this.src!='/static/no-image.png'){this.removeAttribute('srcset'); this.removeAttribute('sizes'); this.src='${imgSrc}';}\">
-              <div class=\"card-body\">
+              <div class=\"card-img-wrap\">
+                <img src=\"${responsive.src}\" srcset=\"${responsive.srcset}\" sizes=\"${responsive.sizes}\" alt=\"${name}\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\" onerror=\"if(this.src!='/static/no-image.png'){this.removeAttribute('srcset'); this.removeAttribute('sizes'); this.src='${imgSrc}';}\">\n              </div>\n              <div class=\"card-body\">
                 <h5>${verifiedIcon}${name}</h5>
                 <p class=\"username\">@${username}</p>
                 ${priceText === 'FREE' ? `<p class='price-free' style='color:#34c759;font-weight:700;font-size:16px;text-transform:uppercase;'>${priceText}</p>` : `<p class='price-tag' style='color:#34c759;font-weight:700;font-size:18px;'>${priceText}</p>`}
@@ -1855,6 +1857,6 @@
       }
     }catch(e){}})();
   </script>
-  <script src="/utils/wishlist-badge.js?v=20251116-1"></script>
+  <script src="/utils/wishlist-badge.js?v=20251116-1" defer></script>
 </body>
 </html>

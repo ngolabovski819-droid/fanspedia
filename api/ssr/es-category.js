@@ -88,11 +88,12 @@ function renderCard(item, index) {
     <button class="favorite-btn" data-username="${username}" onclick="event.preventDefault();toggleFavorite('${username}',this);">
       <span>♡</span>
     </button>
-    <img src="${src}" srcset="${srcset}" sizes="${sizes}"
-      alt="${name} creadora de OnlyFans" width="270" height="360"
-      style="aspect-ratio:3/4;" loading="${loading}"${fetchpriority}
-      decoding="async" referrerpolicy="no-referrer"
-      onerror="if(this.src!=='/static/no-image.png'){this.removeAttribute('srcset');this.removeAttribute('sizes');this.src='${escHtml(imgSrc)}';}">
+    <div class="card-img-wrap">
+      <img src="${src}" srcset="${srcset}" sizes="${sizes}"
+        alt="${name} creadora de OnlyFans" loading="${loading}"${fetchpriority}
+        decoding="async" referrerpolicy="no-referrer"
+        onerror="if(this.src!=='/static/no-image.png'){this.removeAttribute('srcset');this.removeAttribute('sizes');this.src='${escHtml(imgSrc)}';this.style.opacity='0.4';}">
+    </div>
     <div class="card-body">
       <h3 style="font-size:1rem;font-weight:700;margin-bottom:4px;">${verifiedBadge}${name}</h3>
       <p class="username">@${username}</p>
@@ -252,9 +253,15 @@ export default async function handler(req, res) {
     const jsonLd = buildJsonLd(slug, label, creators, canonicalUrl);
     const ssrFlag = `<script>window.__CATEGORY_SSR={slug:${JSON.stringify(slug)},count:${totalCount},hasMore:${creators.length === PAGE_SIZE},page:${page}};</script>`;
     const paginationLinks = [prevLink, nextLink].filter(Boolean).join('\n');
+    // LCP preload
+    const _lcpImg = creators[0]?.avatar || creators[0]?.avatar_c144 || '';
+    const _lcpSrc = _lcpImg.startsWith('http') ? _lcpImg : '';
+    const preloadLink = _lcpSrc
+      ? (() => { const { src, srcset, sizes } = buildResponsiveSources(_lcpSrc); return `<link rel="preload" as="image" fetchpriority="high" href="${src}" imagesrcset="${srcset}" imagesizes="${sizes}">`; })()
+      : '';
     html = html.replace(
       '</head>',
-      `${jsonLd}\n${ssrFlag}\n${hreflangLinks}\n${paginationLinks ? paginationLinks + '\n' : ''}</head>`
+      `${preloadLink ? preloadLink + '\n' : ''}${jsonLd}\n${ssrFlag}\n${hreflangLinks}\n${paginationLinks ? paginationLinks + '\n' : ''}</head>`
     );
 
     // --- 5. Body injections ---

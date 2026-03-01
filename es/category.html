@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mejores Categorías de OnlyFans | FansPedia</title>
-  <meta name="description" content="Descubre a los mejores creadores de OnlyFans por categoría. Filtra por verificados, paquetes y precio.">
+  <title>Best OnlyFans Category | FansPedia</title>
+  <meta name="description" content="Discover top OnlyFans creators by category. Filter by verified, bundles, and price.">
   <link id="canonicalLink" rel="canonical" href="https://fanspedia.net/categories/" />
   <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg">
 
@@ -247,7 +247,9 @@
   /* Card styles (match homepage) */
     .card { background:var(--bg-secondary); color:var(--text-primary); border:none; border-radius:20px; transition:all .3s ease; overflow:hidden; box-shadow:0 2px 8px var(--card-shadow); position:relative; }
     .card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px var(--card-shadow-hover); }
-    .card img { border-radius: 20px 20px 0 0; height: 360px; object-fit: cover; width: 100%; min-height: 360px; background: linear-gradient(90deg, #e8e8e8 25%, #f0f0f0 50%, #e8e8e8 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; transition:filter 0.3s ease; }
+    .card-img-wrap { aspect-ratio: 3/4; overflow: hidden; border-radius: 20px 20px 0 0; background: linear-gradient(90deg, #e8e8e8 25%, #f0f0f0 50%, #e8e8e8 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+    [data-theme="dark"] .card-img-wrap { background: linear-gradient(90deg, #2a2a3e 25%, #323246 50%, #2a2a3e 75%); }
+    .card img { border-radius:0; object-fit: cover; width: 100%; height: 100%; display: block; transition:filter 0.3s ease; }
     @keyframes shimmer { 0%{ background-position:200% 0; } 100%{ background-position:-200% 0; } }
     /* Safe Search Blur */
     body.safe-search-active .card img { filter:blur(20px) saturate(0.7); opacity:0.85; }
@@ -384,7 +386,7 @@
         <!-- Desktop navigation (moved next to logo) -->
         <div class="desktop-nav">
           <button id="categoriesToggle" class="nav-btn" aria-haspopup="true" aria-expanded="false">
-            Categorías <i class="fas fa-chevron-down" aria-hidden="true"></i>
+            Categories <i class="fas fa-chevron-down" aria-hidden="true"></i>
           </button>
           <div id="categoriesMenu" class="dropdown-menu" role="menu" aria-hidden="true">
             <!-- Populated dynamically from config/categories.js -->
@@ -393,13 +395,13 @@
 
         <div class="desktop-nav">
           <a href="/locations/" class="nav-btn">
-            Ubicaciones <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+            Locations <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
           </a>
         </div>
         <div class="header-search-section">
           <div class="header-search-wrapper">
             <i class="fas fa-search header-search-icon"></i>
-            <input id="headerSearch" type="text" class="header-search-input" placeholder="Buscar por nombre, ubicación, categoría..." autocomplete="off" autocapitalize="none" spellcheck="false" />
+            <input id="headerSearch" type="text" class="header-search-input" placeholder="Search by name, location, category..." autocomplete="off" autocapitalize="none" spellcheck="false" />
           </div>
         </div>
         <div class="header-actions">
@@ -431,11 +433,11 @@
       </button>
       <div class="mobile-search-input-wrapper">
         <i class="fas fa-search mobile-search-icon"></i>
-        <input type="text" class="mobile-search-input" id="mobileSearchInput" placeholder="Buscar creadoras..." autocomplete="off" />
+        <input type="text" class="mobile-search-input" id="mobileSearchInput" placeholder="Search creators..." autocomplete="off" />
       </div>
     </div>
     <div class="mobile-search-content">
-      <div class="mobile-search-label">Búsquedas populares</div>
+      <div class="mobile-search-label">Popular Searches</div>
       <div class="mobile-search-suggestions" id="mobileSearchSuggestionsContainer"></div>
     </div>
   </div>
@@ -446,18 +448,18 @@
       <div class="safe-search-modal-icon">
         <i class="fas fa-shield-alt"></i>
       </div>
-      <h2 id="safeSearchModalTitle">¿Activar Búsqueda Segura?</h2>
-      <p>La Búsqueda Segura desenfoca contenido potencialmente NSFW para navegar más cómodo en espacios públicos. Puedes activarla o desactivarla cuando quieras con el botón del escudo en el encabezado o con <strong>Alt+S</strong>.</p>
+      <h2 id="safeSearchModalTitle">Enable Safe Search?</h2>
+      <p>Safe Search blurs potentially NSFW content, making browsing more comfortable in public spaces. You can toggle it anytime using the shield button in the header or pressing <strong>Alt+S</strong>.</p>
       <div class="safe-search-modal-actions">
         <button class="safe-search-modal-btn safe-search-modal-btn-primary" id="enableSafeSearchBtn">
-          <i class="fas fa-check"></i> Activar Búsqueda Segura
+          <i class="fas fa-check"></i> Enable Safe Search
         </button>
         <button class="safe-search-modal-btn safe-search-modal-btn-secondary" id="dismissSafeSearchBtn">
-          No gracias, la activaré después
+          No Thanks, I'll Enable It Later
         </button>
       </div>
       <div class="safe-search-modal-footer">
-        La Búsqueda Segura está desactivada por defecto. Tu elección se guarda localmente.
+        Safe Search is OFF by default. Your choice is saved locally.
       </div>
     </div>
   </div>
@@ -465,44 +467,44 @@
   <!-- Mobile Drawer -->
   <div id="drawerOverlay" class="drawer-overlay" tabindex="-1" aria-hidden="true"></div>
   <nav id="mobileDrawer" class="mobile-drawer" aria-hidden="true" aria-labelledby="mobileMenuToggle">
-    <button class="drawer-close" id="drawerClose" aria-label="Close menu">×</button>
-    <a href="/">Inicio</a>
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">ï¿½</button>
+    <a href="/">Home</a>
     
     <div class="drawer-categories-toggle" id="drawerCategoriesToggle">
       <div class="left">
         <i class="fas fa-th icon"></i>
-        <span class="label">Categorías</span>
+        <span class="label">Categories</span>
       </div>
       <i class="fas fa-chevron-down chevron"></i>
     </div>
     
     <div class="drawer-categories-section" id="drawerCategoriesSection">
-      <div class="section-label">CATEGORÍAS MÁS POPULARES</div>
+      <div class="section-label">MOST POPULAR CATEGORIES</div>
       <div id="drawerCategories">
         <!-- Populated dynamically from config/categories.js -->
       </div>
-      <a href="/categories/" class="drawer-view-all">Ver todas las categorías</a>
+      <a href="/categories/" class="drawer-view-all">View All Categories</a>
     </div>
 
     <!-- Locations collapsible section -->
     <div class="drawer-locations-toggle" id="drawerLocationsToggle">
       <div class="left">
         <i class="fas fa-map-marker-alt icon"></i>
-        <span class="label">Ubicaciones</span>
+        <span class="label">Locations</span>
       </div>
       <i class="fas fa-chevron-down chevron"></i>
     </div>
     
     <div class="drawer-locations-section" id="drawerLocationsSection">
-      <div class="section-label">UBICACIONES POPULARES</div>
+      <div class="section-label">POPULAR LOCATIONS</div>
       <div id="drawerLocations">
-        <a href="/near-me/">Cerca de mí</a>
-        <a href="/country/united-states/">Estados Unidos</a>
+        <a href="/near-me/">Near Me</a>
+        <a href="/country/united-states/">United States</a>
         <a href="/country/canada/">Canada</a>
         <a href="/country/india/">India</a>
         <a href="/country/japan/">Japan</a>
       </div>
-      <a href="/locations/" class="drawer-view-all">Ver todas las ubicaciones</a>
+      <a href="/locations/" class="drawer-view-all">View All Locations</a>
     </div>
   </nav>
 
@@ -515,26 +517,26 @@
 
   <main>
     <div class="container text-center">
-      <h1 id="catH1" class="mb-2">Mejores Creadoras de OnlyFans</h1>
-      <p id="catSubtitle" class="subtitle">Explora las mejores creadoras de esta categoría. Usa los filtros para refinar tus resultados.</p>
+      <h1 id="catH1" class="mb-2">Best OnlyFans Creators</h1>
+      <p id="catSubtitle" class="subtitle">Explore top creators in this category. Use filters below to refine your results.</p>
 
       <!-- Filters (same as index) -->
       <div id="filters" class="filters-container">
         <div class="d-flex justify-content-center align-items-center flex-wrap gap-3 filters">
           <div class="form-check form-switch">
             <input id="verified" type="checkbox" class="form-check-input me-2">
-            <label for="verified" class="form-check-label me-4">Solo verificadas</label>
+            <label for="verified" class="form-check-label me-4">Verified only</label>
           </div>
           <div class="form-check form-switch">
             <input id="bundles" type="checkbox" class="form-check-input me-2">
-            <label for="bundles" class="form-check-label me-4">Suscripciones en paquete</label>
+            <label for="bundles" class="form-check-label me-4">Bundle subscriptions</label>
           </div>
           <div class="price-group">
-            <label for="price" class="form-label me-2">Precio máximo ($)</label>
+            <label for="price" class="form-label me-2">Max price ($)</label>
             <input id="price" type="range" class="form-range price-range" min="0" max="100" value="100" step="1">
             <span id="price-value" class="ms-2 price-value">100</span>
           </div>
-          <button id="resetFilters" type="button" class="btn-reset">Restablecer filtros</button>
+          <button id="resetFilters" type="button" class="btn-reset">Reset filters</button>
         </div>
       </div>
 
@@ -542,8 +544,8 @@
       <div id="activeFilters" class="recent-searches" aria-live="polite"></div>
 
   <!-- Favorites bar -->
-  <section id="wishlist" aria-label="Favoritos">
-    <div id="favoritesBar" class="favorites-bar" aria-label="Favoritos" aria-live="polite"></div>
+  <section id="wishlist" aria-label="Wishlist">
+    <div id="favoritesBar" class="favorites-bar" aria-label="Favorites" aria-live="polite"></div>
   </section>
 
       <!-- Results -->
@@ -554,19 +556,19 @@
       <!-- Load More Button -->
       <div id="loadMoreContainer" class="text-center my-4" style="display: none;">
         <button id="loadMoreBtn" class="load-more-btn">
-          <span class="btn-text">Cargar más creadoras</span>
+          <span class="btn-text">Load More Creators</span>
           <span class="btn-icon">?</span>
         </button>
         <p id="loadedCount" class="mt-2" style="color: #888; font-size: 14px; margin-bottom: 0;"></p>
       </div>
 
       <!-- Back to top button -->
-      <button id="backToTop" aria-label="Volver arriba" title="Volver arriba">?</button>
+      <button id="backToTop" aria-label="Back to top" title="Back to top">?</button>
 
       <!-- SEO content -->
       <section id="seoSection" class="mt-5 pt-4" style="max-width:900px; margin:0 auto; text-align:left; border-top:1px solid #e0e0e0;">
-        <h2 id="seoH2" style="color:#00AFF0; font-weight:700; font-size:26px; margin-bottom:16px;">Sobre esta categoría</h2>
-        <p id="seoP1" style="color:var(--text-primary); font-size:16px; line-height:1.7; margin-bottom:16px;">Encuentra las mejores creadoras de OnlyFans relacionadas con esta categoría. Reunimos miles de perfiles y te permitimos filtrar por verificación, paquetes y precio.</p>
+        <h2 id="seoH2" style="color:#00AFF0; font-weight:700; font-size:26px; margin-bottom:16px;">About this category</h2>
+        <p id="seoP1" style="color:var(--text-primary); font-size:16px; line-height:1.7; margin-bottom:16px;">Find the best OnlyFans creators related to this category. We aggregate thousands of profiles and let you filter by verified status, bundles, and price.</p>
         <div id="faq" style="margin-top:20px;"></div>
       </section>
     </div>
@@ -584,93 +586,15 @@
     // DYNAMIC CATEGORY NAVIGATION
     // ============================================
   import { popularCategories, categoryToSlug, compoundCategories } from '/config/categories.js?v=20260226-1';
-
-    const categoryLabelMapEs = {
-      'nude': 'Desnudo',
-      'reddit': 'Reddit',
-      'models': 'Modelos',
-      'sex': 'Sexo',
-      'gay': 'Gay',
-      'anal': 'Anal',
-      'feet': 'Pies',
-      'twitter': 'Twitter',
-      'trans': 'Trans',
-      'lesbian': 'Lesbiana',
-      'squirt': 'Squirt',
-      'couple': 'Pareja',
-      'milf': 'MILF',
-      'tiktok': 'TikTok',
-      'girl': 'Chica',
-      'big tits': 'Pechos Grandes',
-      'blowjobs': 'Felaciones',
-      'boobs': 'Pechos',
-      'sextape': 'Sex Tape',
-      'creampie': 'Creampie',
-      'joi': 'JOI',
-      'threesome': 'Trío',
-      'teen (18+)': 'Joven (18+)',
-      'shemale': 'Trans',
-      'bbc': 'BBC',
-      'tits': 'Tetas',
-      'ebony': 'Ébano',
-      'pornhub': 'Pornhub',
-      'footjob': 'Footjob',
-      'foot fetish': 'Fetiche de Pies',
-      'dick ratings': 'Calificación de Penes',
-      'bbw': 'BBW',
-      'mature': 'Madura',
-      'teacher': 'Profesora',
-      'pussy': 'Coño',
-      'cuckold': 'Cuckold',
-      'big ass': 'Culo Grande',
-      'squirting': 'Squirting',
-      'hottest': 'Más Hot',
-      'amateur': 'Amateur',
-      'blonde': 'Rubia',
-      'instagram': 'Instagram',
-      'pawg': 'PAWG',
-      'gangbang': 'Gangbang',
-      'redhead': 'Pelirroja',
-      'male': 'Hombre',
-      'vip': 'VIP',
-      'famous': 'Famosa',
-      'twins': 'Gemelas',
-      'ass': 'Culo',
-      'deepthroat': 'Garganta Profunda',
-      'pregnant': 'Embarazada',
-      'handjob': 'Paja',
-      'facial': 'Facial',
-      'asmr': 'ASMR',
-      'pegging': 'Pegging',
-      'no ppv': 'Sin PPV',
-      'nurse': 'Enfermera',
-      'smoking fetish': 'Fetiche de Fumar',
-      'goth-free': 'Gótica (Gratis)',
-      'big natural boobs': 'Pechos Naturales Grandes',
-      'olympian': 'Olímpica',
-      'pussy-play': 'Juego con el Coño'
-    };
-
-    function toTitleCase(label) {
-      return label.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-    }
-
-    function getCategoryDisplayLabel(label) {
-      const normalized = String(label || '').toLowerCase().trim();
-      return categoryLabelMapEs[normalized] || toTitleCase(label);
-    }
-
-    window.categoryLabelMapEs = categoryLabelMapEs;
-    window.getCategoryDisplayLabel = getCategoryDisplayLabel;
     
     // Render desktop dropdown menu
     const catMenu = document.getElementById('categoriesMenu');
     if (catMenu) {
       const menuHTML = popularCategories.map(cat => {
         const slug = categoryToSlug(cat);
-        const label = getCategoryDisplayLabel(cat);
+        const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
         return `<a role="menuitem" href="/categories/${slug}/">${label}</a>`;
-      }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Ver todas las categorías ?</a>';
+      }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Browse all categories ?</a>';
       catMenu.innerHTML = menuHTML;
     }
     
@@ -679,7 +603,7 @@
     if (drawerCats) {
       const drawerHTML = popularCategories.map(cat => {
         const slug = categoryToSlug(cat);
-        const label = getCategoryDisplayLabel(cat);
+        const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
         return `<a href="/categories/${slug}/">${label}</a>`;
       }).join('');
       drawerCats.innerHTML = drawerHTML;
@@ -724,14 +648,14 @@
         <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
           <a href="/" itemprop="item" class="breadcrumb-home">
             <i class="fas fa-home" aria-hidden="true"></i>
-            <span itemprop="name">Inicio</span>
+            <span itemprop="name">Home</span>
           </a>
           <meta itemprop="position" content="1" />
         </li>
         <li class="breadcrumb-separator" aria-hidden="true">/</li>
         <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
           <a href="/categories/" itemprop="item">
-            <span itemprop="name">Categorías</span>
+            <span itemprop="name">Categories</span>
           </a>
           <meta itemprop="position" content="2" />
         </li>
@@ -751,13 +675,7 @@
     function restoreScroll(){ if(savedScrollY>0){ requestAnimationFrame(()=>{ requestAnimationFrame(()=>{ window.scrollTo({ top: savedScrollY, left: 0, behavior: 'instant' }); }); }); } }
     // ----- Utilities -----
     function titleCase(str){ return str.replace(/\b\w/g, c => c.toUpperCase()); }
-    function slugToLabel(slug){
-      const base = decodeURIComponent(slug.replace(/-/g,' '));
-      if (typeof window.getCategoryDisplayLabel === 'function') {
-        return window.getCategoryDisplayLabel(base);
-      }
-      return titleCase(base);
-    }
+    function slugToLabel(slug){ return titleCase(decodeURIComponent(slug.replace(/-/g,' '))); }
     function getSlug(){
       const m = location.pathname.match(/\/categories\/([^\/]+)/i);
       return m ? m[1] : '';
@@ -833,24 +751,24 @@
     
     const canonical = `https://fanspedia.net/categories/${slug ? slug + '/' : ''}`;
 
-    document.title = label ? `${label} OnlyFans - Mejores Creadoras | FansPedia` : 'Categoría OnlyFans | FansPedia';
+    document.title = label ? `${label} OnlyFans Creators - Best ${label} Models | FansPedia` : 'OnlyFans Category | FansPedia';
     const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) metaDesc.setAttribute('content', label ? `Descubre las mejores creadoras de OnlyFans de ${label}. Filtra por verificación, paquetes y precio máximo. Explora miles de perfiles.` : 'Descubre las mejores creadoras de OnlyFans por categoría.');
+    if (metaDesc) metaDesc.setAttribute('content', label ? `Discover top ${label} OnlyFans creators. Filter by verified status, bundles, and max price. Explore thousands of profiles.` : 'Discover top OnlyFans creators by category.');
     const canon = document.getElementById('canonicalLink');
     if (canon) canon.setAttribute('href', canonical);
 
     // H1 + copy
-    document.getElementById('catH1').textContent = label ? `Mejores Creadoras de OnlyFans ${label}` : 'Mejores Creadoras de OnlyFans';
-    document.getElementById('catSubtitle').textContent = label ? `Explora las mejores modelos de OnlyFans de ${label}. Haz clic en los perfiles para verlos y usa filtros para ajustar resultados.` : 'Explora creadoras de OnlyFans. Usa filtros para refinar resultados.';
+    document.getElementById('catH1').textContent = label ? `Best OnlyFans ${label} Creators` : 'Best OnlyFans Creators';
+    document.getElementById('catSubtitle').textContent = label ? `Explore the best ${label} OnlyFans models. Click profiles to view, and use filters to narrow results.` : 'Explore OnlyFans creators. Use filters to refine results.';
 
     // Basic FAQ
     const faq = document.getElementById('faq');
     if (label && faq){
       faq.innerHTML = `
-        <h3 style=\"font-size:22px; font-weight:700; color:#00AFF0; margin-top:8px;\">FAQ: ${label} en OnlyFans</h3>
+        <h3 style=\"font-size:22px; font-weight:700; color:#00AFF0; margin-top:8px;\">FAQ: ${label} on OnlyFans</h3>
         <div>
-          <p style=\"color:var(--text-primary);\">P: ¿Cómo encuentro creadoras verificadas de ${label}? <br> R: Activa \"Solo verificadas\" para ver creadoras con la marca de verificación.</p>
-          <p style=\"color:var(--text-primary);\">P: ¿Puedo filtrar cuentas gratis? <br> R: Ajusta Precio máximo a 0 para mostrar suscripciones gratis cuando estén disponibles.</p>
+          <p style=\"color:var(--text-primary);\">Q: How do I find verified ${label} creators? <br> A: Toggle \"Verified only\" to see creators with the checkmark.</p>
+          <p style=\"color:var(--text-primary);\">Q: Can I filter for free accounts? <br> A: Set Max price to 0 to surface free subscriptions when available.</p>
         </div>
       `;
     }
@@ -875,7 +793,7 @@
       if (filters.bundles !== undefined) bundlesToggle.checked = filters.bundles;
       if (filters.maxPrice !== undefined) {
         priceRange.value = String(filters.maxPrice);
-        priceValue.textContent = filters.maxPrice === 0 ? 'Gratis' : String(filters.maxPrice);
+        priceValue.textContent = filters.maxPrice === 0 ? 'Free' : String(filters.maxPrice);
         // Disable price slider for compound categories with auto-maxPrice
         priceRange.disabled = true;
         priceRange.style.opacity = '0.5';
@@ -883,7 +801,11 @@
       }
     }
 
-    let currentPage = Number(new URLSearchParams(location.search).get('page') || '1');
+    // Read page from path e.g. /categories/big-tits/2/ â†’ page 2
+    let currentPage = (function() {
+      const m = location.pathname.match(/\/categories\/[^\/]+\/(\d+)\/?$/);
+      return m ? Math.max(1, parseInt(m[1], 10)) : 1;
+    })();
     const pageSize = 50;
     let isLoading = false;
     let hasMore = true;
@@ -917,13 +839,13 @@
       const totalLoaded = resultsDiv.children.length;
       if (hasMore && totalLoaded > 0) {
         loadMoreContainer.style.display = 'block';
-        loadedCountEl.textContent = `Mostrando ${totalLoaded} creadoras`;
+        loadedCountEl.textContent = `Showing ${totalLoaded} creators`;
         if (statusDiv) statusDiv.style.display = 'none';
       } else if (totalLoaded > 0 && !hasMore) {
         loadMoreContainer.style.display = 'block';
         loadMoreBtn.disabled = true;
-        loadMoreBtn.querySelector('.btn-text').textContent = 'Todos los resultados cargados';
-        loadedCountEl.textContent = `Has visto las ${totalLoaded} creadoras que coinciden`;
+        loadMoreBtn.querySelector('.btn-text').textContent = 'All Results Loaded';
+        loadedCountEl.textContent = `You've seen all ${totalLoaded} matching creators`;
         if (statusDiv) statusDiv.style.display = 'none';
       } else {
         loadMoreContainer.style.display = 'none';
@@ -956,20 +878,22 @@
     });
 
     function updateURL(){
+      // Path-based pagination: /categories/:slug/ for page 1, /categories/:slug/2/ for page 2+
+      const basePath = `/categories/${slug}/`;
+      const pagePath = currentPage > 1 ? `${basePath}${currentPage}/` : basePath;
+
       const params = new URLSearchParams();
-      if (currentPage > 1) params.set('page', String(currentPage));
-      
       // For compound categories, don't add auto-applied filters to URL (keep it clean for SEO)
       const autoFilters = isCompound && compoundCategories[slug]?.filters;
       const userChangedVerified = !autoFilters || autoFilters.verified === undefined;
       const userChangedBundles = !autoFilters || autoFilters.bundles === undefined;
       const userChangedPrice = !autoFilters || autoFilters.maxPrice === undefined;
-      
+
       if (verifiedToggle.checked && userChangedVerified) params.set('verified', 'true');
       if (bundlesToggle.checked && userChangedBundles) params.set('bundles', 'true');
       if (priceRange.value !== '100' && userChangedPrice) params.set('max', priceRange.value);
-      
-      const newURL = params.toString() ? `${location.pathname}?${params.toString()}` : location.pathname;
+
+      const newURL = params.toString() ? `${pagePath}?${params.toString()}` : pagePath;
       history.replaceState({}, '', newURL);
     }
 
@@ -977,17 +901,17 @@
       const wrap = document.getElementById('activeFilters');
       if (!wrap) return;
       const chips = [];
-      if (verifiedToggle.checked) chips.push(`<div class="search-chip" data-filter="verified">Solo verificadas <span class="remove" aria-label="Quitar">×</span></div>`);
-      if (bundlesToggle.checked) chips.push(`<div class="search-chip" data-filter="bundles">Paquetes <span class="remove" aria-label="Quitar">×</span></div>`);
+      if (verifiedToggle.checked) chips.push(`<div class="search-chip" data-filter="verified">Verified only <span class="remove" aria-label="Remove">ï¿½</span></div>`);
+      if (bundlesToggle.checked) chips.push(`<div class="search-chip" data-filter="bundles">Bundles <span class="remove" aria-label="Remove">ï¿½</span></div>`);
       
       // For compound categories with auto-maxPrice, show a non-removable chip
       const autoMaxPrice = isCompound && compoundCategories[slug]?.filters?.maxPrice !== undefined;
       if (autoMaxPrice) {
         const maxVal = compoundCategories[slug].filters.maxPrice;
-        const label = maxVal === 0 ? 'Solo Gratis' : `Máx $${maxVal}`;
+        const label = maxVal === 0 ? 'Free Only' : `Max $${maxVal}`;
         chips.push(`<div class="search-chip" aria-label="Price filter">${label}</div>`);
       } else if (priceRange.value !== '100') {
-        chips.push(`<div class="search-chip" data-filter="max">Máx $${priceRange.value} <span class="remove" aria-label="Quitar">×</span></div>`);
+        chips.push(`<div class="search-chip" data-filter="max">Max $${priceRange.value} <span class="remove" aria-label="Remove">ï¿½</span></div>`);
       }
       
       wrap.innerHTML = chips.join('');
@@ -1031,7 +955,7 @@
       isLoading = true;
       try {
         if (resetPage) {
-          currentPage = 1; hasMore = true; resultsDiv.innerHTML = ''; if (loadMoreBtn){ loadMoreBtn.disabled = false; loadMoreBtn.querySelector('.btn-text').textContent = 'Cargar más creadoras'; } if (loadMoreContainer) loadMoreContainer.style.display = 'none';
+          currentPage = 1; hasMore = true; resultsDiv.innerHTML = ''; if (loadMoreBtn){ loadMoreBtn.disabled = false; loadMoreBtn.querySelector('.btn-text').textContent = 'Load More Creators'; } if (loadMoreContainer) loadMoreContainer.style.display = 'none';
         }
   updateURL();
   updateActiveFilters();
@@ -1044,51 +968,51 @@
         if (bundles) apiUrl += '&bundles=true';
         // log analytics best-effort
         sendAnalytics('category_search');
-        statusDiv.textContent = `Cargando página ${currentPage}...`;
+        statusDiv.textContent = `Loading page ${currentPage}...`;
         const response = await fetch(apiUrl);
         if (!response.ok) { const errorText = await response.text(); throw new Error(`HTTP ${response.status}: ${errorText}`); }
         const text = await response.text();
         let data; try { data = JSON.parse(text); } catch { throw new Error('Invalid JSON from server'); }
         if (!Array.isArray(data)) { throw new Error('Invalid data format'); }
-  if (data.length === 0) { resultsDiv.innerHTML = `<p class='text-muted'>No se encontraron resultados para <strong>${label}</strong>.</p>`; statusDiv.textContent = '0 resultados'; hasMore = false; updateLoadMoreButton(); isLoading = false; restoreScroll(); return; }
+  if (data.length === 0) { resultsDiv.innerHTML = `<p class='text-muted'>No results found for <strong>${label}</strong>.</p>`; statusDiv.textContent = '0 results'; hasMore = false; updateLoadMoreButton(); isLoading = false; restoreScroll(); return; }
         data.forEach((item) => {
           const img = item.avatar || item.avatar_c144 || '';
           const imgSrc = img && img.startsWith('http') ? img : '/static/no-image.png';
           const responsive = buildResponsiveSources(imgSrc);
-          const name = item.name || 'Desconocida';
-          const username = item.username || '—';
-          const priceText = (item.subscribePrice && !isNaN(item.subscribePrice)) ? `$${parseFloat(item.subscribePrice).toFixed(2)}` : 'GRATIS';
+          const name = item.name || 'Unknown';
+          const username = item.username || 'ï¿½';
+          const priceText = (item.subscribePrice && !isNaN(item.subscribePrice)) ? `$${parseFloat(item.subscribePrice).toFixed(2)}` : 'FREE';
           const verifiedIcon = item.isVerified ? '? ' : '';
-          const profileUrl = username !== '—' ? `https://onlyfans.com/${encodeURIComponent(username)}` : '#';
+          const profileUrl = username !== 'ï¿½' ? `https://onlyfans.com/${encodeURIComponent(username)}` : '#';
           const col = document.createElement('div');
           col.className = 'col-sm-6 col-md-4 col-lg-3 mb-4';
           const safeUsername = String(username).replace(/'/g, "\\'");
           const favSet = getFavoritesSet();
-          const favActive = username !== '—' && favSet.has(username);
+          const favActive = username !== 'ï¿½' && favSet.has(username);
           const favChar = favActive ? '?' : '?';
           col.innerHTML = `
             <div class=\"card h-100\">
               <button class=\"favorite-btn ${favActive ? 'active' : ''}\" data-username=\"${safeUsername}\" onclick=\"event.preventDefault(); toggleFavorite('${safeUsername}', this);\">
                 <span>${favChar}</span>
               </button>
-              <img src=\"${responsive.src}\" srcset=\"${responsive.srcset}\" sizes=\"${responsive.sizes}\" alt=\"${name}\" width=\"270\" height=\"360\" style=\"aspect-ratio:3/4;\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\" onerror=\"if(this.src!='/static/no-image.png'){this.removeAttribute('srcset'); this.removeAttribute('sizes'); this.src='${imgSrc}';}\">
-              <div class=\"card-body\">
+              <div class=\"card-img-wrap\">
+                <img src=\"${responsive.src}\" srcset=\"${responsive.srcset}\" sizes=\"${responsive.sizes}\" alt=\"${name}\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\" onerror=\"if(this.src!='/static/no-image.png'){this.removeAttribute('srcset'); this.removeAttribute('sizes'); this.src='${imgSrc}';}\">\n              </div>\n              <div class=\"card-body\">
                 <h5>${verifiedIcon}${name}</h5>
                 <p class=\"username\">@${username}</p>
-                ${priceText === 'GRATIS' ? `<p class='price-free' style='color:#34c759;font-weight:700;font-size:16px;text-transform:uppercase;'>${priceText}</p>` : `<p class='price-tag' style='color:#34c759;font-weight:700;font-size:18px;'>${priceText}</p>`}
-                <a href=\"${profileUrl}\" class=\"view-profile-btn\">Ver perfil</a>
+                ${priceText === 'FREE' ? `<p class='price-free' style='color:#34c759;font-weight:700;font-size:16px;text-transform:uppercase;'>${priceText}</p>` : `<p class='price-tag' style='color:#34c759;font-weight:700;font-size:18px;'>${priceText}</p>`}
+                <a href=\"${profileUrl}\" class=\"view-profile-btn\">View Profile</a>
               </div>
             </div>`;
           resultsDiv.appendChild(col);
         });
-        statusDiv.textContent = `Mostrando ${resultsDiv.children.length} resultados`;
+        statusDiv.textContent = `Showing ${resultsDiv.children.length} results`;
   hasMore = data.length === pageSize;
   isLoading = false;
   updateLoadMoreButton();
   restoreScroll();
       } catch(err){
         console.error(err);
-        errorDiv.textContent = 'Error al cargar resultados.';
+        errorDiv.textContent = 'Error loading results.';
         statusDiv.textContent = err.message;
         isLoading = false;
     if (loadMoreContainer) loadMoreContainer.style.display = 'none';
@@ -1104,11 +1028,32 @@
     if (backToTopBtn) backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
   // Initial load
-    document.getElementById('status').textContent = label ? `Cargando creadoras de ${label}...` : 'Cargando...';
-  initBreadcrumbs();
-  renderFavoritesBar();
-  updateWishlistBadge();
+  // If this page was SSR pre-rendered (via api/ssr/category.js), skip the initial
+  // client-side fetch â€” the cards are already in the DOM from the server.
+  // The SSR flag is injected by the handler: window.__CATEGORY_SSR = { slug, count, hasMore }
+  const ssrData = window.__CATEGORY_SSR;
+  if (ssrData && ssrData.slug === slug) {
+    hasMore = ssrData.hasMore !== false;
+    document.getElementById('status').textContent = '';
+    initBreadcrumbs();
+    renderFavoritesBar();
+    updateWishlistBadge();
+    // Reattach favorite state to pre-rendered cards
+    try {
+      const favSet = getFavoritesSet();
+      resultsDiv.querySelectorAll('.favorite-btn[data-username]').forEach(btn => {
+        const u = btn.dataset.username;
+        if (u && favSet.has(u)) { btn.classList.add('active'); const s = btn.querySelector('span'); if (s) s.textContent = 'â™¥'; }
+      });
+    } catch (e) { /* non-critical */ }
+    updateLoadMoreButton();
+  } else {
+    document.getElementById('status').textContent = label ? `Loading ${label} creators...` : 'Loading...';
+    initBreadcrumbs();
+    renderFavoritesBar();
+    updateWishlistBadge();
     performSearch(true);
+  }
 
   // ============================================
   // DARK MODE THEME TOGGLE
@@ -1199,7 +1144,7 @@
       if (toggle) {
         toggle.classList.add('active');
         toggle.querySelector('i').className = 'fas fa-eye';
-        toggle.setAttribute('title', 'Búsqueda Segura: ACTIVADA (clic para desactivar)');
+        toggle.setAttribute('title', 'Safe Search: ON (click to disable)');
       }
     } else {
       document.body.classList.remove('safe-search-active');
@@ -1207,7 +1152,7 @@
       if (toggle) {
         toggle.classList.remove('active');
         toggle.querySelector('i').className = 'fas fa-eye-slash';
-        toggle.setAttribute('title', 'Búsqueda Segura: DESACTIVADA (clic para activar)');
+        toggle.setAttribute('title', 'Safe Search: OFF (click to enable)');
       }
     }
     localStorage.setItem('safeSearch', enabled.toString());
@@ -1391,7 +1336,7 @@
               <span class="footer-logo-sub">Your Premium Creator Directory</span>
             </div>
           </div>
-          <p class="footer-description" data-i18n-key="footer_description">Descubre y conecta con creadores verificados de OnlyFans. Actualizado diariamente con más de 10,000 perfiles en todas las categorías.</p>
+          <p class="footer-description" data-i18n-key="footer_description">Descubre y conecta con creadores verificados de OnlyFans. Actualizado diariamente con mÃ¡s de 10,000 perfiles en todas las categorÃ­as.</p>
           <!-- Social Links -->
           <div class="footer-social">
             <a href="https://x.com/fanspedia" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="X (Twitter)">
@@ -1414,40 +1359,40 @@
 
         <!-- Column 2: Popular Categories -->
         <div class="footer-column">
-          <h3 class="footer-heading">Categorías Populares</h3>
+          <h3 class="footer-heading">Popular Categories</h3>
           <ul class="footer-links">
-            <li><a href="/categories/verified">Creadoras Verificadas</a></li>
-            <li><a href="/categories/free">OnlyFans Gratis</a></li>
-            <li><a href="/categories/cosplay">Modelos Cosplay</a></li>
-            <li><a href="/categories/fitness">Fitness y Bienestar</a></li>
-            <li><a href="/categories/gaming">Creadoras Gaming</a></li>
-            <li><a href="/categories">Ver todas las categorías</a></li>
+            <li><a href="/categories/verified">Verified Creators</a></li>
+            <li><a href="/categories/free">Free OnlyFans</a></li>
+            <li><a href="/categories/cosplay">Cosplay Models</a></li>
+            <li><a href="/categories/fitness">Fitness & Wellness</a></li>
+            <li><a href="/categories/gaming">Gaming Creators</a></li>
+            <li><a href="/categories">View All Categories</a></li>
           </ul>
         </div>
 
         <!-- Column 3: Resources -->
         <div class="footer-column">
-          <h3 class="footer-heading">Recursos</h3>
+          <h3 class="footer-heading">Resources</h3>
           <ul class="footer-links">
-            <li><a href="#" onclick="alert('¡Próximamente!'); return false;">Guía para Creadores</a></li>
-            <li><a href="#" onclick="alert('¡Próximamente!'); return false;">Cómo Suscribirte</a></li>
-            <li><a href="#" onclick="alert('¡Próximamente!'); return false;">Consejos de Seguridad</a></li>
-            <li><a href="#" onclick="alert('¡Próximamente!'); return false;">FAQ</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Creator Guide</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">How to Subscribe</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Safety Tips</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">FAQ</a></li>
             <li><a href="/blog/">Blog</a></li>
-            <li><a href="#" onclick="alert('¡Próximamente!'); return false;">Soporte</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Support</a></li>
           </ul>
         </div>
 
         <!-- Column 4: Legal & Info -->
         <div class="footer-column">
-          <h3 class="footer-heading">Legal e Información</h3>
+          <h3 class="footer-heading">Legal & Info</h3>
           <ul class="footer-links">
-            <li><a href="#" onclick="alert('¡Próximamente!'); return false;">Sobre Nosotros</a></li>
-            <li><a href="#" onclick="alert('¡Próximamente!'); return false;">Contacto</a></li>
-            <li><a href="#" onclick="alert('¡Próximamente!'); return false;">Términos del Servicio</a></li>
-            <li><a href="#" onclick="alert('¡Próximamente!'); return false;">Política de Privacidad</a></li>
-            <li><a href="#" onclick="alert('¡Próximamente!'); return false;">Política DMCA</a></li>
-            <li><a href="#" onclick="alert('¡Próximamente!'); return false;">Política de Cookies</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">About Us</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Contact</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Terms of Service</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Privacy Policy</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">DMCA Policy</a></li>
+            <li><a href="#" onclick="alert('Coming soon!'); return false;">Cookie Policy</a></li>
           </ul>
         </div>
       </div>
@@ -1456,20 +1401,20 @@
       <div class="footer-bottom">
         <div class="footer-bottom-content">
           <p class="footer-copyright">
-            © 2026 fanspedia.net - Todos los derechos reservados
+            ï¿½ 2026 fanspedia.net - All rights reserved
           </p>
           <div class="footer-stats">
             <span class="stat-badge">
               <i class="fas fa-check-circle"></i>
-              10,000+ Creadoras Verificadas
+              10,000+ Verified Creators
             </span>
             <span class="stat-badge">
               <i class="fas fa-sync-alt"></i>
-              Actualizado a Diario
+              Updated Daily
             </span>
           </div>
         </div>
-        <p class="footer-disclaimer" data-i18n-key="footer_disclaimer">Este sitio web es un directorio independiente y no está afiliado a OnlyFans. Todos los nombres comerciales pertenecen a sus respectivos propietarios.</p>
+        <p class="footer-disclaimer" data-i18n-key="footer_disclaimer">Este sitio web es un directorio independiente y no estÃ¡ afiliado a OnlyFans. Todos los nombres comerciales pertenecen a sus respectivos propietarios.</p>
       </div>
     </div>
   </footer>
@@ -1849,26 +1794,26 @@
   <nav class="sticky-bottom-nav" role="navigation" aria-label="Bottom navigation">
     <a href="#headerSearch" class="nav-item" data-nav="search">
       <span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span>
-      <span class="label">Buscar</span>
+      <span class="label">Search</span>
     </a>
     <a href="/near-me/" class="nav-item" data-nav="near">
       <span class="icon"><i class="fa-solid fa-location-arrow"></i></span>
-      <span class="label">Cerca de mí</span>
+      <span class="label">Near Me</span>
     </a>
     <a href="/?sort=best" class="nav-item" data-nav="best">
       <span class="icon"><i class="fa-solid fa-trophy"></i></span>
-      <span class="label">Mejor</span>
+      <span class="label">Best</span>
     </a>
     <a href="/?sort=hot" class="nav-item" data-nav="hot">
       <span class="icon"><i class="fa-solid fa-fire"></i></span>
-      <span class="label">¡Hot!</span>
+      <span class="label">Hot!</span>
     </a>
     <a href="/wishlist" class="nav-item" data-nav="wishlist">
       <span class="icon position-relative">
         <i class="fa-solid fa-heart"></i>
         <span class="wishlist-count" style="display:none;position:absolute;top:-6px;right:-6px;background:#ff3b30;color:#fff;font-size:10px;font-weight:700;border-radius:10px;min-width:18px;height:18px;align-items:center;justify-content:center;padding:0 5px;border:2px solid var(--bg-secondary);box-shadow:0 2px 8px rgba(255,59,48,0.4)">0</span>
       </span>
-      <span class="label">Favoritos</span>
+      <span class="label">Wishlist</span>
     </a>
   </nav>
   <style>
@@ -1915,6 +1860,6 @@
       }
     }catch(e){}})();
   </script>
-  <script src="/utils/wishlist-badge.js?v=20251116-1"></script>
+  <script src="/utils/wishlist-badge.js?v=20251116-1" defer></script>
 </body>
 </html>

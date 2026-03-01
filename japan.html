@@ -706,15 +706,23 @@
       transform: translateY(-4px);
       box-shadow: 0 8px 24px var(--card-shadow-hover);
     }
-    .card img {
+    .card-img-wrap {
+      aspect-ratio: 3/4;
+      overflow: hidden;
       border-radius: 20px 20px 0 0;
-      height: 360px;
-      object-fit: cover;
-      width: 100%;
-      min-height: 360px;
       background: linear-gradient(90deg, #e8e8e8 25%, #f0f0f0 50%, #e8e8e8 75%);
       background-size: 200% 100%;
       animation: shimmer 1.5s infinite;
+    }
+    [data-theme="dark"] .card-img-wrap {
+      background: linear-gradient(90deg, #2a2a3e 25%, #323246 50%, #2a2a3e 75%);
+    }
+    .card img {
+      border-radius: 0;
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+      display: block;
       transition: filter 0.3s ease, opacity 0.3s ease;
     }
     @keyframes shimmer {
@@ -2180,18 +2188,18 @@
               <button class="favorite-btn ${favActive ? 'active' : ''}" data-username="${safeUsername}" onclick="event.preventDefault(); toggleFavorite('${safeUsername}', this);">
                 <span>${favChar}</span>
               </button>
-              <img src="${responsive.src}" 
+              <div class="card-img-wrap">
+                <img src="${responsive.src}" 
                    srcset="${responsive.srcset}"
                    sizes="${responsive.sizes}"
-                   alt="${name}" 
-                   width="270" 
-                   height="360"
-                   style="aspect-ratio: 3 / 4;"
+                   alt="${name}"
                    ${isFirstCard ? 'loading="eager" fetchpriority="high"' : 'loading="lazy" fetchpriority="low"'} 
                    decoding="async"
                    referrerpolicy="no-referrer" 
                    onerror="if(this.src!='/static/no-image.png'){this.removeAttribute('srcset'); this.removeAttribute('sizes'); this.src='${imgSrc}';}"
-                   onload="if(this.naturalWidth<=10||this.naturalHeight<=10){this.parentElement.parentElement.remove();}">
+                   onload="if(this.naturalWidth<=10||this.naturalHeight<=10){this.parentElement.parentElement.parentElement.remove();}">
+
+              </div>
               <div class="card-body">
                 <h5>${verifiedIcon}${name}</h5>
                 <p class="username">@${username}</p>
@@ -2375,7 +2383,7 @@
       }
     }catch(e){}})();
   </script>
-  <script src="/utils/wishlist-badge.js?v=20251116-1"></script>
+  <script src="/utils/wishlist-badge.js?v=20251116-1" defer></script>
 </body>
 </html>
 
