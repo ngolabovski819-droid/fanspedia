@@ -43,7 +43,13 @@ export default async function handler(req, res) {
     const base = `${SUPABASE_URL}/rest/v1/onlyfans_profiles`;
     const params = new URLSearchParams();
     params.set('select', selectCols);
-    params.set('order', 'favoritedcount.desc,subscribeprice.asc');
+    // sort=newest orders by first_seen_at desc for the "New This Week" carousel
+    const sortParam = (req.query.sort || '').toString().trim();
+    if (sortParam === 'newest') {
+      params.set('order', 'first_seen_at.desc.nullslast,joindate.desc.nullslast,favoritedcount.desc');
+    } else {
+      params.set('order', 'favoritedcount.desc,subscribeprice.asc');
+    }
     params.set('limit', String(page_size));
     params.set('offset', String((page - 1) * page_size));
 

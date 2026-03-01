@@ -229,7 +229,8 @@ export default async function handler(req, res) {
     const preloadLink = _lcpSrc
       ? (() => { const { src, srcset, sizes } = buildResponsiveSources(_lcpSrc); return `<link rel="preload" as="image" fetchpriority="high" href="${src}" imagesrcset="${srcset}" imagesizes="${sizes}">`; })()
       : '';
-    const ssrFlag = `<script>window.__HOME_SSR={count:${creators.length},hasMore:true};</script>`;
+    const updatedAt = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const ssrFlag = `<script>window.__HOME_SSR={count:${creators.length},hasMore:true,updatedAt:"${updatedAt}"};</script>`;
     html = html.replace('</head>', `${preloadLink ? preloadLink + '\n' : ''}${jsonLd}\n${ssrFlag}\n</head>`);
 
     // --- 4. Pre-render cards into #results ---

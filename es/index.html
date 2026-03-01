@@ -1734,6 +1734,116 @@
     }
     
     /* ============================================
+       NEW THIS WEEK CAROUSEL
+       ============================================ */
+    .new-this-week-section {
+      padding: 48px 0 32px;
+      text-align: center;
+    }
+    .ntw-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      max-width: 1100px;
+      margin: 0 auto 24px;
+      padding: 0 16px;
+    }
+    .ntw-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 0;
+    }
+    .ntw-subtitle {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin: 6px 0 0;
+    }
+    .ntw-badge {
+      font-size: 12px;
+      color: #00AFF0;
+      background: rgba(0,175,240,0.1);
+      border: 1px solid rgba(0,175,240,0.3);
+      border-radius: 20px;
+      padding: 5px 14px;
+      white-space: nowrap;
+      font-weight: 600;
+    }
+    .ntw-carousel-wrap {
+      position: relative;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 60px;
+    }
+    .ntw-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .ntw-skeleton {
+      aspect-ratio: 3/4;
+      border-radius: 16px;
+      background: linear-gradient(90deg,#e8e8e8 25%,#f0f0f0 50%,#e8e8e8 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    [data-theme="dark"] .ntw-skeleton {
+      background: linear-gradient(90deg,#2a2a3e 25%,#323246 50%,#2a2a3e 75%);
+      background-size: 200% 100%;
+    }
+    .ntw-arrow {
+      position: absolute;
+      top: 40%;
+      transform: translateY(-50%);
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: none;
+      background: var(--card-bg, #fff);
+      box-shadow: 0 2px 14px rgba(0,0,0,0.14);
+      font-size: 26px;
+      cursor: pointer;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+      z-index: 2;
+    }
+    .ntw-arrow:hover { background: #00AFF0; color: #fff; box-shadow: 0 4px 18px rgba(0,175,240,0.45); }
+    .ntw-arrow:disabled { opacity: 0.28; cursor: default; pointer-events: none; }
+    .ntw-arrow-left { left: 4px; }
+    .ntw-arrow-right { right: 4px; }
+    .ntw-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 22px;
+    }
+    .ntw-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--border-color, #ddd);
+      transition: background 0.2s, width 0.2s;
+      cursor: pointer;
+    }
+    .ntw-dot.active {
+      background: #00AFF0;
+      width: 26px;
+      border-radius: 5px;
+    }
+    @media (max-width: 767px) {
+      .ntw-cards { grid-template-columns: repeat(2, 1fr); }
+      .ntw-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .ntw-carousel-wrap { padding: 0 48px; }
+    }
+    @media (max-width: 480px) {
+      .ntw-cards { grid-template-columns: repeat(2, 1fr); }
+      .ntw-carousel-wrap { padding: 0 44px; }
+    }
+
+    /* ============================================
        SAFE SEARCH MODAL (First-Time Consent)
        ============================================ */
     .safe-search-modal {
@@ -2234,7 +2344,28 @@
         <!-- Reels will be populated here -->
       </div>
     </section>
-    
+
+    <!-- NEW THIS WEEK SECTION -->
+    <section class="new-this-week-section" id="newThisWeek">
+      <div class="ntw-header">
+        <div>
+          <h2 class="ntw-title">New <span style="color:#00AFF0">This Week</span></h2>
+          <p class="ntw-subtitle">Fresh creators just added to our database</p>
+        </div>
+        <div class="ntw-badge" id="ntwBadge">&#128197; Updated today</div>
+      </div>
+      <div class="ntw-carousel-wrap">
+        <button class="ntw-arrow ntw-arrow-left" id="ntwPrev" aria-label="Previous creators">&#8249;</button>
+        <div class="ntw-cards" id="ntwCards">
+          <div class="ntw-skeleton"></div>
+          <div class="ntw-skeleton"></div>
+          <div class="ntw-skeleton"></div>
+        </div>
+        <button class="ntw-arrow ntw-arrow-right" id="ntwNext" aria-label="Next creators">&#8250;</button>
+      </div>
+      <div class="ntw-dots" id="ntwDots"></div>
+    </section>
+
     <!-- SEO Content Section -->
     <section class="mt-5 pt-5" style="max-width: 900px; margin-left: auto; margin-right: auto; text-align: left; border-top: 1px solid var(--border-color);">
       <h2 style="color: #00AFF0; font-weight: 700; font-size: 28px; margin-bottom: 20px;" data-i18n-key="hero_heading">Encuentra los Mejores Creadores de OnlyFans - Motor de Búsqueda Gratis</h2>
@@ -4506,6 +4637,133 @@
     }catch(e){}})();
   </script>
   <script src="/utils/wishlist-badge.js?v=20251116-1" defer></script>
+
+  <!-- NEW THIS WEEK CAROUSEL LOGIC -->
+  <script>
+  (function () {
+    const PER_PAGE = 3;
+    let pool = [];
+    let idx = 0;
+
+    const wrap    = document.getElementById('ntwCards');
+    const dots    = document.getElementById('ntwDots');
+    const prevBtn = document.getElementById('ntwPrev');
+    const nextBtn = document.getElementById('ntwNext');
+    const badge   = document.getElementById('ntwBadge');
+
+    // Set badge text from SSR flag or today
+    if (badge) {
+      const d = (window.__HOME_SSR && window.__HOME_SSR.updatedAt)
+        ? window.__HOME_SSR.updatedAt
+        : new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      badge.textContent = '\uD83D\uDCC5 Updated ' + d;
+    }
+
+    function perPage() {
+      if (window.innerWidth < 481) return 2;
+      if (window.innerWidth < 768) return 2;
+      return PER_PAGE;
+    }
+
+    function renderCards() {
+      if (!wrap || !pool.length) return;
+      const pp = perPage();
+      const slice = pool.slice(idx, idx + pp);
+      wrap.innerHTML = slice.map(function (c, i) {
+        const raw   = (c.avatar || '');
+        const src   = raw.startsWith('http') ? raw : '/static/no-image.png';
+        const thumb = 'https://images.weserv.nl/?url=' + encodeURIComponent(src) + '&w=400&h=533&fit=cover&output=webp';
+        const name  = c.name || c.username || 'Unknown';
+        const user  = c.username || '';
+        const sub   = c.subscribePrice;
+        const price = (sub && !isNaN(sub)) ? '$' + parseFloat(sub).toFixed(2) : 'FREE';
+        const priceHTML = price === 'FREE'
+          ? '<p class="price-free">FREE</p>'
+          : '<p class="price-tag">' + price + '</p>';
+        const url = user ? 'https://onlyfans.com/' + encodeURIComponent(user) : '#';
+        return [
+          '<div class="card h-100">',
+            '<div class="card-img-wrap">',
+              '<img src="' + thumb + '"',
+              '  alt="' + name.replace(/"/g, '&quot;') + '"',
+              '  loading="' + (i === 0 ? 'eager' : 'lazy') + '"',
+              '  decoding="async" referrerpolicy="no-referrer"',
+              '  onerror="if(this.src!==\'/static/no-image.png\'){this.removeAttribute(\'srcset\');this.src=\'' + src.replace(/'/g, "\\'") + '\';}"',
+              '>',
+            '</div>',
+            '<div class="card-body">',
+              '<h5>' + name + '</h5>',
+              '<p class="username">@' + user + '</p>',
+              priceHTML,
+              '<a href="' + url + '" class="view-profile-btn" target="_blank" rel="noopener noreferrer">View Profile</a>',
+            '</div>',
+          '</div>'
+        ].join('');
+      }).join('');
+      renderDots(pp);
+      updateArrows(pp);
+    }
+
+    function renderDots(pp) {
+      if (!dots) return;
+      const total   = Math.ceil(pool.length / pp);
+      const current = Math.floor(idx / pp);
+      dots.innerHTML = Array.from({ length: total }, function (_, i) {
+        return '<div class="ntw-dot' + (i === current ? ' active' : '') + '" data-i="' + (i * pp) + '"></div>';
+      }).join('');
+      dots.querySelectorAll('.ntw-dot').forEach(function (d) {
+        d.addEventListener('click', function () {
+          idx = parseInt(d.dataset.i, 10);
+          renderCards();
+        });
+      });
+    }
+
+    function updateArrows(pp) {
+      if (prevBtn) prevBtn.disabled = idx === 0;
+      if (nextBtn) nextBtn.disabled = idx + pp >= pool.length;
+    }
+
+    if (prevBtn) prevBtn.addEventListener('click', function () {
+      idx = Math.max(0, idx - perPage());
+      renderCards();
+    });
+    if (nextBtn) nextBtn.addEventListener('click', function () {
+      var pp = perPage();
+      if (idx + pp < pool.length) { idx += pp; renderCards(); }
+    });
+
+    window.addEventListener('resize', function () {
+      if (pool.length) renderCards();
+    });
+
+    function load() {
+      fetch('/api/search?sort=newest&page_size=12&page=1')
+        .then(function (r) { return r.ok ? r.json() : []; })
+        .then(function (data) {
+          pool = Array.isArray(data) ? data : [];
+          if (pool.length) {
+            idx = 0;
+            renderCards();
+          } else {
+            var sec = document.getElementById('newThisWeek');
+            if (sec) sec.style.display = 'none';
+          }
+        })
+        .catch(function () {
+          var sec = document.getElementById('newThisWeek');
+          if (sec) sec.style.display = 'none';
+        });
+    }
+
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(load, { timeout: 4000 });
+    } else {
+      setTimeout(load, 350);
+    }
+  }());
+  </script>
+
   <script type="module">
     import { inject } from '@vercel/analytics';
     inject();
