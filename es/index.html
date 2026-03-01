@@ -8,7 +8,7 @@
   <!-- Preconnect to external domains for faster loading -->
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
-  <link rel="preconnect" href="https://images.weserv.nl" crossorigin>
+  <link rel="preconnect" href="https://images.weserv.nl">
   <link rel="dns-prefetch" href="https://public.onlyfans.com">
   
   <!-- Google tag (gtag.js) -->
@@ -2944,20 +2944,28 @@
     });
     
     // Initialize reels when page loads
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', function() {
-        renderReels();
-        addCreatorReelFromDatabase('61786830');
-        addCreatorReelFromDatabase('27502984');
-        addCreatorReelFromDatabase('21895538');
-        addCreatorReelFromDatabase('116155');
-      });
-    } else {
-      renderReels();
+    // Reel API calls are deferred until after LCP so they don't block the critical path
+    function _loadReels() {
       addCreatorReelFromDatabase('61786830');
       addCreatorReelFromDatabase('27502984');
       addCreatorReelFromDatabase('21895538');
       addCreatorReelFromDatabase('116155');
+    }
+    function _scheduleReels() {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(_loadReels, { timeout: 3000 });
+      } else {
+        setTimeout(_loadReels, 200);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        renderReels();
+        _scheduleReels();
+      });
+    } else {
+      renderReels();
+      _scheduleReels();
     }
 
     // ============================================
