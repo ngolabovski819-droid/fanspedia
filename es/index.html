@@ -4738,7 +4738,7 @@
     });
 
     function load() {
-      fetch('/api/search?sort=newest&page_size=12&page=1')
+      fetch('/api/search?sort=newest&page_size=50&page=1')
         .then(function (r) { return r.ok ? r.json() : []; })
         .then(function (data) {
           pool = Array.isArray(data) ? data : [];
