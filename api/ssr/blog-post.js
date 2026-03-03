@@ -16,9 +16,10 @@
  * rendering — transparent to the user.
  */
 
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync, readdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { parseFrontmatter, mdToHtml, resolveFeaturedImageUrl, contentDir } from '../blog-post.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..', '..');
@@ -141,6 +142,43 @@ function buildJsonLd(post, canonicalUrl) {
 }
 
 // ---------------------------------------------------------------------------
+// Load and parse a single blog post directly from the filesystem
+// (avoids an internal HTTP call that can cause cold-start hangs on Vercel)
+// ---------------------------------------------------------------------------
+async function loadPost(slug) {
+  let filePath = join(contentDir, `${slug}.md`);
+  if (!existsSync(filePath)) {
+    const files = readdirSync(contentDir).filter(f => f.endsWith('.md'));
+    const matchFile = files.find(f => {
+      const raw2 = readFileSync(join(contentDir, f), 'utf8');
+      const { data: d } = parseFrontmatter(raw2);
+      return d.slug === slug;
+    });
+    if (!matchFile) return null;
+    filePath = join(contentDir, matchFile);
+  }
+  const raw = readFileSync(filePath, 'utf8');
+  const { data, body } = parseFrontmatter(raw);
+  const bodyHtml = mdToHtml(body);
+  const resolvedFeaturedImage = await resolveFeaturedImageUrl(data.featured_image || '');
+  return {
+    slug,
+    title: data.title || slug,
+    seoTitle: data.seo_title || data.title || slug,
+    metaDescription: data.meta_description || data.excerpt || '',
+    excerpt: data.excerpt || '',
+    category: data.category || 'guides',
+    categoryLabel: data.categoryLabel || data.category || 'Guides',
+    date: data.date || '',
+    emoji: data.emoji || '',
+    readTime: data.read_time || '5 min read',
+    featuredImage: resolvedFeaturedImage,
+    featuredImageAlt: data.featured_image_alt || data.title || '',
+    bodyHtml,
+  };
+}
+
+// ---------------------------------------------------------------------------
 // Main handler
 // ---------------------------------------------------------------------------
 export default async function handler(req, res) {
@@ -159,21 +197,14 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Delegate parsing/markdown/image-resolution to the existing API endpoint
-    const host = req.headers.host || 'fanspedia.net';
-    const proto = (host.includes('localhost') || host.includes('127.0.0.1')) ? 'http' : 'https';
-    const apiUrl = `${proto}://${host}/api/blog-post?slug=${encodeURIComponent(slug)}`;
+    // Load post directly from the filesystem — no internal HTTP hop
+    const post = await loadPost(slug);
 
-    const apiRes = await fetch(apiUrl);
-
-    if (apiRes.status === 404) {
+    if (!post) {
       // Unknown slug — serve plain shell so client shows its own 404 message
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
       return res.status(200).send(rawHtml);
     }
-    if (!apiRes.ok) throw new Error(`blog-post API returned ${apiRes.status}`);
-
-    const post = await apiRes.json();
     const canonicalUrl = `${BASE_URL}/blog/${post.slug}/`;
     const desc     = cleanDesc(post);
     const seoTitle = escHtml(`${post.seoTitle || post.title} — FansPedia Blog`);

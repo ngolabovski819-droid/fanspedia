@@ -31,11 +31,19 @@ async function resolveFeaturedImageUrl(rawUrl) {
       return rawUrl;
     }
 
-    const response = await fetch(parsed.toString(), {
-      headers: {
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-      },
-    });
+    const ctrl = new AbortController();
+    const tid = setTimeout(() => ctrl.abort(), 3000);
+    let response;
+    try {
+      response = await fetch(parsed.toString(), {
+        signal: ctrl.signal,
+        headers: {
+          'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        },
+      });
+    } finally {
+      clearTimeout(tid);
+    }
 
     if (!response.ok) {
       return rawUrl;

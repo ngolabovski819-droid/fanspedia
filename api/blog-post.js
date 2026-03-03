@@ -191,6 +191,8 @@ async function resolveFeaturedImageUrl(rawUrl) {
   }
 }
 
+export { parseFrontmatter, mdToHtml, resolveFeaturedImageUrl, contentDir };
+
 export default async function handler(req, res) {
   const slug = req.query.slug;
   if (!slug || !/^[a-z0-9-]+$/.test(slug)) {
