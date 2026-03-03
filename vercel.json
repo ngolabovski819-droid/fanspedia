@@ -7,7 +7,7 @@
     "api/ssr/country.js": { "includeFiles": "*.html" },
     "api/ssr/home.js": { "includeFiles": "index.html" },
     "api/ssr/categories-hub.js": { "includeFiles": "categories.html" },
-    "api/ssr/blog-post.js": { "includeFiles": "blog-post.html" },
+    "api/ssr/blog-post.js": { "includeFiles": "blog-post.html,content/blog/**" },
     "api/ssr/blog.js": { "includeFiles": "content/blog/**,blog.html" },
     "api/ssr/es-category.js": { "includeFiles": "es/category.html" },
     "api/ssr/es-country.js": { "includeFiles": "es/*.html" },
