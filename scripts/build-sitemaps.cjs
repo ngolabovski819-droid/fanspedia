@@ -108,8 +108,10 @@ function outputDir() {
  * English base sitemap — every URL carries hreflang xhtml:link pointing to
  * both the EN canonical and its ES mirror (plus x-default = EN).
  */
+const XSL_PI = `<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>`;
+
 function buildBaseSitemap(blogSlugs) {
-  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset ${URLSET_NS}>\n`;
+  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n${XSL_PI}\n<urlset ${URLSET_NS}>\n`;
   const d = today();
   const countries = ['united-states', 'canada', 'india', 'japan'];
 
@@ -168,7 +170,7 @@ function buildBaseSitemap(blogSlugs) {
  * while hreflang xhtml:link annotations reference the same EN↔ES pairs.
  */
 function buildSpanishBaseSitemap(blogSlugs) {
-  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset ${URLSET_NS}>\n`;
+  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n${XSL_PI}\n<urlset ${URLSET_NS}>\n`;
   const d = today();
   const countries = ['united-states', 'canada', 'india', 'japan'];
 
@@ -218,7 +220,7 @@ function buildSpanishBaseSitemap(blogSlugs) {
 }
 
 function buildCreatorSitemap(usernames) {
-  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n${XSL_PI}\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
   const d = today();
   for (const u of usernames) {
     xml += wrapUrl(`${BASE_URL}/${u}`, 'weekly', '0.7', d);
@@ -229,7 +231,7 @@ function buildCreatorSitemap(usernames) {
 
 function buildSitemapIndex(files) {
   const d = today();
-  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n${XSL_PI}\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
   for (const f of files) {
     xml += `  <sitemap>\n    <loc>${BASE_URL}/${f}</loc>\n    <lastmod>${d}</lastmod>\n  </sitemap>\n`;
   }
