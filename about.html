@@ -941,25 +941,34 @@
 
     // Desktop Categories dropdown + content population
     (function() {
-      const catToggle = document.getElementById('categoriesToggle');
-      const catMenu = document.getElementById('categoriesMenu');
+      var CATS = [
+        ['Milf',         'milf'],
+        ['Big Ass',      'big-ass'],
+        ['Ebony',        'ebony'],
+        ['Big Tits',     'big-tits'],
+        ['Redhead',      'redhead'],
+        ['Lesbian',      'lesbian'],
+        ['Bbw',          'bbw'],
+        ['Pawg',         'pawg'],
+        ['Foot Fetish',  'foot-fetish'],
+        ['Dick Ratings', 'dick-ratings']
+      ];
+      var catToggle = document.getElementById('categoriesToggle');
+      var catMenu = document.getElementById('categoriesMenu');
       if (!catToggle || !catMenu) return;
 
-      // Populate menu content
-      import('/config/categories.js?v=20260226-1').then(function(mod) {
-        var popularCategories = mod.popularCategories;
-        var categoryToSlug = mod.categoryToSlug;
-        catMenu.innerHTML = popularCategories.slice(0, 10).map(function(c) {
-          return '<a href="/categories/' + categoryToSlug(c.label) + '" role="menuitem">' + c.label + '</a>';
-        }).join('') + '<div class="divider"></div><a href="/categories/" class="view-all" role="menuitem">View All Categories</a>';
+      // Populate menu
+      catMenu.innerHTML = CATS.map(function(c) {
+        return '<a href="/categories/' + c[1] + '" role="menuitem">' + c[0] + '</a>';
+      }).join('') + '<div class="divider"></div><a href="/categories/" class="view-all" role="menuitem">View All Categories</a>';
 
-        var drawerCats = document.getElementById('drawerCategories');
-        if (drawerCats) {
-          drawerCats.innerHTML = popularCategories.slice(0, 8).map(function(c) {
-            return '<a href="/categories/' + categoryToSlug(c.label) + '">' + c.label + '</a>';
-          }).join('');
-        }
-      }).catch(function() {});
+      // Populate mobile drawer
+      var drawerCats = document.getElementById('drawerCategories');
+      if (drawerCats) {
+        drawerCats.innerHTML = CATS.slice(0, 8).map(function(c) {
+          return '<a href="/categories/' + c[1] + '">' + c[0] + '</a>';
+        }).join('');
+      }
 
       // Click toggle
       catToggle.addEventListener('click', function(e) {
