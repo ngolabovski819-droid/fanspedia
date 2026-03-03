@@ -21,7 +21,11 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(__dirname, '..', '..');
+// In Vercel's bundled environment process.cwd() == /var/task which is where
+// includeFiles are placed. Locally __dirname/../.. == project root (same result).
+const ROOT = (process.env.VERCEL || process.env.NOW_REGION)
+  ? process.cwd()
+  : join(__dirname, '..', '..');
 const contentDir = join(ROOT, 'content', 'blog');
 const BASE_URL = 'https://fanspedia.net';
 
@@ -381,7 +385,7 @@ export default async function handler(req, res) {
 
     // 6. Send
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=60');
+    res.setHeader('Cache-Control', 'no-store');
     return res.status(200).send(html);
 
   } catch (err) {
