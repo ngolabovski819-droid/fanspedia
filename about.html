@@ -881,24 +881,6 @@
   </script>
 
   <script type="module">
-    import { popularCategories, categoryToSlug } from '/config/categories.js?v=20260226-1';
-
-    // Desktop dropdown
-    const catMenu = document.getElementById('categoriesMenu');
-    if (catMenu) {
-      const items = popularCategories.slice(0, 10).map(c =>
-        `<a href="/categories/${categoryToSlug(c.label)}" role="menuitem">${c.label}</a>`
-      ).join('') + '<div class="divider"></div><a href="/categories/" class="view-all" role="menuitem">View All Categories</a>';
-      catMenu.innerHTML = items;
-    }
-    // Mobile drawer categories
-    const drawerCats = document.getElementById('drawerCategories');
-    if (drawerCats) {
-      drawerCats.innerHTML = popularCategories.slice(0, 8).map(c =>
-        `<a href="/categories/${categoryToSlug(c.label)}">${c.label}</a>`
-      ).join('');
-    }
-
     // Header search redirect
     const hs = document.getElementById('headerSearch');
     if (hs) {
@@ -957,33 +939,50 @@
       }
     })();
 
-    // Desktop Categories dropdown
+    // Desktop Categories dropdown + content population
     (function() {
       const catToggle = document.getElementById('categoriesToggle');
       const catMenu = document.getElementById('categoriesMenu');
-      if (catToggle && catMenu) {
-        catToggle.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const isOpen = catMenu.classList.toggle('open');
-          catToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-          catMenu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
-        });
-        document.addEventListener('click', (e) => {
-          if (!catMenu.classList.contains('open')) return;
-          if (!catMenu.contains(e.target) && !catToggle.contains(e.target)) {
-            catMenu.classList.remove('open');
-            catToggle.setAttribute('aria-expanded', 'false');
-            catMenu.setAttribute('aria-hidden', 'true');
-          }
-        });
-        document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape') {
-            catMenu.classList.remove('open');
-            catToggle.setAttribute('aria-expanded', 'false');
-            catMenu.setAttribute('aria-hidden', 'true');
-          }
-        });
-      }
+      if (!catToggle || !catMenu) return;
+
+      // Populate menu content
+      import('/config/categories.js?v=20260226-1').then(function(mod) {
+        var popularCategories = mod.popularCategories;
+        var categoryToSlug = mod.categoryToSlug;
+        catMenu.innerHTML = popularCategories.slice(0, 10).map(function(c) {
+          return '<a href="/categories/' + categoryToSlug(c.label) + '" role="menuitem">' + c.label + '</a>';
+        }).join('') + '<div class="divider"></div><a href="/categories/" class="view-all" role="menuitem">View All Categories</a>';
+
+        var drawerCats = document.getElementById('drawerCategories');
+        if (drawerCats) {
+          drawerCats.innerHTML = popularCategories.slice(0, 8).map(function(c) {
+            return '<a href="/categories/' + categoryToSlug(c.label) + '">' + c.label + '</a>';
+          }).join('');
+        }
+      }).catch(function() {});
+
+      // Click toggle
+      catToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var isOpen = catMenu.classList.toggle('open');
+        catToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        catMenu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+      });
+      document.addEventListener('click', function(e) {
+        if (!catMenu.classList.contains('open')) return;
+        if (!catMenu.contains(e.target) && !catToggle.contains(e.target)) {
+          catMenu.classList.remove('open');
+          catToggle.setAttribute('aria-expanded', 'false');
+          catMenu.setAttribute('aria-hidden', 'true');
+        }
+      });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          catMenu.classList.remove('open');
+          catToggle.setAttribute('aria-expanded', 'false');
+          catMenu.setAttribute('aria-hidden', 'true');
+        }
+      });
     })();
 
     // Safe Search
