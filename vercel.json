@@ -28,6 +28,8 @@
     { "source": "/dmca-policy/", "destination": "/dmca.html" },
     { "source": "/privacy-policy", "destination": "/privacy.html" },
     { "source": "/privacy-policy/", "destination": "/privacy.html" },
+    { "source": "/terms", "destination": "/terms.html" },
+    { "source": "/terms/", "destination": "/terms.html" },
     { "source": "/categories", "destination": "/api/ssr/categories-hub" },
     { "source": "/categories/", "destination": "/api/ssr/categories-hub" },
     { "source": "/categories/:slug/:page", "destination": "/api/ssr/category?slug=:slug&page=:page" },

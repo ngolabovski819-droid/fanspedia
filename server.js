@@ -254,11 +254,16 @@ app.get(['/privacy-policy', '/privacy-policy/'], (req, res) => {
   res.sendFile(path.join(__dirname, 'privacy.html'));
 });
 
+// Terms of Service page
+app.get(['/terms', '/terms/'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'terms.html'));
+});
+
 // Catch username-like paths locally and redirect home to mirror production pause
 app.get('/:username([a-zA-Z0-9_.-]+)', (req, res, next) => {
   const username = req.params.username;
   if (username.match(/\.(js|css|png|jpg|jpeg|svg|ico|webp|map|json)$/i)) return next();
-  if (["index", "category", "creator", "static", "config", "api", "public", "tests", "about", "contact-us", "dmca-policy", "privacy-policy"].includes(username)) return next();
+  if (["index", "category", "creator", "static", "config", "api", "public", "tests", "about", "contact-us", "dmca-policy", "privacy-policy", "terms"].includes(username)) return next();
   return res.redirect(302, '/');
 });
 
