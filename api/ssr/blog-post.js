@@ -185,19 +185,19 @@ export default async function handler(req, res) {
 
     // 1. <title>
     html = html.replace(
-      '<title id="pageTitle">Blog — FansPedia</title>',
+      /<title id="pageTitle">[^<]*<\/title>/,
       `<title id="pageTitle">${seoTitle}</title>`
     );
 
     // 2. <meta description>
     html = html.replace(
-      '<meta name="description" id="pageDesc" content="Read the latest guides and tips on FansPedia.">',
+      /<meta name="description" id="pageDesc" content="[^"]*">/,
       `<meta name="description" id="pageDesc" content="${escHtml(desc)}">`
     );
 
     // 3. <link canonical>
     html = html.replace(
-      '<link rel="canonical" id="pageCanonical" href="https://www.fanspedia.net/blog/">',
+      /<link rel="canonical" id="pageCanonical" href="[^"]*">/,
       `<link rel="canonical" id="pageCanonical" href="${escHtml(canonicalUrl)}">`
     );
 
@@ -225,14 +225,8 @@ export default async function handler(req, res) {
     // 5. Pre-render article body into <main id="articleMain">
     const articleHtml = renderArticleHtml(post);
     html = html.replace(
-      `<main id="articleMain">
-  <div class="state-center" id="loadingState">
-    <div class="state-emoji">⏳</div>
-    <h2 data-i18n-key="blog_loadingArticle">Loading article...</h2>
-  </div>
-</main>`,
-      `<main id="articleMain">${articleHtml}
-</main>`
+      /<main id="articleMain">[\s\S]*?<\/main>/,
+      `<main id="articleMain">${articleHtml}\n</main>`
     );
 
     // 6. Send
