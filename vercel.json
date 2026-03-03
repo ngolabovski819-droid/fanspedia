@@ -22,6 +22,8 @@
     { "source": "/wishlist/", "destination": "/wishlist.html" },
     { "source": "/about", "destination": "/about.html" },
     { "source": "/about/", "destination": "/about.html" },
+    { "source": "/contact-us", "destination": "/contact.html" },
+    { "source": "/contact-us/", "destination": "/contact.html" },
     { "source": "/categories", "destination": "/api/ssr/categories-hub" },
     { "source": "/categories/", "destination": "/api/ssr/categories-hub" },
     { "source": "/categories/:slug/:page", "destination": "/api/ssr/category?slug=:slug&page=:page" },

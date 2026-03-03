@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="index, follow">
-  <title id="pageTitle">Blog — FansPedia</title>
+  <title id="pageTitle">Blog � FansPedia</title>
   <meta name="description" id="pageDesc" content="Read the latest guides and tips on FansPedia.">
   <link rel="canonical" id="pageCanonical" href="https://www.fanspedia.net/blog/">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
@@ -53,7 +53,7 @@
       padding-bottom: 80px;
     }
 
-    /* ── HEADER (exact from index.html) ── */
+    /* -- HEADER (exact from index.html) -- */
     .superior-header { position: fixed; top: 0; left: 0; right: 0; z-index: 9999; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%); box-shadow: 0 4px 24px rgba(0, 175, 240, 0.25); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
     .superior-header.scrolled { box-shadow: 0 8px 32px rgba(0, 175, 240, 0.35); }
     .header-main { padding: 10px 0; }
@@ -127,7 +127,7 @@
       .mobile-menu-toggle { display: inline-flex; }
     }
 
-    /* ── ARTICLE LAYOUT ── */
+    /* -- ARTICLE LAYOUT -- */
     .article-hero {
       max-width: 860px;
       margin: 0 auto;
@@ -327,7 +327,7 @@
     .state-center h2 { font-size: 1.4rem; color: var(--text-primary); margin-bottom: 8px; }
     .state-center p { font-size: 15px; line-height: 1.6; }
 
-    /* ── BACK TO BLOG ── */
+    /* -- BACK TO BLOG -- */
     .back-bar {
       max-width: 860px;
       margin: 0 auto;
@@ -349,7 +349,7 @@
     }
     .back-btn:hover { background: var(--accent-dim); border-color: var(--brand-color); }
 
-    /* ── FOOTER ── */
+    /* -- FOOTER -- */
     .modern-footer { background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%); border-top: 1px solid var(--border-color); margin-top: 80px; padding: 60px 0 0; position: relative; }
     .modern-footer::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent 0%, #00AFF0 50%, transparent 100%); opacity: 0.5; }
     .footer-container { max-width: 1400px; margin: 0 auto; padding: 0 16px; }
@@ -380,7 +380,7 @@
     @media (max-width: 992px) { .footer-grid { grid-template-columns: 2fr 1fr 1fr; } .footer-brand { grid-column: 1 / -1; } }
     @media (max-width: 768px) { .modern-footer { margin-top: 60px; padding: 40px 0 0; } .footer-grid { grid-template-columns: 1fr; } .footer-brand { text-align: center; } .footer-logo { justify-content: center; } .footer-social { justify-content: center; } .footer-column h3.footer-heading { text-align: center; } .footer-column h3.footer-heading::after { left: 50%; transform: translateX(-50%); } .footer-links { text-align: center; } .footer-bottom-content { flex-direction: column; text-align: center; } .footer-stats { justify-content: center; } }
 
-    /* ── STICKY BOTTOM NAV ── */
+    /* -- STICKY BOTTOM NAV -- */
     .sticky-bottom-nav { position: fixed; left: 0; right: 0; bottom: calc(0px + env(safe-area-inset-bottom)); z-index: 9999; display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; background: var(--bg-secondary); border-top: 1px solid var(--border-color); }
     .sticky-bottom-nav .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-primary); text-decoration: none; }
     .sticky-bottom-nav .icon { width: 32px; height: 32px; border-radius: 10px; background: linear-gradient(135deg,#00AFF0 0%,#0099D6 100%); display: flex; align-items: center; justify-content: center; color: #fff; transition: transform .3s ease; }
@@ -452,7 +452,7 @@
 <!-- Mobile Drawer -->
 <div id="drawerOverlay" class="drawer-overlay"></div>
 <nav id="mobileDrawer" class="mobile-drawer">
-  <button class="drawer-close" id="drawerClose">×</button>
+  <button class="drawer-close" id="drawerClose">�</button>
   <a href="/" data-i18n-key="nav_home">Home</a>
   <a href="/blog/" style="color:#00AFF0" data-i18n-key="nav_blog">Blog</a>
   <div class="drawer-categories-toggle" id="drawerCategoriesToggle">
@@ -469,7 +469,7 @@
 <!-- ARTICLE CONTENT -->
 <main id="articleMain">
   <div class="state-center" id="loadingState">
-    <div class="state-emoji">⏳</div>
+    <div class="state-emoji">?</div>
     <h2 data-i18n-key="blog_loadingArticle">Loading article...</h2>
   </div>
 </main>
@@ -527,7 +527,7 @@
         <h3 class="footer-heading" data-i18n-key="blog_footerLegalInfo">Legal &amp; Info</h3>
         <ul class="footer-links">
           <li><a href="/about/">About Us</a></li>
-          <li><a href="#" onclick="alert('Coming soon!'); return false;">Contact</a></li>
+          <li><a href="/contact-us/">Contact</a></li>
           <li><a href="#" onclick="alert('Coming soon!'); return false;">Terms of Service</a></li>
           <li><a href="#" onclick="alert('Coming soon!'); return false;">Privacy Policy</a></li>
           <li><a href="#" onclick="alert('Coming soon!'); return false;">DMCA Policy</a></li>
@@ -565,7 +565,7 @@
       const slug = categoryToSlug(cat);
       const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
       return `<a role="menuitem" href="/categories/${slug}/">${label}</a>`;
-    }).join('') + `<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">${i18nText('nav_viewAllCategories', 'View All Categories')} →</a>`;
+    }).join('') + `<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">${i18nText('nav_viewAllCategories', 'View All Categories')} ?</a>`;
   }
   const drawerCats = document.getElementById('drawerCategories');
   if (drawerCats) {
@@ -706,7 +706,7 @@
   mobileSearchInput?.addEventListener('keypress', e => { if (e.key === 'Enter' && mobileSearchInput.value.trim()) location.href = localizedPath('/?q=' + encodeURIComponent(mobileSearchInput.value.trim())); });
   document.getElementById('headerSearch')?.addEventListener('keydown', e => { if (e.key === 'Enter') location.href = localizedPath('/?q=' + encodeURIComponent(e.target.value)); });
 
-  // ── ARTICLE LOADER ──
+  // -- ARTICLE LOADER --
   function getSlugFromPath() {
     const path = window.location.pathname.replace(/\/$/, '');
     const normalizedPath = path.startsWith('/es/') ? path.slice(3) : path;
@@ -723,7 +723,7 @@
 
   function renderArticle(post) {
     // Update meta
-    document.title = (post.seoTitle || post.title) + ' — FansPedia Blog';
+    document.title = (post.seoTitle || post.title) + ' � FansPedia Blog';
     document.getElementById('pageDesc').content = post.metaDescription || post.excerpt;
     document.getElementById('pageCanonical').href = 'https://www.fanspedia.net' + getLangPrefix() + '/blog/' + post.slug + '/';
 
@@ -772,10 +772,10 @@
   function renderError(msg) {
     document.getElementById('articleMain').innerHTML = `
       <div class="state-center">
-        <div class="state-emoji">😕</div>
+        <div class="state-emoji">??</div>
         <h2>${i18nText('blog_articleNotFound', 'Article not found')}</h2>
         <p>${msg}</p>
-        <a href="${localizedPath('/blog/')}" style="display:inline-block;margin-top:20px;padding:12px 28px;background:linear-gradient(135deg,#00AFF0,#0099D6);color:white;border-radius:24px;text-decoration:none;font-weight:700;">← ${i18nText('blog_backToBlog', 'Back to Blog')}</a>
+        <a href="${localizedPath('/blog/')}" style="display:inline-block;margin-top:20px;padding:12px 28px;background:linear-gradient(135deg,#00AFF0,#0099D6);color:white;border-radius:24px;text-decoration:none;font-weight:700;">? ${i18nText('blog_backToBlog', 'Back to Blog')}</a>
       </div>
     `;
   }
@@ -791,7 +791,7 @@
   if (!slug) {
     window.location.replace(localizedPath('/blog/'));
   } else if (window.__BLOG_POST_SSR) {
-    // Content already rendered server-side — skip API fetch, just run Mermaid
+    // Content already rendered server-side � skip API fetch, just run Mermaid
     mermaid.run({ querySelector: '.mermaid' });
   } else {
     fetch('/api/blog-post?slug=' + encodeURIComponent(slug) + '&t=' + Date.now(), { cache: 'no-store' })

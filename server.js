@@ -239,11 +239,16 @@ app.get(['/about', '/about/'], (req, res) => {
   res.sendFile(path.join(__dirname, 'about.html'));
 });
 
+// Contact page
+app.get(['/contact-us', '/contact-us/'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'contact.html'));
+});
+
 // Catch username-like paths locally and redirect home to mirror production pause
 app.get('/:username([a-zA-Z0-9_.-]+)', (req, res, next) => {
   const username = req.params.username;
   if (username.match(/\.(js|css|png|jpg|jpeg|svg|ico|webp|map|json)$/i)) return next();
-  if (["index", "category", "creator", "static", "config", "api", "public", "tests", "about"].includes(username)) return next();
+  if (["index", "category", "creator", "static", "config", "api", "public", "tests", "about", "contact-us"].includes(username)) return next();
   return res.redirect(302, '/');
 });
 

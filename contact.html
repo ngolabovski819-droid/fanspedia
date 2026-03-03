@@ -6,9 +6,9 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-  <title>About FansPedia | The #1 OnlyFans Creator Search Directory</title>
-  <meta name="description" content="Learn about FansPedia — the most comprehensive OnlyFans creator directory. Discover our mission, how we index 100,000+ profiles, and why millions of fans trust us to find the right creator." />
-  <link rel="canonical" href="https://fanspedia.net/about/" />
+  <title>Contact FansPedia | Get in Touch With Our Team</title>
+  <meta name="description" content="Contact the FansPedia team. Have a question, feedback, or need help with a creator listing? Reach us at fanspediaofficial@gmail.com — we respond within 24 hours." />
+  <link rel="canonical" href="https://fanspedia.net/contact-us/" />
   <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg">
 
   <!-- Google tag (gtag.js) -->
@@ -41,21 +41,22 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "AboutPage",
-    "name": "About FansPedia",
-    "url": "https://fanspedia.net/about/",
-    "description": "FansPedia is the most comprehensive OnlyFans creator search directory, indexing 100,000+ verified profiles updated daily.",
+    "@type": "ContactPage",
+    "name": "Contact FansPedia",
+    "url": "https://fanspedia.net/contact-us/",
+    "description": "Contact the FansPedia team for questions, feedback, removal requests, or partnership enquiries.",
     "breadcrumb": {
       "@type": "BreadcrumbList",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://fanspedia.net/" },
-        { "@type": "ListItem", "position": 2, "name": "About", "item": "https://fanspedia.net/about/" }
+        { "@type": "ListItem", "position": 2, "name": "Contact Us", "item": "https://fanspedia.net/contact-us/" }
       ]
     },
     "publisher": {
       "@type": "Organization",
       "name": "FansPedia",
       "url": "https://fanspedia.net",
+      "email": "fanspediaofficial@gmail.com",
       "logo": { "@type": "ImageObject", "url": "https://fanspedia.net/favicon.svg" },
       "sameAs": [
         "https://www.instagram.com/fanspediaofficial/",
@@ -213,9 +214,8 @@
     .breadcrumb-item { display: inline-flex; align-items: center; color: var(--text-secondary); font-weight: 500; }
     .breadcrumb-item a { color: var(--text-secondary); text-decoration: none; transition: color .2s ease; padding: 4px 6px; border-radius: 6px; }
     .breadcrumb-item a:hover { color: var(--brand-color); background: rgba(0, 175, 240, 0.08); }
+    .breadcrumb-separator { color: var(--text-muted); padding: 0 2px; }
     .breadcrumb-item.active { color: var(--text-primary); font-weight: 600; }
-    .breadcrumb-separator { color: var(--text-muted); margin: 0 2px; font-size: 11px; user-select: none; }
-    .breadcrumb-home { display: inline-flex; align-items: center; gap: 4px; }
 
     @media (max-width: 768px) {
       body { padding-top: 66px; }
@@ -229,9 +229,9 @@
     }
 
     /* ============================================
-       ABOUT PAGE STYLES
+       CONTACT PAGE STYLES
        ============================================ */
-    .about-hero {
+    .contact-hero {
       background: linear-gradient(135deg, #00AFF0 0%, #0069a5 100%);
       color: #fff;
       padding: 72px 16px 80px;
@@ -239,205 +239,121 @@
       position: relative;
       overflow: hidden;
     }
-    .about-hero::before {
+    .contact-hero::before {
       content: '';
       position: absolute;
       inset: 0;
       background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     }
-    .about-hero-inner { position: relative; max-width: 820px; margin: 0 auto; }
-    .about-hero h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 900; margin-bottom: 20px; text-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-    .about-hero p { font-size: clamp(1rem, 2.2vw, 1.25rem); opacity: 0.93; line-height: 1.7; max-width: 680px; margin: 0 auto; }
+    .contact-hero-inner { position: relative; max-width: 720px; margin: 0 auto; }
+    .contact-hero h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; margin-bottom: 16px; text-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+    .contact-hero p { font-size: clamp(1rem, 2.2vw, 1.2rem); opacity: 0.93; line-height: 1.7; max-width: 600px; margin: 0 auto; }
 
-    .about-stats-strip {
-      background: var(--bg-secondary);
-      border-bottom: 1px solid var(--border-color);
-      padding: 28px 16px;
-    }
-    .about-stats-grid {
-      max-width: 900px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 24px;
-      text-align: center;
-    }
-    .about-stat-item .number {
-      font-size: 2rem;
-      font-weight: 900;
-      color: #00AFF0;
-      line-height: 1;
-      display: block;
-    }
-    .about-stat-item .label {
-      font-size: 13px;
-      color: var(--text-secondary);
-      font-weight: 600;
-      margin-top: 6px;
-    }
-    @media (max-width: 600px) { .about-stats-grid { grid-template-columns: repeat(2, 1fr); } }
+    .contact-content { max-width: 1000px; margin: 0 auto; padding: 60px 16px; }
 
-    .about-content {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 60px 16px 40px;
-    }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1.6fr; gap: 40px; align-items: start; }
+    @media (max-width: 768px) { .contact-grid { grid-template-columns: 1fr; } }
 
-    .about-section {
-      margin-bottom: 64px;
-    }
-    .about-section-label {
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 1.6px;
-      text-transform: uppercase;
-      color: #00AFF0;
-      margin-bottom: 10px;
-    }
-    .about-section h2 {
-      font-size: clamp(1.5rem, 3vw, 2rem);
-      font-weight: 800;
-      color: var(--text-primary);
-      margin-bottom: 20px;
-      line-height: 1.25;
-    }
-    .about-section p {
-      font-size: 16px;
-      line-height: 1.8;
-      color: var(--text-secondary);
-      margin-bottom: 16px;
-    }
-    .about-section p:last-child { margin-bottom: 0; }
-
-    .about-values-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 24px;
-      margin-top: 32px;
-    }
-    .about-value-card {
+    /* Contact Info Cards */
+    .contact-info { display: flex; flex-direction: column; gap: 20px; }
+    .contact-card {
       background: var(--bg-secondary);
       border: 1px solid var(--border-color);
       border-radius: 16px;
-      padding: 28px 24px;
-      transition: transform .25s ease, box-shadow .25s ease;
-    }
-    .about-value-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 32px var(--card-shadow-hover);
-    }
-    .about-value-icon {
-      width: 52px;
-      height: 52px;
-      background: linear-gradient(135deg, rgba(0,175,240,0.12) 0%, rgba(0,153,214,0.1) 100%);
-      border-radius: 14px;
+      padding: 24px;
       display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    .contact-card:hover { box-shadow: 0 8px 24px var(--card-shadow-hover); transform: translateY(-2px); }
+    .contact-card-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 20px; flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(0,175,240,0.3);
+    }
+    .contact-card-body h3 { font-size: 15px; font-weight: 700; color: var(--text-primary); margin: 0 0 4px; }
+    .contact-card-body p { font-size: 13px; color: var(--text-secondary); margin: 0 0 6px; line-height: 1.5; }
+    .contact-card-body a { font-size: 14px; font-weight: 700; color: #00AFF0; text-decoration: none; word-break: break-all; }
+    .contact-card-body a:hover { text-decoration: underline; }
+
+    .contact-response-note {
+      background: linear-gradient(135deg, rgba(0,175,240,0.08) 0%, rgba(0,153,214,0.08) 100%);
+      border: 1px solid rgba(0,175,240,0.25);
+      border-radius: 12px;
+      padding: 16px 20px;
+      display: flex;
+      gap: 12px;
       align-items: center;
-      justify-content: center;
-      margin-bottom: 16px;
-      font-size: 22px;
-      color: #00AFF0;
     }
-    .about-value-card h3 {
-      font-size: 16px;
-      font-weight: 800;
-      color: var(--text-primary);
-      margin-bottom: 8px;
-    }
-    .about-value-card p {
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.6;
-      margin: 0;
-    }
+    .contact-response-note i { color: #00AFF0; font-size: 18px; flex-shrink: 0; }
+    .contact-response-note span { font-size: 13px; color: var(--text-secondary); font-weight: 500; line-height: 1.5; }
 
-    .about-divider {
-      height: 1px;
-      background: var(--border-color);
-      margin: 0 0 64px;
-      position: relative;
-    }
-    .about-divider::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 60px;
-      height: 2px;
-      background: linear-gradient(90deg, #00AFF0, #0099D6);
-      border-radius: 2px;
-    }
-
-    .about-team-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 24px;
-      margin-top: 32px;
-    }
-    .about-team-card {
-      text-align: center;
+    /* Contact Form */
+    .contact-form-card {
       background: var(--bg-secondary);
       border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 32px 20px 24px;
+      border-radius: 20px;
+      padding: 36px;
+      box-shadow: 0 4px 20px var(--card-shadow);
     }
-    .about-team-avatar {
-      width: 72px;
-      height: 72px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #00AFF0 0%, #0069a5 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 16px;
-      font-size: 28px;
-      color: #fff;
-      font-weight: 900;
-    }
-    .about-team-card h4 { font-size: 16px; font-weight: 800; color: var(--text-primary); margin-bottom: 4px; }
-    .about-team-card span { font-size: 13px; color: #00AFF0; font-weight: 600; display: block; margin-bottom: 10px; }
-    .about-team-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin: 0; }
+    .contact-form-card h2 { font-size: 22px; font-weight: 800; color: var(--text-primary); margin: 0 0 8px; }
+    .contact-form-card .form-subtitle { font-size: 14px; color: var(--text-secondary); margin: 0 0 28px; }
 
-    .about-cta {
-      background: linear-gradient(135deg, #00AFF0 0%, #0069a5 100%);
-      border-radius: 24px;
-      padding: 48px 40px;
-      text-align: center;
-      color: #fff;
-      margin-bottom: 0;
-      position: relative;
-      overflow: hidden;
+    .form-group { margin-bottom: 20px; }
+    .form-label { display: block; font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+    .form-label span { color: #ff3b30; margin-left: 2px; }
+    .form-control {
+      width: 100%; padding: 12px 16px; border: 2px solid var(--border-color);
+      border-radius: 10px; background: var(--input-bg); color: var(--text-primary);
+      font-size: 15px; font-family: inherit;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      outline: none;
     }
-    .about-cta::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    }
-    .about-cta-inner { position: relative; }
-    .about-cta h2 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 900; margin-bottom: 12px; }
-    .about-cta p { font-size: 16px; opacity: 0.9; margin-bottom: 28px; }
-    .about-cta-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 14px 32px;
-      background: #fff;
-      color: #0099D6;
-      border-radius: 9999px;
-      font-weight: 800;
-      font-size: 16px;
-      text-decoration: none;
-      transition: transform .2s ease, box-shadow .2s ease;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-    }
-    .about-cta-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0,0,0,0.25); color: #0069a5; }
+    .form-control:focus { border-color: #00AFF0; box-shadow: 0 0 0 3px rgba(0,175,240,0.15); }
+    .form-control::placeholder { color: var(--text-muted); }
+    select.form-control { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+    textarea.form-control { resize: vertical; min-height: 130px; line-height: 1.6; }
 
-    @media (max-width: 600px) {
-      .about-hero { padding: 48px 16px 60px; }
-      .about-cta { padding: 36px 24px; }
-      .about-content { padding: 40px 16px 32px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
+
+    .submit-btn {
+      width: 100%; padding: 14px 24px; background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
+      color: #fff; border: none; border-radius: 12px; font-size: 16px; font-weight: 700;
+      cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 8px;
+      box-shadow: 0 4px 16px rgba(0,175,240,0.35);
     }
+    .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,175,240,0.45); }
+    .submit-btn:active { transform: translateY(0); }
+    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .form-success {
+      display: none; background: linear-gradient(135deg, rgba(52,199,89,0.1) 0%, rgba(48,179,80,0.1) 100%);
+      border: 1px solid rgba(52,199,89,0.4); border-radius: 12px; padding: 20px 24px;
+      text-align: center; margin-top: 16px;
+    }
+    .form-success i { color: #34c759; font-size: 28px; display: block; margin-bottom: 10px; }
+    .form-success p { color: var(--text-primary); font-weight: 600; margin: 0; font-size: 15px; }
+    .form-success.show { display: block; }
+
+    /* FAQ Section */
+    .contact-faq { margin-top: 60px; }
+    .contact-faq h2 { font-size: 26px; font-weight: 800; color: var(--text-primary); margin-bottom: 8px; }
+    .contact-faq .faq-subtitle { color: var(--text-secondary); margin-bottom: 32px; font-size: 15px; }
+    .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 768px) { .faq-grid { grid-template-columns: 1fr; } }
+    .faq-item {
+      background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px;
+      padding: 24px; transition: box-shadow 0.2s ease;
+    }
+    .faq-item:hover { box-shadow: 0 4px 16px var(--card-shadow-hover); }
+    .faq-item h3 { font-size: 15px; font-weight: 700; color: var(--text-primary); margin: 0 0 10px; display: flex; gap: 10px; align-items: flex-start; }
+    .faq-item h3 i { color: #00AFF0; font-size: 14px; margin-top: 2px; flex-shrink: 0; }
+    .faq-item p { font-size: 14px; color: var(--text-secondary); line-height: 1.65; margin: 0; }
+    .faq-item a { color: #00AFF0; }
   </style>
   <!-- i18n Translation Module -->
   <script src="/config/i18n.js?v=20260217-1" defer></script>
@@ -501,8 +417,8 @@
   <div class="safe-search-modal" id="safeSearchModal" role="dialog" aria-modal="true">
     <div class="safe-search-modal-content">
       <div class="safe-search-modal-icon"><i class="fas fa-shield-alt"></i></div>
-      <h2>Enable Safe Search?</h2>
-      <p>Safe Search blurs potentially NSFW content, making browsing more comfortable in public spaces. You can toggle it anytime using the shield button.</p>
+      <h2>Safe Search</h2>
+      <p>Enable Safe Search to blur explicit preview images while you browse — great for public settings.</p>
       <div class="safe-search-modal-actions">
         <button class="safe-search-modal-btn safe-search-modal-btn-primary" id="enableSafeSearchBtn"><i class="fas fa-check"></i> Enable Safe Search</button>
         <button class="safe-search-modal-btn safe-search-modal-btn-secondary" id="dismissSafeSearchBtn">No Thanks, I'll Enable It Later</button>
@@ -511,42 +427,44 @@
     </div>
   </div>
 
-  <!-- Mobile Drawer Menu -->
+  <!-- Mobile Drawer -->
   <div id="drawerOverlay" class="drawer-overlay" tabindex="-1" aria-hidden="true"></div>
   <nav id="mobileDrawer" class="mobile-drawer" aria-hidden="true">
-    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&#10005;</button>
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
     <a href="/">Home</a>
     <div class="drawer-categories-toggle" id="drawerCategoriesToggle">
-      <div class="left"><i class="fas fa-th icon"></i><span class="label">Categories</span></div>
-      <i class="fas fa-chevron-down chevron"></i>
+      <div class="left"><span class="icon"><i class="fas fa-th-large"></i></span><span class="label">Categories</span></div>
+      <span class="chevron"><i class="fas fa-chevron-down"></i></span>
     </div>
     <div class="drawer-categories-section" id="drawerCategoriesSection">
-      <div class="section-label">MOST POPULAR CATEGORIES</div>
+      <div class="section-label">Popular</div>
       <div id="drawerCategories"></div>
       <a href="/categories/" class="drawer-view-all">View All Categories</a>
     </div>
     <div class="drawer-locations-toggle" id="drawerLocationsToggle">
-      <div class="left"><i class="fas fa-map-marker-alt icon"></i><span class="label">Locations</span></div>
-      <i class="fas fa-chevron-down chevron"></i>
+      <div class="left"><span class="icon"><i class="fas fa-map-marker-alt"></i></span><span class="label">Locations</span></div>
+      <span class="chevron"><i class="fas fa-chevron-down"></i></span>
     </div>
     <div class="drawer-locations-section" id="drawerLocationsSection">
-      <div class="section-label">POPULAR LOCATIONS</div>
+      <div class="section-label">Countries</div>
       <div id="drawerLocations">
-        <a href="/near-me/">Near Me</a>
-        <a href="/country/united-states/">United States</a>
-        <a href="/country/canada/">Canada</a>
-        <a href="/country/india/">India</a>
-        <a href="/country/japan/">Japan</a>
+        <a href="/country/united-states">United States</a>
+        <a href="/country/canada">Canada</a>
+        <a href="/country/india">India</a>
+        <a href="/country/japan">Japan</a>
+        <a href="/locations/">View All Locations</a>
       </div>
-      <a href="/locations/" class="drawer-view-all">View All Locations</a>
     </div>
+    <a href="/about/">About Us</a>
+    <a href="/contact-us/">Contact</a>
+    <a href="/wishlist">Wishlist</a>
   </nav>
 
   <!-- Breadcrumbs -->
   <nav class="breadcrumbs-wrapper" aria-label="Breadcrumb">
     <ol class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
       <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <a href="/" itemprop="item" class="breadcrumb-home">
+        <a href="/" itemprop="item" aria-label="Home">
           <i class="fas fa-home" aria-hidden="true"></i>
           <span itemprop="name">Home</span>
         </a>
@@ -554,8 +472,8 @@
       </li>
       <li class="breadcrumb-separator" aria-hidden="true">/</li>
       <li class="breadcrumb-item active" aria-current="page" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <span itemprop="item" itemscope itemtype="https://schema.org/WebPage" itemid="https://fanspedia.net/about/">
-          <span itemprop="name">About Us</span>
+        <span itemprop="item" itemscope itemtype="https://schema.org/WebPage" itemid="https://fanspedia.net/contact-us/">
+          <span itemprop="name">Contact Us</span>
         </span>
         <meta itemprop="position" content="2" />
       </li>
@@ -564,155 +482,137 @@
 
   <main>
     <!-- Hero -->
-    <section class="about-hero">
-      <div class="about-hero-inner">
-        <h1>The Creator Discovery Platform Built for Fans</h1>
-        <p>FansPedia is the most comprehensive, independently operated OnlyFans creator directory on the internet — built to help fans find verified creators quickly, safely, and with confidence.</p>
+    <section class="contact-hero">
+      <div class="contact-hero-inner">
+        <h1>Get in Touch With FansPedia</h1>
+        <p>Have a question, a removal request, or feedback? We'd love to hear from you. Our team responds to every message within 24 hours.</p>
       </div>
     </section>
 
-    <!-- Stats Strip -->
-    <div class="about-stats-strip">
-      <div class="about-stats-grid">
-        <div class="about-stat-item">
-          <span class="number">100K+</span>
-          <span class="label">Creator Profiles</span>
+    <div class="contact-content">
+      <div class="contact-grid">
+
+        <!-- Left: Contact Info -->
+        <div class="contact-info">
+
+          <div class="contact-card">
+            <div class="contact-card-icon"><i class="fas fa-envelope"></i></div>
+            <div class="contact-card-body">
+              <h3>Email Us</h3>
+              <p>We respond to all enquiries within 24 hours on business days.</p>
+              <a href="mailto:fanspediaofficial@gmail.com">fanspediaofficial@gmail.com</a>
+            </div>
+          </div>
+
+          <div class="contact-card">
+            <div class="contact-card-icon"><i class="fas fa-user-slash"></i></div>
+            <div class="contact-card-body">
+              <h3>Profile Removal Request</h3>
+              <p>Creator or manager? Request delisting of a profile from our directory.</p>
+              <a href="mailto:fanspediaofficial@gmail.com?subject=Profile%20Removal%20Request">Send removal request</a>
+            </div>
+          </div>
+
+          <div class="contact-card">
+            <div class="contact-card-icon"><i class="fab fa-instagram"></i></div>
+            <div class="contact-card-body">
+              <h3>Instagram</h3>
+              <p>Follow us for updates, featured creators, and announcements.</p>
+              <a href="https://www.instagram.com/fanspediaofficial/" target="_blank" rel="noopener noreferrer">@fanspediaofficial</a>
+            </div>
+          </div>
+
+          <div class="contact-card">
+            <div class="contact-card-icon" style="background: linear-gradient(135deg,#1da1f2 0%,#0d8ecf 100%);"><i class="fab fa-x-twitter"></i></div>
+            <div class="contact-card-body">
+              <h3>X (Twitter)</h3>
+              <p>DM us or tag us with feedback and feature requests.</p>
+              <a href="https://x.com/fanspedia" target="_blank" rel="noopener noreferrer">@fanspedia</a>
+            </div>
+          </div>
+
+          <div class="contact-response-note">
+            <i class="fas fa-clock"></i>
+            <span>Our team is available Monday–Friday, 9 am–6 pm GMT. We aim to respond to all emails within one business day.</span>
+          </div>
+
         </div>
-        <div class="about-stat-item">
-          <span class="number">Daily</span>
-          <span class="label">Database Updates</span>
+
+        <!-- Right: Contact Form -->
+        <div class="contact-form-card">
+          <h2>Send Us a Message</h2>
+          <p class="form-subtitle">Fill in the form below and we'll get back to you as soon as possible.</p>
+          <form id="contactForm" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="contactName">Name <span>*</span></label>
+                <input type="text" class="form-control" id="contactName" name="name" placeholder="Your name" required autocomplete="name" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="contactEmail">Email <span>*</span></label>
+                <input type="email" class="form-control" id="contactEmail" name="email" placeholder="your@email.com" required autocomplete="email" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contactSubject">Subject <span>*</span></label>
+              <select class="form-control" id="contactSubject" name="subject" required>
+                <option value="" disabled selected>Select a topic</option>
+                <option value="General Enquiry">General Enquiry</option>
+                <option value="Profile Removal Request">Profile Removal Request</option>
+                <option value="Report Incorrect Information">Report Incorrect Information</option>
+                <option value="Partnership or Advertising">Partnership or Advertising</option>
+                <option value="Technical Issue">Technical Issue</option>
+                <option value="DMCA / Copyright">DMCA / Copyright</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contactMessage">Message <span>*</span></label>
+              <textarea class="form-control" id="contactMessage" name="message" placeholder="Describe your enquiry in detail..." required></textarea>
+            </div>
+            <button type="submit" class="submit-btn" id="submitBtn">
+              <i class="fas fa-paper-plane"></i> Send Message
+            </button>
+          </form>
+          <div class="form-success" id="formSuccess">
+            <i class="fas fa-check-circle"></i>
+            <p>Message sent! We'll get back to you within 24 hours at the email you provided.</p>
+          </div>
         </div>
-        <div class="about-stat-item">
-          <span class="number">50+</span>
-          <span class="label">Categories Covered</span>
-        </div>
-        <div class="about-stat-item">
-          <span class="number">100%</span>
-          <span class="label">Independent &amp; Unbiased</span>
+
+      </div>
+
+      <!-- FAQ -->
+      <div class="contact-faq">
+        <h2>Frequently Asked Questions</h2>
+        <p class="faq-subtitle">Quick answers to the most common questions we receive.</p>
+        <div class="faq-grid">
+          <div class="faq-item">
+            <h3><i class="fas fa-user-slash"></i> How do I remove my profile from FansPedia?</h3>
+            <p>Email us at <a href="mailto:fanspediaofficial@gmail.com?subject=Profile%20Removal%20Request">fanspediaofficial@gmail.com</a> with your OnlyFans username and a brief note confirming you are the creator or their authorised representative. We process removal requests within 48 hours.</p>
+          </div>
+          <div class="faq-item">
+            <h3><i class="fas fa-edit"></i> Can I update my profile information?</h3>
+            <p>Our directory syncs automatically with public OnlyFans profile data. If your profile shows outdated information, it should update within our next daily refresh. If it persists longer than 72 hours, contact us and we'll force a refresh manually.</p>
+          </div>
+          <div class="faq-item">
+            <h3><i class="fas fa-handshake"></i> Do you offer paid placements or sponsorships?</h3>
+            <p>We do not accept paid placements in our search results. All rankings are based on public engagement metrics and relevance only. For partnership and advertising enquiries, please contact us and select "Partnership or Advertising" as your subject.</p>
+          </div>
+          <div class="faq-item">
+            <h3><i class="fas fa-flag"></i> How do I report incorrect or harmful content?</h3>
+            <p>Use the contact form above or email us directly. Select "Report Incorrect Information" or "DMCA / Copyright" as applicable. We take reports seriously and will review and act within 24 hours on business days.</p>
+          </div>
+          <div class="faq-item">
+            <h3><i class="fas fa-building"></i> Is FansPedia affiliated with OnlyFans?</h3>
+            <p>No. FansPedia is a completely independent third-party directory. We have no commercial relationship with OnlyFans or its parent company. All links to creator profiles direct you to OnlyFans.com — subscriptions and payments happen there, not through us.</p>
+          </div>
+          <div class="faq-item">
+            <h3><i class="fas fa-database"></i> Where does your creator data come from?</h3>
+            <p>We index only publicly available information from OnlyFans creator profile pages — display name, username, biography, subscription price, verification status, post counts, and profile images. We do not access or store private content of any kind.</p>
+          </div>
         </div>
       </div>
-    </div>
-
-    <div class="about-content">
-
-      <!-- Our Mission -->
-      <section class="about-section" aria-labelledby="mission-heading">
-        <div class="about-section-label">Our Mission</div>
-        <h2 id="mission-heading">Making Creator Discovery Simple, Safe, and Transparent</h2>
-        <p>Finding the right creator on OnlyFans can feel overwhelming. With millions of profiles and no centralised search, fans are left scrolling through social media hoping to stumble across someone they'll love. FansPedia was built to solve exactly that problem.</p>
-        <p>We aggregate, organise, and index publicly available creator profile data — including subscription prices, verification status, post counts, and categories — so you can search, filter, and discover creators that genuinely match what you're looking for. No guesswork, no dead links, no misleading content.</p>
-        <p>Our search engine is updated every single day. When a creator publishes new content, adjusts their price, or earns a verified badge, our index reflects that. We believe fans deserve accurate, up-to-date information — and creators deserve to be discovered.</p>
-      </section>
-
-      <div class="about-divider"></div>
-
-      <!-- Our Values -->
-      <section class="about-section" aria-labelledby="values-heading">
-        <div class="about-section-label">What We Stand For</div>
-        <h2 id="values-heading">Our Core Values</h2>
-        <p>Every decision we make — from how we collect creator data to how we display search results — is guided by four principles.</p>
-        <div class="about-values-grid">
-          <div class="about-value-card">
-            <div class="about-value-icon"><i class="fas fa-shield-check"></i></div>
-            <h3>Transparency</h3>
-            <p>We are not affiliated with OnlyFans. We are an independent directory. We clearly disclose our data sources, our limitations, and our editorial process.</p>
-          </div>
-          <div class="about-value-card">
-            <div class="about-value-icon"><i class="fas fa-check-double"></i></div>
-            <h3>Accuracy</h3>
-            <p>Our automated systems verify and refresh profile data daily. We flag deleted or inactive accounts promptly so search results stay clean and reliable.</p>
-          </div>
-          <div class="about-value-card">
-            <div class="about-value-icon"><i class="fas fa-user-shield"></i></div>
-            <h3>Safety</h3>
-            <p>FansPedia is an 18+ platform. We include a built-in Safe Search toggle that blurs explicit preview imagery — designed for responsible browsing in any setting.</p>
-          </div>
-          <div class="about-value-card">
-            <div class="about-value-icon"><i class="fas fa-balance-scale"></i></div>
-            <h3>Impartiality</h3>
-            <p>No creator pays to be featured. Our search results are ranked by relevance and public engagement metrics only — never by commercial arrangements.</p>
-          </div>
-        </div>
-      </section>
-
-      <div class="about-divider"></div>
-
-      <!-- How It Works -->
-      <section class="about-section" aria-labelledby="how-heading">
-        <div class="about-section-label">How It Works</div>
-        <h2 id="how-heading">How We Build and Maintain Our Directory</h2>
-        <p>FansPedia operates a proprietary automated data pipeline that continuously scans and indexes publicly accessible OnlyFans profile pages. We collect only the information that creators have chosen to make public: their display name, username, biography, subscription price, post count, follower count, verification status, and profile images.</p>
-        <p>Our technology identifies new creator registrations daily, adds them to the database, and flags accounts that have been deactivated or deleted so they are removed from search results promptly. Historical snapshots of profile metrics allow us to surface trending creators and highlight those who are growing rapidly.</p>
-        <p>We do not scrape, store, or distribute any private creator content. FansPedia is a discovery tool — we direct fans to creator profiles on OnlyFans directly. Any subscription, payment, or interaction happens entirely on the OnlyFans platform, not through us.</p>
-      </section>
-
-      <div class="about-divider"></div>
-
-      <!-- Our Expertise -->
-      <section class="about-section" aria-labelledby="expertise-heading">
-        <div class="about-section-label">Experience &amp; Expertise</div>
-        <h2 id="expertise-heading">Built by a Team With Deep Platform Knowledge</h2>
-        <p>The FansPedia team brings together expertise in search engine technology, web data infrastructure, and digital content platforms. We have spent years studying how fans discover creators and where the existing tooling falls short — long wait times, stale data, inaccurate pricing, and broken profile links are problems we have personally experienced and are determined to fix.</p>
-        <p>Our engineering team maintains the data pipeline, quality control systems, and search algorithms that power this directory. Our editorial team reviews category taxonomies, ensures content accuracy, and monitors for spam or misleading creator profiles. Together, we operate a platform used by hundreds of thousands of fans every month.</p>
-        <p>We take this responsibility seriously. Our community depends on us to surface reliable information, and we hold ourselves to a high standard: if we would not recommend a profile to a friend, it should not appear prominently in our results.</p>
-      </section>
-
-      <div class="about-divider"></div>
-
-      <!-- Team -->
-      <section class="about-section" aria-labelledby="team-heading">
-        <div class="about-section-label">The Team</div>
-        <h2 id="team-heading">Who Is Behind FansPedia</h2>
-        <p>We are a small, dedicated team of engineers, data researchers, and digital media professionals who are passionate about making creator discovery better for everyone.</p>
-        <div class="about-team-grid">
-          <div class="about-team-card">
-            <div class="about-team-avatar">N</div>
-            <h4>Nicholas G.</h4>
-            <span>Founder &amp; CEO</span>
-            <p>Serial entrepreneur with 10+ years in digital media and search technology. Conceived FansPedia after noticing the gap in creator discoverability.</p>
-          </div>
-          <div class="about-team-card">
-            <div class="about-team-avatar">A</div>
-            <h4>Alex R.</h4>
-            <span>Head of Engineering</span>
-            <p>Backend systems architect specialising in large-scale data indexing and real-time search infrastructure.</p>
-          </div>
-          <div class="about-team-card">
-            <div class="about-team-avatar">M</div>
-            <h4>Maya T.</h4>
-            <span>Head of Data &amp; QA</span>
-            <p>Data scientist responsible for profile quality, category accuracy, and our daily database refresh pipeline.</p>
-          </div>
-          <div class="about-team-card">
-            <div class="about-team-avatar">J</div>
-            <h4>James V.</h4>
-            <span>Head of Growth</span>
-            <p>SEO and community specialist focused on helping fans find FansPedia and helping creators get discovered.</p>
-          </div>
-        </div>
-      </section>
-
-      <div class="about-divider"></div>
-
-      <!-- Trust & Compliance -->
-      <section class="about-section" aria-labelledby="trust-heading">
-        <div class="about-section-label">Trust &amp; Compliance</div>
-        <h2 id="trust-heading">Why You Can Trust FansPedia</h2>
-        <p>We are committed to operating with the highest standards of honesty and legal compliance. Here is what that means in practice:</p>
-        <p><strong>We are 18+ only.</strong> Access to FansPedia requires users to confirm they are adults. We take age verification and responsible access seriously.</p>
-        <p><strong>We respect creator privacy.</strong> We only index publicly available data. Creators can submit a removal request and their profile will be delisted promptly. We do not sell, share, or monetise creator personal data.</p>
-        <p><strong>We are independent.</strong> FansPedia has no commercial relationship with OnlyFans or its parent company. The OnlyFans name and trademark belong to their respective owners. We are a third-party index only.</p>
-        <p><strong>We are honest about what we are.</strong> FansPedia is a search directory, not a fansite, not an agency, and not an OnlyFans reseller. Every link to a creator profile opens OnlyFans.com directly — we earn no commission and receive no referral fees from creator subscriptions.</p>
-      </section>
-
-      <!-- CTA -->
-      <section class="about-section about-cta" aria-labelledby="cta-heading">
-        <div class="about-cta-inner">
-          <h2 id="cta-heading">Ready to Find Your Next Favourite Creator?</h2>
-          <p>Search 100,000+ profiles by category, location, price, and more — completely free.</p>
-          <a href="/" class="about-cta-btn"><i class="fas fa-search"></i> Start Searching Now</a>
-        </div>
-      </section>
 
     </div>
   </main>
@@ -880,66 +780,57 @@
     }catch(e){}})();
   </script>
 
-  <script type="module">
-    // Header search redirect
-    const hs = document.getElementById('headerSearch');
-    if (hs) {
-      hs.addEventListener('keypress', e => { if (e.key === 'Enter' && hs.value.trim()) window.location.href = `/?q=${encodeURIComponent(hs.value.trim())}`; });
-    }
-  </script>
-
   <script>
     // Theme toggle
     (function() {
-      const saved = localStorage.getItem('theme') || 'dark';
+      var saved = localStorage.getItem('theme') || 'dark';
       document.documentElement.setAttribute('data-theme', saved);
-      const btn = document.getElementById('themeToggle');
+      var btn = document.getElementById('themeToggle');
       function update(t) {
         document.documentElement.setAttribute('data-theme', t);
         localStorage.setItem('theme', t);
         if (btn) btn.innerHTML = t === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
       }
       update(saved);
-      if (btn) btn.addEventListener('click', () => update(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
+      if (btn) btn.addEventListener('click', function() { update(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'); });
     })();
 
     // Header scroll effect
-    window.addEventListener('scroll', () => {
+    window.addEventListener('scroll', function() {
       document.getElementById('mainHeader').classList.toggle('scrolled', window.scrollY > 10);
     }, { passive: true });
 
     // Mobile drawer
     (function() {
-      const overlay = document.getElementById('drawerOverlay');
-      const drawer = document.getElementById('mobileDrawer');
-      const menuBtn = document.getElementById('mobileMenuToggle');
-      const closeBtn = document.getElementById('drawerClose');
+      var overlay = document.getElementById('drawerOverlay');
+      var drawer = document.getElementById('mobileDrawer');
+      var menuBtn = document.getElementById('mobileMenuToggle');
+      var closeBtn = document.getElementById('drawerClose');
       function open() { drawer.classList.add('open'); overlay.classList.add('open'); drawer.setAttribute('aria-hidden','false'); }
       function close() { drawer.classList.remove('open'); overlay.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); }
       if (menuBtn) menuBtn.addEventListener('click', open);
       if (closeBtn) closeBtn.addEventListener('click', close);
       if (overlay) overlay.addEventListener('click', close);
 
-      // Categories toggle
-      const catToggle = document.getElementById('drawerCategoriesToggle');
-      const catSection = document.getElementById('drawerCategoriesSection');
-      if (catToggle && catSection) {
-        catToggle.addEventListener('click', () => {
-          catSection.classList.toggle('open');
-          catToggle.querySelector('.chevron').style.transform = catSection.classList.contains('open') ? 'rotate(180deg)' : '';
+      var catToggleD = document.getElementById('drawerCategoriesToggle');
+      var catSectionD = document.getElementById('drawerCategoriesSection');
+      if (catToggleD && catSectionD) {
+        catToggleD.addEventListener('click', function() {
+          catSectionD.classList.toggle('open');
+          catToggleD.querySelector('.chevron').style.transform = catSectionD.classList.contains('open') ? 'rotate(180deg)' : '';
         });
       }
-      const locToggle = document.getElementById('drawerLocationsToggle');
-      const locSection = document.getElementById('drawerLocationsSection');
+      var locToggle = document.getElementById('drawerLocationsToggle');
+      var locSection = document.getElementById('drawerLocationsSection');
       if (locToggle && locSection) {
-        locToggle.addEventListener('click', () => {
+        locToggle.addEventListener('click', function() {
           locSection.classList.toggle('open');
           locToggle.querySelector('.chevron').style.transform = locSection.classList.contains('open') ? 'rotate(180deg)' : '';
         });
       }
     })();
 
-    // Desktop Categories dropdown + content population
+    // Desktop Categories dropdown
     (function() {
       var CATS = [
         ['Milf',         'milf'],
@@ -957,12 +848,10 @@
       var catMenu = document.getElementById('categoriesMenu');
       if (!catToggle || !catMenu) return;
 
-      // Populate menu
       catMenu.innerHTML = CATS.map(function(c) {
         return '<a href="/categories/' + c[1] + '" role="menuitem">' + c[0] + '</a>';
       }).join('') + '<div class="divider"></div><a href="/categories/" class="view-all" role="menuitem">View All Categories</a>';
 
-      // Populate mobile drawer
       var drawerCats = document.getElementById('drawerCategories');
       if (drawerCats) {
         drawerCats.innerHTML = CATS.slice(0, 8).map(function(c) {
@@ -970,7 +859,6 @@
         }).join('');
       }
 
-      // Click toggle
       catToggle.addEventListener('click', function(e) {
         e.stopPropagation();
         var isOpen = catMenu.classList.toggle('open');
@@ -996,45 +884,84 @@
 
     // Safe Search
     (function() {
-      const toggle = document.getElementById('safeSearchToggle');
-      const modal = document.getElementById('safeSearchModal');
-      const enableBtn = document.getElementById('enableSafeSearchBtn');
-      const dismissBtn = document.getElementById('dismissSafeSearchBtn');
-      const SHOWN_KEY = 'safeSearchModalShown';
-      const STATE_KEY = 'safeSearch';
+      var toggle = document.getElementById('safeSearchToggle');
+      var modal = document.getElementById('safeSearchModal');
+      var enableBtn = document.getElementById('enableSafeSearchBtn');
+      var dismissBtn = document.getElementById('dismissSafeSearchBtn');
+      var SHOWN_KEY = 'safeSearchModalShown';
+      var STATE_KEY = 'safeSearch';
       function applyState(on) {
-        if (on) { toggle.classList.add('active'); toggle.title = 'Safe Search: ON'; } 
+        if (on) { toggle.classList.add('active'); toggle.title = 'Safe Search: ON'; }
         else { toggle.classList.remove('active'); toggle.title = 'Safe Search: OFF'; }
         localStorage.setItem(STATE_KEY, on ? '1' : '0');
       }
       applyState(localStorage.getItem(STATE_KEY) === '1');
-      toggle.addEventListener('click', () => applyState(localStorage.getItem(STATE_KEY) !== '1'));
+      toggle.addEventListener('click', function() { applyState(localStorage.getItem(STATE_KEY) !== '1'); });
       if (!localStorage.getItem(SHOWN_KEY)) {
-        setTimeout(() => { modal.classList.add('show'); }, 3000);
+        setTimeout(function() { modal.classList.add('show'); }, 3000);
       }
-      if (enableBtn) enableBtn.addEventListener('click', () => { applyState(true); localStorage.setItem(SHOWN_KEY,'1'); modal.classList.remove('show'); });
-      if (dismissBtn) dismissBtn.addEventListener('click', () => { localStorage.setItem(SHOWN_KEY,'1'); modal.classList.remove('show'); });
+      if (enableBtn) enableBtn.addEventListener('click', function() { applyState(true); localStorage.setItem(SHOWN_KEY,'1'); modal.classList.remove('show'); });
+      if (dismissBtn) dismissBtn.addEventListener('click', function() { localStorage.setItem(SHOWN_KEY,'1'); modal.classList.remove('show'); });
     })();
 
     // Mobile search modal
     (function() {
-      const trigger = document.getElementById('mobileSearchTrigger');
-      const modal = document.getElementById('mobileSearchModal');
-      const back = document.getElementById('mobileSearchBack');
-      const input = document.getElementById('mobileSearchInput');
-      if (trigger) trigger.addEventListener('click', () => { modal.classList.add('active'); setTimeout(() => input && input.focus(), 100); });
-      if (back) back.addEventListener('click', () => modal.classList.remove('active'));
-      if (input) input.addEventListener('keypress', e => { if (e.key === 'Enter' && input.value.trim()) window.location.href = `/?q=${encodeURIComponent(input.value.trim())}`; });
-      // Suggestions
-      const suggestions = [
+      var trigger = document.getElementById('mobileSearchTrigger');
+      var modal = document.getElementById('mobileSearchModal');
+      var back = document.getElementById('mobileSearchBack');
+      var input = document.getElementById('mobileSearchInput');
+      if (trigger) trigger.addEventListener('click', function() { modal.classList.add('active'); setTimeout(function() { if (input) input.focus(); }, 100); });
+      if (back) back.addEventListener('click', function() { modal.classList.remove('active'); });
+      if (input) input.addEventListener('keypress', function(e) { if (e.key === 'Enter' && input.value.trim()) window.location.href = '/?q=' + encodeURIComponent(input.value.trim()); });
+      var cont = document.getElementById('mobileSearchSuggestionsContainer');
+      if (cont) cont.innerHTML = [
         { icon: 'fa-check-circle', label: 'Verified Creators', href: '/categories/verified' },
         { icon: 'fa-dollar-sign', label: 'Free OnlyFans', href: '/categories/free' },
         { icon: 'fa-fire', label: 'MILF', href: '/categories/milf' },
         { icon: 'fa-star', label: 'Cosplay Models', href: '/categories/cosplay' },
         { icon: 'fa-location-dot', label: 'Near Me', href: '/near-me/' }
-      ];
-      const cont = document.getElementById('mobileSearchSuggestionsContainer');
-      if (cont) cont.innerHTML = suggestions.map(s => `<a href="${s.href}" class="mobile-search-suggestion"><i class="fas ${s.icon}"></i>${s.label}</a>`).join('');
+      ].map(function(s) { return '<a href="' + s.href + '" class="mobile-search-suggestion"><i class="fas ' + s.icon + '"></i>' + s.label + '</a>'; }).join('');
+    })();
+
+    // Header search redirect
+    (function() {
+      var hs = document.getElementById('headerSearch');
+      if (hs) hs.addEventListener('keypress', function(e) { if (e.key === 'Enter' && hs.value.trim()) window.location.href = '/?q=' + encodeURIComponent(hs.value.trim()); });
+    })();
+
+    // Contact form → mailto fallback
+    (function() {
+      var form = document.getElementById('contactForm');
+      var successEl = document.getElementById('formSuccess');
+      var submitBtn = document.getElementById('submitBtn');
+      if (!form) return;
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var name = document.getElementById('contactName').value.trim();
+        var email = document.getElementById('contactEmail').value.trim();
+        var subject = document.getElementById('contactSubject').value;
+        var message = document.getElementById('contactMessage').value.trim();
+        if (!name || !email || !subject || !message) {
+          alert('Please fill in all required fields.');
+          return;
+        }
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          alert('Please enter a valid email address.');
+          return;
+        }
+        var body = 'Name: ' + name + '\nEmail: ' + email + '\n\n' + message;
+        var mailtoUrl = 'mailto:fanspediaofficial@gmail.com?subject=' + encodeURIComponent('[FansPedia] ' + subject) + '&body=' + encodeURIComponent(body);
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        window.location.href = mailtoUrl;
+        setTimeout(function() {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+          successEl.classList.add('show');
+          form.reset();
+        }, 1500);
+      });
     })();
   </script>
 

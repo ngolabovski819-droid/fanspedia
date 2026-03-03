@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -8,7 +8,7 @@
   
   <!-- Bootstrap 5.3 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font Awesome 6 (async — non-blocking) -->
+  <!-- Font Awesome 6 (async � non-blocking) -->
   <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
   
@@ -1401,7 +1401,7 @@
   <!-- Mobile Drawer -->
   <div id="drawerOverlay" class="drawer-overlay" tabindex="-1" aria-hidden="true"></div>
   <nav id="mobileDrawer" class="mobile-drawer" aria-hidden="true" aria-labelledby="mobileMenuToggle">
-    <button class="drawer-close" id="drawerClose" aria-label="Close menu">×</button>
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">�</button>
     <a href="/">Home</a>
     
     <!-- Categories collapsible section -->
@@ -1516,7 +1516,7 @@
               <span class="footer-logo-sub">Your Premium Creator Directory</span>
             </div>
           </div>
-          <p class="footer-description" data-i18n-key="footer_description">Descubre y conecta con creadores verificados de OnlyFans. Actualizado diariamente con más de 10,000 perfiles en todas las categorías.</p>
+          <p class="footer-description" data-i18n-key="footer_description">Descubre y conecta con creadores verificados de OnlyFans. Actualizado diariamente con m�s de 10,000 perfiles en todas las categor�as.</p>
           <div class="footer-social">
             <a href="https://x.com/fanspedia" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="X (Twitter)">
               <span class="social-icon-x" aria-hidden="true">
@@ -1571,7 +1571,7 @@
           <h3 class="footer-heading">Legal & Info</h3>
           <ul class="footer-links">
             <li><a href="/about/">About Us</a></li>
-            <li><a href="#" onclick="alert('Coming soon!'); return false;">Contact</a></li>
+            <li><a href="/contact-us/">Contact</a></li>
             <li><a href="#" onclick="alert('Coming soon!'); return false;">Terms of Service</a></li>
             <li><a href="#" onclick="alert('Coming soon!'); return false;">Privacy Policy</a></li>
             <li><a href="#" onclick="alert('Coming soon!'); return false;">DMCA Policy</a></li>
@@ -1584,7 +1584,7 @@
       <div class="footer-bottom">
         <div class="footer-bottom-content">
           <p class="footer-copyright">
-            © 2026 fanspedia.net - All rights reserved
+            � 2026 fanspedia.net - All rights reserved
           </p>
           <div class="footer-stats">
             <span class="stat-badge">
@@ -1597,7 +1597,7 @@
             </span>
           </div>
         </div>
-        <p class="footer-disclaimer" data-i18n-key="footer_disclaimer">Este sitio web es un directorio independiente y no está afiliado a OnlyFans. Todos los nombres comerciales pertenecen a sus respectivos propietarios.</p>
+        <p class="footer-disclaimer" data-i18n-key="footer_disclaimer">Este sitio web es un directorio independiente y no est� afiliado a OnlyFans. Todos los nombres comerciales pertenecen a sus respectivos propietarios.</p>
       </div>
     </div>
   </footer>
@@ -1614,7 +1614,7 @@
         const slug = categoryToSlug(cat);
         const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
         return `<a role="menuitem" href="/categories/${slug}/">${label}</a>`;
-      }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Browse all categories →</a>';
+      }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Browse all categories ?</a>';
       categoriesMenu.innerHTML = menuHTML;
     }
     
@@ -1980,7 +1980,7 @@
   
   <!-- Main Page Script -->
   <script>
-    // Read page from path e.g. /country/canada/2/ → page 2
+    // Read page from path e.g. /country/canada/2/ ? page 2
     let currentPage = (function() {
       const m = location.pathname.match(/\/country\/[^\/]+\/(\d+)\/?$/);
       return m ? Math.max(1, parseInt(m[1], 10)) : 1;
@@ -2050,7 +2050,7 @@
       if (btnEl) {
         btnEl.classList.toggle('active', active);
         const s = btnEl.querySelector('span');
-        if (s) s.textContent = active ? '♥' : '♡';
+        if (s) s.textContent = active ? '?' : '?';
       }
       updateFavoriteButtons(username, active);
       updateWishlistCounter && updateWishlistCounter();
@@ -2064,7 +2064,7 @@
         buttons.forEach(b => {
           b.classList.toggle('active', active);
           const s = b.querySelector('span');
-          if (s) s.textContent = active ? '♥' : '♡';
+          if (s) s.textContent = active ? '?' : '?';
         });
       } catch (e) { console.warn('updateFavoriteButtons failed:', e); }
     }
@@ -2143,18 +2143,18 @@
           const responsive = buildResponsiveSources(imgSrc);
           
           const name = item.name || 'Unknown';
-          const username = item.username || '—';
+          const username = item.username || '�';
           const priceText = (item.subscribePrice && !isNaN(item.subscribePrice))
             ? `$${parseFloat(item.subscribePrice).toFixed(2)}`
             : 'FREE';
-          const verifiedIcon = item.isVerified ? '✅ ' : '';
+          const verifiedIcon = item.isVerified ? '? ' : '';
           const bio = '';
-          const profileUrl = username !== '—' ? `https://onlyfans.com/${encodeURIComponent(username)}` : '#';
+          const profileUrl = username !== '�' ? `https://onlyfans.com/${encodeURIComponent(username)}` : '#';
           
           const isFirstCard = resultsDiv.children.length === 0 && currentPage === 1;
           const favSet = getFavoritesSet();
-          const favActive = username !== '—' && favSet.has(username);
-          const favChar = favActive ? '♥' : '♡';
+          const favActive = username !== '�' && favSet.has(username);
+          const favChar = favActive ? '?' : '?';
           
           const col = document.createElement('div');
           col.className = 'col-sm-6 col-md-4 col-lg-3 mb-4';
@@ -2247,7 +2247,7 @@
         statusDiv.style.display = 'none';
         
         if (totalLoaded >= 200) {
-          loadedCountEl.textContent = `You've explored ${totalLoaded} creators! 🔥`;
+          loadedCountEl.textContent = `You've explored ${totalLoaded} creators! ??`;
         }
       } else if (totalLoaded > 0 && !hasMore) {
         loadMoreContainer.style.display = 'block';
@@ -2273,7 +2273,7 @@
     }
     
     // Initial load
-    // If SSR pre-rendered by api/ssr/country.js, skip the initial client fetch —
+    // If SSR pre-rendered by api/ssr/country.js, skip the initial client fetch �
     // cards are already in the DOM. window.__COUNTRY_SSR = { name, count, hasMore }
     const ssrData = window.__COUNTRY_SSR;
     if (ssrData && ssrData.name === 'canada') {
@@ -2283,7 +2283,7 @@
         const favSet = getFavoritesSet();
         resultsDiv.querySelectorAll('.favorite-btn[data-username]').forEach(btn => {
           const u = btn.dataset.username;
-          if (u && favSet.has(u)) { btn.classList.add('active'); const s = btn.querySelector('span'); if (s) s.textContent = '♥'; }
+          if (u && favSet.has(u)) { btn.classList.add('active'); const s = btn.querySelector('span'); if (s) s.textContent = '?'; }
         });
       } catch (e) { /* non-critical */ }
       updateLoadMoreButton();
