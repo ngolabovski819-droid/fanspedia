@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="index, follow">
-  <title id="pageTitle">Blog — FansPedia</title>
+  <title id="pageTitle">Blog ï¿½ FansPedia</title>
   <meta name="description" id="pageDesc" content="Read the latest guides and tips on FansPedia.">
   <link rel="canonical" id="pageCanonical" href="https://www.fanspedia.net/blog/">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
@@ -452,7 +452,7 @@
 <!-- Mobile Drawer -->
 <div id="drawerOverlay" class="drawer-overlay"></div>
 <nav id="mobileDrawer" class="mobile-drawer">
-  <button class="drawer-close" id="drawerClose">×</button>
+  <button class="drawer-close" id="drawerClose">ï¿½</button>
   <a href="/" data-i18n-key="nav_home">Home</a>
   <a href="/blog/" style="color:#00AFF0" data-i18n-key="nav_blog">Blog</a>
   <div class="drawer-categories-toggle" id="drawerCategoriesToggle">
@@ -529,7 +529,7 @@
           <li><a href="/about/">About Us</a></li>
           <li><a href="/contact-us/">Contact</a></li>
           <li><a href="#" onclick="alert('Coming soon!'); return false;">Terms of Service</a></li>
-          <li><a href="#" onclick="alert('Coming soon!'); return false;">Privacy Policy</a></li>
+          <li><a href="/privacy-policy/">Privacy Policy</a></li>
           <li><a href="/dmca-policy/">DMCA Policy</a></li>
           <li><a href="#" onclick="alert('Coming soon!'); return false;">Cookie Policy</a></li>
         </ul>
@@ -723,7 +723,7 @@
 
   function renderArticle(post) {
     // Update meta
-    document.title = (post.seoTitle || post.title) + ' — FansPedia Blog';
+    document.title = (post.seoTitle || post.title) + ' ï¿½ FansPedia Blog';
     document.getElementById('pageDesc').content = post.metaDescription || post.excerpt;
     document.getElementById('pageCanonical').href = 'https://www.fanspedia.net' + getLangPrefix() + '/blog/' + post.slug + '/';
 
@@ -791,7 +791,7 @@
   if (!slug) {
     window.location.replace(localizedPath('/blog/'));
   } else if (window.__BLOG_POST_SSR) {
-    // Content already rendered server-side — skip API fetch, just run Mermaid
+    // Content already rendered server-side ï¿½ skip API fetch, just run Mermaid
     mermaid.run({ querySelector: '.mermaid' });
   } else {
     fetch('/api/blog-post?slug=' + encodeURIComponent(slug) + '&t=' + Date.now(), { cache: 'no-store' })

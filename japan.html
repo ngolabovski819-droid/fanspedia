@@ -8,7 +8,7 @@
   
   <!-- Bootstrap 5.3 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font Awesome 6 (async — non-blocking) -->
+  <!-- Font Awesome 6 (async ï¿½ non-blocking) -->
   <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
   
@@ -1421,7 +1421,7 @@
   <!-- Mobile Drawer -->
   <div id="drawerOverlay" class="drawer-overlay" tabindex="-1" aria-hidden="true"></div>
   <nav id="mobileDrawer" class="mobile-drawer" aria-hidden="true" aria-labelledby="mobileMenuToggle">
-    <button class="drawer-close" id="drawerClose" aria-label="Close menu">×</button>
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">ï¿½</button>
     <a href="/">Home</a>
     
     <!-- Categories collapsible section -->
@@ -1594,7 +1594,7 @@
             <li><a href="/about/">About Us</a></li>
             <li><a href="/contact-us/">Contact</a></li>
             <li><a href="#" onclick="alert('Coming soon!'); return false;">Terms of Service</a></li>
-            <li><a href="#" onclick="alert('Coming soon!'); return false;">Privacy Policy</a></li>
+            <li><a href="/privacy-policy/">Privacy Policy</a></li>
             <li><a href="/dmca-policy/">DMCA Policy</a></li>
             <li><a href="#" onclick="alert('Coming soon!'); return false;">Cookie Policy</a></li>
           </ul>
@@ -1605,7 +1605,7 @@
       <div class="footer-bottom">
         <div class="footer-bottom-content">
           <p class="footer-copyright">
-            © 2026 fanspedia.net - All rights reserved
+            ï¿½ 2026 fanspedia.net - All rights reserved
           </p>
           <div class="footer-stats">
             <span class="stat-badge">
@@ -2166,17 +2166,17 @@
           const responsive = buildResponsiveSources(imgSrc);
           
           const name = item.name || 'Unknown';
-          const username = item.username || '—';
+          const username = item.username || 'ï¿½';
           const priceText = (item.subscribePrice && !isNaN(item.subscribePrice))
             ? `$${parseFloat(item.subscribePrice).toFixed(2)}`
             : 'FREE';
           const verifiedIcon = item.isVerified ? '? ' : '';
           const bio = '';
-          const profileUrl = username !== '—' ? `https://onlyfans.com/${encodeURIComponent(username)}` : '#';
+          const profileUrl = username !== 'ï¿½' ? `https://onlyfans.com/${encodeURIComponent(username)}` : '#';
           
           const isFirstCard = resultsDiv.children.length === 0 && currentPage === 1;
           const favSet = getFavoritesSet();
-          const favActive = username !== '—' && favSet.has(username);
+          const favActive = username !== 'ï¿½' && favSet.has(username);
           const favChar = favActive ? '?' : '?';
           
           const col = document.createElement('div');
@@ -2296,7 +2296,7 @@
     }
     
     // Initial load
-    // If SSR pre-rendered by api/ssr/country.js, skip the initial client fetch —
+    // If SSR pre-rendered by api/ssr/country.js, skip the initial client fetch ï¿½
     // cards are already in the DOM. window.__COUNTRY_SSR = { name, count, hasMore }
     const ssrData = window.__COUNTRY_SSR;
     if (ssrData && ssrData.name === 'japan') {

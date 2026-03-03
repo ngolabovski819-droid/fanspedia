@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -1229,7 +1229,7 @@
   .search-group .btn-search { width: 100%; margin-top: 8px; border-radius: 9999px; }
   .clear-search { right: 15px; top: 14px; transform: none; }
     }
-    /* Smaller card image on tiny devices — aspect-ratio wrapper handles proportional sizing */
+    /* Smaller card image on tiny devices ï¿½ aspect-ratio wrapper handles proportional sizing */
     @media (max-width: 400px) {
       .card-img-wrap { aspect-ratio: 4/5; }
     }
@@ -2075,7 +2075,7 @@
       background: linear-gradient(90deg,#2a2a3e 25%,#323246 50%,#2a2a3e 75%);
       background-size: 200% 100%;
     }
-    /* reuse ntw-arrow styles — just alias */
+    /* reuse ntw-arrow styles ï¿½ just alias */
     .cat-arrow-btn {
       position: absolute;
       top: 40%;
@@ -4138,14 +4138,14 @@
           const responsive = buildResponsiveSources(imgSrc);
           
           const name = item.name || "Unknown";
-          const username = item.username || "—";
+          const username = item.username || "ï¿½";
           const priceText = (item.subscribePrice && !isNaN(item.subscribePrice))
             ? `$${parseFloat(item.subscribePrice).toFixed(2)}`
             : "FREE";
           const verifiedIcon = item.isVerified ? "? " : "";
           const location = item.location || "";
           // Link directly to OnlyFans profile (not to internal creator page)
-          const profileUrl = username !== "—" ? `https://onlyfans.com/${encodeURIComponent(username)}` : "#";
+          const profileUrl = username !== "ï¿½" ? `https://onlyfans.com/${encodeURIComponent(username)}` : "#";
 
           const isFirstCard = resultsDiv.children.length === 0 && currentPage === 1;
           // Preload the first, above-the-fold image to help LCP
@@ -4165,7 +4165,7 @@
           col.className = "col-sm-6 col-md-4 col-lg-3 mb-4";
           const safeUsername = String(username).replace(/'/g, "\\'");
           const favSet = getFavoritesSet();
-          const favActive = username !== "—" && favSet.has(username);
+          const favActive = username !== "ï¿½" && favSet.has(username);
           const favChar = favActive ? '?' : '?';
           col.innerHTML = `
             <div class="card h-100">
@@ -4720,7 +4720,7 @@
             <li><a href="/about/">About Us</a></li>
             <li><a href="/contact-us/">Contact</a></li>
             <li><a href="#" onclick="alert('Coming soon!'); return false;">Terms of Service</a></li>
-            <li><a href="#" onclick="alert('Coming soon!'); return false;">Privacy Policy</a></li>
+            <li><a href="/privacy-policy/">Privacy Policy</a></li>
             <li><a href="/dmca-policy/">DMCA Policy</a></li>
             <li><a href="#" onclick="alert('Coming soon!'); return false;">Cookie Policy</a></li>
           </ul>
