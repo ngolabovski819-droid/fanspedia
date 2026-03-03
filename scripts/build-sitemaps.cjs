@@ -148,6 +148,17 @@ function buildBaseSitemap(blogSlugs) {
       alts(`${BASE_URL}/country/${country}/`, `${BASE_URL}/es/country/${country}/`));
   }
 
+  // Near-me & Wishlist (have ES mirrors)
+  xml += wrapUrl(`${BASE_URL}/near-me/`, 'weekly', '0.6', d,
+    alts(`${BASE_URL}/near-me/`, `${BASE_URL}/es/near-me/`));
+  xml += wrapUrl(`${BASE_URL}/wishlist/`, 'monthly', '0.5', d,
+    alts(`${BASE_URL}/wishlist/`, `${BASE_URL}/es/wishlist/`));
+
+  // Static legal/info pages (EN only, no ES mirror)
+  for (const page of ['about', 'contact', 'privacy', 'terms']) {
+    xml += wrapUrl(`${BASE_URL}/${page}/`, 'yearly', '0.3', d);
+  }
+
   xml += '</urlset>';
   return xml;
 }
@@ -195,6 +206,12 @@ function buildSpanishBaseSitemap(blogSlugs) {
     xml += wrapUrl(`${BASE_URL}/es/country/${country}/`, 'weekly', '0.8', d,
       alts(`${BASE_URL}/country/${country}/`, `${BASE_URL}/es/country/${country}/`));
   }
+
+  // Spanish Near-me & Wishlist
+  xml += wrapUrl(`${BASE_URL}/es/near-me/`, 'weekly', '0.6', d,
+    alts(`${BASE_URL}/near-me/`, `${BASE_URL}/es/near-me/`));
+  xml += wrapUrl(`${BASE_URL}/es/wishlist/`, 'monthly', '0.5', d,
+    alts(`${BASE_URL}/wishlist/`, `${BASE_URL}/es/wishlist/`));
 
   xml += '</urlset>';
   return xml;
