@@ -2998,6 +2998,33 @@
         drawerLocationsSection.classList.toggle('open');
       });
     }
+
+    // Desktop Categories dropdown toggle
+    const catToggle = document.getElementById('categoriesToggle');
+    const catMenuEl = document.getElementById('categoriesMenu');
+    if (catToggle && catMenuEl) {
+      catToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = catMenuEl.classList.toggle('open');
+        catToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        catMenuEl.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+      });
+      document.addEventListener('click', (e) => {
+        if (!catMenuEl.classList.contains('open')) return;
+        if (!catMenuEl.contains(e.target) && !catToggle.contains(e.target)) {
+          catMenuEl.classList.remove('open');
+          catToggle.setAttribute('aria-expanded', 'false');
+          catMenuEl.setAttribute('aria-hidden', 'true');
+        }
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          catMenuEl.classList.remove('open');
+          catToggle.setAttribute('aria-expanded', 'false');
+          catMenuEl.setAttribute('aria-hidden', 'true');
+        }
+      });
+    }
   </script>
 
   <script>
@@ -3887,33 +3914,6 @@
         }
       }
     });
-
-    // Desktop Categories dropdown
-    const catToggle = document.getElementById('categoriesToggle');
-    const catMenuEl = document.getElementById('categoriesMenu');
-    if (catToggle && catMenuEl) {
-      catToggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isOpen = catMenuEl.classList.toggle('open');
-        catToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-        catMenuEl.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
-      });
-      document.addEventListener('click', (e) => {
-        if (!catMenuEl.classList.contains('open')) return;
-        if (!catMenuEl.contains(e.target) && e.target !== catToggle) {
-          catMenuEl.classList.remove('open');
-          catToggle.setAttribute('aria-expanded', 'false');
-          catMenuEl.setAttribute('aria-hidden', 'true');
-        }
-      });
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-          catMenuEl.classList.remove('open');
-          catToggle.setAttribute('aria-expanded', 'false');
-          catMenuEl.setAttribute('aria-hidden', 'true');
-        }
-      });
-    }
 
     // Mobile drawer
     const mobileToggle = document.getElementById('mobileMenuToggle');
