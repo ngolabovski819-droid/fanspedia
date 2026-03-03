@@ -891,10 +891,29 @@
       ).join('') + '<div class="divider"></div><a href="/categories/" class="view-all" role="menuitem">View All Categories</a>';
       catMenu.innerHTML = items;
     }
-    const toggle = document.getElementById('categoriesToggle');
-    if (toggle && catMenu) {
-      toggle.addEventListener('click', e => { e.stopPropagation(); catMenu.classList.toggle('open'); toggle.setAttribute('aria-expanded', catMenu.classList.contains('open')); });
-      document.addEventListener('click', () => { catMenu.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); });
+    const catToggle = document.getElementById('categoriesToggle');
+    if (catToggle && catMenu) {
+      catToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = catMenu.classList.toggle('open');
+        catToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        catMenu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+      });
+      document.addEventListener('click', (e) => {
+        if (!catMenu.classList.contains('open')) return;
+        if (!catMenu.contains(e.target) && !catToggle.contains(e.target)) {
+          catMenu.classList.remove('open');
+          catToggle.setAttribute('aria-expanded', 'false');
+          catMenu.setAttribute('aria-hidden', 'true');
+        }
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          catMenu.classList.remove('open');
+          catToggle.setAttribute('aria-expanded', 'false');
+          catMenu.setAttribute('aria-hidden', 'true');
+        }
+      });
     }
 
     // Mobile drawer categories
