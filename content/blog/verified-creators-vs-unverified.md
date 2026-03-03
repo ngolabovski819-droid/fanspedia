@@ -7,7 +7,7 @@ categoryLabel: Guides
 emoji: ""
 read_time: 6 min read
 excerpt: ""
-featured_image: 
+featured_image: null
 featured_image_alt: Verified vs. unverified Onlyfans creators cover
 seo_title: "Verified OnlyFans Creator vs Unverified: A Fan’s Safety"
 meta_description: >
@@ -29,7 +29,7 @@ Separately, a subscriber-focused security analysis notes that OnlyFans requires 
 
 **My fan takeaway:** any creator who is actively monetizing on-platform is likely operating under stronger identity controls than a random “creator” link floating around social media DMs. But I still don’t treat that as “safe by default.” 
 
-### What verified can mean in real life (outside the platform)
+### What VERIFIED can mean in real life (outside the platform)
 
 As a long-time fan, I’m honestly more interested in **“verifiable”** than “verified.”
 
