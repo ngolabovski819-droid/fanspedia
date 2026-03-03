@@ -24,6 +24,8 @@
     { "source": "/about/", "destination": "/about.html" },
     { "source": "/contact-us", "destination": "/contact.html" },
     { "source": "/contact-us/", "destination": "/contact.html" },
+    { "source": "/dmca-policy", "destination": "/dmca.html" },
+    { "source": "/dmca-policy/", "destination": "/dmca.html" },
     { "source": "/categories", "destination": "/api/ssr/categories-hub" },
     { "source": "/categories/", "destination": "/api/ssr/categories-hub" },
     { "source": "/categories/:slug/:page", "destination": "/api/ssr/category?slug=:slug&page=:page" },
