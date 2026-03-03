@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="es" data-theme="light">
 <head>
   <meta charset="UTF-8">
@@ -1567,7 +1567,7 @@
   <!-- Mobile Drawer -->
   <div id="drawerOverlay" class="drawer-overlay" tabindex="-1" aria-hidden="true"></div>
   <nav id="mobileDrawer" class="mobile-drawer" aria-labelledby="mobileMenuToggle">
-    <button class="drawer-close" id="drawerClose" aria-label="Close menu">×</button>
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">ï¿½</button>
     <a href="/">Home</a>
     
     <!-- Categories collapsible section -->
@@ -2451,7 +2451,7 @@
     }
 
     window.toggleFavorite = function(username, btn) {
-      if (!username || username === '—') return;
+      if (!username || username === 'ï¿½') return;
       
       const favSet = getFavoritesSet();
       const isActive = favSet.has(username);
@@ -2751,17 +2751,17 @@
         const responsive = buildResponsiveSources(imgSrc);
         
   const name = item.name || "Unknown";
-  const username = item.username || "—";
+  const username = item.username || "ï¿½";
         const priceText = (item.subscribePrice && !isNaN(item.subscribePrice))
           ? `$${parseFloat(item.subscribePrice).toFixed(2)}`
           : "FREE";
         const verifiedIcon = item.isVerified ? "? " : "";
-  const profileUrl = username !== "—" ? `https://onlyfans.com/${encodeURIComponent(username)}` : "#";
+  const profileUrl = username !== "ï¿½" ? `https://onlyfans.com/${encodeURIComponent(username)}` : "#";
   // Removed onlyfansUrl and Visit OnlyFans link
 
         const safeUsername = String(username).replace(/'/g, "\\'");
         const favSet = getFavoritesSet();
-        const favActive = username !== "—" && favSet.has(username);
+        const favActive = username !== "ï¿½" && favSet.has(username);
         const favChar = favActive ? '?' : '?';
         
         return `
@@ -2796,7 +2796,7 @@
       if (!btn.closest('#similarCreatorsSection')) return;
       
       const username = btn.getAttribute('data-username');
-      if (!username || username === '—') return;
+      if (!username || username === 'ï¿½') return;
       
       e.preventDefault();
       e.stopPropagation();
@@ -3280,7 +3280,7 @@
         <div class="footer-column">
           <h3 class="footer-heading">Legal & Info</h3>
           <ul class="footer-links">
-            <li><a href="#" onclick="alert('Coming soon!'); return false;">About Us</a></li>
+            <li><a href="/about/">About Us</a></li>
             <li><a href="#" onclick="alert('Coming soon!'); return false;">Contact</a></li>
             <li><a href="#" onclick="alert('Coming soon!'); return false;">Terms of Service</a></li>
             <li><a href="#" onclick="alert('Coming soon!'); return false;">Privacy Policy</a></li>
@@ -3294,7 +3294,7 @@
       <div class="footer-bottom">
         <div class="footer-bottom-content">
           <p class="footer-copyright">
-            © 2026 FansPedia.net - All rights reserved
+            ï¿½ 2026 FansPedia.net - All rights reserved
           </p>
           <div class="footer-stats">
             <span class="stat-badge">
