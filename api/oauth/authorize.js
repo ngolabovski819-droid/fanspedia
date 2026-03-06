@@ -4,7 +4,7 @@ export default function handler(req, res) {
     res.status(500).send('OAUTH_CLIENT_ID not configured');
     return;
   }
-  const callbackUrl = 'https://www.fanspedia.net/api/oauth/callback';
+  const callbackUrl = 'https://fanspedia.net/api/oauth/callback';
   const scope = 'repo,user';
   const state = Math.random().toString(36).substr(2, 16);
   const url =

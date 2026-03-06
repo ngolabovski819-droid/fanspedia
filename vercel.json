@@ -88,6 +88,12 @@
     { "source": "/es/blog/:slug/", "destination": "/blog-post.html" }
   ],
   "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.fanspedia.net" }],
+      "destination": "https://fanspedia.net/:path*",
+      "permanent": true
+    },
     { "source": "/categories/indian", "destination": "/country/india/", "statusCode": 301 },
     { "source": "/categories/indian/", "destination": "/country/india/", "statusCode": 301 },
     { "source": "/categories/japanese", "destination": "/country/japan/", "statusCode": 301 },
