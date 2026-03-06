@@ -89,10 +89,16 @@
   ],
   "redirects": [
     {
-      "source": "/:path*",
+      "source": "/",
       "has": [{ "type": "host", "value": "www.fanspedia.net" }],
-      "destination": "https://fanspedia.net/:path*",
-      "permanent": true
+      "destination": "https://fanspedia.net/",
+      "statusCode": 301
+    },
+    {
+      "source": "/:path+",
+      "has": [{ "type": "host", "value": "www.fanspedia.net" }],
+      "destination": "https://fanspedia.net/:path+",
+      "statusCode": 301
     },
     { "source": "/categories/indian", "destination": "/country/india/", "statusCode": 301 },
     { "source": "/categories/indian/", "destination": "/country/india/", "statusCode": 301 },
