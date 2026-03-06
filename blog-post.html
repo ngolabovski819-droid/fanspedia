@@ -6,7 +6,10 @@
   <meta name="robots" content="index, follow">
   <title id="pageTitle">Blog &mdash; FansPedia</title>
   <meta name="description" id="pageDesc" content="Read the latest guides and tips on FansPedia.">
-  <link rel="canonical" id="pageCanonical" href="https://www.fanspedia.net/blog/">
+  <link rel="canonical" id="pageCanonical" href="https://fanspedia.net/blog/">
+  <link rel="alternate" hreflang="en" id="pageAlternateEn" href="">
+  <link rel="alternate" hreflang="es" id="pageAlternateEs" href="">
+  <link rel="alternate" hreflang="x-default" id="pageAlternateDefault" href="">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
   <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
@@ -723,9 +726,12 @@
 
   function renderArticle(post) {
     // Update meta
-    document.title = (post.seoTitle || post.title) + ' � FansPedia Blog';
+    document.title = (post.seoTitle || post.title) + ' - FansPedia Blog';
     document.getElementById('pageDesc').content = post.metaDescription || post.excerpt;
-    document.getElementById('pageCanonical').href = 'https://www.fanspedia.net' + getLangPrefix() + '/blog/' + post.slug + '/';
+    document.getElementById('pageCanonical').href = 'https://fanspedia.net' + getLangPrefix() + '/blog/' + post.slug + '/';
+    document.getElementById('pageAlternateEn').href = 'https://fanspedia.net/blog/' + post.slug + '/';
+    document.getElementById('pageAlternateEs').href = 'https://fanspedia.net/es/blog/' + post.slug + '/';
+    document.getElementById('pageAlternateDefault').href = 'https://fanspedia.net/blog/' + post.slug + '/';
 
     // Build hero image HTML (16:9 responsive) if available
     let heroImageHTML = '';

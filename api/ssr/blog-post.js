@@ -355,7 +355,22 @@ export default async function handler(req, res) {
       `<link rel="canonical" id="pageCanonical" href="${escHtml(canonicalUrl)}">`
     );
 
-    // 4. OG tags + Twitter cards + JSON-LD + SSR hydration flag
+    // 4. Update template hreflang alternates
+    const alternateEsUrl = `${BASE_URL}/es/blog/${post.slug}/`;
+    html = html.replace(
+      /<link rel="alternate" hreflang="en" id="pageAlternateEn" href="[^"]*">/,
+      `<link rel="alternate" hreflang="en" id="pageAlternateEn" href="${escHtml(canonicalUrl)}">`
+    );
+    html = html.replace(
+      /<link rel="alternate" hreflang="es" id="pageAlternateEs" href="[^"]*">/,
+      `<link rel="alternate" hreflang="es" id="pageAlternateEs" href="${escHtml(alternateEsUrl)}">`
+    );
+    html = html.replace(
+      /<link rel="alternate" hreflang="x-default" id="pageAlternateDefault" href="[^"]*">/,
+      `<link rel="alternate" hreflang="x-default" id="pageAlternateDefault" href="${escHtml(canonicalUrl)}">`
+    );
+
+    // 5. OG tags + Twitter cards + JSON-LD + SSR hydration flag
     const ogBlock = [
       `  <meta property="og:type" content="article">`,
       `  <meta property="og:url" content="${escHtml(canonicalUrl)}">`,
@@ -376,14 +391,14 @@ export default async function handler(req, res) {
 
     html = html.replace('</head>', `${ogBlock}\n${jsonLd}\n${ssrFlag}\n</head>`);
 
-    // 5. Pre-render article body into <main id="articleMain">
+    // 6. Pre-render article body into <main id="articleMain">
     const articleHtml = renderArticleHtml(post);
     html = html.replace(
       /<main id="articleMain">[\s\S]*?<\/main>/,
       `<main id="articleMain">${articleHtml}\n</main>`
     );
 
-    // 6. Send
+    // 7. Send
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('Cache-Control', 'no-store');
     return res.status(200).send(html);
