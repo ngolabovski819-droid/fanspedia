@@ -30,7 +30,21 @@
   <meta name="keywords" content="onlyfans search, onlyfans finder, best onlyfans, onlyfans girls, verified creators, onlyfans models, OF search engine">
   <meta name="author" content="fanspedia.net">
   <link rel="canonical" href="https://fanspedia.net/">
-  
+
+  <!-- Noindex search/filter/pagination URLs — keeps crawl budget on real SEO pages -->
+  <script>
+    (function () {
+      var p = new URLSearchParams(window.location.search);
+      if (p.has('q') || p.has('page') || p.has('sort') || p.has('verified') || p.has('bundles') || p.has('max') || p.has('safe')) {
+        var m = document.createElement('meta');
+        m.name = 'robots'; m.content = 'noindex, follow';
+        document.head.appendChild(m);
+        var c = document.querySelector('link[rel="canonical"]');
+        if (c) c.href = 'https://fanspedia.net/';
+      }
+    })();
+  </script>
+
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://fanspedia.net/">

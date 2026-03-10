@@ -27,10 +27,33 @@ Disallow: /
 
 # Allow all other bots
 User-agent: *
+
+# Block search/filter/pagination query-string URLs — infinite URL space, thin content
+Disallow: /*?q=
+Disallow: /*?page=
+Disallow: /*?sort=
+Disallow: /*?verified=
+Disallow: /*?bundles=
+Disallow: /*?max=
+Disallow: /*?safe=
+
+# Block internal API endpoints
+Disallow: /api/
+
+# Allow all clean canonical SEO pages explicitly
+Allow: /categories/
+Allow: /country/
+Allow: /blog/
+Allow: /locations/
+Allow: /near-me/
+Allow: /wishlist/
+Allow: /about/
+Allow: /contact-us/
+Allow: /privacy-policy/
+Allow: /terms/
+Allow: /dmca-policy/
+Allow: /es/
 Allow: /
 
-# Sitemaps
+# Sitemap
 Sitemap: https://fanspedia.net/sitemap.xml
-
-# Crawl-delay for good bots
-Crawl-delay: 1
