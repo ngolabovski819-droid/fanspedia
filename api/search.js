@@ -57,14 +57,14 @@ export default async function handler(req, res) {
       // Support multi-term queries separated by | or ,
       // e.g., q=goth|gothic|alt builds an OR across all columns and terms
       const terms = rawQ.split(/[|,]/).map(s => s.trim()).filter(Boolean);
-      const allowedCols = new Set(['username','name','about','location']);
+      const allowedCols = new Set(['username','name','about']);
       const fieldsRaw = (req.query.fields || '').toString();
       const requestedCols = fieldsRaw
         .split(',')
         .map(s => s.trim())
         .filter(Boolean)
         .filter(c => allowedCols.has(c));
-      const cols = requestedCols.length ? requestedCols : ['username','name','about','location'];
+      const cols = requestedCols.length ? requestedCols : ['username','name','about'];
       const expressions = (terms.length ? terms : [rawQ]).flatMap(term => cols.map(c => `${c}.ilike.*${term}*`));
       params.set('or', `(${expressions.join(',')})`);
     }
@@ -92,9 +92,7 @@ export default async function handler(req, res) {
     const cacheKey = url;
     const cached = cache.get(cacheKey);
     if (cached && (Date.now() - cached.ts) < CACHE_TTL_MS) {
-      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-      res.setHeader('Pragma', 'no-cache');
-      res.setHeader('Expires', '0');
+      res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
       return res.status(200).json(cached.data);
     }
     const headers = {
@@ -119,13 +117,8 @@ export default async function handler(req, res) {
 
     const data = await r.json();
 
-    // Store in cache
-    cache.set(cacheKey, { data, ts: Date.now() });
-
-    // Add cache-control headers to prevent stale responses
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    res.setHeader('Pragma', 'no-cache');
-    res.setHeader('Expires', '0');
+    // CDN + browser cache: Vercel edge caches for 60s, serves stale up to 5min while revalidating
+    res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
 
     // Normalize field names to what the frontend expects (camelCase)
     const mapped = (Array.isArray(data) ? data : []).map(item => ({
@@ -134,7 +127,7 @@ export default async function handler(req, res) {
       subscribePrice: item.subscribeprice,
     }));
 
-    // Save to cache (best-effort)
+    // Save to in-memory cache (best-effort, supplements CDN cache)
     try { cache.set(cacheKey, { ts: Date.now(), data: mapped }); } catch (e) { /* ignore */ }
 
     return res.status(200).json(mapped);
