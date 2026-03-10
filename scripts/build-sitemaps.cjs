@@ -157,7 +157,7 @@ function buildBaseSitemap(blogSlugs) {
     alts(`${BASE_URL}/wishlist/`, `${BASE_URL}/es/wishlist/`));
 
   // Static legal/info pages (EN only, no ES mirror)
-  for (const page of ['about', 'contact', 'privacy', 'terms']) {
+  for (const page of ['about', 'contact-us', 'privacy-policy', 'terms']) {
     xml += wrapUrl(`${BASE_URL}/${page}/`, 'yearly', '0.3', d);
   }
 
