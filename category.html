@@ -538,7 +538,7 @@
 
   <!-- Favorites bar -->
   <section id="wishlist" aria-label="Wishlist">
-    <div id="favoritesBar" class="favorites-bar" aria-label="Favorites" aria-live="polite"></div>
+    <div id="favoritesBar" class="favorites-bar" aria-label="Favorites" aria-live="polite" style="display:none;"></div>
   </section>
 
       <!-- Results -->
@@ -1028,7 +1028,6 @@
   if (ssrData && ssrData.slug === slug) {
     hasMore = ssrData.hasMore !== false;
     document.getElementById('status').textContent = '';
-    initBreadcrumbs();
     renderFavoritesBar();
     updateWishlistBadge();
     // Reattach favorite state to pre-rendered cards

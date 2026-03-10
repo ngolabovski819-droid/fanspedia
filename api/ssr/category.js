@@ -269,6 +269,28 @@ export default async function handler(req, res) {
     html = html.replace('</head>', `${preloadLink ? preloadLink + '\n' : ''}${jsonLd}\n${ssrFlag}\n${hreflangLinks}\n${paginationLinks ? paginationLinks + '\n' : ''}</head>`);
 
     // --- 5. Body injections ---
+
+    // Pre-rendered breadcrumbs — avoids the client JS injecting them after paint (kills CLS)
+    const categoryUrl = canonicalUrl;
+    const breadcrumbsHtml = `<li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/" itemprop="item" class="breadcrumb-home"><i class="fas fa-home" aria-hidden="true"></i><span itemprop="name">Home</span></a>
+          <meta itemprop="position" content="1" />
+        </li>
+        <li class="breadcrumb-separator" aria-hidden="true">/</li>
+        <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/categories/" itemprop="item"><span itemprop="name">Categories</span></a>
+          <meta itemprop="position" content="2" />
+        </li>
+        <li class="breadcrumb-separator" aria-hidden="true">/</li>
+        <li class="breadcrumb-item active" aria-current="page" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <span itemprop="item" itemscope itemtype="https://schema.org/WebPage" itemid="${categoryUrl}"><span itemprop="name">${escHtml(label)}</span></span>
+          <meta itemprop="position" content="3" />
+        </li>`;
+    html = html.replace(
+      /(<ol id="breadcrumbsList"[^>]*>)\s*<!--[^>]*-->\s*(<\/ol>)/,
+      `$1${breadcrumbsHtml}$2`
+    );
+
     html = html.replace(
       '<h1 id="catH1" class="mb-2">Best OnlyFans Creators</h1>',
       `<h1 id="catH1" class="mb-2">Best OnlyFans ${escHtml(label)} Creators</h1>`
