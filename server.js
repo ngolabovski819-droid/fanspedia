@@ -267,6 +267,11 @@ app.get('/:username([a-zA-Z0-9_.-]+)', (req, res, next) => {
   return res.redirect(302, '/');
 });
 
+// 404 catch-all — serve 404.html with 404 status (mirrors Vercel's automatic 404.html behaviour)
+app.use((req, res) => {
+  res.status(404).sendFile(path.join(__dirname, '404.html'));
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Local test server running on http://127.0.0.1:${PORT}`));
 // Lightweight health endpoint for quick availability checks
