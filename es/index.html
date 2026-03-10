@@ -3268,9 +3268,7 @@
           <div class="reel-modal-content">
             <div class="reel-media-wrapper" onclick="toggleReelPlayPause(event)">
               <div id="reelMediaContainer" style="width: 100%; height: 85vh; background: #000; display: flex; align-items: center; justify-content: center; cursor: pointer;">
-                <video id="reelVideo" class="reel-modal-video" autoplay loop playsinline style="display: none;">
-                  <source src="" type="video/mp4">
-                </video>
+                <video id="reelVideo" class="reel-modal-video" autoplay muted loop playsinline style="display: none;"></video>
                 <img id="reelImage" class="reel-modal-video" style="display: none;" />
               </div>
               <div class="reel-controls-bar">
@@ -3332,21 +3330,24 @@
       
       // Detect if URL is image or video
       const url = reel.videoUrl;
-      const isImage = /\.(jpg|jpeg|png|gif|webp)/i.test(url);
+      const isImage = url && /\.(jpg|jpeg|png|gif|webp)/i.test(url);
+      const isVideo = url && !isImage;
       
       const videoEl = document.getElementById('reelVideo');
       const imageEl = document.getElementById('reelImage');
       
-      if (isImage) {
-        // Show image, hide video
-        videoEl.style.display = 'none';
-        imageEl.style.display = 'block';
-        imageEl.src = url;
-      } else {
-        // Show video, hide image
+      if (isVideo) {
         imageEl.style.display = 'none';
         videoEl.style.display = 'block';
         videoEl.src = url;
+        videoEl.load();
+        videoEl.play().catch(function() {});
+      } else {
+        videoEl.pause();
+        videoEl.src = '';
+        videoEl.style.display = 'none';
+        imageEl.style.display = 'block';
+        imageEl.src = isImage ? url : reel.thumbnail;
       }
       
       // Update modal content
@@ -3548,10 +3549,12 @@
         imageEl.style.display = 'none';
         videoEl.style.display = 'block';
         videoEl.src = url;
+        videoEl.load();
         videoEl.play().catch(function() {});
       } else {
-        videoEl.style.display = 'none';
+        videoEl.pause();
         videoEl.src = '';
+        videoEl.style.display = 'none';
         imageEl.style.display = 'block';
         imageEl.src = isImage ? url : reel.thumbnail;
       }
