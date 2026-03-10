@@ -15,7 +15,7 @@ export default async function handler(req, res) {
     const ids = idsParam.split(',').map(s => s.trim()).filter(Boolean).slice(0, 10);
     const idFilter = ids.length === 1 ? `id=eq.${ids[0]}` : `id=in.(${ids.join(',')})`;
 
-    const url = `${SUPABASE_URL}/rest/v1/onlyfans_profiles?${idFilter}&select=id,username,avatar,name,favoritedcount`;
+    const url = `${SUPABASE_URL}/rest/v1/onlyfans_profiles?${idFilter}&select=id,username,avatar,name,favoritedcount,stories`;
     
     const headers = {
       'apikey': SUPABASE_KEY,

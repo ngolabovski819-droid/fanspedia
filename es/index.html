@@ -3538,19 +3538,22 @@
       
       // Detect if URL is image or video
       const url = reel.videoUrl;
-      const isImage = /\.(jpg|jpeg|png|gif|webp)/i.test(url);
+      const isImage = url && /\.(jpg|jpeg|png|gif|webp)/i.test(url);
+      const isVideo = url && !isImage;
       
       const videoEl = document.getElementById('reelVideo');
       const imageEl = document.getElementById('reelImage');
       
-      if (isImage) {
-        videoEl.style.display = 'none';
-        imageEl.style.display = 'block';
-        imageEl.src = url;
-      } else {
+      if (isVideo) {
         imageEl.style.display = 'none';
         videoEl.style.display = 'block';
         videoEl.src = url;
+        videoEl.play().catch(function() {});
+      } else {
+        videoEl.style.display = 'none';
+        videoEl.src = '';
+        imageEl.style.display = 'block';
+        imageEl.src = isImage ? url : reel.thumbnail;
       }
       
       document.getElementById('reelAvatar').src = reel.avatar;
@@ -3639,12 +3642,13 @@
           var list = result.creators || (result.creator ? [result.creator] : []);
           list.forEach(function(creator) {
             if (!creator) return;
+            var thumb = creator.avatar ? 'https://images.weserv.nl/?url=' + encodeURIComponent(creator.avatar) + '&w=320&h=568&fit=cover' : 'https://via.placeholder.com/320x568';
             var newReel = {
               id: reelsData.length + 1,
               username: creator.username,
               avatar: creator.avatar ? 'https://images.weserv.nl/?url=' + encodeURIComponent(creator.avatar) + '&w=120&h=120&fit=cover' : 'https://via.placeholder.com/120',
-              videoUrl: null,
-              thumbnail: creator.avatar ? 'https://images.weserv.nl/?url=' + encodeURIComponent(creator.avatar) + '&w=320&h=568&fit=cover' : 'https://via.placeholder.com/320x568',
+              videoUrl: creator.stories || null,
+              thumbnail: thumb,
               caption: creator.name || ('Check out ' + creator.username + '!'),
               likes: creator.favoritedcount ? (creator.favoritedcount / 1000).toFixed(0) + 'k' : '0',
               creatorId: parseInt(creator.id)
