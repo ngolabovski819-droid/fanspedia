@@ -219,7 +219,7 @@ export default async function handler(req, res) {
         apikey: SUPABASE_KEY,
         Authorization: `Bearer ${SUPABASE_KEY}`,
         'Accept-Profile': 'public',
-        Prefer: 'count=exact',
+        Prefer: 'count=estimated',
       },
     });
 
@@ -301,7 +301,7 @@ export default async function handler(req, res) {
 
     // --- 6. Send ---
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=60');
+    res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=3600');
     return res.status(200).send(html);
 
   } catch (err) {

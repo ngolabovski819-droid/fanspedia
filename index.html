@@ -5341,19 +5341,17 @@
     // Initial render with skeletons replaced by label-only cards
     renderCards();
 
-    // Fetch real images on idle
+    // Fetch real images on idle — 1 request instead of 16
     function loadImages() {
-      var fetches = CATS.map(function (c, i) {
-        return fetch('/api/search?q=' + encodeURIComponent(c.q) + '&page_size=5&page=1')
-          .then(function (r) { return r.ok ? r.json() : []; })
-          .then(function (data) {
-            var list = Array.isArray(data) ? data : [];
-            var hit  = list.find(function (cr) { return cr.avatar && cr.avatar.startsWith('http'); });
-            if (hit) { pool[i].img = hit.avatar; }
-          })
-          .catch(function () {});
-      });
-      Promise.all(fetches).then(function () { renderCards(); });
+      fetch('/api/category-previews')
+        .then(function (r) { return r.ok ? r.json() : {}; })
+        .then(function (data) {
+          pool.forEach(function (c) {
+            if (data[c.slug]) c.img = data[c.slug];
+          });
+          renderCards();
+        })
+        .catch(function () {});
     }
 
     // Fire category image loads only when browser is truly idle after full page load
