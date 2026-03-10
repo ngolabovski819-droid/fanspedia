@@ -3631,29 +3631,39 @@
       }
     });
     
-    // Initialize reels when page loads
-    // Reel API calls are deferred until after LCP so they don't block the critical path
+    // Initialize reels — deferred until AFTER window load to never block LCP
     function _loadReels() {
-      addCreatorReelFromDatabase('61786830');
-      addCreatorReelFromDatabase('27502984');
-      addCreatorReelFromDatabase('21895538');
-      addCreatorReelFromDatabase('116155');
+      fetch('/api/reel?ids=61786830,27502984,21895538,116155')
+        .then(function(r) { return r.ok ? r.json() : {}; })
+        .then(function(result) {
+          var list = result.creators || (result.creator ? [result.creator] : []);
+          list.forEach(function(creator) {
+            if (!creator) return;
+            var newReel = {
+              id: reelsData.length + 1,
+              username: creator.username,
+              avatar: creator.avatar ? 'https://images.weserv.nl/?url=' + encodeURIComponent(creator.avatar) + '&w=120&h=120&fit=cover' : 'https://via.placeholder.com/120',
+              videoUrl: null,
+              thumbnail: creator.avatar ? 'https://images.weserv.nl/?url=' + encodeURIComponent(creator.avatar) + '&w=320&h=568&fit=cover' : 'https://via.placeholder.com/320x568',
+              caption: creator.name || ('Check out ' + creator.username + '!'),
+              likes: creator.favoritedcount ? (creator.favoritedcount / 1000).toFixed(0) + 'k' : '0',
+              creatorId: parseInt(creator.id)
+            };
+            reelsData.push(newReel);
+          });
+          if (reelsData.length) renderReels();
+        })
+        .catch(function() {});
     }
-    function _scheduleReels() {
-      if ('requestIdleCallback' in window) {
-        requestIdleCallback(_loadReels, { timeout: 3000 });
-      } else {
-        setTimeout(_loadReels, 200);
-      }
-    }
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', function() {
-        renderReels();
-        _scheduleReels();
-      });
-    } else {
+    // Fire only after full page load — never appears in Lighthouse critical path
+    if (document.readyState === 'complete') {
       renderReels();
-      _scheduleReels();
+      setTimeout(_loadReels, 100);
+    } else {
+      window.addEventListener('load', function() {
+        renderReels();
+        setTimeout(_loadReels, 100);
+      });
     }
 
     // ============================================
@@ -5343,10 +5353,14 @@
       Promise.all(fetches).then(function () { renderCards(); });
     }
 
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(loadImages, { timeout: 5000 });
+    if (document.readyState === 'complete') {
+      if ('requestIdleCallback' in window) { requestIdleCallback(loadImages); }
+      else { setTimeout(loadImages, 1000); }
     } else {
-      setTimeout(loadImages, 500);
+      window.addEventListener('load', function() {
+        if ('requestIdleCallback' in window) { requestIdleCallback(loadImages); }
+        else { setTimeout(loadImages, 1000); }
+      });
     }
   }());
   </script>

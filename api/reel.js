@@ -10,9 +10,12 @@ export default async function handler(req, res) {
       });
     }
 
-    const creatorId = req.query.id || '61786830';
-    
-    const url = `${SUPABASE_URL}/rest/v1/onlyfans_profiles?id=eq.${creatorId}&select=id,username,avatar,stories,name,favoritedcount`;
+    // Accept single id= or comma-separated ids= for batch fetching
+    const idsParam = req.query.ids || req.query.id || '61786830';
+    const ids = idsParam.split(',').map(s => s.trim()).filter(Boolean).slice(0, 10);
+    const idFilter = ids.length === 1 ? `id=eq.${ids[0]}` : `id=in.(${ids.join(',')})`;
+
+    const url = `${SUPABASE_URL}/rest/v1/onlyfans_profiles?${idFilter}&select=id,username,avatar,name,favoritedcount`;
     
     const headers = {
       'apikey': SUPABASE_KEY,
@@ -30,11 +33,16 @@ export default async function handler(req, res) {
     }
 
     const data = await response.json();
-    
-    // Return first result or null
-    const creator = data && data.length > 0 ? data[0] : null;
-    
-    return res.status(200).json({ creator });
+    const creators = Array.isArray(data) ? data : [];
+
+    // Cache at CDN edge for 5 minutes — creator avatars don't change often
+    res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
+
+    // Legacy single-ID compat: if single id requested return { creator }
+    if (ids.length === 1) {
+      return res.status(200).json({ creator: creators[0] || null });
+    }
+    return res.status(200).json({ creators });
   } catch (err) {
     console.error('api/reel error', err);
     return res.status(500).json({ 
