@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -40,7 +40,7 @@
         m.name = 'robots'; m.content = 'noindex, follow';
         document.head.appendChild(m);
         var c = document.querySelector('link[rel="canonical"]');
-        if (c) c.href = 'https://fanspedia.net/es/';
+        if (c) c.href = 'https://fanspedia.net/';
       }
     })();
   </script>
@@ -2695,7 +2695,7 @@
   </nav>
 
   <div class="container text-center">
-  <h1 class="mb-4" style="color:#00aff0; font-weight:800;" data-i18n-key="hero_title">El Mejor Motor de B�squeda OnlyFans - Encuentra Cuentas OF R�PIDO</h1>
+  <h1 class="mb-4" style="color:#00aff0; font-weight:800;" data-i18n-key="hero_title">El Mejor Motor de Búsqueda OnlyFans - Encuentra Cuentas OF RÁPIDO</h1>
 
     <!-- Search bar -->
     <div class="mb-3 search-group">
@@ -2816,7 +2816,7 @@
     <!-- Load More Button -->
     <div id="loadMoreContainer" class="text-center my-4" style="display: none;">
       <button id="loadMoreBtn" class="load-more-btn">
-        <span class="btn-text" data-i18n-key="loadMore">Cargar M�s</span>
+        <span class="btn-text" data-i18n-key="loadMore">Cargar Más</span>
         <span class="btn-icon">?</span>
       </button>
       <p id="loadedCount" class="mt-2" style="color: #888; font-size: 14px; margin-bottom: 0;"></p>
@@ -2939,19 +2939,19 @@
 
     <!-- SEO Content Section -->
     <section class="mt-5 pt-5" style="max-width: 900px; margin-left: auto; margin-right: auto; text-align: left; border-top: 1px solid var(--border-color);">
-      <h2 style="color: #00AFF0; font-weight: 700; font-size: 28px; margin-bottom: 20px;" data-i18n-key="hero_heading">Encuentra los Mejores Creadores de OnlyFans - Motor de B�squeda Gratis</h2>
+      <h2 style="color: #00AFF0; font-weight: 700; font-size: 28px; margin-bottom: 20px;" data-i18n-key="hero_heading">Encuentra los Mejores Creadores de OnlyFans - Motor de Búsqueda Gratis</h2>
       
       <p style="color: var(--text-primary); font-size: 16px; line-height: 1.7; margin-bottom: 20px;" data-i18n-key="hero_intro">
         Welcome to <strong>fanspedia.net</strong>, the leading <strong>OnlyFans search engine</strong> with over <strong>10,000 verified creators</strong>. Our platform helps fans discover and connect with their favorite <strong>OnlyFans models</strong> through advanced filtering options including categories, price ranges, verified status, bundle subscriptions, and more.
       </p>
 
-      <h3 style="color: #00AFF0; font-weight: 600; font-size: 22px; margin-bottom: 15px; margin-top: 30px;" data-i18n-key="hero_search_title">C�mo Buscar Creadores de OnlyFans</h3>
+      <h3 style="color: #00AFF0; font-weight: 600; font-size: 22px; margin-bottom: 15px; margin-top: 30px;" data-i18n-key="hero_search_title">Cómo Buscar Creadores de OnlyFans</h3>
       
       <p style="color: var(--text-primary); font-size: 16px; line-height: 1.7; margin-bottom: 15px;" data-i18n-key="hero_search_desc">
         Our <strong>OnlyFans finder</strong> makes it easy to search through thousands of profiles. Simply enter keywords like location (e.g., "Texas", "California"), categories (e.g., "fitness", "cosplay", "MILF"), or social media usernames (TikTok, Instagram) to find creators that match your interests.
       </p>
 
-      <h3 style="color: #00AFF0; font-weight: 600; font-size: 22px; margin-bottom: 15px; margin-top: 30px;" data-i18n-key="hero_filter_title">Filtra por Precio, Estado Verificado y M�s</h3>
+      <h3 style="color: #00AFF0; font-weight: 600; font-size: 22px; margin-bottom: 15px; margin-top: 30px;" data-i18n-key="hero_filter_title">Filtra por Precio, Estado Verificado y Más</h3>
       
       <ul style="color: var(--text-primary); font-size: 16px; line-height: 1.8; margin-bottom: 20px;">
         <li data-i18n-key="hero_filter_1"><strong>Verified Models:</strong> Find only verified OnlyFans creators with the checkmark badge</li>
@@ -2960,7 +2960,7 @@
         <li data-i18n-key="hero_filter_4"><strong>Category Search:</strong> Filter by interests, location, body type, and other preferences</li>
       </ul>
 
-      <h3 style="color: #00AFF0; font-weight: 600; font-size: 22px; margin-bottom: 15px; margin-top: 30px;" data-i18n-key="hero_why_title">�Por Qu� Usar Nuestro Motor de B�squeda de OnlyFans?</h3>
+      <h3 style="color: #00AFF0; font-weight: 600; font-size: 22px; margin-bottom: 15px; margin-top: 30px;" data-i18n-key="hero_why_title">¿Por Qué Usar Nuestro Motor de Búsqueda de OnlyFans?</h3>
       
       <p style="color: var(--text-primary); font-size: 16px; line-height: 1.7; margin-bottom: 20px;" data-i18n-key="hero_why_desc">
         Unlike OnlyFans' limited native search, our platform indexes <strong>10k+ OnlyFans girls</strong> and provides powerful search filters to help you find exactly what you're looking for. Whether you're searching for <strong>top OnlyFans creators</strong>, free accounts, or specific categories, our database is updated daily with the latest profiles.
@@ -3017,6 +3017,33 @@
     if (drawerLocationsToggle && drawerLocationsSection) {
       drawerLocationsToggle.addEventListener('click', () => {
         drawerLocationsSection.classList.toggle('open');
+      });
+    }
+
+    // Desktop Categories dropdown toggle
+    const catToggle = document.getElementById('categoriesToggle');
+    const catMenuEl = document.getElementById('categoriesMenu');
+    if (catToggle && catMenuEl) {
+      catToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = catMenuEl.classList.toggle('open');
+        catToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        catMenuEl.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+      });
+      document.addEventListener('click', (e) => {
+        if (!catMenuEl.classList.contains('open')) return;
+        if (!catMenuEl.contains(e.target) && !catToggle.contains(e.target)) {
+          catMenuEl.classList.remove('open');
+          catToggle.setAttribute('aria-expanded', 'false');
+          catMenuEl.setAttribute('aria-hidden', 'true');
+        }
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          catMenuEl.classList.remove('open');
+          catToggle.setAttribute('aria-expanded', 'false');
+          catMenuEl.setAttribute('aria-hidden', 'true');
+        }
       });
     }
   </script>
@@ -3351,12 +3378,14 @@
       const imageEl = document.getElementById('reelImage');
       
       if (isVideo) {
+        // Show video, hide image
         imageEl.style.display = 'none';
         videoEl.style.display = 'block';
         videoEl.src = url;
         videoEl.load();
         videoEl.play().catch(function() {});
       } else {
+        // No video (or image URL) — show thumbnail/image
         videoEl.pause();
         videoEl.src = '';
         videoEl.style.display = 'none';
@@ -3653,19 +3682,19 @@
     
     // Initialize reels — deferred until AFTER window load to never block LCP
     function _loadReels() {
+      // Batch all 4 IDs into a single API call instead of 4 separate calls
       fetch('/api/reel?ids=61786830,27502984,21895538,116155')
         .then(function(r) { return r.ok ? r.json() : {}; })
         .then(function(result) {
           var list = result.creators || (result.creator ? [result.creator] : []);
           list.forEach(function(creator) {
             if (!creator) return;
-            var thumb = creator.avatar ? 'https://images.weserv.nl/?url=' + encodeURIComponent(creator.avatar) + '&w=320&h=568&fit=cover' : 'https://via.placeholder.com/320x568';
             var newReel = {
               id: reelsData.length + 1,
               username: creator.username,
               avatar: creator.avatar ? 'https://images.weserv.nl/?url=' + encodeURIComponent(creator.avatar) + '&w=120&h=120&fit=cover' : 'https://via.placeholder.com/120',
-              videoUrl: creator.stories || null,
-              thumbnail: thumb,
+              videoUrl: null,
+              thumbnail: creator.avatar ? 'https://images.weserv.nl/?url=' + encodeURIComponent(creator.avatar) + '&w=320&h=568&fit=cover' : 'https://via.placeholder.com/320x568',
               caption: creator.name || ('Check out ' + creator.username + '!'),
               likes: creator.favoritedcount ? (creator.favoritedcount / 1000).toFixed(0) + 'k' : '0',
               creatorId: parseInt(creator.id)
@@ -3925,33 +3954,6 @@
         }
       }
     });
-
-    // Desktop Categories dropdown
-    const catToggle = document.getElementById('categoriesToggle');
-    const catMenuEl = document.getElementById('categoriesMenu');
-    if (catToggle && catMenuEl) {
-      catToggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isOpen = catMenuEl.classList.toggle('open');
-        catToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-        catMenuEl.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
-      });
-      document.addEventListener('click', (e) => {
-        if (!catMenuEl.classList.contains('open')) return;
-        if (!catMenuEl.contains(e.target) && e.target !== catToggle) {
-          catMenuEl.classList.remove('open');
-          catToggle.setAttribute('aria-expanded', 'false');
-          catMenuEl.setAttribute('aria-hidden', 'true');
-        }
-      });
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-          catMenuEl.classList.remove('open');
-          catToggle.setAttribute('aria-expanded', 'false');
-          catMenuEl.setAttribute('aria-hidden', 'true');
-        }
-      });
-    }
 
     // Mobile drawer
     const mobileToggle = document.getElementById('mobileMenuToggle');
@@ -4703,16 +4705,16 @@
               <span class="footer-logo-sub">Your Premium Creator Directory</span>
             </div>
           </div>
-          <p class="footer-description" data-i18n-key="footer_description">Descubre y conecta con creadores verificados de OnlyFans. Actualizado diariamente con m�s de 10,000 perfiles en todas las categor�as.</p>
+          <p class="footer-description" data-i18n-key="footer_description">Descubre y conecta con creadores verificados de OnlyFans. Actualizado diariamente con más de 10,000 perfiles en todas las categorías.</p>
           <!-- Social Links -->
           <div class="footer-social">
             <a href="https://x.com/fanspedia" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="X (Twitter)">
               <span class="social-icon-x" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2H21.5l-6.52 7.455L22.25 22h-7.03l-4.64-6.08L4.9 22H1.64l7.02-8.04L1.25 2h7.19l4.27 5.64L18.245 2Z"/></svg></span>
             </a>
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook">
+            <a href="https://www.facebook.com/fanspediaofficial/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook">
               <i class="fab fa-facebook-f"></i>
             </a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
+            <a href="https://www.instagram.com/fanspediaofficial/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
               <i class="fab fa-instagram"></i>
             </a>
             <a href="https://www.youtube.com/@FansPediaOfficial" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="YouTube">
@@ -4739,14 +4741,13 @@
 
         <!-- Column 3: Resources -->
         <div class="footer-column">
-          <h3 class="footer-heading">Resources</h3>
+          <h3 class="footer-heading">Countries</h3>
           <ul class="footer-links">
-            <li><a href="#" onclick="alert('Coming soon!'); return false;">Creator Guide</a></li>
-            <li><a href="#" onclick="alert('Coming soon!'); return false;">How to Subscribe</a></li>
-            <li><a href="#" onclick="alert('Coming soon!'); return false;">Safety Tips</a></li>
-            <li><a href="#" onclick="alert('Coming soon!'); return false;">FAQ</a></li>
-            <li><a href="/blog/">Blog</a></li>
-            <li><a href="#" onclick="alert('Coming soon!'); return false;">Support</a></li>
+            <li><a href="/country/united-states">United States</a></li>
+            <li><a href="/country/canada">Canada</a></li>
+            <li><a href="/country/india">India</a></li>
+            <li><a href="/country/japan">Japan</a></li>
+            <li><a href="/locations/">View All Locations</a></li>
           </ul>
         </div>
 
@@ -4773,7 +4774,7 @@
           <div class="footer-stats">
             <span class="stat-badge">
               <i class="fas fa-check-circle"></i>
-              10,000+ Verified Creators
+              100,000+ Verified Creators
             </span>
             <span class="stat-badge">
               <i class="fas fa-sync-alt"></i>
@@ -4781,7 +4782,7 @@
             </span>
           </div>
         </div>
-        <p class="footer-disclaimer" data-i18n-key="footer_disclaimer">Este sitio web es un directorio independiente y no est� afiliado a OnlyFans. Todos los nombres comerciales pertenecen a sus respectivos propietarios.</p>
+        <p class="footer-disclaimer" data-i18n-key="footer_disclaimer">Este sitio web es un directorio independiente y no está afiliado a OnlyFans. Todos los nombres comerciales pertenecen a sus respectivos propietarios.</p>
       </div>
     </div>
   </footer>
@@ -5372,6 +5373,7 @@
         .catch(function () {});
     }
 
+    // Fire category image loads only when browser is truly idle after full page load
     if (document.readyState === 'complete') {
       if ('requestIdleCallback' in window) { requestIdleCallback(loadImages); }
       else { setTimeout(loadImages, 1000); }

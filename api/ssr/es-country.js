@@ -42,6 +42,14 @@ const COUNTRIES = {
     metaDesc: 'Descubre las creadoras de OnlyFans más populares en Canadá. Explora perfiles verificados, cuentas gratis y contenido exclusivo de creadoras canadienses.',
     titleEs: `Mejores Creadoras de OnlyFans en Canadá (${YEAR}) | FansPedia`,
   },
+  argentina: {
+    terms: ['argentina', 'argentinian', 'argentine', 'buenos aires'],
+    label: 'Argentina',
+    htmlFile: 'es/argentina.html',
+    h1: 'Las Mejores Creadoras de OnlyFans de Argentina',
+    metaDesc: 'Descubre las creadoras de OnlyFans más populares de Argentina. Explora perfiles verificados, cuentas gratis y contenido exclusivo de creadoras argentinas.',
+    titleEs: `Mejores Creadoras de OnlyFans de Argentina (${YEAR}) | FansPedia`,
+  },
   india: {
     terms: ['india', 'indian'],
     label: 'India',

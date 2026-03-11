@@ -28,7 +28,8 @@ const COUNTRY_PAGES = [
   'united-states.html',
   'canada.html',
   'india.html',
-  'japan.html'
+  'japan.html',
+  'argentina.html'
 ];
 
 // Ensure /es directory exists
@@ -89,6 +90,7 @@ function translateHTML(html, lang = 'es') {
   else if (result.includes('canada.html')) pageName = 'canada.html';
   else if (result.includes('india.html')) pageName = 'india.html';
   else if (result.includes('japan.html')) pageName = 'japan.html';
+  else if (result.includes('argentina.html')) pageName = 'argentina.html';
   
   const hreflang = buildHreflang(pageName, lang === 'es');
   result = result.replace('</head>', `  ${hreflang}\n</head>`);

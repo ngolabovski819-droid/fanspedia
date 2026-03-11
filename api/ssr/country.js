@@ -47,6 +47,13 @@ const COUNTRIES = {
     h1: 'The Best Onlyfans Creators All Across Canada',
     metaDesc: 'Discover the most popular OnlyFans creators across Canada. Browse verified profiles, free accounts, and exclusive content from Canadian creators.',
   },
+  argentina: {
+    terms: ['argentina', 'argentinian', 'argentine', 'buenos aires'],
+    label: 'Argentina',
+    htmlFile: 'argentina.html',
+    h1: 'The Best OnlyFans Creators From Argentina',
+    metaDesc: 'Discover the most popular OnlyFans creators from Argentina. Browse verified profiles, free accounts, and exclusive content from Argentine creators.',
+  },
   india: {
     terms: ['india', 'indian'],
     label: 'India',

@@ -113,7 +113,7 @@ const XSL_PI = `<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>`;
 function buildBaseSitemap(blogSlugs) {
   let xml = `<?xml version="1.0" encoding="UTF-8"?>\n${XSL_PI}\n<urlset ${URLSET_NS}>\n`;
   const d = today();
-  const countries = ['united-states', 'canada', 'india', 'japan'];
+  const countries = ['united-states', 'canada', 'india', 'japan', 'argentina'];
 
   // Homepage
   xml += wrapUrl(`${BASE_URL}/`, 'daily', '1.0', d,
@@ -172,7 +172,7 @@ function buildBaseSitemap(blogSlugs) {
 function buildSpanishBaseSitemap(blogSlugs) {
   let xml = `<?xml version="1.0" encoding="UTF-8"?>\n${XSL_PI}\n<urlset ${URLSET_NS}>\n`;
   const d = today();
-  const countries = ['united-states', 'canada', 'india', 'japan'];
+  const countries = ['united-states', 'canada', 'india', 'japan', 'argentina'];
 
   // Spanish Homepage
   xml += wrapUrl(`${BASE_URL}/es/`, 'daily', '1.0', d,

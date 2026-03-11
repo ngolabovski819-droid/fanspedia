@@ -545,7 +545,7 @@
 
   <!-- Favorites bar -->
   <section id="wishlist" aria-label="Wishlist">
-    <div id="favoritesBar" class="favorites-bar" aria-label="Favorites" aria-live="polite"></div>
+    <div id="favoritesBar" class="favorites-bar" aria-label="Favorites" aria-live="polite" style="display:none;"></div>
   </section>
 
       <!-- Results -->
@@ -1035,7 +1035,6 @@
   if (ssrData && ssrData.slug === slug) {
     hasMore = ssrData.hasMore !== false;
     document.getElementById('status').textContent = '';
-    initBreadcrumbs();
     renderFavoritesBar();
     updateWishlistBadge();
     // Reattach favorite state to pre-rendered cards
@@ -1336,16 +1335,16 @@
               <span class="footer-logo-sub">Your Premium Creator Directory</span>
             </div>
           </div>
-          <p class="footer-description" data-i18n-key="footer_description">Descubre y conecta con creadores verificados de OnlyFans. Actualizado diariamente con m�s de 10,000 perfiles en todas las categor�as.</p>
+          <p class="footer-description" data-i18n-key="footer_description">Descubre y conecta con creadores verificados de OnlyFans. Actualizado diariamente con más de 10,000 perfiles en todas las categorías.</p>
           <!-- Social Links -->
           <div class="footer-social">
             <a href="https://x.com/fanspedia" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="X (Twitter)">
               <span class="social-icon-x" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2H21.5l-6.52 7.455L22.25 22h-7.03l-4.64-6.08L4.9 22H1.64l7.02-8.04L1.25 2h7.19l4.27 5.64L18.245 2Z"/></svg></span>
             </a>
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook">
+            <a href="https://www.facebook.com/fanspediaofficial/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook">
               <i class="fab fa-facebook-f"></i>
             </a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
+            <a href="https://www.instagram.com/fanspediaofficial/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
               <i class="fab fa-instagram"></i>
             </a>
             <a href="https://www.youtube.com/@FansPediaOfficial" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="YouTube">
@@ -1372,14 +1371,13 @@
 
         <!-- Column 3: Resources -->
         <div class="footer-column">
-          <h3 class="footer-heading">Resources</h3>
+          <h3 class="footer-heading">Countries</h3>
           <ul class="footer-links">
-            <li><a href="#" onclick="alert('Coming soon!'); return false;">Creator Guide</a></li>
-            <li><a href="#" onclick="alert('Coming soon!'); return false;">How to Subscribe</a></li>
-            <li><a href="#" onclick="alert('Coming soon!'); return false;">Safety Tips</a></li>
-            <li><a href="#" onclick="alert('Coming soon!'); return false;">FAQ</a></li>
-            <li><a href="/blog/">Blog</a></li>
-            <li><a href="#" onclick="alert('Coming soon!'); return false;">Support</a></li>
+            <li><a href="/country/united-states">United States</a></li>
+            <li><a href="/country/canada">Canada</a></li>
+            <li><a href="/country/india">India</a></li>
+            <li><a href="/country/japan">Japan</a></li>
+            <li><a href="/locations/">View All Locations</a></li>
           </ul>
         </div>
 
@@ -1406,7 +1404,7 @@
           <div class="footer-stats">
             <span class="stat-badge">
               <i class="fas fa-check-circle"></i>
-              10,000+ Verified Creators
+              100,000+ Verified Creators
             </span>
             <span class="stat-badge">
               <i class="fas fa-sync-alt"></i>
@@ -1414,7 +1412,7 @@
             </span>
           </div>
         </div>
-        <p class="footer-disclaimer" data-i18n-key="footer_disclaimer">Este sitio web es un directorio independiente y no est� afiliado a OnlyFans. Todos los nombres comerciales pertenecen a sus respectivos propietarios.</p>
+        <p class="footer-disclaimer" data-i18n-key="footer_disclaimer">Este sitio web es un directorio independiente y no está afiliado a OnlyFans. Todos los nombres comerciales pertenecen a sus respectivos propietarios.</p>
       </div>
     </div>
   </footer>
