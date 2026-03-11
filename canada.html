@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -2150,7 +2150,7 @@
           const isFirstCard = resultsDiv.children.length === 0 && currentPage === 1;
           const favSet = getFavoritesSet();
           const favActive = username !== '�' && favSet.has(username);
-          const favChar = favActive ? '?' : '?';
+          const favChar = favActive ? '&#9829;' : '&#9825;';
           
           const col = document.createElement('div');
           col.className = 'col-sm-6 col-md-4 col-lg-3 mb-4';

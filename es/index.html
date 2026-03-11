@@ -4206,7 +4206,7 @@
           const safeUsername = String(username).replace(/'/g, "\\'");
           const favSet = getFavoritesSet();
           const favActive = username !== "�" && favSet.has(username);
-          const favChar = favActive ? '?' : '?';
+          const favChar = favActive ? '&#9829;' : '&#9825;';
           col.innerHTML = `
             <div class="card h-100">
               <button class="favorite-btn ${favActive ? 'active' : ''}" data-username="${safeUsername}" onclick="event.preventDefault(); toggleFavorite('${safeUsername}', this);">
@@ -4391,7 +4391,7 @@
         const safe = String(u).replace(/'/g, "\\'");
         const url = `https://onlyfans.com/${encodeURIComponent(u)}`;
         return `<div class="favorite-chip" data-username="${safe}" onclick="window.open('${url}','_blank')">
-          <span class=\"heart\">?</span>
+          <span class=\"heart\">&#9829;</span>
           <a class=\"open\" href=\"${url}\" target=\"_blank\" rel=\"noopener\">@${u}</a>
           <button class=\"remove\" aria-label=\"Remove\" onclick=\"event.stopPropagation(); toggleFavorite('${safe}');\">&times;</button>
         </div>`;

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -800,7 +800,7 @@
         const profileUrl = username !== "—" ? `https://onlyfans.com/${encodeURIComponent(username)}` : "#";
         const favSet = getFavoritesSet();
         const favActive = username !== "—" && favSet.has(username);
-        const favChar = favActive ? '♥' : '♡';
+        const favChar = favActive ? '&#9829;' : '&#9825;';
         const isFirstCard = els.resultsContainer.children.length === 0 && currentPage === 1;
         if (isFirstCard) {
           try {

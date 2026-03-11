@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -989,7 +989,7 @@
           const safeUsername = String(username).replace(/'/g, "\\'");
           const favSet = getFavoritesSet();
           const favActive = username !== '?' && favSet.has(username);
-          const favChar = favActive ? '?' : '?';
+          const favChar = favActive ? '&#9829;' : '&#9825;';
           col.innerHTML = `
             <div class=\"card h-100\">
               <button class=\"favorite-btn ${favActive ? 'active' : ''}\" data-username=\"${safeUsername}\" onclick=\"event.preventDefault(); toggleFavorite('${safeUsername}', this);\">
