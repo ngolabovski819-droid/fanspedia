@@ -99,61 +99,87 @@ const preloadLink = _lcpImg.startsWith('http')
 
 ---
 
-## Adding a New Country Page (e.g. Taiwan)
+## Adding a New Country Page
 
-Follow every step in order. Test locally after completing all steps, then commit.
+> **Verified against Argentina (Mar 2026). Follow ALL steps — missing any one causes a 404.**
+> See `.github/CHECKLISTS.md` for the full checkbox-style version.
 
-### 1. Create the HTML page
-Copy an existing country page (e.g. `canada.html`) to `taiwan.html`. Update:
-- `<title>`, `<meta name="description">`, `<link rel="canonical">` to use Taiwan
-- `<h1>` and any static heading text
-- The `window.__COUNTRY_SSR` hydration skip block near the top of the `<script>` — it already works generically, just ensure the `fetch` fallback URL uses `/country/taiwan`
-- The `<link rel="alternate" hreflang="es">` pointing to `/es/country/taiwan`
-- Ensure the CSS includes the `.card-img-wrap` pattern (copy from canada.html)
-- Ensure `<script src="/utils/wishlist-badge.js?...">` has `defer`
+**9 files to touch:** `{country}.html`, `api/ssr/country.js`, `api/ssr/es-country.js`, `vercel.json` (3 places!), `scripts/build-sitemaps.cjs` (2 places), `scripts/build-spanish-pages.cjs` (2 places), `locations.html`, `es/locations.html`.
+
+### 1. Create `{country}.html`
+Copy `canada.html` → `{country}.html`. Update title, meta description, canonical, h1, hreflang, `countryTermsArr`, and `window.__COUNTRY_SSR` fetch fallback URL.
 
 ### 2. Add to `api/ssr/country.js` COUNTRIES map
 ```javascript
-taiwan: {
-  terms: ['taiwan', 'taiwanese'],
-  label: 'Taiwan',
-  htmlFile: 'taiwan.html',
-  h1: 'The Best OnlyFans Creators All Across Taiwan',
-  metaDesc: 'Discover the most popular OnlyFans creators across Taiwan. Browse verified profiles, free accounts, and exclusive content from Taiwanese creators.',
+{country}: {
+  terms: ['{country}', '{adjective}'],
+  label: '{Label}',
+  htmlFile: '{country}.html',
+  h1: 'The Best OnlyFans Creators From {Label}',
+  metaDesc: 'Discover the most popular OnlyFans creators from {Label}...',
 },
 ```
-No other change needed in `country.js` — `"includeFiles": "*.html"` in `vercel.json` already bundles all root HTML files, and the generic `/country/:name` route already handles any slug in the COUNTRIES map.
+`"includeFiles": "*.html"` in `vercel.json` already bundles all root HTML — no extra config needed there.
 
-### 3. Add explicit routes to `vercel.json`
-Inside the `"rewrites"` array, add (following the existing pattern):
+### 3. Add to `api/ssr/es-country.js` COUNTRIES map
+Same shape, but `htmlFile: 'es/{country}.html'` and Spanish `h1`/`metaDesc`/`titleEs`.
+
+### 4. `vercel.json` — ⚠️ THREE separate places
+
+**4a. `"rewrites"` — English** (near the other `/country/` rewrites):
 ```json
-{ "source": "/country/taiwan",   "destination": "/api/ssr/country?name=taiwan" },
-{ "source": "/country/taiwan/",  "destination": "/api/ssr/country?name=taiwan" }
-```
-The paginated route `/country/:name/:page` already handles all countries generically — no extra entry needed for that.
-
-### 4. Add route to `server.js` (local dev only)
-`server.js` uses a generic `/country/:name` Express route that calls `ssrCountryHandler` — **no change needed** as long as the COUNTRIES map in `country.js` is updated.
-
-### 5. Do the same for the ES mirror (`api/ssr/es-country.js`)
-Add the same entry to the `COUNTRIES` map in `es-country.js` with Spanish `h1`/`metaDesc`. Create `es/taiwan.html` by running `npm run build:spanish` (it will auto-generate from `taiwan.html`).
-
-### 6. Add `vercel.json` ES routes
-```json
-{ "source": "/es/country/taiwan",   "destination": "/api/ssr/es-country?name=taiwan" },
-{ "source": "/es/country/taiwan/",  "destination": "/api/ssr/es-country?name=taiwan" }
+{ "source": "/country/{country}",  "destination": "/api/ssr/country?name={country}" },
+{ "source": "/country/{country}/", "destination": "/api/ssr/country?name={country}" },
 ```
 
-### 7. Sitemaps
-Run `npm run build:sitemaps` — it picks up all `*.html` files automatically.
+**4b. `"rewrites"` — Spanish** (near the other `/es/country/` rewrites):
+```json
+{ "source": "/es/country/{country}",  "destination": "/api/ssr/es-country?name={country}" },
+{ "source": "/es/country/{country}/", "destination": "/api/ssr/es-country?name={country}" },
+```
 
-### 8. Verify locally
+**4c. `"redirects"` — trailing-slash canonical 301** (near the other `/country/` redirects):
+```json
+{ "source": "/country/{country}", "destination": "/country/{country}/", "statusCode": 301 },
+```
+
+**4d. `"redirects"` — `.html` cleanup** (near the other `.html` redirects):
+```json
+{ "source": "/{country}.html",    "destination": "/country/{country}/",    "statusCode": 301 },
+{ "source": "/es/{country}.html", "destination": "/es/country/{country}/", "statusCode": 301 },
+```
+
+> ⚠️ **Argentina 404 (Mar 2026):** Steps 4a and 4c were missed while 4b was added. The EN page was unreachable until hotfixed. Always add all four sub-steps.
+
+### 5. `scripts/build-sitemaps.cjs` — 2 places
+Add `'{country}'` to the countries array inside *both* `buildBaseSitemap()` and `buildSpanishBaseSitemap()`.
+
+### 6. `scripts/build-spanish-pages.cjs` — 2 places
+- Add `'{country}.html'` to the `COUNTRY_PAGES` array
+- Add `else if (result.includes('{country}.html')) pageName = '{country}.html';` to the pageName detection block
+
+### 7. `locations.html` — make the country chip a link
+Find the entry in the JS `countries` array and add `url`:
+```javascript
+{ code: 'XX', name: '{Label}', url: '/country/{country}/' },
+```
+Also add `<li><a href="/country/{country}">{Label}</a></li>` to the footer "Countries" column.
+
+### 8. `es/locations.html` — same as step 7
+Add `url: '/es/country/{country}/'` to its countries array entry and patch footer if needed.
+
+### 9. Run build scripts + verify + push
 ```powershell
+node scripts/build-sitemaps.cjs
+node scripts/build-spanish-pages.cjs
 npm start
-# Then test:
-curl http://127.0.0.1:3000/country/taiwan
+curl http://127.0.0.1:3000/country/{country}/
+# Check: SSR cards, window.__COUNTRY_SSR, JSON-LD in source
+git add -A
+git commit -m "Add /country/{country} with SSR, ES mirror, sitemaps, redirects"
+git push
 ```
-Check: SSR cards render, `__COUNTRY_SSR` is set in the HTML source, JSON-LD is present.
+**Post-deploy checks:** `/country/{country}/` → 200, `/country/{country}` → 301, `/es/country/{country}/` → 200, chip on `/locations/` is linked.
 
 ---
 
