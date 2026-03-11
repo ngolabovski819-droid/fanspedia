@@ -48,6 +48,8 @@
     { "source": "/country/india/", "destination": "/api/ssr/country?name=india" },
     { "source": "/country/japan", "destination": "/api/ssr/country?name=japan" },
     { "source": "/country/japan/", "destination": "/api/ssr/country?name=japan" },
+    { "source": "/country/argentina", "destination": "/api/ssr/country?name=argentina" },
+    { "source": "/country/argentina/", "destination": "/api/ssr/country?name=argentina" },
     { "source": "/near-me", "destination": "/near-me.html" },
     { "source": "/near-me/", "destination": "/near-me.html" },
     
@@ -128,6 +130,7 @@
     { "source": "/country/canada",        "destination": "/country/canada/",        "statusCode": 301 },
     { "source": "/country/india",         "destination": "/country/india/",         "statusCode": 301 },
     { "source": "/country/japan",         "destination": "/country/japan/",         "statusCode": 301 },
+    { "source": "/country/argentina",     "destination": "/country/argentina/",     "statusCode": 301 },
 
     { "source": "/categories/indian", "destination": "/country/india/", "statusCode": 301 },
     { "source": "/categories/indian/", "destination": "/country/india/", "statusCode": 301 },
