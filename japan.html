@@ -2073,7 +2073,7 @@
       if (btnEl) {
         btnEl.classList.toggle('active', active);
         const s = btnEl.querySelector('span');
-        if (s) s.textContent = active ? '?' : '?';
+        if (s) s.textContent = active ? '\u2665' : '\u2661';
       }
       updateFavoriteButtons(username, active);
       updateWishlistCounter && updateWishlistCounter();
@@ -2087,7 +2087,7 @@
         buttons.forEach(b => {
           b.classList.toggle('active', active);
           const s = b.querySelector('span');
-          if (s) s.textContent = active ? '?' : '?';
+          if (s) s.textContent = active ? '\u2665' : '\u2661';
         });
       } catch (e) { console.warn('updateFavoriteButtons failed:', e); }
     }

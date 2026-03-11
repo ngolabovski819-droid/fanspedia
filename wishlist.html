@@ -869,7 +869,7 @@
       if(set.has(username)){ set.delete(username); active=false; } else { set.add(username); active=true; }
       try { localStorage.setItem('favorites', JSON.stringify(Array.from(set))); } catch {}
       if(typeof window.fpUpdateWishlistBadge === 'function') window.fpUpdateWishlistBadge();
-      if(btnEl){ btnEl.classList.toggle('active', active); const span = btnEl.querySelector('span'); if(span) span.textContent = active ? '♥' : '♡'; }
+      if(btnEl){ btnEl.classList.toggle('active', active); const span = btnEl.querySelector('span'); if(span) span.textContent = active ? '\u2665' : '\u2661'; }
       if(!active){ 
         const wrapper = btnEl.closest('.card')?.parentElement; 
         if(wrapper && !wrapper.dataset.removing){ 
