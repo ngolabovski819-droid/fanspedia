@@ -6,5 +6,6 @@ export default function handler(req, res) {
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.setHeader('Cache-Control', 'public, max-age=86400, s-maxage=86400');
   res.setHeader('X-Robots-Tag', 'noindex');
-  res.send('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Gone</title><meta name="robots" content="noindex,nofollow"></head><body><h1>410 Gone</h1><p>This page has been permanently removed.</p></body></html>');
+  res.setHeader('Link', '<https://fanspedia.net/>; rel="canonical"');
+  res.send('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Gone</title><meta name="robots" content="noindex,nofollow"><link rel="canonical" href="https://fanspedia.net/"></head><body><h1>410 Gone</h1><p>This page has been permanently removed.</p></body></html>');
 }
