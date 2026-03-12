@@ -467,7 +467,7 @@
   <!-- Mobile Drawer -->
   <div id="drawerOverlay" class="drawer-overlay" tabindex="-1" aria-hidden="true"></div>
   <nav id="mobileDrawer" class="mobile-drawer" aria-hidden="true" aria-labelledby="mobileMenuToggle">
-    <button class="drawer-close" id="drawerClose" aria-label="Close menu">?</button>
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
     <a href="/">Home</a>
     
     <div class="drawer-categories-toggle" id="drawerCategoriesToggle">
@@ -557,7 +557,7 @@
       <div id="loadMoreContainer" class="text-center my-4" style="display: none;">
         <button id="loadMoreBtn" class="load-more-btn">
           <span class="btn-text">Load More Creators</span>
-          <span class="btn-icon">?</span>
+          <span class="btn-icon">&#8595;</span>
         </button>
         <p id="loadedCount" class="mt-2" style="color: #888; font-size: 14px; margin-bottom: 0;"></p>
       </div>
@@ -594,7 +594,7 @@
         const slug = categoryToSlug(cat);
         const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
         return `<a role="menuitem" href="/categories/${slug}/">${label}</a>`;
-      }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Browse all categories ?</a>';
+      }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Browse all categories &#8594;</a>';
       catMenu.innerHTML = menuHTML;
     }
     
@@ -901,8 +901,8 @@
       const wrap = document.getElementById('activeFilters');
       if (!wrap) return;
       const chips = [];
-      if (verifiedToggle.checked) chips.push(`<div class="search-chip" data-filter="verified">Verified only <span class="remove" aria-label="Remove">?</span></div>`);
-      if (bundlesToggle.checked) chips.push(`<div class="search-chip" data-filter="bundles">Bundles <span class="remove" aria-label="Remove">?</span></div>`);
+      if (verifiedToggle.checked) chips.push(`<div class="search-chip" data-filter="verified">Verified only <span class="remove" aria-label="Remove">&times;</span></div>`);
+      if (bundlesToggle.checked) chips.push(`<div class="search-chip" data-filter="bundles">Bundles <span class="remove" aria-label="Remove">&times;</span></div>`);
       
       // For compound categories with auto-maxPrice, show a non-removable chip
       const autoMaxPrice = isCompound && compoundCategories[slug]?.filters?.maxPrice !== undefined;
@@ -911,7 +911,7 @@
         const label = maxVal === 0 ? 'Free Only' : `Max $${maxVal}`;
         chips.push(`<div class="search-chip" aria-label="Price filter">${label}</div>`);
       } else if (priceRange.value !== '100') {
-        chips.push(`<div class="search-chip" data-filter="max">Max $${priceRange.value} <span class="remove" aria-label="Remove">?</span></div>`);
+        chips.push(`<div class="search-chip" data-filter="max">Max $${priceRange.value} <span class="remove" aria-label="Remove">&times;</span></div>`);
       }
       
       wrap.innerHTML = chips.join('');

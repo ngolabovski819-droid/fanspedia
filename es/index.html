@@ -2634,7 +2634,7 @@
   <!-- Mobile Drawer -->
   <div id="drawerOverlay" class="drawer-overlay" tabindex="-1" aria-hidden="true"></div>
   <nav id="mobileDrawer" class="mobile-drawer" aria-hidden="true" aria-labelledby="mobileMenuToggle">
-    <button class="drawer-close" id="drawerClose" aria-label="Close menu">?</button>
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
     <a href="/">Home</a>
     
     <!-- Categories collapsible section -->
@@ -2701,7 +2701,7 @@
     <div class="mb-3 search-group">
       <div class="input-group input-group-lg">
         <input id="search" type="text" class="form-control" placeholder='Type: "milf" "Texas" "piercings"' aria-label="Search creators" inputmode="search" enterkeyhint="search" autocomplete="off" autocapitalize="none" spellcheck="false" />
-  <button class="clear-search" id="clearSearch" type="button" aria-label="Clear search">?</button>
+  <button class="clear-search" id="clearSearch" type="button" aria-label="Clear search">&times;</button>
         <button id="searchBtn" class="btn btn-search" type="button">
           <span class="spinner" aria-hidden="true"></span>
           <span class="btn-label" data-i18n-key="search">Buscar</span>
@@ -2988,7 +2988,7 @@
         const slug = categoryToSlug(cat);
         const label = cat.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
         return `<a role="menuitem" href="/categories/${slug}/">${label}</a>`;
-      }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Browse all categories ?</a>';
+      }).join('') + '<div class="divider"></div><a class="view-all" role="menuitem" href="/categories/">Browse all categories &#8594;</a>';
       catMenu.innerHTML = menuHTML;
     }
     
@@ -4618,13 +4618,13 @@
       if (!activeFiltersDiv) return;
       const chips = [];
       if (verifiedToggle.checked) {
-        chips.push(`<div class="search-chip" data-filter="verified">Verified only <span class="remove" aria-label="Remove">?</span></div>`);
+        chips.push(`<div class="search-chip" data-filter="verified">Verified only <span class="remove" aria-label="Remove">&times;</span></div>`);
       }
       if (bundlesToggle.checked) {
-        chips.push(`<div class="search-chip" data-filter="bundles">Bundles <span class="remove" aria-label="Remove">?</span></div>`);
+        chips.push(`<div class="search-chip" data-filter="bundles">Bundles <span class="remove" aria-label="Remove">&times;</span></div>`);
       }
       if (priceRange.value !== '100') {
-        chips.push(`<div class="search-chip" data-filter="max">Max $${priceRange.value} <span class="remove" aria-label="Remove">?</span></div>`);
+        chips.push(`<div class="search-chip" data-filter="max">Max $${priceRange.value} <span class="remove" aria-label="Remove">&times;</span></div>`);
       }
       activeFiltersDiv.innerHTML = chips.join('');
       activeFiltersDiv.style.display = chips.length ? 'flex' : 'none';
