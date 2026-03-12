@@ -27,18 +27,29 @@ export default async function handler(req, res) {
     const page = parseInt(req.query.page || "1", 10) || 1;
     const page_size = Math.max(1, Math.min(parseInt(req.query.page_size || "50", 10) || 50, 1000)); // Allow up to 1000 per request
 
-    const selectCols = [
-      "id","username","name","about","location","avatar","header",
+    // Core card columns only — keeps payload small for fast initial render.
+    // If a caller needs extra fields they can pass ?extra=1 to get the full set.
+    const CARD_COLS = [
+      "id","username","name","about","location","avatar","avatar_c144",
       "isverified","subscribeprice",
-      "avatar_c50","avatar_c144",
-      "photoscount","videoscount","postscount","archivedpostscount","finishedstreamscount","audioscount",
-      "subscriberscount","favoritedcount","showsubscriberscount","canearn",
-      "firstpublishedpostdate","joindate","lastseen",
+      "photoscount","videoscount","postscount",
+      "subscriberscount","favoritedcount",
+      "joindate",
       "bundle1_price","bundle1_duration","bundle1_discount",
       "bundle2_price","bundle2_duration","bundle2_discount",
-      "bundle3_price","bundle3_duration","bundle3_discount",
+      "bundle3_price",
       "promotion1_price","promotion1_discount"
-    ].join(',');
+    ];
+    const FULL_COLS = [
+      ...CARD_COLS,
+      "header","avatar_c50",
+      "archivedpostscount","finishedstreamscount","audioscount",
+      "showsubscriberscount","canearn",
+      "firstpublishedpostdate","lastseen",
+      "bundle2_duration","bundle3_duration","bundle3_discount"
+    ];
+    const wantFull = (req.query.extra || '').toString().trim() === '1';
+    const selectCols = (wantFull ? FULL_COLS : CARD_COLS).join(',');
 
     const base = `${SUPABASE_URL}/rest/v1/onlyfans_profiles`;
     const params = new URLSearchParams();

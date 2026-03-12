@@ -15,7 +15,7 @@
     "api/ssr/es-blog.js": { "includeFiles": "content/blog/**,blog.html" }
   },
   "rewrites": [
-    { "source": "/", "destination": "/index.html" },
+    { "source": "/", "destination": "/api/ssr/home" },
     { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
     { "source": "/robots.txt", "destination": "/robots.txt" },
     { "source": "/wishlist", "destination": "/wishlist.html" },
