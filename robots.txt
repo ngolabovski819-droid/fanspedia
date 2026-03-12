@@ -36,6 +36,9 @@ Disallow: /*?verified=
 Disallow: /*?bundles=
 Disallow: /*?max=
 Disallow: /*?safe=
+# Block legacy creator profile query params (?v= cache-bust, ?u= old username loader)
+Disallow: /*?v=
+Disallow: /*?u=
 
 # Block internal API endpoints
 Disallow: /api/
