@@ -313,7 +313,7 @@ export default async function handler(req, res) {
     // --- 6. Send ---
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     // 5-minute CDN cache; stale-while-revalidate so Vercel serves stale while refreshing
-    res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=3600');
+    res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
     return res.status(200).send(html);
 
   } catch (err) {

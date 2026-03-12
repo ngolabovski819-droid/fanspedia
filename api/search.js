@@ -103,7 +103,7 @@ export default async function handler(req, res) {
     const cacheKey = url;
     const cached = cache.get(cacheKey);
     if (cached && (Date.now() - cached.ts) < CACHE_TTL_MS) {
-      res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+      res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=3600');
       return res.status(200).json(cached.data);
     }
     const headers = {
@@ -128,8 +128,8 @@ export default async function handler(req, res) {
 
     const data = await r.json();
 
-    // CDN + browser cache: Vercel edge caches for 60s, serves stale up to 5min while revalidating
-    res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+    // CDN + browser cache: Vercel edge caches for 5min, serves stale up to 1h while revalidating
+    res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=3600');
 
     // Normalize field names to what the frontend expects (camelCase)
     const mapped = (Array.isArray(data) ? data : []).map(item => ({
