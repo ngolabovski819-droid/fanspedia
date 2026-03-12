@@ -316,6 +316,7 @@ export default async function handler(req, res) {
     // --- 6. Send ---
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+    res.setHeader('Vercel-CDN-Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
     return res.status(200).send(html);
 
   } catch (err) {
