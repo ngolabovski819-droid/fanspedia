@@ -20,6 +20,8 @@
     { "source": "/robots.txt", "destination": "/robots.txt" },
     { "source": "/wishlist", "destination": "/wishlist.html" },
     { "source": "/wishlist/", "destination": "/wishlist.html" },
+    { "source": "/es/wishlist", "destination": "/wishlist.html" },
+    { "source": "/es/wishlist/", "destination": "/wishlist.html" },
     { "source": "/about", "destination": "/about.html" },
     { "source": "/about/", "destination": "/about.html" },
     { "source": "/contact-us", "destination": "/contact.html" },
