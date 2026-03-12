@@ -205,6 +205,12 @@ export default async function handler(req, res) {
       totalCount = parseInt(contentRange.split('/')[1] || '0', 10) || creators.length;
     }
 
+    // Unknown slug with no results → hard 404 to prevent GSC soft-404
+    if (creators.length === 0 && totalCount === 0 && page === 1) {
+      res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+      return res.status(404).send('<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Categoría No Encontrada | FansPedia</title><link rel="canonical" href="https://fanspedia.net/es/categories/"></head><body><h1>Categoría No Encontrada</h1><p><a href="/es/categories/">Ver todas las categorías</a></p></body></html>');
+    }
+
     // --- 3. Read ES template ---
     let html = readFileSync(ES_CATEGORY_HTML, 'utf8');
 
