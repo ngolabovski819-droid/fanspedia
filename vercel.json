@@ -5,7 +5,7 @@
     "api/blog-post.js": { "includeFiles": "content/blog/**" },
     "api/ssr/category.js": { "includeFiles": "category.html" },
     "api/ssr/country.js": { "includeFiles": "*.html" },
-    "api/ssr/home.js": { "includeFiles": "index.html" },
+    "api/ssr/home.js": { "includeFiles": "_index.html" },
     "api/ssr/categories-hub.js": { "includeFiles": "categories.html" },
     "api/ssr/blog-post.js": { "includeFiles": "blog-post.html,content/blog/**" },
     "api/ssr/blog.js": { "includeFiles": "content/blog/**,blog.html" },
@@ -189,7 +189,7 @@
       ]
     },
     {
-      "source": "/index.html",
+      "source": "/_index.html",
       "headers": [
         { "key": "Cache-Control", "value": "no-store, must-revalidate" }
       ]

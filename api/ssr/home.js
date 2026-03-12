@@ -163,9 +163,9 @@ export default async function handler(req, res) {
   // Read the template once — do this early so errors surface quickly
   let rawHtml;
   try {
-    rawHtml = readFileSync(join(ROOT, 'index.html'), 'utf8');
+    rawHtml = readFileSync(join(ROOT, '_index.html'), 'utf8');
   } catch (readErr) {
-    console.error('[ssr/home] could not read index.html:', readErr.message);
+    console.error('[ssr/home] could not read _index.html:', readErr.message);
     return res.status(500).send('Internal Server Error');
   }
 
