@@ -4171,14 +4171,14 @@
           const responsive = buildResponsiveSources(imgSrc);
           
           const name = item.name || "Unknown";
-          const username = item.username || "�";
+          const username = item.username || "";
           const priceText = (item.subscribePrice && !isNaN(item.subscribePrice))
             ? `$${parseFloat(item.subscribePrice).toFixed(2)}`
             : "FREE";
-          const verifiedIcon = item.isVerified ? "? " : "";
+          const verifiedIcon = item.isVerified ? "&#10003; " : "";
           const location = item.location || "";
           // Link directly to OnlyFans profile (not to internal creator page)
-          const profileUrl = username !== "�" ? `https://onlyfans.com/${encodeURIComponent(username)}` : "#";
+          const profileUrl = username ? `https://onlyfans.com/${encodeURIComponent(username)}` : "#";
 
           const isFirstCard = resultsDiv.children.length === 0 && currentPage === 1;
           // Preload the first, above-the-fold image to help LCP
@@ -4198,7 +4198,7 @@
           col.className = "col-sm-6 col-md-4 col-lg-3 mb-4";
           const safeUsername = String(username).replace(/'/g, "\\'");
           const favSet = getFavoritesSet();
-          const favActive = username !== "�" && favSet.has(username);
+          const favActive = !!username && favSet.has(username);
           const favChar = favActive ? '&#9829;' : '&#9825;';
           col.innerHTML = `
             <div class="card h-100">
