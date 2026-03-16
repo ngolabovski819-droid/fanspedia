@@ -175,6 +175,55 @@
   ],
   "headers": [
     {
+      "source": "/",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, s-maxage=3600, stale-while-revalidate=604800" },
+        { "key": "Vercel-CDN-Cache-Control", "value": "public, s-maxage=3600, stale-while-revalidate=604800" }
+      ]
+    },
+    {
+      "source": "/categories",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, s-maxage=3600, stale-while-revalidate=604800" },
+        { "key": "Vercel-CDN-Cache-Control", "value": "public, s-maxage=3600, stale-while-revalidate=604800" }
+      ]
+    },
+    {
+      "source": "/categories/:slug*",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, s-maxage=3600, stale-while-revalidate=604800" },
+        { "key": "Vercel-CDN-Cache-Control", "value": "public, s-maxage=3600, stale-while-revalidate=604800" }
+      ]
+    },
+    {
+      "source": "/country/:name*",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, s-maxage=3600, stale-while-revalidate=604800" },
+        { "key": "Vercel-CDN-Cache-Control", "value": "public, s-maxage=3600, stale-while-revalidate=604800" }
+      ]
+    },
+    {
+      "source": "/es",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, s-maxage=3600, stale-while-revalidate=604800" },
+        { "key": "Vercel-CDN-Cache-Control", "value": "public, s-maxage=3600, stale-while-revalidate=604800" }
+      ]
+    },
+    {
+      "source": "/es/categories/:slug*",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, s-maxage=3600, stale-while-revalidate=604800" },
+        { "key": "Vercel-CDN-Cache-Control", "value": "public, s-maxage=3600, stale-while-revalidate=604800" }
+      ]
+    },
+    {
+      "source": "/es/country/:name*",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, s-maxage=3600, stale-while-revalidate=604800" },
+        { "key": "Vercel-CDN-Cache-Control", "value": "public, s-maxage=3600, stale-while-revalidate=604800" }
+      ]
+    },
+    {
       "source": "/sitemap.xsl",
       "headers": [
         { "key": "Content-Type", "value": "text/xsl; charset=utf-8" },
