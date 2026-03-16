@@ -216,8 +216,8 @@ export default async function handler(req, res) {
 
     // Unknown slug with no results → hard 404 to prevent GSC soft-404
     if (creators.length === 0 && totalCount === 0 && page === 1) {
-      res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
-    res.setHeader('Vercel-CDN-Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+      res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=604800');
+    res.setHeader('Vercel-CDN-Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=604800');
       return res.status(404).send('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Category Not Found | FansPedia</title><link rel="canonical" href="https://fanspedia.net/categories/"></head><body><h1>Category Not Found</h1><p><a href="/categories/">Browse all categories</a></p></body></html>');
     }
 
@@ -320,8 +320,8 @@ export default async function handler(req, res) {
     // --- 6. Send ---
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     // 5-minute CDN cache; stale-while-revalidate so Vercel serves stale while refreshing
-    res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
-    res.setHeader('Vercel-CDN-Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+    res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=604800');
+    res.setHeader('Vercel-CDN-Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=604800');
     return res.status(200).send(html);
 
   } catch (err) {
