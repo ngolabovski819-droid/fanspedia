@@ -154,6 +154,56 @@ function buildJsonLd(creators) {
 }
 
 // ---------------------------------------------------------------------------
+// In-memory HTML cache — survives across requests within the same warm instance.
+// Combined with a 5-minute cron ping (e.g. cron-job.org) this means real users
+// almost always hit the memory cache instead of waiting for a Supabase round-trip.
+// ---------------------------------------------------------------------------
+let _htmlCache = null;       // string: last successfully generated HTML
+let _cacheExpiresAt = 0;     // ms timestamp: when the fresh window ends
+let _cacheRefreshing = false; // prevents thundering-herd on stale cache
+const HTML_CACHE_TTL = 5 * 60 * 1000; // 5 minutes fresh
+
+/** Builds SSR HTML from Supabase and stores it in the module-level cache. */
+async function buildAndCache(SUPABASE_URL, SUPABASE_KEY, rawHtml) {
+  try {
+    const headers = {
+      apikey: SUPABASE_KEY,
+      Authorization: `Bearer ${SUPABASE_KEY}`,
+      'Accept-Profile': 'public',
+      Prefer: 'count=exact',
+    };
+    const popularParams = new URLSearchParams({ select: SELECT_COLS, order: 'favoritedcount.desc', limit: String(POPULAR_LIMIT) });
+    const newestParams  = new URLSearchParams({ select: SELECT_COLS, order: 'joindate.desc',       limit: String(NEWEST_LIMIT)  });
+    const [popularRes, newestRes] = await Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/onlyfans_profiles?${popularParams}`, { headers }),
+      fetch(`${SUPABASE_URL}/rest/v1/onlyfans_profiles?${newestParams}`,  { headers }),
+    ]);
+    if (!popularRes.ok || !newestRes.ok) return;
+    const [popular, newest] = await Promise.all([popularRes.json(), newestRes.json()]);
+    const seen = new Set();
+    const creators = [];
+    for (const c of [...popular, ...newest]) { if (!seen.has(c.id)) { seen.add(c.id); creators.push(c); } }
+    let html = rawHtml;
+    html = html.replace('<body>', `<body data-ssr="true" data-initial-creators="${creators.length}">`);
+    const jsonLd = buildJsonLd(creators);
+    const _lcpImg = creators[0]?.avatar || creators[0]?.avatar_c144 || '';
+    const _lcpSrc = _lcpImg.startsWith('http') ? _lcpImg : '';
+    const preloadLink = _lcpSrc ? (() => { const { src, srcset, sizes } = buildResponsiveSources(_lcpSrc); return `<link rel="preload" as="image" fetchpriority="high" href="${src}" imagesrcset="${srcset}" imagesizes="${sizes}">`; })() : '';
+    const updatedAt = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const ssrFlag = `<script>window.__HOME_SSR={count:${creators.length},hasMore:true,updatedAt:"${updatedAt}"};</script>`;
+    html = html.replace('</head>', `${preloadLink ? preloadLink + '\n' : ''}${jsonLd}\n${ssrFlag}\n</head>`);
+    const cardsHtml = creators.map((c, i) => renderCard(c, i)).join('\n');
+    if (cardsHtml) html = html.replace('<div id="results" class="row g-3 justify-content-center"></div>', `<div id="results" class="row g-3 justify-content-center">\n${cardsHtml}\n</div>`);
+    _htmlCache = html;
+    _cacheExpiresAt = Date.now() + HTML_CACHE_TTL;
+  } catch (err) {
+    console.error('[ssr/home] background cache build failed:', err.message);
+  } finally {
+    _cacheRefreshing = false;
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Main handler
 // ---------------------------------------------------------------------------
 export default async function handler(req, res) {
@@ -174,6 +224,32 @@ export default async function handler(req, res) {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     return res.status(200).send(rawHtml);
   }
+
+  // ── Memory cache check ──────────────────────────────────────────────────
+  const now = Date.now();
+  const isFresh = _htmlCache && now < _cacheExpiresAt;
+  const isStale = _htmlCache && !isFresh;
+
+  if (isFresh) {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=604800');
+    res.setHeader('Vercel-CDN-Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=604800');
+    return res.status(200).send(_htmlCache);
+  }
+
+  if (isStale) {
+    // Serve stale immediately; kick off background refresh (won't block user)
+    if (!_cacheRefreshing) {
+      _cacheRefreshing = true;
+      // Background build — intentionally not awaited
+      buildAndCache(SUPABASE_URL, SUPABASE_KEY, rawHtml);
+    }
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=604800');
+    res.setHeader('Vercel-CDN-Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=604800');
+    return res.status(200).send(_htmlCache);
+  }
+  // ────────────────────────────────────────────────────────────────────────
 
   try {
     const headers = {
@@ -245,7 +321,9 @@ export default async function handler(req, res) {
       );
     }
 
-    // --- 5. Send ---
+    // --- 5. Store in memory cache + Send ---
+    _htmlCache = html;
+    _cacheExpiresAt = Date.now() + HTML_CACHE_TTL;
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=604800');
     res.setHeader('Vercel-CDN-Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=604800');
