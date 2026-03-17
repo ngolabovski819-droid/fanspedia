@@ -32,6 +32,7 @@
             extension: 'md',
             format: 'frontmatter',
             identifier_field: 'slug',
+            editor: { preview: false },
             fields: [
               { label: 'Title', name: 'title', widget: 'string' },
               { label: 'URL Slug', name: 'slug', widget: 'string', hint: 'The URL path for this post, e.g. my-post-title — lowercase letters, numbers and hyphens only. Cannot be changed after publishing (would break the URL).', pattern: ['^[a-z0-9][a-z0-9-]*[a-z0-9]$', 'Lowercase letters, numbers, and hyphens only (no leading/trailing hyphens)'] },
