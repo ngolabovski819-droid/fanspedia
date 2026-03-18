@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -12,12 +12,12 @@
   <link rel="dns-prefetch" href="https://public.onlyfans.com">
   
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YV9QD82K7G"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3XB30HS12L"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-YV9QD82K7G');
+    gtag('config', 'G-3XB30HS12L');
   </script>
   
   <!-- Google Search Console Verification -->
@@ -31,7 +31,7 @@
   <meta name="author" content="fanspedia.net">
   <link rel="canonical" href="https://fanspedia.net/">
 
-  <!-- Noindex search/filter/pagination URLs â€” keeps crawl budget on real SEO pages -->
+  <!-- Noindex search/filter/pagination URLs — keeps crawl budget on real SEO pages -->
   <script>
     (function () {
       var p = new URLSearchParams(window.location.search);
@@ -1243,7 +1243,7 @@
   .search-group .btn-search { width: 100%; margin-top: 8px; border-radius: 9999px; }
   .clear-search { right: 15px; top: 14px; transform: none; }
     }
-    /* Smaller card image on tiny devices ï¿½ aspect-ratio wrapper handles proportional sizing */
+    /* Smaller card image on tiny devices ? aspect-ratio wrapper handles proportional sizing */
     @media (max-width: 400px) {
       .card-img-wrap { aspect-ratio: 4/5; }
     }
@@ -2089,7 +2089,7 @@
       background: linear-gradient(90deg,#2a2a3e 25%,#323246 50%,#2a2a3e 75%);
       background-size: 200% 100%;
     }
-    /* reuse ntw-arrow styles ï¿½ just alias */
+    /* reuse ntw-arrow styles ? just alias */
     .cat-arrow-btn {
       position: absolute;
       top: 40%;
@@ -3378,7 +3378,7 @@
         videoEl.load();
         videoEl.play().catch(function() {});
       } else {
-        // No video (or image URL) â€” show thumbnail/image
+        // No video (or image URL) — show thumbnail/image
         videoEl.pause();
         videoEl.src = '';
         videoEl.style.display = 'none';
@@ -3673,7 +3673,7 @@
       }
     });
     
-    // Initialize reels â€” deferred until AFTER window load to never block LCP
+    // Initialize reels — deferred until AFTER window load to never block LCP
     function _loadReels() {
       // Batch all 4 IDs into a single API call instead of 4 separate calls
       fetch('/api/reel?ids=61786830,27502984,21895538,116155')
@@ -3698,7 +3698,7 @@
         })
         .catch(function() {});
     }
-    // Fire only after full page load â€” never appears in Lighthouse critical path
+    // Fire only after full page load — never appears in Lighthouse critical path
     if (document.readyState === 'complete') {
       renderReels();
       setTimeout(_loadReels, 100);
@@ -5360,7 +5360,7 @@
     // Initial render with skeletons replaced by label-only cards
     renderCards();
 
-    // Fetch real images on idle â€” 1 request instead of 16
+    // Fetch real images on idle — 1 request instead of 16
     function loadImages() {
       fetch('/api/category-previews')
         .then(function (r) { return r.ok ? r.json() : {}; })

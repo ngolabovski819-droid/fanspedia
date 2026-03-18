@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -8,12 +8,12 @@
   <link rel="canonical" href="https://fanspedia.net/near-me/" />
   <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg" />
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YV9QD82K7G"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3XB30HS12L"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);} 
     gtag('js', new Date());
-    gtag('config', 'G-YV9QD82K7G', { 'anonymize_ip': true, 'debug_mode': true });
+    gtag('config', 'G-3XB30HS12L', { 'anonymize_ip': true, 'debug_mode': true });
     // Fallback visibility ping after load
     window.addEventListener('load', () => {
       if (typeof gtag === 'function') {
@@ -343,7 +343,7 @@
   <!-- Mobile Drawer -->
   <div id="drawerOverlay" class="drawer-overlay" tabindex="-1" aria-hidden="true"></div>
   <nav id="mobileDrawer" class="mobile-drawer" aria-hidden="true" aria-labelledby="mobileMenuToggle">
-    <button class="drawer-close" id="drawerClose" aria-label="Close menu">Ã—</button>
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">×</button>
     <a href="/">Home</a>
     <div class="drawer-categories-toggle" id="drawerCategoriesToggle">
       <div class="icon-text"><i class="fas fa-th"></i><span>Categories</span></div>
@@ -389,7 +389,7 @@
       <div class="modal-header">
         <h3 id="countryModalTitle">Select Your Location</h3>
         <p>Choose location to find models nearby</p>
-        <button class="modal-close" id="countryModalClose" aria-label="Close">Ã—</button>
+        <button class="modal-close" id="countryModalClose" aria-label="Close">×</button>
       </div>
       <div class="country-search-wrapper">
         <input type="text" id="countrySearch" class="country-search" placeholder="Search country..." aria-label="Search country" autocomplete="off" />
@@ -729,8 +729,8 @@
     function persistFavorites(set){ localStorage.setItem('favorites', JSON.stringify(Array.from(set))); }
     function toggleFavorite(username, btn){
       const set = getFavoritesSet();
-      if(set.has(username)){ set.delete(username); btn.classList.remove('active'); btn.querySelector('span').textContent='â™¡'; }
-      else { set.add(username); btn.classList.add('active'); btn.querySelector('span').textContent='â™¥'; }
+      if(set.has(username)){ set.delete(username); btn.classList.remove('active'); btn.querySelector('span').textContent='?'; }
+      else { set.add(username); btn.classList.add('active'); btn.querySelector('span').textContent='?'; }
       persistFavorites(set);
       try { if (window.fpUpdateWishlistBadge) window.fpUpdateWishlistBadge(); } catch {}
     }
@@ -793,13 +793,13 @@
         const imgSrc = img && img.startsWith("http") ? img : "/static/no-image.png";
         const responsive = buildResponsiveSources(imgSrc);
         const name = item.name || "Unknown";
-        const username = item.username || "â€”";
+        const username = item.username || "—";
         const priceText = (item.subscribePrice && !isNaN(item.subscribePrice)) ? `$${parseFloat(item.subscribePrice).toFixed(2)}` : "FREE";
-        const verifiedIcon = item.isVerified ? "âœ… " : "";
+        const verifiedIcon = item.isVerified ? "? " : "";
         const bio = item.about || "";
-        const profileUrl = username !== "â€”" ? `https://onlyfans.com/${encodeURIComponent(username)}` : "#";
+        const profileUrl = username !== "—" ? `https://onlyfans.com/${encodeURIComponent(username)}` : "#";
         const favSet = getFavoritesSet();
-        const favActive = username !== "â€”" && favSet.has(username);
+        const favActive = username !== "—" && favSet.has(username);
         const favChar = favActive ? '&#9829;' : '&#9825;';
         const isFirstCard = els.resultsContainer.children.length === 0 && currentPage === 1;
         if (isFirstCard) {

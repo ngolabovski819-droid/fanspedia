@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -8,12 +8,12 @@
   <link rel="canonical" href="https://fanspedia.net/blog/" />
   <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg">
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YV9QD82K7G"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3XB30HS12L"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-YV9QD82K7G');
+    gtag('config', 'G-3XB30HS12L');
   </script>
   <link rel="preload" as="style" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"></noscript>
@@ -23,7 +23,7 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      /* Theme foundations � light default */
+      /* Theme foundations ? light default */
       --bg-primary:   #f5f5f7;
       --bg-secondary: #ffffff;
       --text-primary: #1d1d1f;
@@ -54,7 +54,7 @@
       --input-bg:     #2a2a2a;
       --brand-color:  #00AFF0;
       --placeholder-color: #666;
-      /* Blog aliases � dark overrides */
+      /* Blog aliases ? dark overrides */
       --card-bg:   #242424;
       --card-hover:#2e2e2e;
       --accent-dim:rgba(0,175,240,0.12);
@@ -999,7 +999,7 @@
       const thumbSrc = 'https://images.weserv.nl/?url=' + encodeURIComponent(baseUrl) + '&w=600&h=338&fit=cover&output=webp&q=85';
       imagePlaceholder = '<div class="post-card-image-placeholder"><img src="' + thumbSrc + '" alt="' + alt + '" loading="lazy"></div>';
     } else {
-      const fallbackEmoji = (post.emoji && post.emoji.trim()) ? post.emoji : '📝';
+      const fallbackEmoji = (post.emoji && post.emoji.trim()) ? post.emoji : '??';
       imagePlaceholder = '<div class="post-card-image-placeholder">' + fallbackEmoji + '</div>';
     }
     
@@ -1095,7 +1095,7 @@
     }, 300);
   });
 
-  // Hydration: SSR pre-injected the full post list � skip the API roundtrip
+  // Hydration: SSR pre-injected the full post list ? skip the API roundtrip
   if (window.__BLOG_SSR_POSTS) {
     POSTS = window.__BLOG_SSR_POSTS;
     renderPage();
