@@ -88,11 +88,6 @@ export function initSafeSearch() {
   const savedState = getSafeSearchState();
   applySafeSearch(savedState);
   
-  // Show modal for first-time visitors (after short delay for better UX)
-  if (!hasSeenSafeSearchModal()) {
-    setTimeout(showSafeSearchModal, 1500);
-  }
-  
   // Check URL parameter for forced state (?safe=1)
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.has('safe')) {
