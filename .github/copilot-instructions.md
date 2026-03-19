@@ -257,3 +257,14 @@ npm run build:spanish            # regenerate /es/* pages from English sources
 - Non-critical scripts (`i18n.js`, `wishlist-badge.js`, `mermaid.js`) must have `defer` attribute.
 - Do not re-enable creator profile pages without explicit decision.
 - Do not commit `.env`, `cookies.json`, `*.csv`, `failed_batch.json`, `failed_ids_v2.json`, `progress_urls.json`.
+- **Every new HTML page MUST include the GA4 analytics tag** immediately after `<meta name="viewport" ...>`. GA4 Measurement ID: `G-3XB30HS12L`. Required snippet:
+  ```html
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3XB30HS12L"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-3XB30HS12L');
+  </script>
+  ```
