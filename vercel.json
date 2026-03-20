@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "buildCommand": "node scripts/build-sitemaps.cjs",
   "functions": {
     "api/blog.js": { "includeFiles": "content/blog/**" },
     "api/blog-post.js": { "includeFiles": "content/blog/**" },
