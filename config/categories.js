@@ -9,7 +9,7 @@ export const categories = [
   // Future geo taxonomy will live separately (e.g. /locations/<country>) to avoid mixing topical vs geographic facets.
   'nude', 'reddit', 'models', 'sex', 'gay', 'anal', 'feet', 'twitter', 'trans',
   'lesbian', 'squirt', 'couple', 'milf', 'tiktok', 'girl', 'big tits', 'blowjobs', 'boobs',
-  'sextape', 'creampie', 'joi', 'threesome', 'teen (18+)', '18 years old', 'shemale', 'bbc', 'tits', 'ebony', 'pornhub',
+  'sextape', 'creampie', 'joi', 'threesome', '18 years old', 'shemale', 'bbc', 'tits', 'ebony', 'pornhub',
   'footjob', 'foot fetish', 'dick ratings', 'bbw', 'mature', 'teacher', 'pussy', 'cuckold', 'big ass', 'squirting', 'hottest',
   'amateur', 'blonde', 'instagram', 'pawg', 'gangbang', 'redhead', 'male', 'vip', 'famous',
   'twins', 'ass', 'deepthroat', 'pregnant', 'handjob', 'facial', 'asmr', 'pegging', 'no ppv', 'nurse', 'smoking fetish', 'goth-free',
