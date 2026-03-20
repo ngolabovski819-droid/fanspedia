@@ -336,7 +336,7 @@
   <!-- Mobile Drawer -->
   <div id="drawerOverlay" class="drawer-overlay" tabindex="-1" aria-hidden="true"></div>
   <nav id="mobileDrawer" class="mobile-drawer" aria-hidden="true" aria-labelledby="mobileMenuToggle">
-    <button class="drawer-close" id="drawerClose" aria-label="Close menu">×</button>
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">ï¿½</button>
     <a href="/">Home</a>
     <div class="drawer-categories-toggle" id="drawerCategoriesToggle">
       <div class="icon-text"><i class="fas fa-th"></i><span>Categories</span></div>
@@ -382,7 +382,7 @@
       <div class="modal-header">
         <h3 id="countryModalTitle">Select Your Location</h3>
         <p>Choose location to find models nearby</p>
-        <button class="modal-close" id="countryModalClose" aria-label="Close">×</button>
+        <button class="modal-close" id="countryModalClose" aria-label="Close">ï¿½</button>
       </div>
       <div class="country-search-wrapper">
         <input type="text" id="countrySearch" class="country-search" placeholder="Search country..." aria-label="Search country" autocomplete="off" />
@@ -393,7 +393,7 @@
 
   <script type="module">
     // Import categories for dropdowns
-    import { popularCategories, categoryToSlug } from '/config/categories.js?v=20260226-1';
+    import { popularCategories, categoryToSlug } from '/config/categories.js?v=20260320-1';
     
     // Populate desktop categories dropdown
     const catMenuEl = document.getElementById('categoriesMenu');
@@ -786,13 +786,13 @@
         const imgSrc = img && img.startsWith("http") ? img : "/static/no-image.png";
         const responsive = buildResponsiveSources(imgSrc);
         const name = item.name || "Unknown";
-        const username = item.username || "—";
+        const username = item.username || "ï¿½";
         const priceText = (item.subscribePrice && !isNaN(item.subscribePrice)) ? `$${parseFloat(item.subscribePrice).toFixed(2)}` : "FREE";
         const verifiedIcon = item.isVerified ? "? " : "";
         const bio = item.about || "";
-        const profileUrl = username !== "—" ? `https://onlyfans.com/${encodeURIComponent(username)}` : "#";
+        const profileUrl = username !== "ï¿½" ? `https://onlyfans.com/${encodeURIComponent(username)}` : "#";
         const favSet = getFavoritesSet();
-        const favActive = username !== "—" && favSet.has(username);
+        const favActive = username !== "ï¿½" && favSet.has(username);
         const favChar = favActive ? '&#9829;' : '&#9825;';
         const isFirstCard = els.resultsContainer.children.length === 0 && currentPage === 1;
         if (isFirstCard) {

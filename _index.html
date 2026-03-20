@@ -31,7 +31,7 @@
   <meta name="author" content="fanspedia.net">
   <link rel="canonical" href="https://fanspedia.net/">
 
-  <!-- Noindex search/filter/pagination URLs — keeps crawl budget on real SEO pages -->
+  <!-- Noindex search/filter/pagination URLs ï¿½ keeps crawl budget on real SEO pages -->
   <script>
     (function () {
       var p = new URLSearchParams(window.location.search);
@@ -2972,7 +2972,7 @@
     // ============================================
     // DYNAMIC CATEGORY NAVIGATION (uses shared config)
     // ============================================
-  import { popularCategories, categoryToSlug } from '/config/categories.js?v=20260226-1';
+  import { popularCategories, categoryToSlug } from '/config/categories.js?v=20260320-1';
     
     // Render desktop dropdown menu
     const catMenu = document.getElementById('categoriesMenu');
@@ -3378,7 +3378,7 @@
         videoEl.load();
         videoEl.play().catch(function() {});
       } else {
-        // No video (or image URL) — show thumbnail/image
+        // No video (or image URL) ï¿½ show thumbnail/image
         videoEl.pause();
         videoEl.src = '';
         videoEl.style.display = 'none';
@@ -3673,7 +3673,7 @@
       }
     });
     
-    // Initialize reels — deferred until AFTER window load to never block LCP
+    // Initialize reels ï¿½ deferred until AFTER window load to never block LCP
     function _loadReels() {
       // Batch all 4 IDs into a single API call instead of 4 separate calls
       fetch('/api/reel?ids=61786830,27502984,21895538,116155')
@@ -3698,7 +3698,7 @@
         })
         .catch(function() {});
     }
-    // Fire only after full page load — never appears in Lighthouse critical path
+    // Fire only after full page load ï¿½ never appears in Lighthouse critical path
     if (document.readyState === 'complete') {
       renderReels();
       setTimeout(_loadReels, 100);
@@ -5360,7 +5360,7 @@
     // Initial render with skeletons replaced by label-only cards
     renderCards();
 
-    // Fetch real images on idle — 1 request instead of 16
+    // Fetch real images on idle ï¿½ 1 request instead of 16
     function loadImages() {
       fetch('/api/category-previews')
         .then(function (r) { return r.ok ? r.json() : {}; })

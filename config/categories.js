@@ -9,7 +9,7 @@ export const categories = [
   // Future geo taxonomy will live separately (e.g. /locations/<country>) to avoid mixing topical vs geographic facets.
   'nude', 'reddit', 'models', 'sex', 'gay', 'anal', 'feet', 'twitter', 'trans',
   'lesbian', 'squirt', 'couple', 'milf', 'tiktok', 'girl', 'big tits', 'blowjobs', 'boobs',
-  'sextape', 'creampie', 'joi', 'threesome', 'teen (18+)', 'shemale', 'bbc', 'tits', 'ebony', 'pornhub',
+  'sextape', 'creampie', 'joi', 'threesome', 'teen (18+)', '18 years old', 'shemale', 'bbc', 'tits', 'ebony', 'pornhub',
   'footjob', 'foot fetish', 'dick ratings', 'bbw', 'mature', 'teacher', 'pussy', 'cuckold', 'big ass', 'squirting', 'hottest',
   'amateur', 'blonde', 'instagram', 'pawg', 'gangbang', 'redhead', 'male', 'vip', 'famous',
   'twins', 'ass', 'deepthroat', 'pregnant', 'handjob', 'facial', 'asmr', 'pegging', 'no ppv', 'nurse', 'smoking fetish', 'goth-free',
@@ -77,7 +77,8 @@ const synonymsOverrides = {
   'nude': ['nude','nudity','naked'],
   'reddit': ['reddit','subreddit'],
   'girl': ['girl','girls','babe'],
-  'male': ['male','man','men']
+  'male': ['male','man','men'],
+  '18 years old': ['18 years old','teen 18','18yo','18+','teen 18+','barely legal','just 18']
 };
 
 function normalizeTerm(s){
