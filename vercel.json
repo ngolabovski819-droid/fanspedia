@@ -1,6 +1,14 @@
 {
   "version": 2,
   "buildCommand": "node scripts/build-sitemaps.cjs",
+  "headers": [
+    {
+      "source": "/(sitemap.*\\.xml|sitemap-index\\.xml|robots\\.txt)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+      ]
+    }
+  ],
   "functions": {
     "api/blog.js": { "includeFiles": "content/blog/**" },
     "api/blog-post.js": { "includeFiles": "content/blog/**" },
