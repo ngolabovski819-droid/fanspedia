@@ -11,7 +11,7 @@ export const categories = [
   'lesbian', 'squirt', 'couple', 'milf', 'tiktok', 'girl', 'big tits', 'blowjobs', 'boobs',
   'sextape', 'creampie', 'joi', 'threesome', '18 years old', 'shemale', 'bbc', 'tits', 'ebony', 'pornhub',
   'footjob', 'foot fetish', 'dick ratings', 'bbw', 'mature', 'teacher', 'pussy', 'cuckold', 'big ass', 'squirting', 'hottest',
-  'amateur', 'blonde', 'instagram', 'pawg', 'gangbang', 'redhead', 'male', 'vip', 'famous',
+  'best', 'amateur', 'blonde', 'instagram', 'pawg', 'gangbang', 'redhead', 'male', 'vip', 'famous',
   'twins', 'ass', 'deepthroat', 'pregnant', 'handjob', 'facial', 'asmr', 'pegging', 'no ppv', 'nurse', 'smoking fetish', 'goth-free',
   'big natural boobs', 'olympian', 'pussy-play'
 ];
@@ -78,7 +78,8 @@ const synonymsOverrides = {
   'reddit': ['reddit','subreddit'],
   'girl': ['girl','girls','babe'],
   'male': ['male','man','men'],
-  '18 years old': ['18 years old','teen 18','18yo','18+','teen 18+','barely legal','just 18']
+  '18 years old': ['18 years old','teen 18','18yo','18+','teen 18+','barely legal','just 18'],
+  'best': ['best','top','elite','greatest','top creator','finest']
 };
 
 function normalizeTerm(s){
