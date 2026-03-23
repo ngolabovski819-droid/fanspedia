@@ -120,6 +120,7 @@ export const synonymsMap = (() => {
 
 // Popular categories for header dropdown and mobile drawer (order matters for UX)
 export const popularCategories = [
+  'best',
   'milf',
   'big ass',
   'ebony',
