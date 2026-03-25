@@ -71,6 +71,13 @@ function inlineFormat(text) {
     .replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>')
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_, alt, src) => {
+      const safeAlt = alt.replace(/"/g, '&quot;');
+      const proxiedSrc = (src.startsWith('http://') || src.startsWith('https://'))
+        ? `https://images.weserv.nl/?url=${encodeURIComponent(src)}&w=800&output=webp&q=85`
+        : src;
+      return `<img src="${proxiedSrc}" alt="${safeAlt}" loading="lazy" style="max-width:100%;height:auto;border-radius:8px;display:block;margin:1rem auto">`;
+    })
     .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" rel="noopener noreferrer">$1</a>');
 }
 
