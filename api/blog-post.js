@@ -177,24 +177,22 @@ async function resolveFeaturedImageUrl(rawUrl) {
       clearTimeout(timeoutId);
     }
 
-    if (!response.ok) {
-      return rawUrl;
-    }
+    if (!response.ok) return '';
 
     const html = await response.text();
     const metaMatch =
       html.match(/<meta[^>]+property=["']og:image["'][^>]*content=["']([^"']+)["'][^>]*>/i) ||
       html.match(/<meta[^>]+content=["']([^"']+)["'][^>]*property=["']og:image["'][^>]*>/i) ||
       html.match(/<meta[^>]+name=["']twitter:image(?::src)?["'][^>]*content=["']([^"']+)["'][^>]*>/i) ||
-      html.match(/<meta[^>]+content=["']([^"']+)["'][^>]*name=["']twitter:image(?::src)?["'][^>]*>/i);
+      html.match(/<meta[^>]+content=["']([^"']+)["'][^>]*name=["']twitter:image(?::src)?["'][^>]*>/i) ||
+      html.match(/<img[^>]+class=["'][^"']*screenshot-image[^"']*["'][^>]+src=["']([^"']+)["']/i) ||
+      html.match(/<img[^>]+src=["']([^"']+)["'][^>]+class=["'][^"']*screenshot-image[^"']*["']/i);
 
-    if (!metaMatch?.[1]) {
-      return rawUrl;
-    }
+    if (!metaMatch?.[1]) return '';
 
     return new URL(metaMatch[1], parsed).toString();
   } catch {
-    return rawUrl;
+    return '';
   }
 }
 

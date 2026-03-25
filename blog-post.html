@@ -763,8 +763,10 @@
     if (post.featuredImage && post.featuredImage.trim()) {
       const baseUrl = post.featuredImage.trim();
       const alt = post.featuredImageAlt || post.title;
-      const desktopSrc = `https://images.weserv.nl/?url=${encodeURIComponent(baseUrl)}&w=1200&h=675&fit=cover&output=webp&q=85`;
-      const mobileSrc = `https://images.weserv.nl/?url=${encodeURIComponent(baseUrl)}&w=800&h=450&fit=cover&output=webp&q=85`;
+      const isLocal = baseUrl.startsWith('/');
+      const absUrl = isLocal ? `https://fanspedia.net${baseUrl}` : baseUrl;
+      const desktopSrc = isLocal ? baseUrl : `https://images.weserv.nl/?url=${encodeURIComponent(absUrl)}&w=1200&h=675&fit=cover&output=webp&q=85`;
+      const mobileSrc  = isLocal ? baseUrl : `https://images.weserv.nl/?url=${encodeURIComponent(absUrl)}&w=800&h=450&fit=cover&output=webp&q=85`;
       heroImageHTML = `
         <div class="blog-hero-image">
           <picture>

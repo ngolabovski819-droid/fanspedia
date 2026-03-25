@@ -145,14 +145,18 @@ async function resolveFeaturedImageUrl(rawUrl) {
         headers: { 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36' },
       });
     } finally { clearTimeout(timeoutId); }
-    if (!response.ok) return rawUrl;
+    if (!response.ok) return '';
     const html = await response.text();
     const metaMatch =
       html.match(/<meta[^>]+property=["']og:image["'][^>]*content=["']([^"']+)["'][^>]*>/i) ||
-      html.match(/<meta[^>]+content=["']([^"']+)["'][^>]*property=["']og:image["'][^>]*>/i);
-    if (!metaMatch?.[1]) return rawUrl;
+      html.match(/<meta[^>]+content=["']([^"']+)["'][^>]*property=["']og:image["'][^>]*>/i) ||
+      html.match(/<meta[^>]+name=["']twitter:image(?::src)?["'][^>]*content=["']([^"']+)["'][^>]*>/i) ||
+      html.match(/<meta[^>]+content=["']([^"']+)["'][^>]*name=["']twitter:image(?::src)?["'][^>]*>/i) ||
+      html.match(/<img[^>]+class=["'][^"']*screenshot-image[^"']*["'][^>]+src=["']([^"']+)["']/i) ||
+      html.match(/<img[^>]+src=["']([^"']+)["'][^>]+class=["'][^"']*screenshot-image[^"']*["']/i);
+    if (!metaMatch?.[1]) return '';
     return new URL(metaMatch[1], parsed).toString();
-  } catch { return rawUrl; }
+  } catch { return ''; }
 }
 
 // ---------------------------------------------------------------------------
@@ -191,8 +195,10 @@ function renderArticleHtml(post) {
   if (post.featuredImage && post.featuredImage.trim()) {
     const base = post.featuredImage.trim();
     const alt = escHtml(post.featuredImageAlt || post.title || '');
-    const desk = escHtml(`https://images.weserv.nl/?url=${encodeURIComponent(base)}&w=1200&h=675&fit=cover&output=webp&q=85`);
-    const mob  = escHtml(`https://images.weserv.nl/?url=${encodeURIComponent(base)}&w=800&h=450&fit=cover&output=webp&q=85`);
+    const isLocal = base.startsWith('/');
+    const absBase = isLocal ? `https://fanspedia.net${base}` : base;
+    const desk = isLocal ? escHtml(base) : escHtml(`https://images.weserv.nl/?url=${encodeURIComponent(absBase)}&w=1200&h=675&fit=cover&output=webp&q=85`);
+    const mob  = isLocal ? escHtml(base) : escHtml(`https://images.weserv.nl/?url=${encodeURIComponent(absBase)}&w=800&h=450&fit=cover&output=webp&q=85`);
     heroImageHTML = `
     <div class="blog-hero-image">
       <picture>
