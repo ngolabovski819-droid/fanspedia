@@ -299,12 +299,20 @@
       min-width: 620px;
       border-collapse: collapse;
       font-size: 0.95em;
+      border: 2px solid #b0b0b8;
+    }
+    [data-theme="dark"] .article-body table {
+      border-color: #555568;
     }
     .article-body th,
     .article-body td {
-      border: 1px solid var(--border-color);
-      padding: 10px 12px;
+      border: 1px solid #b0b0b8;
+      padding: 10px 14px;
       vertical-align: top;
+    }
+    [data-theme="dark"] .article-body th,
+    [data-theme="dark"] .article-body td {
+      border-color: #555568;
     }
     .article-body th {
       background: var(--bg-secondary);
