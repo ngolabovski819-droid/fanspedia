@@ -9,21 +9,106 @@
 <body>
   <script src="https://unpkg.com/decap-cms@3.0.2/dist/decap-cms.js"></script>
   <script>
-    // ─── Smart paste: HTML table → Markdown table ───────────────────────────
-    // Uses CAPTURE phase so we intercept before CodeMirror (raw mode editor) or
-    // any textarea processes the paste. When clipboard HTML has a <table>, we
-    // convert it to a markdown table and inject it via CodeMirror's API or the
-    // native textarea API.
-    function htmlTablesToMarkdown(html) {
-      var parser = new DOMParser();
-      var doc = parser.parseFromString(html, 'text/html');
-      var tables = Array.from(doc.querySelectorAll('table'));
-      if (!tables.length) return null;
+    // ─── Full HTML → Markdown converter for Google Docs paste ───────────────
+    // Handles: h1-h6, p, ul/ol/li, strong/em/b/i, a, table, br, hr, blockquote
+    // Intercepts ALL pastes that contain HTML (not just tables).
 
-      tables.forEach(function(table) {
-        var rows = Array.from(table.querySelectorAll('tr'));
-        if (!rows.length) return;
+    function nodeToMarkdown(node, ctx) {
+      ctx = ctx || { listDepth: 0, orderedCounters: [] };
+      if (node.nodeType === 3) { // text node
+        return node.textContent.replace(/\r?\n/g, ' ');
+      }
+      if (node.nodeType !== 1) return '';
+      var tag = node.tagName.toLowerCase();
+      var children = Array.from(node.childNodes);
 
+      function inner() {
+        return children.map(function(c) { return nodeToMarkdown(c, ctx); }).join('');
+      }
+      function blockInner() {
+        return children.map(function(c) { return nodeToMarkdown(c, ctx); }).join('').trim();
+      }
+
+      // Headings
+      if (tag === 'h1') return '\n\n# ' + blockInner() + '\n\n';
+      if (tag === 'h2') return '\n\n## ' + blockInner() + '\n\n';
+      if (tag === 'h3') return '\n\n### ' + blockInner() + '\n\n';
+      if (tag === 'h4') return '\n\n#### ' + blockInner() + '\n\n';
+      if (tag === 'h5') return '\n\n##### ' + blockInner() + '\n\n';
+      if (tag === 'h6') return '\n\n###### ' + blockInner() + '\n\n';
+
+      // Paragraphs / divs / sections
+      if (tag === 'p') {
+        var t = blockInner();
+        return t ? '\n\n' + t + '\n\n' : '';
+      }
+      if (tag === 'div' || tag === 'section' || tag === 'article') {
+        var t2 = inner();
+        // only wrap in newlines if it looks block-level (has sub-blocks)
+        return /\n/.test(t2) ? t2 : '\n\n' + t2.trim() + '\n\n';
+      }
+
+      // Inline formatting
+      if (tag === 'strong' || tag === 'b') return '**' + inner().trim() + '**';
+      if (tag === 'em' || tag === 'i') return '*' + inner().trim() + '*';
+      if (tag === 'code') return '`' + node.textContent + '`';
+      if (tag === 'del' || tag === 's') return '~~' + inner().trim() + '~~';
+      if (tag === 'br') return '\n';
+      if (tag === 'hr') return '\n\n---\n\n';
+
+      // Links
+      if (tag === 'a') {
+        var href = node.getAttribute('href') || '';
+        var text = inner().trim();
+        if (!href || href === text) return text;
+        return '[' + text + '](' + href + ')';
+      }
+
+      // Images
+      if (tag === 'img') {
+        var src  = node.getAttribute('src') || '';
+        var alt2 = node.getAttribute('alt') || '';
+        return src ? '![' + alt2 + '](' + src + ')' : '';
+      }
+
+      // Lists
+      if (tag === 'ul' || tag === 'ol') {
+        ctx.listDepth++;
+        if (tag === 'ol') ctx.orderedCounters[ctx.listDepth] = 0;
+        var result = children.map(function(c) { return nodeToMarkdown(c, ctx); }).join('');
+        ctx.listDepth--;
+        if (tag === 'ol') delete ctx.orderedCounters[ctx.listDepth + 1];
+        return '\n' + result + '\n';
+      }
+      if (tag === 'li') {
+        var indent = '  '.repeat(Math.max(0, ctx.listDepth - 1));
+        var parentTag = node.parentElement && node.parentElement.tagName.toLowerCase();
+        var bullet;
+        if (parentTag === 'ol') {
+          ctx.orderedCounters[ctx.listDepth] = (ctx.orderedCounters[ctx.listDepth] || 0) + 1;
+          bullet = ctx.orderedCounters[ctx.listDepth] + '.';
+        } else {
+          bullet = '-';
+        }
+        var liContent = children.map(function(c) { return nodeToMarkdown(c, ctx); }).join('').trim();
+        return indent + bullet + ' ' + liContent + '\n';
+      }
+
+      // Blockquote
+      if (tag === 'blockquote') {
+        var lines = blockInner().split('\n');
+        return '\n\n' + lines.map(function(l) { return '> ' + l; }).join('\n') + '\n\n';
+      }
+
+      // Pre / code block
+      if (tag === 'pre') {
+        return '\n\n```\n' + node.textContent.trim() + '\n```\n\n';
+      }
+
+      // Table
+      if (tag === 'table') {
+        var rows = Array.from(node.querySelectorAll('tr'));
+        if (!rows.length) return '';
         var mdRows = rows.map(function(row) {
           var cells = Array.from(row.querySelectorAll('th,td'));
           return '| ' + cells.map(function(c) {
@@ -31,30 +116,41 @@
               .replace(/\|/g, '\\|').replace(/\r?\n/g, ' ');
           }).join(' | ') + ' |';
         });
-
-        var colCount = table.querySelector('tr').querySelectorAll('th,td').length;
+        var colCount = rows[0].querySelectorAll('th,td').length;
         var sep = '| ' + Array(colCount).fill('---').join(' | ') + ' |';
         mdRows.splice(1, 0, sep);
+        return '\n\n' + mdRows.join('\n') + '\n\n';
+      }
 
-        var placeholder = document.createTextNode('\n\n' + mdRows.join('\n') + '\n\n');
-        table.parentNode.replaceChild(placeholder, table);
-      });
+      // Skip style/script/meta noise
+      if (tag === 'style' || tag === 'script' || tag === 'meta' || tag === 'head') return '';
 
-      return (doc.body.innerText || doc.body.textContent || '').trim();
+      // Span and other inline wrappers — just pass through
+      return inner();
     }
 
-    // Capture phase = fires before the editor's own paste listener
+    function htmlToMarkdown(html) {
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(html, 'text/html');
+      var md = nodeToMarkdown(doc.body);
+      // Collapse 3+ blank lines to 2
+      return md.replace(/\n{3,}/g, '\n\n').trim();
+    }
+
+    // Capture phase — fires before Plate.js / CodeMirror handles the paste
     document.addEventListener('paste', function(e) {
       var html = e.clipboardData && e.clipboardData.getData('text/html');
-      if (!html || !html.toLowerCase().includes('<table')) return;
+      if (!html) return;
+      // Only intercept if there's real rich content (not a plain URL paste etc.)
+      if (!/<(h[1-6]|table|ul|ol|strong|em|b|i)\b/i.test(html)) return;
 
       var pasteText;
-      try { pasteText = htmlTablesToMarkdown(html); } catch(err) { return; }
+      try { pasteText = htmlToMarkdown(html); } catch(err) { return; }
       if (!pasteText) return;
 
       var target = e.target;
 
-      // ── CodeMirror path (older Decap CMS versions) ─────────────────────────
+      // CodeMirror (older Decap versions)
       var cmEl = document.querySelector('.CodeMirror.CodeMirror-focused');
       if (!cmEl && target && target.closest) cmEl = target.closest('.CodeMirror');
       if (cmEl && cmEl.CodeMirror) {
@@ -63,35 +159,29 @@
         return;
       }
 
-      // ── contenteditable path (Decap CMS 3.x uses Plate.js — no CodeMirror) ─
+      // contenteditable (Decap CMS 3.x — Plate.js)
       var editableEl = null;
       if (target) {
-        if (target.isContentEditable) {
-          editableEl = target;
-        } else if (target.closest) {
-          editableEl = target.closest('[contenteditable="true"]');
-        }
+        editableEl = target.isContentEditable ? target
+          : (target.closest ? target.closest('[contenteditable="true"]') : null);
       }
       if (editableEl) {
         e.preventDefault();
-        // execCommand fires a DOM mutation that Plate.js / React picks up via onChange
         document.execCommand('insertText', false, pasteText);
         return;
       }
 
-      // ── Textarea fallback ──────────────────────────────────────────────────
+      // Textarea fallback
       if (!target || target.tagName !== 'TEXTAREA') return;
       e.preventDefault();
-
       var start  = target.selectionStart || 0;
       var end2   = target.selectionEnd   || 0;
       var newVal = target.value.substring(0, start) + pasteText + target.value.substring(end2);
-
       var setter = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value').set;
       setter.call(target, newVal);
       target.dispatchEvent(new Event('input', { bubbles: true }));
       target.selectionStart = target.selectionEnd = start + pasteText.length;
-    }, true); // <-- true = capture phase, fires before editor handlers
+    }, true);
     // ────────────────────────────────────────────────────────────────────────
     // Register Table editor component — shows as "Table" button in toolbar
     CMS.registerEditorComponent({
