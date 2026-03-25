@@ -167,7 +167,23 @@
       }
       if (editableEl) {
         e.preventDefault();
-        document.execCommand('insertText', false, pasteText);
+        // DO NOT use execCommand — it mutates the Slate/Plate.js DOM directly,
+        // corrupting Slate's internal node model and crashing on next toolbar use.
+        // Instead, re-dispatch a synthetic paste event with ONLY text/plain so that
+        // Plate.js inserts the markdown via its own safe Slate transforms.
+        try {
+          var dt = new DataTransfer();
+          dt.setData('text/plain', pasteText);
+          var newPaste = new ClipboardEvent('paste', {
+            bubbles: true,
+            cancelable: true,
+            clipboardData: dt
+          });
+          editableEl.dispatchEvent(newPaste);
+        } catch(err) {
+          // absolute last resort — likely to cause state issues but prevents data loss
+          document.execCommand('insertText', false, pasteText);
+        }
         return;
       }
 
