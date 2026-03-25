@@ -10,60 +10,74 @@
   <script src="https://unpkg.com/decap-cms@3.0.2/dist/decap-cms.js"></script>
   <script>
     // ─── Smart paste: HTML table → Markdown table ───────────────────────────
-    // Fires on every paste. When clipboard HTML contains a <table>, converts it
-    // to a markdown table and inserts it into the focused textarea (raw mode).
-    document.addEventListener('paste', function(e) {
-      var target = e.target;
-      if (!target || target.tagName !== 'TEXTAREA') return;
+    // Uses CAPTURE phase so we intercept before CodeMirror (raw mode editor) or
+    // any textarea processes the paste. When clipboard HTML has a <table>, we
+    // convert it to a markdown table and inject it via CodeMirror's API or the
+    // native textarea API.
+    function htmlTablesToMarkdown(html) {
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(html, 'text/html');
+      var tables = Array.from(doc.querySelectorAll('table'));
+      if (!tables.length) return null;
 
+      tables.forEach(function(table) {
+        var rows = Array.from(table.querySelectorAll('tr'));
+        if (!rows.length) return;
+
+        var mdRows = rows.map(function(row) {
+          var cells = Array.from(row.querySelectorAll('th,td'));
+          return '| ' + cells.map(function(c) {
+            return (c.innerText || c.textContent || '').trim()
+              .replace(/\|/g, '\\|').replace(/\r?\n/g, ' ');
+          }).join(' | ') + ' |';
+        });
+
+        var colCount = table.querySelector('tr').querySelectorAll('th,td').length;
+        var sep = '| ' + Array(colCount).fill('---').join(' | ') + ' |';
+        mdRows.splice(1, 0, sep);
+
+        var placeholder = document.createTextNode('\n\n' + mdRows.join('\n') + '\n\n');
+        table.parentNode.replaceChild(placeholder, table);
+      });
+
+      return (doc.body.innerText || doc.body.textContent || '').trim();
+    }
+
+    // Capture phase = fires before CodeMirror's own paste listener
+    document.addEventListener('paste', function(e) {
       var html = e.clipboardData && e.clipboardData.getData('text/html');
       if (!html || !html.toLowerCase().includes('<table')) return;
 
+      var pasteText;
+      try { pasteText = htmlTablesToMarkdown(html); } catch(err) { return; }
+      if (!pasteText) return;
+
+      // ── CodeMirror path (Decap CMS raw mode) ──────────────────────────────
+      // CodeMirror 5 stores the instance on the wrapper div as `.CodeMirror`
+      var cmEl = document.querySelector('.CodeMirror.CodeMirror-focused');
+      if (!cmEl && e.target && e.target.closest) {
+        cmEl = e.target.closest('.CodeMirror');
+      }
+      if (cmEl && cmEl.CodeMirror) {
+        e.preventDefault();
+        cmEl.CodeMirror.replaceSelection(pasteText, 'end');
+        return;
+      }
+
+      // ── Textarea fallback (rich-text editor or other widgets) ─────────────
+      var target = e.target;
+      if (!target || target.tagName !== 'TEXTAREA') return;
       e.preventDefault();
 
-      try {
-        var parser = new DOMParser();
-        var doc = parser.parseFromString(html, 'text/html');
-        var tables = Array.from(doc.querySelectorAll('table'));
+      var start  = target.selectionStart || 0;
+      var end2   = target.selectionEnd   || 0;
+      var newVal = target.value.substring(0, start) + pasteText + target.value.substring(end2);
 
-        // Build final text: replace <table> blocks with markdown, keep rest as plain text
-        var container = doc.body;
-        tables.forEach(function(table) {
-          var rows = Array.from(table.querySelectorAll('tr'));
-          if (!rows.length) return;
-
-          var mdRows = rows.map(function(row) {
-            var cells = Array.from(row.querySelectorAll('th,td'));
-            return '| ' + cells.map(function(c) {
-              return (c.innerText || c.textContent || '').trim().replace(/\|/g, '\\|').replace(/\r?\n/g, ' ');
-            }).join(' | ') + ' |';
-          });
-
-          var colCount = table.querySelector('tr').querySelectorAll('th,td').length;
-          var sep = '| ' + Array(colCount).fill('---').join(' | ') + ' |';
-          mdRows.splice(1, 0, sep);
-
-          var placeholder = document.createTextNode('\n\n' + mdRows.join('\n') + '\n\n');
-          table.parentNode.replaceChild(placeholder, table);
-        });
-
-        // Get remaining text (headings, paragraphs etc.) with tables replaced
-        var pasteText = (container.innerText || container.textContent || '').trim();
-
-        var start = target.selectionStart || 0;
-        var end   = target.selectionEnd   || 0;
-        var val   = target.value;
-        var newVal = val.substring(0, start) + pasteText + val.substring(end);
-
-        // Trigger React controlled input
-        var setter = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value').set;
-        setter.call(target, newVal);
-        target.dispatchEvent(new Event('input', { bubbles: true }));
-        target.selectionStart = target.selectionEnd = start + pasteText.length;
-      } catch(err) {
-        // silently fall back to browser default paste
-      }
-    });
+      var setter = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value').set;
+      setter.call(target, newVal);
+      target.dispatchEvent(new Event('input', { bubbles: true }));
+      target.selectionStart = target.selectionEnd = start + pasteText.length;
+    }, true); // <-- true = capture phase
     // ────────────────────────────────────────────────────────────────────────
     // Register Table editor component — shows as "Table" button in toolbar
     CMS.registerEditorComponent({
