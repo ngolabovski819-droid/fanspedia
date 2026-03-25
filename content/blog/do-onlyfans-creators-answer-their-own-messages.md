@@ -138,6 +138,8 @@ Agencies are fine-tuning everything, from tone of voice, response timing, even s
 
 Here's a proof of me chatting with an OF creator, offering her coverage at [Fanspedia's teen 18+ category](https://fanspedia.net/categories/18-years-old/), and here's what "she" replied:
 
+![Creator on Onlyfans using AI to reply to their messages example](/uploads/proof-onlyfans-creator-does-not-reply-by-himself-its-bot.webp)
+
 Chat long enough say 20–30 minutes, cracks start to show. Don't pay a PPV or a subscription immediately.
 
 If the conversation feels a bit hollow, slightly off, like it’s missing real emotion or memory, steer away.
