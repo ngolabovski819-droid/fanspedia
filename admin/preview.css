@@ -1,0 +1,95 @@
+/* Decap CMS preview pane styles — mirrors the actual blog-post.html appearance */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #fff;
+  color: #1a1a2e;
+  margin: 0;
+  padding: 40px 24px;
+  line-height: 1.75;
+  font-size: 16px;
+}
+
+.preview-wrap {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; margin: 0 0 1rem; }
+h2 { font-size: 1.45rem; font-weight: 700; border-bottom: 2px solid #e5e5e7; padding-bottom: 10px; margin: 2em 0 .75em; }
+h3 { font-size: 1.2rem; font-weight: 700; margin: 1.5em 0 .5em; }
+h4 { font-size: 1.05rem; font-weight: 700; margin: 1.25em 0 .4em; }
+p  { margin: 0 0 1.25em; }
+
+strong, b { font-weight: 700; }
+em, i     { font-style: italic; }
+
+a { color: #7c4dff; text-decoration: underline; }
+
+ul, ol { padding-left: 1.5em; margin: 0 0 1.25em; }
+li { margin: .4em 0; }
+
+blockquote {
+  border-left: 4px solid #e0e0e0;
+  margin: 1.5em 0;
+  padding: .5em 1.25em;
+  color: #555;
+  font-style: italic;
+  background: #fafafa;
+  border-radius: 0 6px 6px 0;
+}
+
+code {
+  background: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: .88em;
+  font-family: "Fira Mono", Consolas, monospace;
+}
+
+pre {
+  background: #1a1a2e;
+  color: #e2e8f0;
+  padding: 20px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 1.5em 0;
+}
+pre code { background: none; padding: 0; color: inherit; font-size: .9em; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .95em;
+  border: 2px solid #b0b0b8;
+  margin: 1.5em 0;
+}
+th, td {
+  border: 1px solid #b0b0b8;
+  padding: 10px 14px;
+  vertical-align: top;
+  text-align: left;
+}
+th { background: #f5f5f7; font-weight: 700; }
+tr:nth-child(even) td { background: #fafafa; }
+
+img { max-width: 100%; border-radius: 8px; display: block; margin: 1.5em 0; }
+
+hr { border: none; border-top: 1px solid #e5e5e7; margin: 2em 0; }
+
+.preview-meta {
+  color: #888;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+.preview-excerpt {
+  font-size: 1.1rem;
+  color: #555;
+  font-style: italic;
+  border-left: 3px solid #ccc;
+  padding-left: 16px;
+  margin: 0 0 2rem;
+}
