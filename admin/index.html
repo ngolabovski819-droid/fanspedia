@@ -9,6 +9,38 @@
 <body>
   <script src="https://unpkg.com/decap-cms@3.0.2/dist/decap-cms.js"></script>
   <script>
+    // Register Table editor component — shows as "Table" button in toolbar
+    CMS.registerEditorComponent({
+      id: 'table',
+      label: 'Table',
+      icon: 'table',
+      fields: [
+        { name: 'headers', label: 'Column Headers (comma-separated)', widget: 'string', hint: 'e.g. Name, Price, Rating' },
+        { name: 'rows', label: 'Rows (one row per line, cells comma-separated)', widget: 'text', hint: 'e.g.\nAlice, $9.99, ⭐⭐⭐\nBob, Free, ⭐⭐⭐⭐⭐' }
+      ],
+      pattern: /^\|[^\n]+\|\n\|[-| :]+\|\n((\|[^\n]+\|\n?)*)/m,
+      fromBlock: function(match) { return { headers: '', rows: '' }; },
+      toBlock: function(data) {
+        var cols = (data.headers || '').split(',').map(function(h) { return h.trim(); }).filter(Boolean);
+        if (!cols.length) return '';
+        var headerRow = '| ' + cols.join(' | ') + ' |';
+        var sepRow    = '| ' + cols.map(function() { return '---'; }).join(' | ') + ' |';
+        var bodyRows  = (data.rows || '').split('\n').filter(function(r) { return r.trim(); }).map(function(r) {
+          var cells = r.split(',').map(function(c) { return c.trim(); });
+          // pad missing cells
+          while (cells.length < cols.length) cells.push('');
+          return '| ' + cells.join(' | ') + ' |';
+        }).join('\n');
+        return headerRow + '\n' + sepRow + (bodyRows ? '\n' + bodyRows : '');
+      },
+      toPreview: function(data) {
+        var cols = (data.headers || '').split(',').map(function(h) { return h.trim(); }).filter(Boolean);
+        if (!cols.length) return '<em>Table preview</em>';
+        var ths = cols.map(function(c) { return '<th>' + c + '</th>'; }).join('');
+        return '<table border="1" style="border-collapse:collapse;width:100%"><thead><tr>' + ths + '</tr></thead></table>';
+      }
+    });
+
     CMS.init({
       config: {
         load_config_file: false,
@@ -55,7 +87,7 @@
               { label: 'Featured Image Alt Text', name: 'featured_image_alt', widget: 'string', required: false, hint: 'Descriptive alt text for the featured image (for accessibility and SEO)' },
               { label: 'SEO Title', name: 'seo_title', widget: 'string', required: false, hint: 'Overrides the browser tab title for SEO (50-60 chars). Leave blank to use the post title.' },
               { label: 'Meta Description', name: 'meta_description', widget: 'text', required: false, hint: 'Shown in Google search results (150-160 chars). Leave blank to use the excerpt.' },
-              { label: 'Body', name: 'body', widget: 'markdown' }
+              { label: 'Body', name: 'body', widget: 'markdown', modes: ['rich_text', 'raw'], buttons: ['bold', 'italic', 'code', 'link', 'heading-one', 'heading-two', 'heading-three', 'bulleted-list', 'numbered-list', 'quote', 'code-block'], hint: 'Tip: switch to "Raw" mode (top-right toggle) to paste from Google Docs or insert markdown tables.' }
             ]
           }
         ]
