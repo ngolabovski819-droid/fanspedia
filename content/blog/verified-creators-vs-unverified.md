@@ -7,7 +7,6 @@ categoryLabel: Guides
 emoji: ""
 read_time: 6 min read
 excerpt: ""
-featured_image: ''
 featured_image_alt: Verified vs. unverified Onlyfans creators cover
 seo_title: "Verified OnlyFans Creator vs Unverified: A Fan’s Safety"
 meta_description: >
