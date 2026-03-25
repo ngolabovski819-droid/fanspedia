@@ -9,6 +9,62 @@
 <body>
   <script src="https://unpkg.com/decap-cms@3.0.2/dist/decap-cms.js"></script>
   <script>
+    // ─── Smart paste: HTML table → Markdown table ───────────────────────────
+    // Fires on every paste. When clipboard HTML contains a <table>, converts it
+    // to a markdown table and inserts it into the focused textarea (raw mode).
+    document.addEventListener('paste', function(e) {
+      var target = e.target;
+      if (!target || target.tagName !== 'TEXTAREA') return;
+
+      var html = e.clipboardData && e.clipboardData.getData('text/html');
+      if (!html || !html.toLowerCase().includes('<table')) return;
+
+      e.preventDefault();
+
+      try {
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(html, 'text/html');
+        var tables = Array.from(doc.querySelectorAll('table'));
+
+        // Build final text: replace <table> blocks with markdown, keep rest as plain text
+        var container = doc.body;
+        tables.forEach(function(table) {
+          var rows = Array.from(table.querySelectorAll('tr'));
+          if (!rows.length) return;
+
+          var mdRows = rows.map(function(row) {
+            var cells = Array.from(row.querySelectorAll('th,td'));
+            return '| ' + cells.map(function(c) {
+              return (c.innerText || c.textContent || '').trim().replace(/\|/g, '\\|').replace(/\r?\n/g, ' ');
+            }).join(' | ') + ' |';
+          });
+
+          var colCount = table.querySelector('tr').querySelectorAll('th,td').length;
+          var sep = '| ' + Array(colCount).fill('---').join(' | ') + ' |';
+          mdRows.splice(1, 0, sep);
+
+          var placeholder = document.createTextNode('\n\n' + mdRows.join('\n') + '\n\n');
+          table.parentNode.replaceChild(placeholder, table);
+        });
+
+        // Get remaining text (headings, paragraphs etc.) with tables replaced
+        var pasteText = (container.innerText || container.textContent || '').trim();
+
+        var start = target.selectionStart || 0;
+        var end   = target.selectionEnd   || 0;
+        var val   = target.value;
+        var newVal = val.substring(0, start) + pasteText + val.substring(end);
+
+        // Trigger React controlled input
+        var setter = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value').set;
+        setter.call(target, newVal);
+        target.dispatchEvent(new Event('input', { bubbles: true }));
+        target.selectionStart = target.selectionEnd = start + pasteText.length;
+      } catch(err) {
+        // silently fall back to browser default paste
+      }
+    });
+    // ────────────────────────────────────────────────────────────────────────
     // Register Table editor component — shows as "Table" button in toolbar
     CMS.registerEditorComponent({
       id: 'table',
@@ -87,7 +143,7 @@
               { label: 'Featured Image Alt Text', name: 'featured_image_alt', widget: 'string', required: false, hint: 'Descriptive alt text for the featured image (for accessibility and SEO)' },
               { label: 'SEO Title', name: 'seo_title', widget: 'string', required: false, hint: 'Overrides the browser tab title for SEO (50-60 chars). Leave blank to use the post title.' },
               { label: 'Meta Description', name: 'meta_description', widget: 'text', required: false, hint: 'Shown in Google search results (150-160 chars). Leave blank to use the excerpt.' },
-              { label: 'Body', name: 'body', widget: 'markdown', modes: ['rich_text', 'raw'], buttons: ['bold', 'italic', 'code', 'link', 'heading-one', 'heading-two', 'heading-three', 'bulleted-list', 'numbered-list', 'quote', 'code-block'], hint: 'Tip: switch to "Raw" mode (top-right toggle) to paste from Google Docs or insert markdown tables.' }
+              { label: 'Body', name: 'body', widget: 'markdown', default_mode: 'raw', modes: ['rich_text', 'raw'], buttons: ['bold', 'italic', 'code', 'link', 'heading-one', 'heading-two', 'heading-three', 'bulleted-list', 'numbered-list', 'quote', 'code-block'], hint: 'Raw mode is default. Paste from Google Docs here — tables paste automatically as markdown tables.' }
             ]
           }
         ]
