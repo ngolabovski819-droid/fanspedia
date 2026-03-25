@@ -43,7 +43,7 @@
       return (doc.body.innerText || doc.body.textContent || '').trim();
     }
 
-    // Capture phase = fires before CodeMirror's own paste listener
+    // Capture phase = fires before the editor's own paste listener
     document.addEventListener('paste', function(e) {
       var html = e.clipboardData && e.clipboardData.getData('text/html');
       if (!html || !html.toLowerCase().includes('<table')) return;
@@ -52,20 +52,34 @@
       try { pasteText = htmlTablesToMarkdown(html); } catch(err) { return; }
       if (!pasteText) return;
 
-      // ── CodeMirror path (Decap CMS raw mode) ──────────────────────────────
-      // CodeMirror 5 stores the instance on the wrapper div as `.CodeMirror`
+      var target = e.target;
+
+      // ── CodeMirror path (older Decap CMS versions) ─────────────────────────
       var cmEl = document.querySelector('.CodeMirror.CodeMirror-focused');
-      if (!cmEl && e.target && e.target.closest) {
-        cmEl = e.target.closest('.CodeMirror');
-      }
+      if (!cmEl && target && target.closest) cmEl = target.closest('.CodeMirror');
       if (cmEl && cmEl.CodeMirror) {
         e.preventDefault();
         cmEl.CodeMirror.replaceSelection(pasteText, 'end');
         return;
       }
 
-      // ── Textarea fallback (rich-text editor or other widgets) ─────────────
-      var target = e.target;
+      // ── contenteditable path (Decap CMS 3.x uses Plate.js — no CodeMirror) ─
+      var editableEl = null;
+      if (target) {
+        if (target.isContentEditable) {
+          editableEl = target;
+        } else if (target.closest) {
+          editableEl = target.closest('[contenteditable="true"]');
+        }
+      }
+      if (editableEl) {
+        e.preventDefault();
+        // execCommand fires a DOM mutation that Plate.js / React picks up via onChange
+        document.execCommand('insertText', false, pasteText);
+        return;
+      }
+
+      // ── Textarea fallback ──────────────────────────────────────────────────
       if (!target || target.tagName !== 'TEXTAREA') return;
       e.preventDefault();
 
@@ -77,7 +91,7 @@
       setter.call(target, newVal);
       target.dispatchEvent(new Event('input', { bubbles: true }));
       target.selectionStart = target.selectionEnd = start + pasteText.length;
-    }, true); // <-- true = capture phase
+    }, true); // <-- true = capture phase, fires before editor handlers
     // ────────────────────────────────────────────────────────────────────────
     // Register Table editor component — shows as "Table" button in toolbar
     CMS.registerEditorComponent({
