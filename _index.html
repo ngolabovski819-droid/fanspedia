@@ -5697,7 +5697,7 @@
         var res = await fetch('/api/blog?limit=3');
         if (!res.ok) throw new Error();
         var data = await res.json();
-        var posts = data.posts;
+        var posts = Array.isArray(data) ? data : (data.posts || []);
         if (!posts || !posts.length) { grid.closest('section').style.display = 'none'; return; }
         grid.innerHTML = posts.slice(0, 3).map(function(p) {
           var thumb = p.featuredImage
