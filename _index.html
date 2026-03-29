@@ -2142,6 +2142,124 @@
     }
 
     /* ============================================
+       FEATURED BLOG POSTS
+       ============================================ */
+    .blog-feature-section {
+      padding: 56px 0 48px;
+      text-align: center;
+    }
+    .blog-feature-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      max-width: 1100px;
+      margin: 0 auto 32px;
+      padding: 0 24px;
+    }
+    .blog-feature-titles { text-align: left; }
+    .blog-feature-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+    .blog-feature-sub {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+    .blog-feature-link {
+      font-size: 13px;
+      font-weight: 700;
+      color: #00AFF0;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: opacity 0.2s;
+    }
+    .blog-feature-link:hover { opacity: 0.7; }
+    .blog-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .blog-card {
+      background: var(--card-bg, #fff);
+      border: 1px solid var(--border-color, #e5e5e7);
+      border-radius: 16px;
+      overflow: hidden;
+      text-align: left;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+    .blog-card:hover { transform: translateY(-5px); box-shadow: 0 16px 48px rgba(0,0,0,0.13); }
+    .blog-card-thumb {
+      aspect-ratio: 16/9;
+      overflow: hidden;
+      background: var(--bg-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+    }
+    .blog-card-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .blog-card-body { padding: 18px 20px 20px; flex: 1; display: flex; flex-direction: column; gap: 8px; }
+    .blog-card-meta { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-secondary); flex-wrap: wrap; }
+    .blog-card-chip {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: rgba(0,175,240,0.12);
+      color: #00AFF0;
+    }
+    .blog-card-title { font-size: 16px; font-weight: 700; color: var(--text-primary); line-height: 1.4; margin: 0; }
+    .blog-card-excerpt {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin: 0;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+    .blog-card-footer {
+      margin-top: auto;
+      padding-top: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #00AFF0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .blog-card-skel {
+      border-radius: 16px;
+      aspect-ratio: 3/2;
+      background: linear-gradient(90deg,#e8e8e8 25%,#f0f0f0 50%,#e8e8e8 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    [data-theme="dark"] .blog-card-skel {
+      background: linear-gradient(90deg,#2a2a3e 25%,#323246 50%,#2a2a3e 75%);
+      background-size: 200% 100%;
+    }
+    @media (max-width: 900px) { .blog-cards-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 576px) {
+      .blog-cards-grid { grid-template-columns: 1fr; gap: 14px; padding: 0 16px; }
+      .blog-feature-header { flex-direction: column; align-items: flex-start; gap: 10px; padding: 0 16px; }
+    }
+
+    /* ============================================
        TESTIMONIALS
        ============================================ */
     .testimonials-section {
@@ -2864,6 +2982,22 @@
         <button class="ntw-arrow ntw-arrow-right" id="ntwNext" aria-label="Next creators">&#8250;</button>
       </div>
       <div class="ntw-dots" id="ntwDots"></div>
+    </section>
+
+    <!-- FEATURED BLOG POSTS -->
+    <section class="blog-feature-section" id="featuredBlog" aria-label="From the FansPedia blog">
+      <div class="blog-feature-header">
+        <div class="blog-feature-titles">
+          <h2 class="blog-feature-title">From the <span style="color:#00AFF0">FansPedia Blog</span></h2>
+          <p class="blog-feature-sub">Tips, guides &amp; creator insights</p>
+        </div>
+        <a href="/blog/" class="blog-feature-link">All articles &rarr;</a>
+      </div>
+      <div class="blog-cards-grid" id="featuredBlogGrid">
+        <div class="blog-card-skel"></div>
+        <div class="blog-card-skel"></div>
+        <div class="blog-card-skel"></div>
+      </div>
     </section>
 
     <!-- TESTIMONIALS -->
@@ -5554,6 +5688,41 @@
   <script type="module">
     import { inject } from '@vercel/analytics';
     inject();
+  </script>
+  <script>
+    (async function() {
+      var grid = document.getElementById('featuredBlogGrid');
+      if (!grid) return;
+      try {
+        var res = await fetch('/api/blog?limit=3');
+        if (!res.ok) throw new Error();
+        var data = await res.json();
+        var posts = data.posts;
+        if (!posts || !posts.length) { grid.closest('section').style.display = 'none'; return; }
+        grid.innerHTML = posts.slice(0, 3).map(function(p) {
+          var thumb = p.featuredImage
+            ? '<img src="' + p.featuredImage + '" alt="' + (p.featuredImageAlt || p.title).replace(/"/g,'&quot;') + '" loading="lazy" decoding="async">'
+            : '<span>' + (p.emoji || '📝') + '</span>';
+          var date = p.date ? new Date(p.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+          return '<a class="blog-card" href="/blog/' + p.slug + '/">'
+            + '<div class="blog-card-thumb">' + thumb + '</div>'
+            + '<div class="blog-card-body">'
+            + '<div class="blog-card-meta">'
+            + '<span class="blog-card-chip">' + (p.categoryLabel || 'Guide') + '</span>'
+            + (date ? '<span>' + date + '</span>' : '')
+            + (p.readTime ? '<span>&middot; ' + p.readTime + '</span>' : '')
+            + '</div>'
+            + '<p class="blog-card-title">' + p.title + '</p>'
+            + '<p class="blog-card-excerpt">' + (p.excerpt || '') + '</p>'
+            + '<span class="blog-card-footer">Read article &rarr;</span>'
+            + '</div>'
+            + '</a>';
+        }).join('');
+      } catch(e) {
+        var sec = document.getElementById('featuredBlog');
+        if (sec) sec.style.display = 'none';
+      }
+    })();
   </script>
 </body>
 </html>
