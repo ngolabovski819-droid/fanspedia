@@ -2260,6 +2260,98 @@
     }
 
     /* ============================================
+       HOW IT WORKS + FEATURES
+       ============================================ */
+    .hiw-section {
+      padding: 72px 0 64px;
+      text-align: center;
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+    }
+    .hiw-main-title { font-size: 30px; font-weight: 800; color: var(--text-primary); margin: 0 0 10px; line-height: 1.2; }
+    .hiw-main-sub { font-size: 15px; color: var(--text-secondary); margin: 0 0 56px; }
+    .hiw-steps {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px; max-width: 880px;
+      margin: 0 auto; padding: 0 24px; position: relative;
+    }
+    .hiw-steps::before {
+      content: ''; position: absolute;
+      top: 44px; left: calc(100% / 6); right: calc(100% / 6);
+      height: 2px;
+      background: linear-gradient(to right, rgba(0,175,240,0.55), rgba(0,175,240,0.15), rgba(0,175,240,0.55));
+      z-index: 0;
+    }
+    .hiw-step { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+    .hiw-bubble {
+      width: 88px; height: 88px; border-radius: 50%;
+      background: linear-gradient(135deg, #00AFF0 0%, #0077b6 100%);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      position: relative; z-index: 1;
+      box-shadow: 0 8px 28px rgba(0,175,240,0.35); flex-shrink: 0;
+    }
+    .hiw-bubble-num { font-size: 11px; font-weight: 800; color: rgba(255,255,255,0.7); letter-spacing: 1px; text-transform: uppercase; line-height: 1; margin-bottom: 3px; }
+    .hiw-bubble i { font-size: 22px; color: #fff; line-height: 1; }
+    .hiw-step-title { font-size: 17px; font-weight: 700; color: var(--text-primary); margin: 0 0 6px; }
+    .hiw-step-desc { font-size: 13.5px; color: var(--text-secondary); line-height: 1.65; margin: 0; }
+    .hiw-step-desc em { font-style: normal; font-weight: 600; color: #00AFF0; }
+    .feat-section { padding: 64px 0 72px; text-align: center; background: var(--bg-primary); }
+    .feat-title { font-size: 26px; font-weight: 800; color: var(--text-primary); margin: 0 0 8px; line-height: 1.3; }
+    .feat-subtitle { font-size: 14px; color: var(--text-secondary); margin: 0 0 44px; }
+    .feat-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 16px; max-width: 960px; margin: 0 auto; padding: 0 24px;
+    }
+    .feat-card {
+      background: var(--bg-secondary); border: 1px solid var(--border-color);
+      border-radius: 18px; padding: 26px 22px;
+      text-align: left; display: flex; flex-direction: column; gap: 12px;
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    }
+    .feat-card:hover { transform: translateY(-5px); box-shadow: 0 14px 40px rgba(0,0,0,0.1); border-color: rgba(0,175,240,0.35); }
+    [data-theme="dark"] .feat-card:hover { box-shadow: 0 14px 40px rgba(0,0,0,0.35); }
+    .feat-icon-wrap {
+      width: 50px; height: 50px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(0,175,240,0.18) 0%, rgba(0,119,182,0.12) 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 21px; color: #00AFF0; flex-shrink: 0;
+    }
+    .feat-card-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #00AFF0; margin: 0; }
+    .feat-card-title { font-size: 16px; font-weight: 700; color: var(--text-primary); margin: 0; line-height: 1.3; }
+    .feat-card-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin: 0; }
+    .feat-card-link { font-size: 12px; font-weight: 600; color: #00AFF0; text-decoration: none; margin-top: auto; display: inline-flex; align-items: center; gap: 4px; }
+    .feat-card-link:hover { opacity: 0.7; }
+    .feat-cta { margin: 48px auto 0; max-width: 480px; padding: 0 24px; }
+    .feat-cta-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      background: linear-gradient(135deg, #00AFF0 0%, #0077b6 100%);
+      color: #fff; font-size: 16px; font-weight: 700; padding: 16px 38px;
+      border-radius: 50px; border: none; cursor: pointer; text-decoration: none;
+      box-shadow: 0 6px 24px rgba(0,175,240,0.4);
+      transition: box-shadow 0.22s ease, transform 0.22s ease; width: 100%;
+    }
+    .feat-cta-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(0,175,240,0.5); color: #fff; }
+    .feat-cta-note { font-size: 12px; color: var(--text-secondary); margin: 12px 0 0; }
+    @media (max-width: 900px) { .feat-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 767px) {
+      .hiw-steps { grid-template-columns: 1fr; max-width: 380px; gap: 36px; }
+      .hiw-steps::before {
+        top: 0; bottom: 0; left: 50%; right: auto;
+        width: 2px; height: auto; transform: translateX(-50%);
+        background: linear-gradient(to bottom, rgba(0,175,240,0.55), rgba(0,175,240,0.15), rgba(0,175,240,0.55));
+      }
+      .hiw-bubble { width: 72px; height: 72px; }
+      .hiw-bubble i { font-size: 19px; }
+      .hiw-main-sub { margin-bottom: 40px; }
+    }
+    @media (max-width: 576px) {
+      .feat-grid { grid-template-columns: 1fr; gap: 12px; padding: 0 16px; }
+      .hiw-main-title { font-size: 24px; }
+      .feat-title { font-size: 22px; }
+    }
+
+    /* ============================================
        TESTIMONIALS
        ============================================ */
     .testimonials-section {
@@ -3062,6 +3154,107 @@
         </div>
       </div>
       <div class="testimonial-nav" id="testimonialNav"></div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="hiw-section" id="howItWorks" aria-label="How FansPedia works">
+      <h2 class="hiw-main-title">How <span style="color:#00AFF0">It Works</span></h2>
+      <p class="hiw-main-sub">Find your next favorite creator in under 60 seconds &mdash; completely free</p>
+      <div class="hiw-steps">
+
+        <div class="hiw-step">
+          <div class="hiw-bubble">
+            <span class="hiw-bubble-num">Step 1</span>
+            <i class="fas fa-search" aria-hidden="true"></i>
+          </div>
+          <div>
+            <h3 class="hiw-step-title">Search or Browse</h3>
+            <p class="hiw-step-desc">Type a keyword like <em>&ldquo;milf Texas&rdquo;</em> or <em>&ldquo;feet free&rdquo;</em>, pick a category, or explore by country &mdash; 100K+ real profiles indexed and ready.</p>
+          </div>
+        </div>
+
+        <div class="hiw-step">
+          <div class="hiw-bubble">
+            <span class="hiw-bubble-num">Step 2</span>
+            <i class="fas fa-sliders-h" aria-hidden="true"></i>
+          </div>
+          <div>
+            <h3 class="hiw-step-title">Filter Instantly</h3>
+            <p class="hiw-step-desc">Narrow results by <em>verified badge</em>, <em>max monthly price</em> ($0&ndash;$100+), <em>bundle deals</em>, or location. Results update live &mdash; no page reload needed.</p>
+          </div>
+        </div>
+
+        <div class="hiw-step">
+          <div class="hiw-bubble">
+            <span class="hiw-bubble-num">Step 3</span>
+            <i class="fas fa-heart" aria-hidden="true"></i>
+          </div>
+          <div>
+            <h3 class="hiw-step-title">Save &amp; Subscribe</h3>
+            <p class="hiw-step-desc">Wishlist your favorites and compare profiles side by side, then jump straight to their OnlyFans page. <em>No account needed</em> on FansPedia &mdash; ever.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FEATURES GRID -->
+    <section class="feat-section" id="featuresGrid" aria-label="FansPedia platform features">
+      <h2 class="feat-title">Everything You Need to Find the <span style="color:#00AFF0">Perfect Creator</span></h2>
+      <p class="feat-subtitle">One platform. Every filter. Free forever.</p>
+      <div class="feat-grid">
+
+        <div class="feat-card">
+          <div class="feat-icon-wrap"><i class="fas fa-th-large" aria-hidden="true"></i></div>
+          <p class="feat-card-label">Discovery</p>
+          <p class="feat-card-title">50+ Niche Categories</p>
+          <p class="feat-card-desc">Milf, feet, BBW, goth, trans, lesbian, couples, ASMR, and dozens more &mdash; curated with synonym matching so you never miss a relevant result.</p>
+          <a href="/categories/" class="feat-card-link">Browse all categories &rarr;</a>
+        </div>
+
+        <div class="feat-card">
+          <div class="feat-icon-wrap"><i class="fas fa-check-circle" aria-hidden="true"></i></div>
+          <p class="feat-card-label">Quality</p>
+          <p class="feat-card-title">Verified Badge Filter</p>
+          <p class="feat-card-desc">One click to surface only OnlyFans-verified creators. Verified profiles are more active, post more frequently, and have higher subscriber counts on average.</p>
+        </div>
+
+        <div class="feat-card">
+          <div class="feat-icon-wrap"><i class="fas fa-dollar-sign" aria-hidden="true"></i></div>
+          <p class="feat-card-label">Budget</p>
+          <p class="feat-card-title">Price Range Slider</p>
+          <p class="feat-card-desc">Slide to set your max monthly price &mdash; drag to $0 to find completely free creators, or set any ceiling between $1 and $50. No surprises on subscription day.</p>
+        </div>
+
+        <div class="feat-card">
+          <div class="feat-icon-wrap"><i class="fas fa-tags" aria-hidden="true"></i></div>
+          <p class="feat-card-label">Deals</p>
+          <p class="feat-card-title">Bundle Subscription Filter</p>
+          <p class="feat-card-desc">Surface creators who offer 3-month or 6-month bundle discounts &mdash; great for fans who want to commit and save up to 50% on a subscription.</p>
+        </div>
+
+        <div class="feat-card">
+          <div class="feat-icon-wrap"><i class="fas fa-map-marker-alt" aria-hidden="true"></i></div>
+          <p class="feat-card-label">Location</p>
+          <p class="feat-card-title">Browse by Country or Near Me</p>
+          <p class="feat-card-desc">Filter by country (US, Canada, UK, India, Japan and more), search by city or state, or use &ldquo;Near Me&rdquo; to find local creators using your device location.</p>
+          <a href="/locations/" class="feat-card-link">Explore locations &rarr;</a>
+        </div>
+
+        <div class="feat-card">
+          <div class="feat-icon-wrap"><i class="fas fa-shield-alt" aria-hidden="true"></i></div>
+          <p class="feat-card-label">Privacy</p>
+          <p class="feat-card-title">Safe Search Mode</p>
+          <p class="feat-card-desc">Blur all preview images with one tap &mdash; perfect for browsing at work, on the train, or in public. Toggle it anytime from the header. Your preference is saved locally.</p>
+        </div>
+
+      </div>
+      <div class="feat-cta">
+        <a href="#search" class="feat-cta-btn" onclick="document.getElementById('search').focus();return false;">
+          <i class="fas fa-search" aria-hidden="true"></i> Start Searching &mdash; It&rsquo;s Free
+        </a>
+        <p class="feat-cta-note">No account required &middot; No email &middot; No paywall</p>
+      </div>
     </section>
 
     <!-- SEO Content Section -->
