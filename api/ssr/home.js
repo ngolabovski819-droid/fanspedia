@@ -232,8 +232,8 @@ export default async function handler(req, res) {
 
   if (isFresh) {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=604800');
-    res.setHeader('Vercel-CDN-Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=604800');
+    res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=60');
+    res.setHeader('Vercel-CDN-Cache-Control', 'public, s-maxage=300, stale-while-revalidate=60');
     return res.status(200).send(_htmlCache);
   }
 
@@ -245,8 +245,8 @@ export default async function handler(req, res) {
       buildAndCache(SUPABASE_URL, SUPABASE_KEY, rawHtml);
     }
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=604800');
-    res.setHeader('Vercel-CDN-Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=604800');
+    res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=60');
+    res.setHeader('Vercel-CDN-Cache-Control', 'public, s-maxage=300, stale-while-revalidate=60');
     return res.status(200).send(_htmlCache);
   }
   // ────────────────────────────────────────────────────────────────────────
@@ -321,8 +321,8 @@ export default async function handler(req, res) {
     _htmlCache = html;
     _cacheExpiresAt = Date.now() + HTML_CACHE_TTL;
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=604800');
-    res.setHeader('Vercel-CDN-Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=604800');
+    res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=60');
+    res.setHeader('Vercel-CDN-Cache-Control', 'public, s-maxage=300, stale-while-revalidate=60');
     return res.status(200).send(html);
 
   } catch (err) {
