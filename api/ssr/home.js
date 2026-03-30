@@ -307,21 +307,17 @@ export default async function handler(req, res) {
       : '';
     const updatedAt = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     const ssrFlag = `<script>window.__HOME_SSR={count:${creators.length},hasMore:true,updatedAt:"${updatedAt}"};</script>`;
-    html = html.replace('</head>', `${preloadLink ? preloadLink + '\n' : ''}${jsonLd}\n${ssrFlag}\n</head>`);
+    // Inject creator pool for the Top Creators client-side carousel (avoids a second API call)
+    const tcPoolData = creators.map(c => ({
+      username: c.username || '',
+      name: c.name || '',
+      avatar: c.avatar || c.avatar_c144 || '',
+      subscribePrice: c.subscribeprice != null ? c.subscribeprice : null,
+    }));
+    const tcPoolFlag = `<script>window.__TC_POOL=${JSON.stringify(tcPoolData)};</script>`;
+    html = html.replace('</head>', `${preloadLink ? preloadLink + '\n' : ''}${jsonLd}\n${ssrFlag}\n${tcPoolFlag}\n</head>`);
 
-    // --- 4. Pre-render cards into #results ---
-    const cardsHtml = creators.length > 0
-      ? creators.map((c, i) => renderCard(c, i)).join('\n')
-      : '';
-
-    if (cardsHtml) {
-      html = html.replace(
-        '<div id="results" class="row g-3 justify-content-center"></div>',
-        `<div id="results" class="row g-3 justify-content-center">\n${cardsHtml}\n</div>`
-      );
-    }
-
-    // --- 5. Store in memory cache + Send ---
+    // --- 4. Store in memory cache + Send ---
     _htmlCache = html;
     _cacheExpiresAt = Date.now() + HTML_CACHE_TTL;
     res.setHeader('Content-Type', 'text/html; charset=utf-8');

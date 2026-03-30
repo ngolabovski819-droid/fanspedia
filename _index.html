@@ -3011,8 +3011,29 @@
       </div>
     </div>
 
-    <!-- Results -->
-    <div id="results" class="row g-3 justify-content-center"></div>
+    <!-- TOP CREATORS CAROUSEL (default view; hidden when user searches) -->
+    <section class="new-this-week-section" id="topCreatorsSection" style="padding-top:32px;">
+      <div class="ntw-header">
+        <div>
+          <h2 class="ntw-title">Top <span style="color:#00AFF0">Creators</span></h2>
+          <p class="ntw-subtitle">Most popular creators on FansPedia right now</p>
+        </div>
+        <div class="ntw-badge" id="tcBadge">&#128293; 100K+ profiles</div>
+      </div>
+      <div class="ntw-carousel-wrap">
+        <button class="ntw-arrow ntw-arrow-left" id="tcPrev" aria-label="Previous creators">&#8249;</button>
+        <div class="ntw-cards" id="tcCards">
+          <div class="ntw-skeleton"></div>
+          <div class="ntw-skeleton"></div>
+          <div class="ntw-skeleton"></div>
+        </div>
+        <button class="ntw-arrow ntw-arrow-right" id="tcNext" aria-label="Next creators">&#8250;</button>
+      </div>
+      <div class="ntw-dots" id="tcDots"></div>
+    </section>
+
+    <!-- Search Results (hidden by default; shown when user searches) -->
+    <div id="results" class="row g-3 justify-content-center" style="display:none;"></div>
     <p id="error" class="error"></p>
     <p id="status" style="color: #888; margin-top: 10px; font-size: 14px;"></p>
     
@@ -4346,11 +4367,29 @@
       }
     }
 
+    // Switch between carousel (default) and results grid (search mode)
+    function showCarousel() {
+      const tcSection = document.getElementById('topCreatorsSection');
+      if (tcSection) tcSection.style.display = '';
+      resultsDiv.style.display = 'none';
+      if (loadMoreContainer) loadMoreContainer.style.display = 'none';
+      statusDiv.textContent = '';
+      errorDiv.textContent = '';
+    }
+    function showResults() {
+      const tcSection = document.getElementById('topCreatorsSection');
+      if (tcSection) tcSection.style.display = 'none';
+      resultsDiv.style.display = '';
+    }
+
     // Perform the API search
     async function performSearch(resetPage = true, append = false) {
       if (isLoading || (!hasMore && !resetPage)) return;
       isLoading = true;
       setSearchButtonLoading(true);
+
+      // Switch to results grid mode (hide carousel)
+      if (resetPage) showResults();
       
       if (resetPage) {
         // Avoid stale scroll restoration from prior filter interactions
@@ -4789,22 +4828,28 @@
     }
     if (resetFiltersBtn) {
       resetFiltersBtn.addEventListener('click', () => {
-        lockScroll();
         searchInput.value = '';
         clearSearchBtn.classList.remove('visible');
         verifiedToggle.checked = false;
         bundlesToggle.checked = false;
         priceRange.value = '100';
         priceValue.textContent = '100';
-        performSearch(true);
+        if (searchBtn) searchBtn.disabled = true;
+        showCarousel();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     }
     // Clear search functionality
     clearSearchBtn.addEventListener("click", () => {
       searchInput.value = "";
       clearSearchBtn.classList.remove("visible");
-      searchInput.focus();
-      performSearch(true);
+      if (searchBtn) searchBtn.disabled = true;
+      // Only return to carousel if no filters are active
+      if (!verifiedToggle.checked && !bundlesToggle.checked && priceRange.value === '100') {
+        showCarousel();
+      } else {
+        performSearch(true);
+      }
     });
     // Update value live while dragging, but search only on release to avoid jank
     priceRange.addEventListener("pointerdown", lockScroll);
@@ -4939,36 +4984,28 @@
     const initialCreatorCount = parseInt(document.body.dataset.initialCreators || '0', 10);
     
     if (isSSR && initialCreatorCount > 0) {
-      // Content already rendered by server - just hydrate interactive features
+      // Content already rendered by server — carousel handles top creators, no grid needed
       console.log(`SSR detected: ${initialCreatorCount} creators pre-rendered`);
       statusDiv.textContent = "";
-      currentPage = 1; // SSR renders page 1
-      hasMore = true; // Assume more results available
+      currentPage = 1;
+      hasMore = true;
       
-      // Attach favorite button event listeners to SSR-rendered cards
-      document.querySelectorAll('.favorite-btn').forEach(btn => {
-        const creatorId = btn.dataset.id;
-        if (favorites.includes(creatorId)) {
-          btn.classList.add('active');
-          btn.querySelector('i').className = 'fas fa-heart';
-        }
-        // Event listener already attached via event delegation, no action needed
-      });
-      
-      // Show Load More button if we have results
-      if (loadMoreContainer && resultsDiv.children.length > 0) {
-        loadMoreContainer.style.display = 'block';
-        updateLoadMoreButton();
-      }
-      
-      // Load URL params for filters (user might have bookmarked a filtered view)
+      // Load URL params — if any filter/query is active, trigger search instead of carousel
       loadFromURL();
+      const _hasURLParams = searchInput.value.trim() || verifiedToggle.checked || bundlesToggle.checked || priceRange.value !== '100';
+      if (_hasURLParams) {
+        performSearch(true);
+      }
+      // Otherwise carousel is shown by default (results div starts display:none)
       
     } else {
-      // No SSR or empty results - perform initial client-side search
-      statusDiv.textContent = "Loading popular creators...";
-      loadFromURL(); // Load search state from URL
-      performSearch(true);
+      // No SSR or empty results — load URL params; if search set, run it; else show carousel
+      loadFromURL();
+      const _hasURLParams = searchInput.value.trim() || verifiedToggle.checked || bundlesToggle.checked || priceRange.value !== '100';
+      if (_hasURLParams) {
+        performSearch(true);
+      }
+      // Otherwise the carousel loads its own data via the TC carousel JS
     }
   </script>
 
@@ -5715,6 +5752,128 @@
       timer = setInterval(function () { show(cur + 1); }, 5000);
     }
     startTimer();
+  }());
+  </script>
+
+  <!-- TOP CREATORS CAROUSEL LOGIC -->
+  <script>
+  (function () {
+    var TC_PER_PAGE = 3;
+    var tcPool = [];
+    var tcIdx = 0;
+
+    var tcWrap    = document.getElementById('tcCards');
+    var tcDots    = document.getElementById('tcDots');
+    var tcPrevBtn = document.getElementById('tcPrev');
+    var tcNextBtn = document.getElementById('tcNext');
+
+    function tcPerPage() {
+      return (window.innerWidth < 768) ? 2 : TC_PER_PAGE;
+    }
+
+    function tcRenderCards() {
+      if (!tcWrap || !tcPool.length) return;
+      var pp = tcPerPage();
+      var slice = tcPool.slice(tcIdx, tcIdx + pp);
+      tcWrap.innerHTML = slice.map(function (c, i) {
+        var raw   = (c.avatar || '');
+        var src   = raw.startsWith('http') ? raw : '/static/no-image.png';
+        var thumb = 'https://images.weserv.nl/?url=' + encodeURIComponent(src) + '&w=400&h=533&fit=cover&output=webp';
+        var name  = c.name || c.username || 'Unknown';
+        var user  = c.username || '';
+        var sub   = c.subscribePrice;
+        var price = (sub && !isNaN(sub)) ? '$' + parseFloat(sub).toFixed(2) : 'FREE';
+        var priceHTML = price === 'FREE'
+          ? '<p class="price-free">FREE</p>'
+          : '<p class="price-tag">' + price + '</p>';
+        var url = user ? 'https://onlyfans.com/' + encodeURIComponent(user) : '#';
+        return [
+          '<div class="card h-100">',
+            '<div class="card-img-wrap">',
+              '<img src="' + thumb + '"',
+              '  alt="' + name.replace(/"/g, '&quot;') + '"',
+              '  loading="' + (tcIdx === 0 && i === 0 ? 'eager' : 'lazy') + '"',
+              '  decoding="async" referrerpolicy="no-referrer"',
+              '  onerror="if(this.src!==\'/static/no-image.png\'){this.removeAttribute(\'srcset\');this.src=\'' + src.replace(/'/g, "\\'") + '\';}"',
+              '>',
+            '</div>',
+            '<div class="card-body">',
+              '<h5>' + name + '</h5>',
+              '<p class="username">@' + user + '</p>',
+              priceHTML,
+              '<a href="' + url + '" class="view-profile-btn" target="_blank" rel="noopener noreferrer">View Profile</a>',
+            '</div>',
+          '</div>'
+        ].join('');
+      }).join('');
+      tcRenderDots(pp);
+      tcUpdateArrows(pp);
+    }
+
+    function tcRenderDots(pp) {
+      if (!tcDots) return;
+      var total   = Math.ceil(tcPool.length / pp);
+      var current = Math.floor(tcIdx / pp);
+      tcDots.innerHTML = Array.from({ length: total }, function (_, i) {
+        return '<div class="ntw-dot' + (i === current ? ' active' : '') + '" data-i="' + (i * pp) + '"></div>';
+      }).join('');
+      tcDots.querySelectorAll('.ntw-dot').forEach(function (d) {
+        d.addEventListener('click', function () {
+          tcIdx = parseInt(d.dataset.i, 10);
+          tcRenderCards();
+        });
+      });
+    }
+
+    function tcUpdateArrows(pp) {
+      if (tcPrevBtn) tcPrevBtn.disabled = tcIdx === 0;
+      if (tcNextBtn) tcNextBtn.disabled = tcIdx + pp >= tcPool.length;
+    }
+
+    if (tcPrevBtn) tcPrevBtn.addEventListener('click', function () {
+      tcIdx = Math.max(0, tcIdx - tcPerPage());
+      tcRenderCards();
+    });
+    if (tcNextBtn) tcNextBtn.addEventListener('click', function () {
+      var pp = tcPerPage();
+      if (tcIdx + pp < tcPool.length) { tcIdx += pp; tcRenderCards(); }
+    });
+
+    window.addEventListener('resize', function () {
+      if (tcPool.length) tcRenderCards();
+    });
+
+    function tcLoad() {
+      // Use server-injected pool if available (SSR), otherwise fetch
+      if (window.__TC_POOL && window.__TC_POOL.length) {
+        tcPool = window.__TC_POOL;
+        tcIdx = 0;
+        tcRenderCards();
+        return;
+      }
+      fetch('/api/search?sort=popular&page_size=50&page=1')
+        .then(function (r) { return r.ok ? r.json() : []; })
+        .then(function (data) {
+          tcPool = Array.isArray(data) ? data : [];
+          if (tcPool.length) {
+            tcIdx = 0;
+            tcRenderCards();
+          } else {
+            var sec = document.getElementById('topCreatorsSection');
+            if (sec) sec.style.display = 'none';
+          }
+        })
+        .catch(function () {
+          var sec = document.getElementById('topCreatorsSection');
+          if (sec) sec.style.display = 'none';
+        });
+    }
+
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(tcLoad, { timeout: 3000 });
+    } else {
+      setTimeout(tcLoad, 200);
+    }
   }());
   </script>
 
