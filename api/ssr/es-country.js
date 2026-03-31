@@ -50,6 +50,14 @@ const COUNTRIES = {
     metaDesc: 'Descubre las creadoras de OnlyFans más populares de Argentina. Explora perfiles verificados, cuentas gratis y contenido exclusivo de creadoras argentinas.',
     titleEs: `Mejores Creadoras de OnlyFans de Argentina (${YEAR}) | FansPedia`,
   },
+  'united-kingdom': {
+    terms: ['united kingdom', 'uk', 'british', 'england', 'english', 'wales', 'welsh', 'scotland', 'scottish'],
+    label: 'Reino Unido',
+    htmlFile: 'es/united-kingdom.html',
+    h1: 'Las Mejores Creadoras de OnlyFans del Reino Unido',
+    metaDesc: 'Descubre las creadoras de OnlyFans más populares del Reino Unido. Explora perfiles verificados, cuentas gratis y contenido exclusivo de creadoras británicas.',
+    titleEs: `Mejores Creadoras de OnlyFans del Reino Unido (${YEAR}) | FansPedia`,
+  },
   india: {
     terms: ['india', 'indian'],
     label: 'India',

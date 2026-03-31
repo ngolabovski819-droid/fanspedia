@@ -60,6 +60,8 @@
     { "source": "/country/japan/", "destination": "/api/ssr/country?name=japan" },
     { "source": "/country/argentina", "destination": "/api/ssr/country?name=argentina" },
     { "source": "/country/argentina/", "destination": "/api/ssr/country?name=argentina" },
+    { "source": "/country/united-kingdom", "destination": "/api/ssr/country?name=united-kingdom" },
+    { "source": "/country/united-kingdom/", "destination": "/api/ssr/country?name=united-kingdom" },
     { "source": "/near-me", "destination": "/near-me.html" },
     { "source": "/near-me/", "destination": "/near-me.html" },
     
@@ -85,6 +87,8 @@
     { "source": "/es/country/japan/", "destination": "/api/ssr/es-country?name=japan" },
     { "source": "/es/country/argentina", "destination": "/api/ssr/es-country?name=argentina" },
     { "source": "/es/country/argentina/", "destination": "/api/ssr/es-country?name=argentina" },
+    { "source": "/es/country/united-kingdom", "destination": "/api/ssr/es-country?name=united-kingdom" },
+    { "source": "/es/country/united-kingdom/", "destination": "/api/ssr/es-country?name=united-kingdom" },
     { "source": "/es/near-me", "destination": "/es/near-me.html" },
     { "source": "/es/near-me/", "destination": "/es/near-me.html" },
 
@@ -145,6 +149,7 @@
     { "source": "/country/india",         "destination": "/country/india/",         "statusCode": 301 },
     { "source": "/country/japan",         "destination": "/country/japan/",         "statusCode": 301 },
     { "source": "/country/argentina",     "destination": "/country/argentina/",     "statusCode": 301 },
+    { "source": "/country/united-kingdom", "destination": "/country/united-kingdom/", "statusCode": 301 },
 
     { "source": "/categories/indian", "destination": "/country/india/", "statusCode": 301 },
     { "source": "/categories/indian/", "destination": "/country/india/", "statusCode": 301 },
@@ -166,6 +171,7 @@
     { "source": "/japan.html",         "destination": "/country/japan/",       "statusCode": 301 },
     { "source": "/united-states.html", "destination": "/country/united-states/","statusCode": 301 },
     { "source": "/argentina.html",     "destination": "/country/argentina/",   "statusCode": 301 },
+    { "source": "/united-kingdom.html", "destination": "/country/united-kingdom/", "statusCode": 301 },
 
     { "source": "/es/index.html",        "destination": "/es/",                        "statusCode": 301 },
     { "source": "/es/blog.html",          "destination": "/es/blog/",                  "statusCode": 301 },
@@ -179,7 +185,8 @@
     { "source": "/es/india.html",         "destination": "/es/country/india/",         "statusCode": 301 },
     { "source": "/es/japan.html",         "destination": "/es/country/japan/",         "statusCode": 301 },
     { "source": "/es/argentina.html",     "destination": "/es/country/argentina/",     "statusCode": 301 },
-    { "source": "/es/united-states.html", "destination": "/es/country/united-states/", "statusCode": 301 }
+    { "source": "/es/united-states.html", "destination": "/es/country/united-states/", "statusCode": 301 },
+    { "source": "/es/united-kingdom.html", "destination": "/es/country/united-kingdom/", "statusCode": 301 }
   ],
   "headers": [
     {

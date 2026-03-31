@@ -54,6 +54,13 @@ const COUNTRIES = {
     h1: 'The Best OnlyFans Creators From Argentina',
     metaDesc: 'Discover the most popular OnlyFans creators from Argentina. Browse verified profiles, free accounts, and exclusive content from Argentine creators.',
   },
+  'united-kingdom': {
+    terms: ['united kingdom', 'uk', 'british', 'england', 'english', 'wales', 'welsh', 'scotland', 'scottish'],
+    label: 'United Kingdom',
+    htmlFile: 'united-kingdom.html',
+    h1: 'The Best OnlyFans Creators From the United Kingdom',
+    metaDesc: 'Discover the most popular OnlyFans creators from the United Kingdom. Browse verified profiles, free accounts, and exclusive content from British creators.',
+  },
   india: {
     terms: ['india', 'indian'],
     label: 'India',
