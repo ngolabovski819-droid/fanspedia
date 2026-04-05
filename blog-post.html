@@ -224,8 +224,28 @@
       color: var(--text-primary);
     }
     .article-body h1 { font-size: 1.9rem; }
-    .article-body h2 { font-size: 1.45rem; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
-    .article-body h3 { font-size: 1.15rem; }
+    .article-body h2 { font-size: 1.45rem; padding-bottom: 12px; position: relative; }
+    .article-body h2::after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0; bottom: 0;
+      height: 3px;
+      width: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, #00AFF0 0%, #0099D6 30%, transparent 72%);
+    }
+    .article-body h3 { font-size: 1.15rem; padding-bottom: 8px; position: relative; }
+    .article-body h3::after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0; bottom: 0;
+      height: 2px;
+      width: 100%;
+      border-radius: 2px;
+      background: linear-gradient(90deg, rgba(0,175,240,0.55) 0%, rgba(0,153,214,0.4) 28%, transparent 60%);
+    }
     .article-body p { margin-bottom: 1.3em; }
     .article-body ul, .article-body ol { padding-left: 1.5em; margin-bottom: 1.3em; }
     .article-body li { margin-bottom: 0.5em; }
@@ -951,19 +971,23 @@
     `;
   }
 
-  // Initialize Mermaid for diagram rendering
-  mermaid.initialize({
-    startOnLoad: false,
-    theme: document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default',
-    securityLevel: 'loose'
-  });
+  // Initialize Mermaid for diagram rendering (guard: defer may not have executed yet)
+  if (typeof mermaid !== 'undefined') {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default',
+      securityLevel: 'loose'
+    });
+  }
 
   const slug = getSlugFromPath();
   if (!slug) {
     window.location.replace(localizedPath('/blog/'));
   } else if (window.__BLOG_POST_SSR) {
     // Content already rendered server-side � skip API fetch, just run Mermaid
-    mermaid.run({ querySelector: '.mermaid' });    buildTOC();  } else {
+    if (typeof mermaid !== 'undefined') mermaid.run({ querySelector: '.mermaid' });
+    buildTOC();
+  } else {
     fetch('/api/blog-post?slug=' + encodeURIComponent(slug) + '&t=' + Date.now(), { cache: 'no-store' })
       .then(r => {
         if (r.status === 404) throw new Error('This article could not be found.');
@@ -973,7 +997,7 @@
       .then(post => {
         renderArticle(post);
         // Render Mermaid diagrams after content is loaded
-        mermaid.run({ querySelector: '.mermaid' });
+        if (typeof mermaid !== 'undefined') mermaid.run({ querySelector: '.mermaid' });
         buildTOC();
       })
       .catch(err => renderError(err.message || 'Please try again later.'));

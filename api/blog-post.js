@@ -139,6 +139,7 @@ function tableAlignAttr(align) {
 
 function inlineFormat(text) {
   return text
+    .replace(/\\([!\"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~])/g, '$1')
     .replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>')
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
