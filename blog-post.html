@@ -348,6 +348,83 @@
     .state-center h2 { font-size: 1.4rem; color: var(--text-primary); margin-bottom: 8px; }
     .state-center p { font-size: 15px; line-height: 1.6; }
 
+    /* === TABLE OF CONTENTS === */
+    .article-layout-wrapper {
+      display: flex;
+      gap: 40px;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 20px 80px;
+      align-items: flex-start;
+    }
+    .article-layout-wrapper .article-body {
+      flex: 1;
+      min-width: 0;
+      max-width: 720px;
+      margin: 0;
+      padding: 0;
+    }
+    .toc-sidebar {
+      width: 220px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 88px;
+      max-height: calc(100vh - 108px);
+      overflow-y: auto;
+    }
+    .toc-nav {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .toc-header {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .toc-header i { color: var(--brand-color); }
+    .toc-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+    .toc-link {
+      display: block;
+      padding: 6px 8px 6px 10px;
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      border-left: 2px solid transparent;
+      border-radius: 0 6px 6px 0;
+      transition: all 0.15s;
+      line-height: 1.4;
+    }
+    .toc-item-h3 .toc-link { padding-left: 20px; font-size: 12px; }
+    .toc-link:hover, .toc-link.active {
+      color: var(--brand-color);
+      border-left-color: var(--brand-color);
+      background: var(--accent-dim);
+    }
+    .toc-link.active { font-weight: 700; }
+    .toc-mobile { display: none; margin-bottom: 2em; }
+    @media (max-width: 900px) {
+      .toc-sidebar { display: none; }
+      .toc-mobile { display: block; }
+      .article-layout-wrapper { display: block; }
+      .article-layout-wrapper .article-body { max-width: 100%; }
+    }
+
     /* -- BACK TO BLOG -- */
     .back-bar {
       max-width: 860px;
@@ -810,6 +887,59 @@
     `;
   }
 
+  function buildTOC() {
+    const articleBody = document.querySelector('.article-body');
+    if (!articleBody) return;
+    const headings = [...articleBody.querySelectorAll('h2, h3')];
+    if (headings.length < 2) return;
+
+    // Assign IDs to headings
+    const seen = {};
+    headings.forEach(h => {
+      if (!h.id) {
+        let base = h.textContent.trim().toLowerCase()
+          .replace(/[^a-z0-9\s]/g, '').trim().replace(/\s+/g, '-');
+        let id = base, n = 2;
+        while (seen[id]) id = base + '-' + (n++);
+        seen[id] = true;
+        h.id = id;
+      } else { seen[h.id] = true; }
+    });
+
+    // Build TOC markup
+    const items = headings.map(h =>
+      `<li class="toc-item${h.tagName === 'H3' ? ' toc-item-h3' : ''}"><a class="toc-link" href="#${h.id}">${h.textContent.trim()}</a></li>`
+    ).join('');
+    const inner = `<div class="toc-header"><i class="fas fa-list-ul"></i> Contents</div><ol class="toc-list">${items}</ol>`;
+
+    // Desktop: wrap article-body with sidebar
+    const sidebar = document.createElement('aside');
+    sidebar.className = 'toc-sidebar';
+    sidebar.innerHTML = `<nav class="toc-nav" aria-label="Table of contents">${inner}</nav>`;
+    const wrapper = document.createElement('div');
+    wrapper.className = 'article-layout-wrapper';
+    articleBody.parentNode.insertBefore(wrapper, articleBody);
+    wrapper.appendChild(sidebar);
+    wrapper.appendChild(articleBody);
+
+    // Mobile: insert TOC before first heading
+    const mobileToc = document.createElement('div');
+    mobileToc.className = 'toc-mobile';
+    mobileToc.innerHTML = `<nav class="toc-nav" aria-label="Table of contents">${inner}</nav>`;
+    headings[0].before(mobileToc);
+
+    // Scroll spy
+    const links = [...document.querySelectorAll('.toc-link')];
+    function updateActive() {
+      const y = window.scrollY + 100;
+      let active = headings[0];
+      for (const h of headings) { if (h.offsetTop <= y) active = h; else break; }
+      links.forEach(l => l.classList.toggle('active', !!active && l.getAttribute('href') === '#' + active.id));
+    }
+    window.addEventListener('scroll', updateActive, { passive: true });
+    updateActive();
+  }
+
   function renderError(msg) {
     document.getElementById('articleMain').innerHTML = `
       <div class="state-center">
@@ -833,8 +963,7 @@
     window.location.replace(localizedPath('/blog/'));
   } else if (window.__BLOG_POST_SSR) {
     // Content already rendered server-side � skip API fetch, just run Mermaid
-    mermaid.run({ querySelector: '.mermaid' });
-  } else {
+    mermaid.run({ querySelector: '.mermaid' });    buildTOC();  } else {
     fetch('/api/blog-post?slug=' + encodeURIComponent(slug) + '&t=' + Date.now(), { cache: 'no-store' })
       .then(r => {
         if (r.status === 404) throw new Error('This article could not be found.');
@@ -845,6 +974,7 @@
         renderArticle(post);
         // Render Mermaid diagrams after content is loaded
         mermaid.run({ querySelector: '.mermaid' });
+        buildTOC();
       })
       .catch(err => renderError(err.message || 'Please try again later.'));
   }
