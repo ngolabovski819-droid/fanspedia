@@ -185,7 +185,9 @@ How do creators drive traffic? The lion's share comes from outside social media 
 
 How does OnlyFans stack up against competitors? In short, it dwarfs them all.
 
-\[IMAGE: Comparison table/bar chart (OnlyFans vs Patreon vs Fansly vs Substack) showing: registered users, number of creators, annual fan spend/revenue, and creator revenue share %. Dark theme, brand colors.]
+\*\*\[IMAGE: Comparison table/bar chart (OnlyFans vs Patreon vs Fansly vs Substack) showing: registered users, number of creators, annual fan spend/revenue, and creator revenue share %. Dark theme, brand colors.]
+
+
 
 
 
