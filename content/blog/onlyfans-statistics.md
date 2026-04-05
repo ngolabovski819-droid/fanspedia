@@ -153,7 +153,7 @@ How do creators drive traffic? The lion's share comes from outside social media 
 
 How does OnlyFans stack up against competitors? In short, it dwarfs them all.
 
-\*\*\[IMAGE: Comparison table/bar chart (OnlyFans vs Patreon vs Fansly vs Substack) showing: registered users, number of creators, annual fan spend/revenue, and creator revenue share %. Dark theme, brand colors.]
+![Platform comparison onlyfans vs patreon vs fansly vs substack 2026](/uploads/platform-comparison-onlyfans-vs-patreon-vs-fansly-vs-substack-2026.webp)
 
 | Platform | Users | Creators | Annual Revenue | Creator Cut |
 | --- | --- | --- | --- | --- |
@@ -162,113 +162,82 @@ How does OnlyFans stack up against competitors? In short, it dwarfs them all.
 | Fansly | ~130–190M (est.) | N/A | Not disclosed | 80% |
 | Substack | ~5M paid subs | N/A | Smaller scale | 90% |
 
-\- \*\*Scale gap:\*\* OnlyFans processes more in a single month than Patreon pays creators in an entire year. Patreon's annual creator payouts (\~$300M) compare to OnlyFans' estimated \~$29B cumulative payout through April 2026
+* **Scale gap**: OnlyFans processes more in a single month than Patreon pays creators in an entire year. Patreon's annual creator payouts (\~$300M) compare to OnlyFans' estimated \~$29B cumulative payout through April 2026
+* **Business model**: OnlyFans and Fansly take 20%. Patreon scales by plan (5–12% + fees). Substack takes 10%. OnlyFans' adult-content moat makes it uniquely defensible — no rival matches its market share there
+* **Valuation gap**: OnlyFans' attempted $8B sale price (January 2026, fell through) dwarfs Patreon's last known valuation of ~$4B
 
-\- \*\*Business model:\*\* OnlyFans and Fansly take 20%. Patreon scales by plan (5–12% + fees). Substack takes 10%. OnlyFans' adult-content moat makes it uniquely defensible — no rival matches its market share there
+> **Key Takeaway**: OnlyFans is in a league of its own. It has orders of magnitude more users and dollars flowing than Patreon or Substack. This comparison highlights how OnlyFans is the definitive platform for subscription-based creator monetization — especially in adult content.
 
-\- \*\*Valuation gap:\*\* OnlyFans' attempted $8B sale price (January 2026, fell through) dwarfs Patreon's last known valuation of ~$4B
-
-\> \*\*Key Takeaway:\*\* OnlyFans is in a league of its own. It has orders of magnitude more users and dollars flowing than Patreon or Substack. This comparison highlights how OnlyFans is the definitive platform for subscription-based creator monetization — especially in adult content.
-
-\---
-
-\## Future Trends & Projections {#future}
+## Future Trends & Projections
 
 The creator economy is booming. A recent report values it at \~$235B in 2026, on track to \~$528B by 2030. OnlyFans, as a dominant player, benefits from that tailwind.
 
 Key projections and developments:
 
-\- OnlyFans surpassed \*\*400M registered users by January 2026\*\* (Source: Followchain). Analysts now forecast \*\*500M+ users by 2028\*\*
+* OnlyFans surpassed \*\*400M registered users by January 2026 (Source: Followchain). Analysts now forecast 500M+ users by 2028\*\*
+* 2026 base case: \~$7.95B fan spend, \~$1.59B platform revenue, ~$6.36B paid to creators (Source: PhoeniX Creators, State of OnlyFans 2026)
+* The attempted $8B IPO/sale valuation fell through in January 2026. In March 2026, majority owner Leonid Radvinsky died while in acquisition talks at a revised $3.5B valuation — ownership transition is ongoing and creates uncertainty
+* OnlyFans is investing in AI chat features, live streaming improvements, and expanded fitness/music verticals (OFTV) to reduce reliance on adult content
+* Geographic expansion into Brazil and Southern Europe (Spain, Italy +24% YoY spend) is a clear growth vector
+* The post-pandemic surge is over; growth normalizes to \*\*mid-single digits in fan spend\*\* and \*\*high single digits/low double digits in users\*\* going forward
 
-\- 2026 base case: \~$7.95B fan spend, \~$1.59B platform revenue, ~$6.36B paid to creators (Source: PhoeniX Creators, State of OnlyFans 2026)
+> **Key Takeaway**: The future looks solid but no longer explosive for OnlyFans. With the creator economy surging toward $528B by 2030, OnlyFans has structural tailwinds. The key wild cards are: ownership transition post-Radvinsky, regulatory pressure (UK's Ofcom fined OnlyFans £1.05M in March 2025 for age assurance failures), and whether OFTV can meaningfully diversify the platform beyond adult content.
 
-\- The attempted $8B IPO/sale valuation fell through in January 2026. In March 2026, majority owner Leonid Radvinsky died while in acquisition talks at a revised $3.5B valuation — ownership transition is ongoing and creates uncertainty
+## User Gender Demographics
 
-\- OnlyFans is investing in AI chat features, live streaming improvements, and expanded fitness/music verticals (OFTV) to reduce reliance on adult content
+It's well-established: the subscriber base is overwhelmingly male. Multiple sources confirm \~80% of users are male. Taking 80% of 430M estimated April 2026 users, that's approximately 344M male users vs. \~86M female users.
 
-\- Geographic expansion into Brazil and Southern Europe (Spain, Italy +24% YoY spend) is a clear growth vector
+![Onlyfans gender subscribers creators ratio 2026](/uploads/onlyfans-gender-subscribers-creators-ratio-2026.webp)
 
-\- The post-pandemic surge is over; growth normalizes to \*\*mid-single digits in fan spend\*\* and \*\*high single digits/low double digits in users\*\* going forward
-
-\> \*\*Key Takeaway:\*\* The future looks solid but no longer explosive for OnlyFans. With the creator economy surging toward $528B by 2030, OnlyFans has structural tailwinds. The key wild cards are: ownership transition post-Radvinsky, regulatory pressure (UK's Ofcom fined OnlyFans £1.05M in March 2025 for age assurance failures), and whether OFTV can meaningfully diversify the platform beyond adult content.
-
-\---
-
-\## User Gender Demographics {#gender}
-
-It's well-established: the subscriber base is overwhelmingly male. Multiple sources confirm \*\*\~80% of users are male\*\*. Taking 80% of 430M estimated April 2026 users, that's approximately \*\*344M male users vs. \~86M female users\*\*.
-
-\[IMAGE: Pie chart of OnlyFans subscribers by gender (April 2026 est.): \~80% male (344M), \~17% female (73M), ~3% other/undisclosed (13M). Colors: OnlyFans blue (#00AFF0) for male, white for female, grey for other.]
-
-\| Gender | Percentage | Estimated Users (April 2026) |
-
-\| --- | --- | --- |
-
-\| Male | \~80% | \~344M |
-
-\| Female | \~17% | \~73M |
-
-\| Other/Undisclosed | \~3% | \~13M |
+| Gender | Percentage | Estimated Users (April 2026) |
+| --- | --- | --- |
+| Male | ~80% | ~344M |
+| Female | ~17% | ~73M |
+| Other/Undisclosed | ~3% | ~13M |
 
 This male dominance has major implications: content on OnlyFans is largely created for men. The data aligns with the insight that OnlyFans functions primarily as a male-consumption platform, which in turn explains the female-dominated creator side (see next section).
 
-\> \*\*Key Takeaway:\*\* Roughly 4 out of every 5 OnlyFans users are male. This gender skew is one of the most important structural facts about the platform — it explains content trends, creator strategies, and the enormous income potential for female creators targeting that audience.
+> **Key Takeaway**: Roughly 4 out of every 5 OnlyFans users are male. This gender skew is one of the most important structural facts about the platform — it explains content trends, creator strategies, and the enormous income potential for female creators targeting that audience.
 
-\---
+## User Age Demographics
 
-\## User Age Demographics {#age}
+OnlyFans users are predominantly young adults. Analytics from SimilarWeb and multiple surveys indicate \~61% of users are under 35. The largest segment, 25–34, makes up approximately 31% of users; 18–24 follows at roughly 30%. The remainder: 35–44 (\~17%), 45–54 (\~10%), 55–64 (\~7%), 65+ (~4%).
 
-OnlyFans users are predominantly young adults. Analytics from SimilarWeb and multiple surveys indicate \*\*\~61% of users are under 35\*\*. The largest segment, 25–34, makes up approximately 31% of users; 18–24 follows at roughly 30%. The remainder: 35–44 (\~17%), 45–54 (\~10%), 55–64 (\~7%), 65+ (~4%).
+![Onlyfans users by age group april 2026](/uploads/onlyfans-users-by-age-group-april-2026.webp)
 
-\[IMAGE: Horizontal bar chart of OnlyFans users by age bracket (April 2026 est.): 18–24 \~30%, 25–34 \~31%, 35–44 \~17%, 45–54 \~10%, 55–64 \~7%, 65+ \~4%. Dark background, brand colors #00AFF0 and white. Values shown in both % and millions of users.]
-
-\| Age Group | Percentage | Estimated Users (April 2026) |
-
-\| --- | --- | --- |
-
-\| 18–24 | \~30% | \~129M |
-
-\| 25–34 | \~31% | \~133M |
-
-\| 35–44 | \~17% | \~73M |
-
-\| 45–54 | \~10% | \~43M |
-
-\| 55–64 | \~7% | \~30M |
-
-\| 65+ | \~4% | \~17M |
+| Age Group | Percentage | Estimated Users (April 2026) |
+| --- | --- | --- |
+| 18–24 | ~30% | ~129M |
+| 25–34 | ~31% | ~133M |
+| 35–44 | ~17% | ~73M |
+| 45–54 | ~10% | ~43M |
+| 55–64 | ~7% | ~30M |
+| 65+ | ~4% | ~17M |
 
 Translating to raw numbers (using 430M): roughly 129M users are 18–24, 133M are 25–34. These two groups alone represent 262M users — over 60% of the entire platform. OnlyFans is, at its core, a millennial and Gen Z platform.
 
-\> \*\*Key Takeaway:\*\* OnlyFans is a young-adult platform. If you're a creator targeting new fans or a marketer analyzing the space, aim at 18–34 year-olds — they represent 61% of all users. Usage drops sharply after 45. This matches the heavy social-media promotional strategy creators use, since 18–34s are the most active on TikTok, Instagram, and Reddit.
+> **Key Takeaway**: OnlyFans is a young-adult platform. If you're a creator targeting new fans or a marketer analyzing the space, aim at 18–34 year-olds — they represent 61% of all users. Usage drops sharply after 45. This matches the heavy social-media promotional strategy creators use, since 18–34s are the most active on TikTok, Instagram, and Reddit.
 
-\---
+## Creator Gender Demographics
 
-\## Creator Gender Demographics {#creator-gender}
-
-The creator side tells the opposite story from subscribers. Roughly \*\*70–75% of creators are female\*\* — some analyses cite as high as 84%. Using a conservative 75% estimate across 5.3M total April 2026 creators:
+The creator side tells the opposite story from subscribers. Roughly 70–75% of creators are female — some analyses cite as high as 84%. Using a conservative 75% estimate across 5.3M total April 2026 creators:
 
 \[IMAGE: Pie chart of OnlyFans creators by gender (April 2026 est.): \~75% female (\~3.98M), \~23% male (\~1.22M), \~2% other/undisclosed (\~0.11M). Dark theme, brand colors.]
 
-\| Gender | Percentage | Creator Count (April 2026 est.) |
+| Gender | Percentage | Creator Count (April 2026 est.) |
+| --- | --- | --- |
+| Female | ~75% | ~3.98M |
+| Male | ~23% | ~1.22M |
+| Other/Undisclosed | ~2% | ~0.11M |
 
-\| --- | --- | --- |
+This female-majority creator landscape is a key structural insight. On one side, \~344M male fans; on the other, \~3.98M women creators providing the content those fans pay for. 
 
-\| Female | \~75% | \~3.98M |
+This gender inversion is unique to OnlyFans — on YouTube or Instagram, creator gender is much closer to parity.
 
-\| Male | \~23% | \~1.22M |
+* **Implication for female creators**: Enormous opportunity, but also enormous competition (3.98M women competing for ~20M paying subscribers)
+* **Implication for male creators**: Scarcity creates a niche — specialized male creators (fitness, gay content, male POV) punch above their weight
 
-\| Other/Undisclosed | \~2% | \~0.11M |
-
-This female-majority creator landscape is a key structural insight. On one side, \~344M male fans; on the other, \~3.98M women creators providing the content those fans pay for. This gender inversion is unique to OnlyFans — on YouTube or Instagram, creator gender is much closer to parity.
-
-\- \*\*Implication for female creators:\*\* Enormous opportunity, but also enormous competition (3.98M women competing for ~20M paying subscribers)
-
-\- \*\*Implication for male creators:\*\* Scarcity creates a niche — specialized male creators (fitness, gay content, male POV) punch above their weight
-
-\> \*\*Key Takeaway:\*\* OnlyFans is a female-led creator economy. Roughly 3 out of 4 creators are women, serving a platform that is 4 out of 5 male subscribers. This supply-demand dynamic is the core engine of OnlyFans' entire revenue model.
-
-\---
+> **Key Takeaway**: OnlyFans is a female-led creator economy. Roughly 3 out of 4 creators are women, serving a platform that is 4 out of 5 male subscribers. This supply-demand dynamic is the core engine of OnlyFans' entire revenue model.
 
 \## Creator Income Tiers & Distribution {#income}
 
@@ -276,17 +245,12 @@ Drilling down into income, the inequality is stark and well-documented. Here is 
 
 \[IMAGE: Infographic of OnlyFans creator income distribution (April 2026). Use a Pareto-style bar or pyramid: Top 0.1% (5,300 creators) = 76% of income at avg $147K/mo; Top 1% (53,000 creators) = 33% of income at avg $34K/mo; Top 10% (530,000 creators) = 73% of income; Bottom 90% (4.77M creators) = 27% of income at avg $131–$180/mo. Dark background, brand colors.]
 
-\| Creator Tier | Count (April 2026) | Avg Monthly Income | Share of Total Revenue |
-
-\| --- | --- | --- | --- |
-
-\| Top 0.1% | \~5,300 | \~$147,000/mo | 76% |
-
-\| Top 1% | \~53,000 | \~$33,984/mo | 33% (incl. top 0.1%) |
-
-\| Top 10% | ~530,000 | $5,000+/mo | 73% |
-
-\| Bottom 90% | ~4.77M | $131–$180/mo | 27% |
+| Creator Tier | Count (April 2026) | Avg Monthly Income | Share of Total Revenue |
+| --- | --- | --- | --- |
+| Top 0.1% | ~5300 | ~$147000/mo | 76% |
+| Top 1% | ~53000 | ~$33984/mo | 33% (incl. top 0.1%) |
+| Top 10% | ~530000 | $5000+/mo | 73% |
+| Bottom 90% | ~4.77M | $131–$180/mo | 27% |
 
 \> \*\*Tweet This:\*\* The top 0.1% of OnlyFans creators (just 5,300 people) earn 76% of all creator revenue — averaging $147K/month each. The bottom 90% share only 27%. #CreatorEconomy
 
@@ -301,6 +265,19 @@ This massive skew is sometimes called the "power law" of content platforms. Only
 Journalists always want names and figures. Several trackers and leaked reports compile the top earners. For 2024–2025, the highest earners are in the tens of millions annually.
 
 \[IMAGE: Ranked list/leaderboard graphic of Top 10 OnlyFans earners (2024–2025 estimates). Name, rank number, estimated annual earnings shown as horizontal bars. Dark theme, brand colors.]
+
+| Rank | Creator | Estimated Annual Earnings |
+| --- | --- | --- |
+| 1 | Tierney Johnson | ~$27M/year (~$2.2M/mo) |
+| 2 | Blac Chyna (Angela White) | ~$19M/year |
+| 3 | Cardi B | ~$15M/year |
+| 4 | Mia Khalifa | ~$14M/year |
+| 5 | Abella Danger | ~$13.4M/year |
+| 6 | Tana Mongeau | ~$13M/year |
+| 7 | Safaree | ~$12M/year |
+| 8 | Aniy Ma | ~$11M/year |
+| 9 | Pia Mia | ~$10M/year |
+| 10 | Bella Thorne | ~$9.4M/year |
 
 \*Note: These figures derive from internal leak reports and specialized trackers, not official OnlyFans filings. They represent best available estimates as of 2024–2025.\*
 
@@ -318,13 +295,10 @@ OnlyFans is overwhelmingly a mobile platform. Every analytics source agrees: \*\
 
 \[IMAGE: Split graphic showing mobile phone (84.1%) vs desktop computer (15.9%) for OnlyFans visit share. December 2025 data. Dark theme, brand colors.]
 
-\| Device | Share of Visits |
-
-\| --- | --- |
-
-\| Mobile (web + app) | 84.1% |
-
-\| Desktop | 15.9% |
+| Device | Share of Visits |
+| --- | --- |
+| Mobile (web + app) | 84.1% |
+| Desktop | 15.9% |
 
 \*Source: SimilarWeb, December 2025\*
 
@@ -340,29 +314,18 @@ It's worth distinguishing creator geography from user geography — they tell di
 
 \[IMAGE: Bar chart showing Top 10 countries by number of OnlyFans creators (April 2026 est.). US leads at ~45%, followed by UK, Canada, Australia, Germany, France, Italy, Spain, Brazil, Mexico. Dark theme, brand colors.]
 
-\| Rank | Country | Estimated Share of Creators |
-
-\| --- | --- | --- |
-
-\| 1 | United States | \~45% (\~2.39M creators) |
-
-\| 2 | United Kingdom | \~20% (\~1.06M creators) |
-
-\| 3 | Canada | \~10% (\~530K creators) |
-
-\| 4 | Australia | \~7% (\~371K creators) |
-
-\| 5 | Germany | \~4% (\~212K creators) |
-
-\| 6 | France | \~3.5% (\~186K creators) |
-
-\| 7 | Italy | \~2.5% (\~133K creators) |
-
-\| 8 | Spain | \~2.5% (\~133K creators) |
-
-\| 9 | Brazil | \~2% (\~106K creators) |
-
-\| 10 | Mexico | \~2% (\~106K creators) |
+| Rank | Country | Estimated Share of Creators |
+| --- | --- | --- |
+| 1 | United States | ~45% (~2.39M creators) |
+| 2 | United Kingdom | ~20% (~1.06M creators) |
+| 3 | Canada | ~10% (~530K creators) |
+| 4 | Australia | ~7% (~371K creators) |
+| 5 | Germany | ~4% (~212K creators) |
+| 6 | France | ~3.5% (~186K creators) |
+| 7 | Italy | ~2.5% (~133K creators) |
+| 8 | Spain | ~2.5% (~133K creators) |
+| 9 | Brazil | ~2% (~106K creators) |
+| 10 | Mexico | ~2% (~106K creators) |
 
 \*Note: These are directional estimates based on traffic share data and creator community surveys, not official OnlyFans disclosures.\*
 
@@ -380,52 +343,41 @@ OnlyFans' 80/20 creator split is one of the platform's most-cited competitive ad
 
 \[IMAGE: Comparison bar chart showing creator revenue share % across platforms: OnlyFans 80%, Patreon 88–95%, Substack 90%, YouTube ~55%, Twitch 50%. Dark theme, brand colors. Label each bar clearly.]
 
-\| Platform | Creator Gets | Platform Takes |
+| Platform | Creator Gets | Platform Takes |
+| --- | --- | --- |
+| OnlyFans | 80% | 20% |
+| Patreon | 88–95% | 5–12% + fees |
+| Substack | 90% | 10% + fees |
+| YouTube (ads) | ~55% | ~45% |
+| Twitch (standard) | 50% | 50% |
 
-\| --- | --- | --- |
+OnlyFans' 80% is more favorable than ad-supported platforms (YouTube, Twitch) but slightly less favorable than Patreon or Substack in pure percentage terms. 
 
-\| OnlyFans | 80% | 20% |
+However, the comparison isn't apples-to-apples: Patreon and Substack charge lower % but have far lower absolute earning potential. 
 
-\| Patreon | 88–95% | 5–12% + fees |
+An OnlyFans creator earning $10,000/month keeps $8,000. A Patreon creator earning $10,000/month keeps ~$8,800–$9,500 — but far fewer creators reach $10K/month on Patreon.
 
-\| Substack | 90% | 10% + fees |
+> **Key Takeaway**: From a creator's viewpoint, OnlyFans' 80/20 split is quite favorable — significantly better than ad-based platforms (YouTube/Twitch) and only slightly behind creator-first tools like Patreon. It's one of the primary structural reasons OnlyFans attracted so many creators and retains them despite growing competition.
 
-\| YouTube (ads) | \~55% | \~45% |
+## Methodology & Sources
 
-\| Twitch (standard) | 50% | 50% |
+Methodology: We compiled the latest data (as of April 2026) from industry reports, financial filings, SimilarWeb analytics, Fanspedia's API, and news sources. Statistics marked (est.) are extrapolated from confirmed 2024–2025 data using published growth rates. 
 
-OnlyFans' 80% is more favorable than ad-supported platforms (YouTube, Twitch) but slightly less favorable than Patreon or Substack in pure percentage terms. However, the comparison isn't apples-to-apples: Patreon and Substack charge lower % but have far lower absolute earning potential. An OnlyFans creator earning $10,000/month keeps $8,000. A Patreon creator earning $10,000/month keeps ~$8,800–$9,500 — but far fewer creators reach $10K/month on Patreon.
+Platform-confirmed figures are cited directly to Reuters, Fenix Int'l filings, SimilarWeb (via Followchain), and PhoeniX Creators' 2026 State of OnlyFans report. OnlyFans does not release real-time public statistics; all April 2026 figures represent best available estimates based on current trajectories.
 
-\> \*\*Key Takeaway:\*\* From a creator's viewpoint, OnlyFans' 80/20 split is quite favorable — significantly better than ad-based platforms (YouTube/Twitch) and only slightly behind creator-first tools like Patreon. It's one of the primary structural reasons OnlyFans attracted so many creators and retains them despite growing competition.
+## Primary Sources:
 
-\---
+* **Business Insider (Fenix International financial filings)**
+* **Reuters (payment volume, creator payouts)**
+* **Wikipedia / Fenix Int'l corporate disclosures (ownership, valuation)**
+* **SimilarWeb via Followchain.org (traffic data, January–February 2026)**
+* **PhoeniX Creators — State of OnlyFans 2026**
+* **Statista (historical user and creator growth)**
+* **DataGlobeHub — OnlyFans Statistics and Insights 2026**
+* **Business of Apps (platform revenue and user benchmarks)**
+* **Official OnlyFans/Fenix press releases and announcements**
+* **Fanspedia's API from 500k + creators in our database**
 
-\## Methodology & Sources {#method}
+> **Disclosure**: First-person commentary reflects the author's experience as a long-term platform subscriber and observer. Statistical figures are independently sourced and cited. Where ranges exist across sources, we use conservative midpoints and note the variance.
 
-\*\*Methodology:\*\* We compiled the latest data (as of April 2026) from industry reports, financial filings, SimilarWeb analytics, and news sources. Statistics marked \*(est.)\* are extrapolated from confirmed 2024–2025 data using published growth rates. Platform-confirmed figures are cited directly to Reuters, Fenix Int'l filings, SimilarWeb (via Followchain and ofstats.net), and PhoeniX Creators' 2026 State of OnlyFans report. OnlyFans does not release real-time public statistics; all April 2026 figures represent best available estimates based on current trajectories.
-
-\*\*Primary Sources:\*\*
-
-\- Business Insider (Fenix International financial filings)
-
-\- Reuters (payment volume, creator payouts)
-
-\- Wikipedia / Fenix Int'l corporate disclosures (ownership, valuation)
-
-\- SimilarWeb via Followchain.org (traffic data, January–February 2026)
-
-\- ofstats.net (OnlyFans Statistics 2026, January 2026)
-
-\- PhoeniX Creators — State of OnlyFans 2026
-
-\- Statista (historical user and creator growth)
-
-\- DataGlobeHub — OnlyFans Statistics and Insights 2026
-
-\- Business of Apps (platform revenue and user benchmarks)
-
-\- Official OnlyFans/Fenix press releases and announcements
-
-\*\*Disclosure:\*\* First-person commentary reflects the author's experience as a long-term platform subscriber and observer. Statistical figures are independently sourced and cited. Where ranges exist across sources, we use conservative midpoints and note the variance.
-
-\*Last updated: April 2026. Next review scheduled: October 2026.\*
+**Last updated**: April 2026. Next review scheduled: October 2026.
