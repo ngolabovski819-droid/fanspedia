@@ -63,133 +63,104 @@ Other financial highlights: Fenix Int'l reported ~$658M pre-tax profit for 2023;
 
 I've seen this firsthand: most creators make little money, while a few make a fortune. Key stats:
 
-\- \*\*Active creators:\*\* ~5.3M in April 2026 (roughly 81 fans per creator)
+* **Active creators**: ~5.3M in April 2026 (roughly 81 fans per creator)
+* **Creator growth**: +15% in 2025; +40% in 2023 (pandemic-era peak). Total growth since 2019: ~1,414%
+* **Top earners**: Only a tiny slice cash out: top 0.1% of creators earn ~76% of income
+* **Average income**: Industry sources estimate the average OnlyFans creator earns only $131–$180 per month. In other words, the median creator makes under $2K/year.
+* **Income concentration**: Even the top 10% of creators make 73% of revenue, leaving 90% of creators sharing only 27%
+* **Income tiers**: The top 1% of creators average about $33,984/month (\~$408K/year). In practice, only about 53,000 creators (1% of 5.3M) reach that level. The top 0.1% (\~5,300 creators) average \~$147K/month. The remaining \~4.77M creators mostly earn in the low hundreds per month — or nothing
+* **Income share**: Top 1% = 33% of income; Top 10% = 73%; Bottom 90% = 27%
+* **Dependence on few fans**: Only \~4.5% of users pay, so only \~19–22M accounts buy anything. This tiny paying crowd funds the entire creator economy
 
-\- \*\*Creator growth:\*\* +15% in 2025; +40% in 2023 (pandemic-era peak). Total growth since 2019: ~1,414%
+> **Key Takeaway**: The creator economy is a power law: a few superstars earn millions while the vast majority scrape by. In my experience, this means the narrative "anyone can make big money on OnlyFans" is deeply misleading — only elite creators do.
 
-\- \*\*Top earners:\*\* Only a tiny slice cash out: top 0.1% of creators earn ~76% of income
+## Subscribers & Fan Behavior
 
-\- \*\*Average income:\*\* Industry sources estimate the average OnlyFans creator earns only \*\*$131–$180 per month\*\* (Source: ofstats.net, 2026). In other words, the median creator makes under $2K/year
+In April 2026, we estimate ~430M total registered accounts — but not all are paying. Based on updated estimates, roughly 4.5% of accounts are paying subscribers\*\*, implying approximately \*\*19–22 million paying fans. 
 
-\- \*\*Income concentration:\*\* Even the top 10% of creators make 73% of revenue, leaving 90% of creators sharing only 27%
+Those who do pay spend heavily, averaging around $397/year ($7.95B ÷ ~20M paying fans), or roughly $33/month.
 
-\> \*\*Tweet This:\*\* OnlyFans payout is wildly unequal — the top 0.1% of creators pull 76% of revenue (avg ~$147K/mo), while most creators earn less than $180/mo. #OnlyFansStatistics
-
-\- \*\*Income tiers:\*\* The top 1% of creators average about $33,984/month (\~$408K/year). In practice, only about 53,000 creators (1% of 5.3M) reach that level. The top 0.1% (\~5,300 creators) average \~$147K/month. The remaining \~4.77M creators mostly earn in the low hundreds per month — or nothing
-
-\- \*\*Income share:\*\* Top 1% = 33% of income; Top 10% = 73%; Bottom 90% = 27%
-
-\- \*\*Dependence on few fans:\*\* Only \~4.5% of users pay, so only \~19–22M accounts buy anything. This tiny paying crowd funds the entire creator economy
-
-\> \*\*Key Takeaway:\*\* The creator economy is a power law: a few superstars earn millions while the vast majority scrape by. In my experience, this means the narrative "anyone can make big money on OnlyFans" is deeply misleading — only elite creators do.
-
-\---
-
-\## Subscribers & Fan Behavior {#subscribers}
-
-In April 2026, we estimate \~430M total registered accounts — but not all are paying. Based on updated estimates, roughly \*\*4.5% of accounts are paying subscribers\*\*, implying approximately \*\*19–22 million paying fans\*\*. Those who do pay spend heavily, averaging around \*\*$397/year\*\* ($7.95B ÷ \~20M paying fans), or roughly \*\*$33/month\*\*.
-
-\- \*\*Total fans:\*\* \~430M registered (April 2026 est.); actual paying subscribers \~19–22M (~4.5% of users)
-
-\- \*\*Avg spend:\*\* \~$397/year per paying fan (\~$33/month)
-
-\- \*\*Retention:\*\* OnlyFans doesn't publish retention data, but surveys suggest high churn; many fans subscribe for 1–2 months then cycle off
-
-\- \*\*Non-paying majority:\*\* ~95.5% of subscribers spend nothing — a tiny minority of "whales" fund the entire platform
+* **Total fans**: \~430M registered (April 2026 est.); actual paying subscribers \~19–22M (~4.5% of users)
+* **Avg spend**: \~$397/year per paying fan (\~$33/month)
+* **Retention**: OnlyFans doesn't publish retention data, but surveys suggest high churn; many fans subscribe for 1–2 months then cycle off
+* **Non-paying majority**: ~95.5% of subscribers spend nothing — a tiny minority of "whales" fund the entire platform
 
 Demographically, most fans are young adult males. Platform analytics confirm that the vast majority of financial activity comes from a core group of highly loyal, repeat-paying subscribers. Creators who retain those buyers long-term are the ones who climb income tiers.
 
-\> \*\*Key Takeaway:\*\* Only a small fraction of OnlyFans users pays; that core fan base spends heavily (\~$397/year). Real money comes from a tiny percentage of loyal, paying subscribers — meaning creators compete fiercely for those \~20M wallets across 5.3M creator accounts.
+> Key Takeaway: Only a small fraction of OnlyFans users pays; that core fan base spends heavily (\~$397/year). Real money comes from a tiny percentage of loyal, paying subscribers — meaning creators compete fiercely for those \~20M wallets across 5.3M creator accounts.
 
-\---
-
-\## Content & Niche Trends {#content}
+## Content & Niche Trends
 
 OnlyFans started as an adult platform, and adult content still dominates. Roughly 70% of creators produce sexual or erotic material. The remainder focus on fitness, music, cooking, life coaching, cosplay, and more. The platform even rolled out "OFTV" for sports, fitness, and cooking streams — but non-NSFW creators remain a clear minority.
 
-\- \*\*Adult content:\*\* ~70% of creators
-
-\- \*\*Fitness/Health:\*\* ~15%
-
-\- \*\*Other niches\*\* (music, cooking, lifestyle, education, cosplay): collectively ~15%
+* **Adult content**: ~70% of creators
+* **Fitness/Health**: ~15%
+* **Other niches** (music, cooking, lifestyle, education, cosplay): collectively ~15%
 
 The revenue share skews even more toward adult content — top earners are almost exclusively adult content creators. Lifestyle influencers do well but rarely reach the very top income bracket. Female sports and fitness personalities have gained ground in recent years, but they remain far behind the adult core in raw revenue terms.
 
-\[IMAGE: Pie chart showing OnlyFans content categories: Adult 70%, Fitness/Health 15%, Other Niches 15%. Dark background, brand colors.]
+![Onlyfans content categories by percentage pie chart Fanspedia](/uploads/onlyfans-content-categories-by-percentage-pie-chart-fanspedia.webp)
 
-\> \*\*Key Takeaway:\*\* Adult content creators rule OnlyFans. Roughly 7 in 10 creators produce sexual or erotic material. Non-adult niches exist (fitness, music, cooking), but they're much smaller by both count and revenue. OnlyFans is still seen primarily as an adult platform despite ongoing efforts to diversify.
+> **Key Takeaway**: Adult content creators rule OnlyFans. Roughly 7 in 10 creators produce sexual or erotic material. Non-adult niches exist (fitness, music, cooking), but they're much smaller by both count and revenue. OnlyFans is still seen primarily as an adult platform despite ongoing efforts to diversify.
 
-\---
+## Growth & Traffic
 
-\## Growth & Traffic {#traffic}
+Traffic data shows continuing — if moderating — growth. SimilarWeb ranks OnlyFans at approximately \*\*#93 globally (February 2026) with \~300 million monthly visits, up \~15% year-over-year. Mobile accounts for 84.1% of all visits; desktop just 15.9% — confirmed December 2025 data.
 
-Traffic data shows continuing — if moderating — growth. SimilarWeb ranks OnlyFans at approximately \*\*#93 globally\*\* (February 2026) with \*\*\~300 million monthly visits\*\*, up \~15% year-over-year. Mobile accounts for 84.1% of all visits; desktop just 15.9% — confirmed December 2025 data.
-
-\[IMAGE: Line graph showing OnlyFans monthly visits (millions) from 2020 to February 2026. Steadily rising line from \~85M (2020) to \~300M+ (Feb 2026). Dark theme, brand colors.]
+![Onlyfans monthly visits 2020-2026 February](/uploads/onlyfans-monthly-visits-2020-2026-feb.webp)
 
 Traffic sources are heavily organic. A breakdown (January 2026) shows: \~55% direct traffic, \~6.7% Google organic, \~4.8% X/Twitter, \~1.9% Instagram. In short, creators rely on Google/SEO and direct links far more than paid social for conversions.
 
-\*\*Growth phases:\*\*
+### Growth phases:
 
-\- 2016–2020: Exponential rise (13.5M → 82.3M users)
-
-\- 2021: Peak pandemic growth (120M by March 2021)
-
-\- 2022–2024: Strong but decelerating growth
-
-\- 2025–2026: Stabilizing at ~13–15% annual traffic growth
+* 2016–2020: Exponential rise (13.5M → 82.3M users)
+* 2021: Peak pandemic growth (120M by March 2021)
+* 2022–2024: Strong but decelerating growth
+* 2025–2026: Stabilizing at ~13–15% annual traffic growth
 
 Seasonally, holiday months (November–December) are traffic peaks; summer months typically dip.
 
-\> \*\*Key Takeaway:\*\* OnlyFans traffic is still climbing — the site now ranks in the top 100 globally. ~58% of traffic comes via search or direct, meaning strong SEO and high-intent users. Social media ads are secondary; real growth comes from discoverability (Google, Reddit, fan networks).
+> **Key Takeaway**: OnlyFans traffic is still climbing — the site now ranks in the top 100 globally. ~58% of traffic comes via search or direct, meaning strong SEO and high-intent users. Social media ads are secondary; real growth comes from discoverability (Google, Reddit, fan networks).
 
-\---
-
-\## Geographic Distribution {#geography}
+## Geographic Distribution
 
 Where are OnlyFans users? The U.S. leads by a wide margin. SimilarWeb traffic share (January 2026): \*\*USA \~50%, UK \~5.97%, Mexico \~5.62%, Germany \~4.53%, Canada ~4.48%\*\*. All other countries each account for less than 4%.
 
 In absolute spending, Americans outpace everyone else dramatically. One 2025 dataset shows US fans spent ~$2.637B vs. $531M in the UK — nearly five times more. Spain and Italy showed the strongest year-over-year growth in fan spend (+24%), signaling rapidly rising activity in Southern Europe.
 
-\[IMAGE: World map with traffic share heat map. USA darkest (50%), followed by UK, Mexico, Germany, Canada. Lighter shading for rest of world. Dark background, brand colors.]
+![Onlyfans traffic share by country Jan 2026](/uploads/onlyfans-traffic-share-by-country-jan-2026.webp)
 
-\- \*\*User ranking by traffic:\*\* US > UK > Mexico > Germany > Canada
-
-\- \*\*Creator ranking:\*\* US (\~45%) >> UK (\~20%) >> Canada (\~10%) >> Australia (\~7%)
-
-\- \*\*Spending:\*\* US fans spend approximately 5× more than UK fans in absolute terms
+* **User ranking by traffic**: US > UK > Mexico > Germany > Canada
+* **Creator ranking**: US (\~45%) >> UK (\~20%) >> Canada (\~10%) >> Australia (\~7%)
+* **Spending**: US fans spend approximately 5× more than UK fans in absolute terms
 
 OnlyFans is active in 150+ countries, but usage is concentrated in developed Western markets. Emerging markets (Asia, Africa) remain small due to payment infrastructure and regulatory barriers.
 
-\> \*\*Key Takeaway:\*\* OnlyFans is, in practical terms, a US-dominated platform. Half its traffic and nearly half its creators originate from the United States. This shapes content language (English), pricing (USD), and content style.
+> **Key Takeaway**: OnlyFans is, in practical terms, a US-dominated platform. Half its traffic and nearly half its creators originate from the United States. This shapes content language (English), pricing (USD), and content style.
 
-\---
-
-\## Social Media & Marketing {#marketing}
+## Social Media & Marketing
 
 How do creators drive traffic? The lion's share comes from outside social media — organic and direct sources dominate. However, social media is where creators build initial followings.
 
-\- \*\*Traffic sources:\*\* \~55% direct, \~6.7% Google organic, \~4.8% X/Twitter, \~1.9% Instagram. Combined, direct + organic = over 85% of all traffic
+* **Traffic sources**: \~55% direct, \~6.7% Google organic, \~4.8% X/Twitter, \~1.9% Instagram. Combined, direct + organic = over 85% of all traffic
+* **Top platforms used by creators**: X/Twitter and Instagram (teaser content + OF links); TikTok (massive reach but often removes OF links, creators put links in bio); Reddit (highly conversion-efficient — a single top post can beat a month of TikTok for paid subscribers)
+* **Social stats:** ~80% of creators report using Instagram and TikTok to acquire fans (creator survey). Top creators have millions of IG followers funneling to their OF profiles
+* **Strategies that work**: Community-building (email lists, private Discord/Telegram groups), collaborations, giveaways, and SEO-optimized profile names ("OnlyFans \[Name]" Google searches)
 
-\- \*\*Top platforms used by creators:\*\* X/Twitter and Instagram (teaser content + OF links); TikTok (massive reach but often removes OF links, creators put links in bio); Reddit (highly conversion-efficient — a single top post can beat a month of TikTok for paid subscribers)
+> **Key Takeaway**: OnlyFans traffic is largely driven by direct visits and search — but social is where creators grow their initial audience. The biggest mistake new creators make is ignoring SEO and community channels. Only ~7% of traffic comes from mainstream social directly, so diversification (Reddit, SEO, direct fan outreach) is essential.
 
-\- \*\*Social stats:\*\* ~80% of creators report using Instagram and TikTok to acquire fans (creator survey). Top creators have millions of IG followers funneling to their OF profiles
-
-\- \*\*Strategies that work:\*\* Community-building (email lists, private Discord/Telegram groups), collaborations, giveaways, and SEO-optimized profile names ("OnlyFans \[Name]" Google searches)
-
-\> \*\*Key Takeaway:\*\* OnlyFans traffic is largely driven by direct visits and search — but social is where creators grow their initial audience. The biggest mistake new creators make is ignoring SEO and community channels. Only ~7% of traffic comes from mainstream social directly, so diversification (Reddit, SEO, direct fan outreach) is essential.
-
-\---
-
-\## Platform Comparisons {#comparison}
+## Platform Comparisons
 
 How does OnlyFans stack up against competitors? In short, it dwarfs them all.
 
 \*\*\[IMAGE: Comparison table/bar chart (OnlyFans vs Patreon vs Fansly vs Substack) showing: registered users, number of creators, annual fan spend/revenue, and creator revenue share %. Dark theme, brand colors.]
 
-
-
-
+| Platform | Users | Creators | Annual Revenue | Creator Cut |
+| --- | --- | --- | --- | --- |
+| OnlyFans | ~430M (2026 est.) | ~5.3M | ~$7.95B fan spend | 80% |
+| Patreon | ~10M paying patrons | ~280K paid | ~$300M creator payouts | 88–95% |
+| Fansly | ~130–190M (est.) | N/A | Not disclosed | 80% |
+| Substack | ~5M paid subs | N/A | Smaller scale | 90% |
 
 \- \*\*Scale gap:\*\* OnlyFans processes more in a single month than Patreon pays creators in an entire year. Patreon's annual creator payouts (\~$300M) compare to OnlyFans' estimated \~$29B cumulative payout through April 2026
 
