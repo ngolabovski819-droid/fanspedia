@@ -159,21 +159,6 @@
     .mobile-search-suggestion i { color:#00AFF0; font-size:16px; }
     .mobile-search-trigger { display:none; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.3); color:#fff; width:44px; height:44px; border-radius:12px; cursor:pointer; justify-content:center; align-items:center; font-size:20px; transition:all .3s ease; }
     .mobile-search-trigger:hover { background:rgba(255,255,255,0.3); transform:translateY(-1px); }
-    .safe-search-modal { position:fixed; inset:0; background:rgba(0,0,0,0.75); backdrop-filter:blur(10px); z-index:10002; display:none; align-items:center; justify-content:center; padding:20px; animation:fadeIn .3s ease; }
-    .safe-search-modal.show { display:flex; }
-    @keyframes fadeIn { from{opacity:0;}to{opacity:1;} }
-    .safe-search-modal-content { background:var(--bg-secondary); border-radius:24px; padding:40px; max-width:520px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,0.3); animation:slideUp .3s cubic-bezier(0.4,0,0.2,1); position:relative; }
-    @keyframes slideUp { from{transform:translateY(40px);opacity:0;}to{transform:translateY(0);opacity:1;} }
-    .safe-search-modal-icon { width:80px; height:80px; background:linear-gradient(135deg,#00AFF0 0%,#0099D6 100%); border-radius:20px; display:flex; align-items:center; justify-content:center; margin:0 auto 24px; font-size:36px; color:#fff; box-shadow:0 8px 24px rgba(0,175,240,0.4); }
-    .safe-search-modal h2 { font-size:28px; font-weight:800; color:var(--text-primary); margin-bottom:12px; text-align:center; }
-    .safe-search-modal p { color:var(--text-secondary); font-size:16px; line-height:1.6; text-align:center; margin-bottom:32px; }
-    .safe-search-modal-actions { display:flex; gap:12px; flex-direction:column; }
-    .safe-search-modal-btn { padding:16px 32px; border-radius:12px; font-weight:700; font-size:16px; cursor:pointer; transition:all .3s ease; border:none; text-align:center; }
-    .safe-search-modal-btn-primary { background:linear-gradient(135deg,#34c759 0%,#30b350 100%); color:#fff; box-shadow:0 6px 18px rgba(52,199,89,0.4); }
-    .safe-search-modal-btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(52,199,89,0.5); }
-    .safe-search-modal-btn-secondary { background:var(--bg-primary); color:var(--text-primary); border:2px solid var(--border-color); }
-    .safe-search-modal-btn-secondary:hover { background:var(--bg-secondary); border-color:var(--text-secondary); }
-    .safe-search-modal-footer { margin-top:24px; text-align:center; font-size:13px; color:var(--text-muted); }
     @media (max-width:768px) { body{padding-top:66px;} .header-container{flex-wrap:nowrap;gap:12px;} .logo-text .tagline{display:none;} .header-search-section{display:none !important;} .mobile-search-trigger{display:inline-flex;} .desktop-nav{display:none;} .mobile-menu-toggle{display:inline-flex;} .header-main{padding:8px 0;} }
     @media (max-width:480px) { body{padding-top:62px;} .logo-icon{width:40px;height:40px;font-size:20px;} .logo-text .brand{font-size:16px;} .header-main{padding:6px 0;} }
     
@@ -316,20 +301,6 @@
     <div class="mobile-search-content">
       <div class="mobile-search-label">POPULAR SEARCHES</div>
       <div class="mobile-search-suggestions" id="mobileSearchSuggestions"></div>
-    </div>
-  </div>
-  
-  <!-- Safe Search Modal -->
-  <div id="safeSearchModal" class="safe-search-modal" role="dialog" aria-labelledby="safeSearchModalTitle" aria-modal="true">
-    <div class="safe-search-modal-content">
-      <div class="safe-search-modal-icon"><i class="fas fa-shield-alt"></i></div>
-      <h2 id="safeSearchModalTitle">Browse Safely in Public?</h2>
-      <p>Enable <strong>Safe Search</strong> to blur images so you can comfortably browse at work, on the bus, or anywhere public. You can toggle this anytime using the shield icon in the header.</p>
-      <div class="safe-search-modal-actions">
-        <button class="safe-search-modal-btn safe-search-modal-btn-primary" id="enableSafeSearch"><i class="fas fa-shield-alt"></i> Enable Safe Search</button>
-        <button class="safe-search-modal-btn safe-search-modal-btn-secondary" id="dismissSafeSearch">No Thanks, I'm in Private</button>
-      </div>
-      <div class="safe-search-modal-footer">You can change this setting anytime by clicking the <i class="fas fa-eye-slash"></i> icon in the header</div>
     </div>
   </div>
   
@@ -487,11 +458,7 @@
     
     // Safe Search functionality
     const safeSearchToggle = document.getElementById('safeSearchToggle');
-    const safeSearchModal = document.getElementById('safeSearchModal');
-    const enableSafeSearchBtn = document.getElementById('enableSafeSearch');
-    const dismissSafeSearchBtn = document.getElementById('dismissSafeSearch');
     function getSafeSearchState() { const saved = localStorage.getItem('safeSearch'); return saved === 'true'; }
-    function hasSeenSafeSearchModal() { return localStorage.getItem('safeSearchModalShown') === 'true'; }
     function applySafeSearch(enabled) {
       if (enabled) {
         document.body.classList.add('safe-search-active');
@@ -505,40 +472,11 @@
       localStorage.setItem('safeSearch', enabled.toString());
     }
     function toggleSafeSearch() { applySafeSearch(!getSafeSearchState()); }
-    function showSafeSearchModal() {
-      if (safeSearchModal) {
-        safeSearchModal.classList.add('show');
-        document.body.style.overflow = 'hidden';
-      }
-    }
-    function hideSafeSearchModal() {
-      if (safeSearchModal) {
-        safeSearchModal.classList.remove('show');
-        document.body.style.overflow = '';
-        localStorage.setItem('safeSearchModalShown', 'true');
-      }
-    }
-    function initSafeSearch() {
-      applySafeSearch(getSafeSearchState());
-      if (!hasSeenSafeSearchModal()) {
-        setTimeout(showSafeSearchModal, 10000);
-      }
-    }
     if (safeSearchToggle) safeSearchToggle.addEventListener('click', toggleSafeSearch);
-    if (enableSafeSearchBtn) enableSafeSearchBtn.addEventListener('click', () => { applySafeSearch(true); hideSafeSearchModal(); });
-    if (dismissSafeSearchBtn) dismissSafeSearchBtn.addEventListener('click', () => { applySafeSearch(false); hideSafeSearchModal(); });
-    if (safeSearchModal) {
-      safeSearchModal.addEventListener('click', (e) => {
-        if (e.target === safeSearchModal) { applySafeSearch(false); hideSafeSearchModal(); }
-      });
-    }
     document.addEventListener('keydown', (e) => {
       if (e.altKey && e.key.toLowerCase() === 's') { e.preventDefault(); toggleSafeSearch(); }
-      if (e.key === 'Escape' && safeSearchModal && safeSearchModal.classList.contains('show')) {
-        applySafeSearch(false); hideSafeSearchModal();
-      }
     });
-    initSafeSearch();
+    applySafeSearch(getSafeSearchState());
     
     // Mobile Search Modal
     const mobileSearchModal = document.getElementById('mobileSearchModal');

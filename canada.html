@@ -1376,32 +1376,7 @@
     </div>
   </div>
 
-  <!-- Safe Search Modal (First-Time Consent) -->
-  <div id="safeSearchModal" class="safe-search-modal" role="dialog" aria-labelledby="safeSearchModalTitle" aria-modal="true">
-    <div class="safe-search-modal-content">
-      <div class="safe-search-modal-icon">
-        <i class="fas fa-shield-alt"></i>
-      </div>
-      <h2 id="safeSearchModalTitle">Browse Safely in Public?</h2>
-      <p>
-        Enable <strong>Safe Search</strong> to blur images so you can comfortably browse at work, on the bus, or anywhere public. 
-        You can toggle this anytime using the shield icon in the header.
-      </p>
-      <div class="safe-search-modal-actions">
-        <button class="safe-search-modal-btn safe-search-modal-btn-primary" id="enableSafeSearch">
-          <i class="fas fa-shield-alt"></i> Enable Safe Search
-        </button>
-        <button class="safe-search-modal-btn safe-search-modal-btn-secondary" id="dismissSafeSearch">
-          No Thanks, I'm in Private
-        </button>
-      </div>
-      <div class="safe-search-modal-footer">
-        You can change this setting anytime by clicking the <i class="fas fa-eye-slash"></i> icon in the header
-      </div>
-    </div>
-  </div>
-
-  <!-- Mobile Drawer -->
+    <!-- Mobile Drawer -->
   <div id="drawerOverlay" class="drawer-overlay" tabindex="-1" aria-hidden="true"></div>
   <nav id="mobileDrawer" class="mobile-drawer" aria-hidden="true" aria-labelledby="mobileMenuToggle">
     <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
@@ -1758,21 +1733,11 @@
     // SAFE SEARCH FUNCTIONALITY
     // ============================================
     const safeSearchToggle = document.getElementById('safeSearchToggle');
-    const safeSearchModal = document.getElementById('safeSearchModal');
-    const enableSafeSearchBtn = document.getElementById('enableSafeSearch');
-    const dismissSafeSearchBtn = document.getElementById('dismissSafeSearch');
-    
     // Get saved Safe Search preference (default OFF for new users)
     function getSafeSearchState() {
       const saved = localStorage.getItem('safeSearch');
       return saved === 'true'; // Returns false by default
     }
-    
-    // Check if user has seen the modal before
-    function hasSeenSafeSearchModal() {
-      return localStorage.getItem('safeSearchModalShown') === 'true';
-    }
-    
     // Apply Safe Search state to UI
     function applySafeSearch(enabled) {
       if (enabled) {
@@ -1796,40 +1761,11 @@
       const current = getSafeSearchState();
       applySafeSearch(!current);
     }
-    
-    // Show first-time modal
-    function showSafeSearchModal() {
-      if (safeSearchModal) {
-        safeSearchModal.classList.add('show');
-        document.body.style.overflow = 'hidden';
-        
-        // Focus trap for accessibility
-        setTimeout(() => {
-          const firstBtn = safeSearchModal.querySelector('button');
-          if (firstBtn) firstBtn.focus();
-        }, 100);
-      }
-    }
-    
-    // Hide modal
-    function hideSafeSearchModal() {
-      if (safeSearchModal) {
-        safeSearchModal.classList.remove('show');
-        document.body.style.overflow = '';
-        localStorage.setItem('safeSearchModalShown', 'true');
-      }
-    }
-    
     // Initialize Safe Search on page load
     function initSafeSearch() {
       // Apply saved preference
       const savedState = getSafeSearchState();
       applySafeSearch(savedState);
-      
-      // Show modal for first-time visitors (after 10 seconds of browsing)
-      if (!hasSeenSafeSearchModal()) {
-        setTimeout(showSafeSearchModal, 10000);
-      }
       
       // Check URL parameter for forced state (?safe=1)
       const urlParams = new URLSearchParams(window.location.search);
@@ -1842,20 +1778,6 @@
     // Event listeners
     if (safeSearchToggle) {
       safeSearchToggle.addEventListener('click', toggleSafeSearch);
-    }
-    
-    if (enableSafeSearchBtn) {
-      enableSafeSearchBtn.addEventListener('click', () => {
-        applySafeSearch(true);
-        hideSafeSearchModal();
-      });
-    }
-    
-    if (dismissSafeSearchBtn) {
-      dismissSafeSearchBtn.addEventListener('click', () => {
-        applySafeSearch(false);
-        hideSafeSearchModal();
-      });
     }
     
     // Initialize on page load
