@@ -228,6 +228,71 @@ Check: SSR renders cards matching the new terms, `__CATEGORY_SSR` is in HTML sou
 
 ---
 
+## Adding Rich SEO Content to a Category Page
+
+By default all category pages show a generic "About this category" paragraph + FAQ (injected by `category.html` client JS). To replace that with a custom long-form article for a specific slug, add a `build<Slug>SeoContent()` function in `api/ssr/category.js` and call it conditionally in step 7 of the handler.
+
+### Pattern (verified for `/categories/best/` — Apr 2026)
+
+**1. Add a builder function** above `export default` in `api/ssr/category.js`:
+```javascript
+function buildBestSeoContent() {
+  const p  = (txt) => `<p style="color:var(--text-primary);font-size:16px;line-height:1.7;margin-bottom:16px;">${txt}</p>`;
+  const h2 = (txt) => `<h2 style="color:#00AFF0;font-weight:600;font-size:22px;margin-bottom:15px;margin-top:30px;">${txt}</h2>`;
+  const h3 = (txt) => `<h3 style="color:#00AFF0;font-weight:600;font-size:20px;margin-bottom:12px;margin-top:24px;">${txt}</h3>`;
+  const a  = (href, txt) => `<a href="${href}" style="color:#00AFF0;">${txt}</a>`;
+  return `
+<h2 id="seoH2" ...>Page headline</h2>
+<p id="seoP1" ...>Intro paragraph...</p>
+${h2('Section heading')} ${p('Body text...')}
+...
+<div id="faq" style="display:none;"></div>`;   // ← keep this hidden div at the end
+}
+```
+> The hidden `<div id="faq">` is required — it keeps the client JS from erroring when it looks up that element.
+
+**2. Call it in the handler** (step 7, just before the `// --- 6. Send ---` comment):
+```javascript
+// --- 7. Category-specific SEO content ---
+if (slug === 'your-slug') {
+  html = html.replace(
+    /<h2 id="seoH2"[^>]*>About this category<\/h2>[\s\S]*?<div id="faq"[^>]*><\/div>/,
+    buildYourSlugSeoContent()
+  );
+}
+```
+> Use a regex (not a plain string) — `category.html` uses CRLF line endings on Windows and plain-string `.replace()` will silently fail.
+
+**3. Naming convention** — name the function `build<PascalCaseSlug>SeoContent()`:
+- `best` → `buildBestSeoContent()`
+- `free` → `buildFreeSeoContent()`
+- `fitness` → `buildFitnessSeoContent()`
+
+**4. Inline style rules** to keep consistent with the rest of the site:
+| Element | Style |
+|---------|-------|
+| `<h2>` main headline | `color:#00AFF0; font-weight:700; font-size:26px; margin-bottom:16px;` |
+| `<h2>` sub-sections | `color:#00AFF0; font-weight:600; font-size:22px; margin-bottom:15px; margin-top:30px;` |
+| `<h3>` | `color:#00AFF0; font-weight:600; font-size:20px; margin-bottom:12px; margin-top:24px;` |
+| `<p>` | `color:var(--text-primary); font-size:16px; line-height:1.7; margin-bottom:16px;` |
+| `<ul>` | `color:var(--text-primary); font-size:16px; line-height:1.8; margin-bottom:20px;` |
+| `<a>` | `color:#00AFF0;` |
+
+**5. Local test** before committing:
+```powershell
+npm start
+# Then in another terminal:
+Invoke-WebRequest http://127.0.0.1:3000/categories/best/ -UseBasicParsing | Select -Expand Content | Select-String 'Your headline'
+```
+Confirm old "About this category" text is gone and new content appears.
+
+**Currently implemented slug-specific pages:**
+| Slug | Function | Added |
+|------|----------|-------|
+| `best` | `buildBestSeoContent()` | Apr 2026 |
+
+---
+
 ## API (`api/`)
 - `search.js` — Supabase REST proxy, 60s in-memory Map cache keyed by full URL. Returns camelCase (`isVerified`, `subscribePrice`) mapped from lowercase DB columns.
 - **Search**: splits `q` by `|` or `,`; defaults to OR across `username,name,about,location`. Caller can override with `?fields=username,name`. Supports `?verified=`, `?bundles=true`, `?price=`, `?location=`, `?page=`, `?page_size=`.
