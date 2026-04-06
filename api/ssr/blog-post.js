@@ -267,6 +267,18 @@ function renderArticleHtml(post) {
   </div>
   ${heroImageHTML}
   <div class="article-divider"><hr></div>
+  <div class="ai-summary-wrap" data-blog-url="${BASE_URL}/blog/${escHtml(post.slug || '')}/">
+    <div class="ai-summary-panel">
+      <div class="ai-summary-title">Summarize this blog post:</div>
+      <div class="ai-summary-actions">
+        <button type="button" class="ai-summary-btn" data-ai="chatgpt" aria-label="Summarize with ChatGPT"><i class="fas fa-robot"></i><span>ChatGPT</span></button>
+        <button type="button" class="ai-summary-btn" data-ai="perplexity" aria-label="Summarize with Perplexity"><i class="fas fa-search"></i><span>Perplexity</span></button>
+        <button type="button" class="ai-summary-btn" data-ai="gemini" aria-label="Summarize with Gemini"><i class="fas fa-star"></i><span>Gemini</span></button>
+        <button type="button" class="ai-summary-btn" data-ai="claude" aria-label="Summarize with Claude"><i class="fas fa-comments"></i><span>Claude</span></button>
+        <button type="button" class="ai-summary-btn" data-ai="grok" aria-label="Summarize with Grok"><i class="fas fa-lightbulb"></i><span>Grok</span></button>
+      </div>
+    </div>
+  </div>
   <article class="article-body">${post.bodyHtml || ''}</article>`;
 }
 
