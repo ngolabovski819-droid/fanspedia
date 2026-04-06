@@ -58,6 +58,14 @@ const COUNTRIES = {
     metaDesc: 'Descubre las creadoras de OnlyFans más populares del Reino Unido. Explora perfiles verificados, cuentas gratis y contenido exclusivo de creadoras británicas.',
     titleEs: `Mejores Creadoras de OnlyFans del Reino Unido (${YEAR}) | FansPedia`,
   },
+  philippines: {
+    terms: ['philippines', 'philippine', 'filipina', 'filipinas'],
+    label: 'Filipinas',
+    htmlFile: 'es/philippines.html',
+    h1: 'Las Mejores Creadoras de OnlyFans en Filipinas',
+    metaDesc: 'Descubre las creadoras de OnlyFans más populares en Filipinas. Explora perfiles verificados, cuentas gratis y contenido exclusivo de creadoras filipinas.',
+    titleEs: `Mejores Creadoras de OnlyFans en Filipinas (${YEAR}) | FansPedia`,
+  },
   india: {
     terms: ['india', 'indian'],
     label: 'India',

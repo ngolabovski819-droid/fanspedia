@@ -62,6 +62,8 @@
     { "source": "/country/argentina/", "destination": "/api/ssr/country?name=argentina" },
     { "source": "/country/united-kingdom", "destination": "/api/ssr/country?name=united-kingdom" },
     { "source": "/country/united-kingdom/", "destination": "/api/ssr/country?name=united-kingdom" },
+    { "source": "/country/philippines", "destination": "/api/ssr/country?name=philippines" },
+    { "source": "/country/philippines/", "destination": "/api/ssr/country?name=philippines" },
     { "source": "/near-me", "destination": "/near-me.html" },
     { "source": "/near-me/", "destination": "/near-me.html" },
     
@@ -89,6 +91,8 @@
     { "source": "/es/country/argentina/", "destination": "/api/ssr/es-country?name=argentina" },
     { "source": "/es/country/united-kingdom", "destination": "/api/ssr/es-country?name=united-kingdom" },
     { "source": "/es/country/united-kingdom/", "destination": "/api/ssr/es-country?name=united-kingdom" },
+    { "source": "/es/country/philippines", "destination": "/api/ssr/es-country?name=philippines" },
+    { "source": "/es/country/philippines/", "destination": "/api/ssr/es-country?name=philippines" },
     { "source": "/es/near-me", "destination": "/es/near-me.html" },
     { "source": "/es/near-me/", "destination": "/es/near-me.html" },
 
