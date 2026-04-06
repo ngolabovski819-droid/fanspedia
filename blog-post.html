@@ -637,6 +637,50 @@
       opacity: 1;
       transform: translateY(0);
     }
+    .ai-gemini-notice {
+      display: none;
+      margin-top: 12px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(66,133,244,0.10), rgba(52,168,83,0.08));
+      border: 1.5px solid #4285F4;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .ai-gemini-notice.visible { display: flex; }
+    .ai-gemini-notice-text {
+      flex: 1;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+    .ai-gemini-notice-text span { color: #34A853; }
+    .ai-gemini-notice-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: #4285F4;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background .18s;
+    }
+    .ai-gemini-notice-link:hover { background: #1a73e8; }
+    .ai-gemini-notice-dismiss {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 17px;
+      line-height: 1;
+      padding: 2px 4px;
+    }
     @media (max-width: 768px) {
       .ai-summary-title { font-size: 17px; }
       .ai-summary-btn { font-size: 14px; padding: 9px 12px; }
@@ -1139,6 +1183,11 @@
             <button type="button" class="ai-summary-btn" data-ai="claude" aria-label="Summarize with Claude"><i class="fas fa-comments"></i><span>Claude</span></button>
             <button type="button" class="ai-summary-btn" data-ai="grok" aria-label="Summarize with Grok"><i class="fas fa-lightbulb"></i><span>Grok</span></button>
           </div>
+          <div class="ai-gemini-notice">
+            <div class="ai-gemini-notice-text"><strong>&#10003; Prompt copied!</strong> Now paste it into Gemini with Ctrl+V (or &#8984;V on Mac).</div>
+            <a class="ai-gemini-notice-link" href="https://gemini.google.com/app" target="_blank" rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i>&nbsp;Open Gemini</a>
+            <button class="ai-gemini-notice-dismiss" aria-label="Dismiss" onclick="this.closest('.ai-gemini-notice').classList.remove('visible')">&times;</button>
+          </div>
         </div>
       </div>
       <article class="article-body">${post.bodyHtml || `<p><em>${i18nText('blog_contentComingSoon', 'Content coming soon.')}</em></p>`}</article>
@@ -1195,12 +1244,10 @@
     const aiUrl = buildAiPromptUrl(provider, prompt);
 
     if (provider === 'gemini') {
-      // Show toast BEFORE opening so user sees it before focus shifts to new tab
-      showAiSummaryToast('✓ Prompt copied! Paste it into Gemini (Ctrl+V / ⌘V)', 5000);
-      setTimeout(() => {
-        const opened = window.open(aiUrl, '_blank', 'noopener,noreferrer');
-        if (!opened) showAiSummaryToast('Popup blocked. Please allow popups for this site.', 3000);
-      }, 600);
+      // Gemini has no URL prefill — show inline notice with manual link instead
+      const notice = clickedButton.closest('.ai-summary-panel')?.querySelector('.ai-gemini-notice')
+                  || document.getElementById('geminiNotice');
+      if (notice) notice.classList.add('visible');
       return;
     }
 

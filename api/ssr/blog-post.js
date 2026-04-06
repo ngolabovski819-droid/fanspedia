@@ -277,6 +277,11 @@ function renderArticleHtml(post) {
         <button type="button" class="ai-summary-btn" data-ai="claude" aria-label="Summarize with Claude"><i class="fas fa-comments"></i><span>Claude</span></button>
         <button type="button" class="ai-summary-btn" data-ai="grok" aria-label="Summarize with Grok"><i class="fas fa-lightbulb"></i><span>Grok</span></button>
       </div>
+      <div class="ai-gemini-notice">
+        <div class="ai-gemini-notice-text"><strong>&#10003; Prompt copied!</strong> Now paste it into Gemini with Ctrl+V (or &#8984;V on Mac).</div>
+        <a class="ai-gemini-notice-link" href="https://gemini.google.com/app" target="_blank" rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i>&nbsp;Open Gemini</a>
+        <button class="ai-gemini-notice-dismiss" aria-label="Dismiss" onclick="this.closest('.ai-gemini-notice').classList.remove('visible')">&times;</button>
+      </div>
     </div>
   </div>
   <article class="article-body">${post.bodyHtml || ''}</article>`;
