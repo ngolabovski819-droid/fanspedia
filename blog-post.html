@@ -445,6 +445,102 @@
       .article-layout-wrapper .article-body { max-width: 100%; }
     }
 
+    /* === AUTHOR CARD === */
+    .author-card-wrap {
+      max-width: 860px;
+      margin: 0 auto 28px;
+      padding: 0 20px;
+    }
+    .author-card {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 40px;
+      background: var(--bg-primary);
+      cursor: pointer;
+      position: relative;
+      transition: border-color .2s, box-shadow .2s;
+      outline: none;
+    }
+    .author-card:hover, .author-card:focus-within {
+      border-color: var(--brand-color);
+      box-shadow: 0 2px 12px rgba(0,175,240,0.12);
+    }
+    .author-avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: var(--bg-secondary);
+      flex-shrink: 0;
+    }
+    .author-info { display: flex; flex-direction: column; gap: 1px; }
+    .author-name { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+    .author-jobtitle { font-size: 12px; color: var(--text-muted); }
+    /* Tooltip */
+    .author-tooltip {
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 0;
+      z-index: 200;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 16px;
+      width: 300px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(4px);
+      transition: opacity .18s ease, transform .18s ease;
+    }
+    .author-card:hover .author-tooltip,
+    .author-card:focus-within .author-tooltip,
+    .author-card.tooltip-open .author-tooltip {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    .author-tooltip-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .author-tooltip-avatar {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: var(--bg-secondary);
+      flex-shrink: 0;
+    }
+    .author-tooltip-name { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+    .author-tooltip-title { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .author-tooltip-bio {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      margin: 0 0 12px;
+    }
+    .author-tooltip-linkedin {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 14px;
+      background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
+      color: #fff;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: opacity .2s;
+    }
+    .author-tooltip-linkedin:hover { opacity: .88; }
+    @media (max-width: 480px) {
+      .author-tooltip { width: calc(100vw - 48px); left: 0; }
+    }
+
     /* -- BACK TO BLOG -- */
     .back-bar {
       max-width: 860px;
@@ -900,6 +996,29 @@
           <span class="article-tag article-tag-inline">${post.categoryLabel}</span>
         </div>
       </div>
+      <div class="author-card-wrap">
+        <div class="author-card" tabindex="0">
+          <img class="author-avatar" src="/uploads/author-nick.webp" alt="Nick Golabovski" width="40" height="40" loading="lazy" onerror="this.style.display='none'">
+          <div class="author-info">
+            <span class="author-name">Nick Golabovski</span>
+            <span class="author-jobtitle">Founder, FansPedia</span>
+          </div>
+          <div class="author-tooltip" role="tooltip">
+            <div class="author-tooltip-header">
+              <img class="author-tooltip-avatar" src="/uploads/author-nick.webp" alt="Nick Golabovski" width="52" height="52" loading="lazy" onerror="this.style.display='none'">
+              <div>
+                <div class="author-tooltip-name">Nick Golabovski</div>
+                <div class="author-tooltip-title">Founder, FansPedia</div>
+              </div>
+            </div>
+            <p class="author-tooltip-bio">Nick has been researching the creator economy since 2021. He built FansPedia to help fans discover real OnlyFans creators. He writes data-driven guides on creator platforms, monetisation, and audience growth.</p>
+            <a class="author-tooltip-linkedin" href="https://www.linkedin.com/in/nikola-golabovski-28b124209/" target="_blank" rel="noopener noreferrer">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              Connect on LinkedIn
+            </a>
+          </div>
+        </div>
+      </div>
       ${heroImageHTML}
       <div class="article-divider"><hr></div>
       <article class="article-body">${post.bodyHtml || `<p><em>${i18nText('blog_contentComingSoon', 'Content coming soon.')}</em></p>`}</article>
@@ -1001,6 +1120,15 @@
       })
       .catch(err => renderError(err.message || 'Please try again later.'));
   }
+  // Author card — tap to toggle tooltip on mobile
+  document.addEventListener('click', e => {
+    const card = e.target.closest('.author-card');
+    if (card) {
+      card.classList.toggle('tooltip-open');
+      return;
+    }
+    document.querySelectorAll('.author-card.tooltip-open').forEach(c => c.classList.remove('tooltip-open'));
+  });
 </script>
 
   <script defer src="/age-gate.js"></script>

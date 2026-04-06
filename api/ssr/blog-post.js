@@ -30,6 +30,18 @@ const contentDir = join(ROOT, 'content', 'blog');
 const BASE_URL = 'https://fanspedia.net';
 
 // ---------------------------------------------------------------------------
+// Author
+// ---------------------------------------------------------------------------
+const AUTHOR = {
+  name: 'Nick Golabovski',
+  title: 'Founder, FansPedia',
+  bio: 'Nick has been researching the creator economy since 2021. He built FansPedia to help fans discover real OnlyFans creators. He writes data-driven guides on creator platforms, monetisation, and audience growth.',
+  linkedin: 'https://www.linkedin.com/in/nikola-golabovski-28b124209/',
+  avatar: '/uploads/author-nick.webp',
+  url: 'https://fanspedia.net/about/',
+};
+
+// ---------------------------------------------------------------------------
 // Markdown / frontmatter helpers (self-contained to avoid cross-bundle imports)
 // ---------------------------------------------------------------------------
 function parseFrontmatter(raw) {
@@ -230,6 +242,29 @@ function renderArticleHtml(post) {
       <span class="article-tag article-tag-inline">${escHtml(post.categoryLabel || post.category || '')}</span>
     </div>
   </div>
+  <div class="author-card-wrap">
+    <div class="author-card" tabindex="0">
+      <img class="author-avatar" src="${escHtml(AUTHOR.avatar)}" alt="${escHtml(AUTHOR.name)}" width="40" height="40" loading="lazy" onerror="this.style.display='none'">
+      <div class="author-info">
+        <span class="author-name">${escHtml(AUTHOR.name)}</span>
+        <span class="author-jobtitle">${escHtml(AUTHOR.title)}</span>
+      </div>
+      <div class="author-tooltip" role="tooltip">
+        <div class="author-tooltip-header">
+          <img class="author-tooltip-avatar" src="${escHtml(AUTHOR.avatar)}" alt="${escHtml(AUTHOR.name)}" width="52" height="52" loading="lazy" onerror="this.style.display='none'">
+          <div>
+            <div class="author-tooltip-name">${escHtml(AUTHOR.name)}</div>
+            <div class="author-tooltip-title">${escHtml(AUTHOR.title)}</div>
+          </div>
+        </div>
+        <p class="author-tooltip-bio">${escHtml(AUTHOR.bio)}</p>
+        <a class="author-tooltip-linkedin" href="${escHtml(AUTHOR.linkedin)}" target="_blank" rel="noopener noreferrer">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          Connect on LinkedIn
+        </a>
+      </div>
+    </div>
+  </div>
   ${heroImageHTML}
   <div class="article-divider"><hr></div>
   <article class="article-body">${post.bodyHtml || ''}</article>`;
@@ -251,9 +286,11 @@ function buildJsonLd(post, canonicalUrl) {
     }),
     ...(post.featuredImage && { image: post.featuredImage }),
     author: {
-      '@type': 'Organization',
-      name: 'FansPedia',
-      url: `${BASE_URL}/`,
+      '@type': 'Person',
+      name: AUTHOR.name,
+      url: AUTHOR.url,
+      sameAs: [AUTHOR.linkedin],
+      jobTitle: AUTHOR.title,
     },
     publisher: {
       '@type': 'Organization',
