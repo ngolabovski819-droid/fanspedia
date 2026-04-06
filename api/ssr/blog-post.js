@@ -37,7 +37,7 @@ const AUTHOR = {
   title: 'Founder, FansPedia',
   bio: 'Nick has been researching the creator economy since 2021. He built FansPedia to help fans discover real OnlyFans creators. He writes data-driven guides on creator platforms, monetisation, and audience growth.',
   linkedin: 'https://www.linkedin.com/in/nikola-golabovski-28b124209/',
-  avatar: '/uploads/author-nick.webp',
+  avatar: '/uploads/author-nick.jpg',
   url: 'https://fanspedia.net/about/',
 };
 
@@ -244,14 +244,14 @@ function renderArticleHtml(post) {
   </div>
   <div class="author-card-wrap">
     <div class="author-card" tabindex="0">
-      <img class="author-avatar" src="${escHtml(AUTHOR.avatar)}" alt="${escHtml(AUTHOR.name)}" width="40" height="40" loading="lazy" onerror="this.style.display='none'">
+      <img class="author-avatar" src="${escHtml(AUTHOR.avatar)}" alt="${escHtml(AUTHOR.name)}" width="44" height="44" loading="lazy" onerror="this.style.display='none'">
       <div class="author-info">
         <span class="author-name">${escHtml(AUTHOR.name)}</span>
         <span class="author-jobtitle">${escHtml(AUTHOR.title)}</span>
       </div>
       <div class="author-tooltip" role="tooltip">
         <div class="author-tooltip-header">
-          <img class="author-tooltip-avatar" src="${escHtml(AUTHOR.avatar)}" alt="${escHtml(AUTHOR.name)}" width="52" height="52" loading="lazy" onerror="this.style.display='none'">
+          <img class="author-tooltip-avatar" src="${escHtml(AUTHOR.avatar)}" alt="${escHtml(AUTHOR.name)}" width="56" height="56" loading="lazy" onerror="this.style.display='none'">
           <div>
             <div class="author-tooltip-name">${escHtml(AUTHOR.name)}</div>
             <div class="author-tooltip-title">${escHtml(AUTHOR.title)}</div>

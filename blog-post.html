@@ -450,95 +450,113 @@
       max-width: 860px;
       margin: 0 auto 28px;
       padding: 0 20px;
+      display: flex;
+      justify-content: center;
     }
     .author-card {
       display: inline-flex;
       align-items: center;
-      gap: 12px;
-      padding: 10px 16px;
+      gap: 14px;
+      padding: 10px 20px 10px 10px;
       border: 1px solid var(--border-color);
-      border-radius: 40px;
-      background: var(--bg-primary);
+      border-radius: 48px;
+      background: var(--bg-secondary);
       cursor: pointer;
       position: relative;
-      transition: border-color .2s, box-shadow .2s;
+      transition: border-color .2s, box-shadow .2s, background .2s;
       outline: none;
     }
     .author-card:hover, .author-card:focus-within {
       border-color: var(--brand-color);
-      box-shadow: 0 2px 12px rgba(0,175,240,0.12);
+      box-shadow: 0 4px 20px rgba(0,175,240,0.1);
+      background: var(--bg-primary);
     }
     .author-avatar {
-      width: 40px; height: 40px;
+      width: 44px; height: 44px;
       border-radius: 50%;
       object-fit: cover;
       background: var(--bg-secondary);
       flex-shrink: 0;
+      border: 2px solid var(--brand-color);
     }
-    .author-info { display: flex; flex-direction: column; gap: 1px; }
-    .author-name { font-size: 14px; font-weight: 700; color: var(--text-primary); }
-    .author-jobtitle { font-size: 12px; color: var(--text-muted); }
+    .author-info { display: flex; flex-direction: column; gap: 2px; }
+    .author-name { font-size: 14px; font-weight: 700; color: var(--text-primary); line-height: 1.2; }
+    .author-jobtitle { font-size: 11px; font-weight: 600; color: var(--brand-color); letter-spacing: .02em; }
     /* Tooltip */
     .author-tooltip {
       position: absolute;
       top: calc(100% + 10px);
-      left: 0;
+      left: 50%;
+      transform: translateX(-50%) translateY(6px);
       z-index: 200;
       background: var(--bg-primary);
       border: 1px solid var(--border-color);
       border-radius: 16px;
-      padding: 16px;
-      width: 300px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      padding: 20px;
+      width: 320px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
       opacity: 0;
       pointer-events: none;
-      transform: translateY(4px);
-      transition: opacity .18s ease, transform .18s ease;
+      transition: opacity .2s ease, transform .2s ease;
     }
     .author-card:hover .author-tooltip,
     .author-card:focus-within .author-tooltip,
     .author-card.tooltip-open .author-tooltip {
       opacity: 1;
       pointer-events: auto;
-      transform: translateY(0);
+      transform: translateX(-50%) translateY(0);
+    }
+    .author-tooltip::before {
+      content: '';
+      position: absolute;
+      top: -7px;
+      left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 12px; height: 12px;
+      background: var(--bg-primary);
+      border-left: 1px solid var(--border-color);
+      border-top: 1px solid var(--border-color);
     }
     .author-tooltip-header {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 10px;
+      gap: 14px;
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-color);
     }
     .author-tooltip-avatar {
-      width: 52px; height: 52px;
+      width: 56px; height: 56px;
       border-radius: 50%;
       object-fit: cover;
       background: var(--bg-secondary);
       flex-shrink: 0;
+      border: 2px solid var(--brand-color);
     }
-    .author-tooltip-name { font-size: 15px; font-weight: 700; color: var(--text-primary); }
-    .author-tooltip-title { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .author-tooltip-name { font-size: 16px; font-weight: 700; color: var(--text-primary); line-height: 1.2; }
+    .author-tooltip-title { font-size: 12px; color: var(--brand-color); font-weight: 600; margin-top: 3px; }
     .author-tooltip-bio {
       font-size: 13px;
-      line-height: 1.6;
+      line-height: 1.65;
       color: var(--text-secondary);
-      margin: 0 0 12px;
+      margin: 0 0 14px;
     }
     .author-tooltip-linkedin {
       display: inline-flex;
       align-items: center;
       gap: 7px;
-      padding: 8px 14px;
-      background: linear-gradient(135deg, #00AFF0 0%, #0099D6 100%);
+      padding: 8px 16px;
+      background: #0A66C2;
       color: #fff;
       border-radius: 20px;
       font-size: 13px;
       font-weight: 700;
       text-decoration: none;
-      transition: opacity .2s;
+      transition: background .2s;
     }
-    .author-tooltip-linkedin:hover { opacity: .88; }
+    .author-tooltip-linkedin:hover { background: #004182; }
     @media (max-width: 480px) {
-      .author-tooltip { width: calc(100vw - 48px); left: 0; }
+      .author-tooltip { width: calc(100vw - 48px); left: 50%; }
     }
 
     /* -- BACK TO BLOG -- */
@@ -998,14 +1016,14 @@
       </div>
       <div class="author-card-wrap">
         <div class="author-card" tabindex="0">
-          <img class="author-avatar" src="/uploads/author-nick.webp" alt="Nick Golabovski" width="40" height="40" loading="lazy" onerror="this.style.display='none'">
+          <img class="author-avatar" src="/uploads/author-nick.jpg" alt="Nick Golabovski" width="44" height="44" loading="lazy" onerror="this.style.display='none'">
           <div class="author-info">
             <span class="author-name">Nick Golabovski</span>
             <span class="author-jobtitle">Founder, FansPedia</span>
           </div>
           <div class="author-tooltip" role="tooltip">
             <div class="author-tooltip-header">
-              <img class="author-tooltip-avatar" src="/uploads/author-nick.webp" alt="Nick Golabovski" width="52" height="52" loading="lazy" onerror="this.style.display='none'">
+              <img class="author-tooltip-avatar" src="/uploads/author-nick.jpg" alt="Nick Golabovski" width="56" height="56" loading="lazy" onerror="this.style.display='none'">
               <div>
                 <div class="author-tooltip-name">Nick Golabovski</div>
                 <div class="author-tooltip-title">Founder, FansPedia</div>
