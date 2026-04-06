@@ -1193,17 +1193,23 @@
     }
 
     const aiUrl = buildAiPromptUrl(provider, prompt);
+
+    if (provider === 'gemini') {
+      // Show toast BEFORE opening so user sees it before focus shifts to new tab
+      showAiSummaryToast('✓ Prompt copied! Paste it into Gemini (Ctrl+V / ⌘V)', 5000);
+      setTimeout(() => {
+        const opened = window.open(aiUrl, '_blank', 'noopener,noreferrer');
+        if (!opened) showAiSummaryToast('Popup blocked. Please allow popups for this site.', 3000);
+      }, 600);
+      return;
+    }
+
     const opened = window.open(aiUrl, '_blank', 'noopener,noreferrer');
     if (!opened) {
       showAiSummaryToast('Popup blocked. Please allow popups for this site.');
       return;
     }
-
-    if (provider === 'gemini') {
-      showAiSummaryToast('Prompt copied! Paste it into Gemini (Ctrl+V / ⌘V)', 4000);
-    } else {
-      showAiSummaryToast('Opened — prompt prefilled.');
-    }
+    showAiSummaryToast('Opened — prompt prefilled.');
   }
 
   function buildTOC() {
