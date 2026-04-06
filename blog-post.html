@@ -1157,13 +1157,13 @@
     const q = encodeURIComponent(prompt);
     if (provider === 'chatgpt') return `${AI_ASSISTANT_URLS.chatgpt}?q=${q}`;
     if (provider === 'perplexity') return `${AI_ASSISTANT_URLS.perplexity}?q=${q}`;
-    if (provider === 'gemini') return `${AI_ASSISTANT_URLS.gemini}?prompt=${q}`;
+    if (provider === 'gemini') return AI_ASSISTANT_URLS.gemini; // Gemini ignores URL query params — prompt is pre-copied to clipboard
     if (provider === 'claude') return `${AI_ASSISTANT_URLS.claude}?q=${q}`;
     if (provider === 'grok') return `${AI_ASSISTANT_URLS.grok}?q=${q}`;
     return `${AI_ASSISTANT_URLS.chatgpt}?q=${q}`;
   }
 
-  function showAiSummaryToast(message) {
+  function showAiSummaryToast(message, duration) {
     let toast = document.getElementById('aiSummaryToast');
     if (!toast) {
       toast = document.createElement('div');
@@ -1174,7 +1174,7 @@
     toast.textContent = message;
     toast.classList.add('show');
     clearTimeout(showAiSummaryToast._timer);
-    showAiSummaryToast._timer = setTimeout(() => toast.classList.remove('show'), 1800);
+    showAiSummaryToast._timer = setTimeout(() => toast.classList.remove('show'), duration || 2200);
   }
 
   async function handleAiSummary(provider, clickedButton) {
@@ -1199,7 +1199,11 @@
       return;
     }
 
-    showAiSummaryToast('Opened in a new tab. Prompt is prefilled where supported and copied as backup.');
+    if (provider === 'gemini') {
+      showAiSummaryToast('Prompt copied! Paste it into Gemini (Ctrl+V / ⌘V)', 4000);
+    } else {
+      showAiSummaryToast('Opened — prompt prefilled.');
+    }
   }
 
   function buildTOC() {
