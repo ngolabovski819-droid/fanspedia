@@ -155,6 +155,8 @@ function inlineFormat(text) {
 
 async function resolveFeaturedImageUrl(rawUrl) {
   if (!rawUrl) return '';
+  // Local paths (e.g. /uploads/...) are served as static files — return as-is
+  if (rawUrl.trim().startsWith('/')) return rawUrl.trim();
 
   try {
     const parsed = new URL(rawUrl);

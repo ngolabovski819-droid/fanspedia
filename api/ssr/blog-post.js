@@ -133,6 +133,8 @@ function mdToHtml(md) {
 
 async function resolveFeaturedImageUrl(rawUrl) {
   if (!rawUrl || !rawUrl.trim()) return '';
+  // Local paths (e.g. /uploads/...) are served as static files — return as-is
+  if (rawUrl.trim().startsWith('/')) return rawUrl.trim();
   try {
     const parsed = new URL(rawUrl);
     const host = parsed.hostname.toLowerCase().replace(/^www\./, '');
@@ -196,10 +198,9 @@ function renderArticleHtml(post) {
   if (post.featuredImage && post.featuredImage.trim()) {
     const base = post.featuredImage.trim();
     const alt = escHtml(post.featuredImageAlt || post.title || '');
-    const isLocal = base.startsWith('/');
-    const absBase = isLocal ? `https://fanspedia.net${base}` : base;
-    const desk = isLocal ? escHtml(base) : escHtml(`https://images.weserv.nl/?url=${encodeURIComponent(absBase)}&w=1200&h=675&fit=cover&output=webp&q=85`);
-    const mob  = isLocal ? escHtml(base) : escHtml(`https://images.weserv.nl/?url=${encodeURIComponent(absBase)}&w=800&h=450&fit=cover&output=webp&q=85`);
+    const absBase = base.startsWith('/') ? `https://fanspedia.net${base}` : base;
+    const desk = escHtml(`https://images.weserv.nl/?url=${encodeURIComponent(absBase)}&w=1200&h=675&fit=cover&output=webp&q=85`);
+    const mob  = escHtml(`https://images.weserv.nl/?url=${encodeURIComponent(absBase)}&w=800&h=450&fit=cover&output=webp&q=85`);
     heroImageHTML = `
     <div class="blog-hero-image">
       <picture>

@@ -966,8 +966,9 @@
     let imagePlaceholder = '';
     if (post.featuredImage && post.featuredImage.trim()) {
       const baseUrl = post.featuredImage.trim();
+      const absUrl = baseUrl.startsWith('/') ? 'https://fanspedia.net' + baseUrl : baseUrl;
       const alt = post.featuredImageAlt || post.title;
-      const thumbSrc = 'https://images.weserv.nl/?url=' + encodeURIComponent(baseUrl) + '&w=600&h=338&fit=cover&output=webp&q=85';
+      const thumbSrc = 'https://images.weserv.nl/?url=' + encodeURIComponent(absUrl) + '&w=600&h=338&fit=cover&output=webp&q=85';
       imagePlaceholder = '<div class="post-card-image-placeholder"><img src="' + thumbSrc + '" alt="' + alt + '" loading="lazy"></div>';
     } else {
       const fallbackEmoji = (post.emoji && post.emoji.trim()) ? post.emoji : '??';

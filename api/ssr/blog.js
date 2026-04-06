@@ -56,7 +56,9 @@ function renderCard(post, index) {
   const url = `${BASE_URL}/blog/${post.slug}/`;
   let imageHtml;
   if (post.featuredImage && post.featuredImage.trim()) {
-    const proxy = `https://images.weserv.nl/?url=${encodeURIComponent(post.featuredImage.trim())}&w=600&h=338&fit=cover&output=webp&q=85`;
+    const raw = post.featuredImage.trim();
+    const absUrl = raw.startsWith('/') ? `https://fanspedia.net${raw}` : raw;
+    const proxy = `https://images.weserv.nl/?url=${encodeURIComponent(absUrl)}&w=600&h=338&fit=cover&output=webp&q=85`;
     const alt = escAttr(post.featuredImageAlt || post.title);
     const imgExtra = index === 0
       ? ' loading="eager" fetchpriority="high"'
