@@ -154,6 +154,7 @@
     { "source": "/country/japan",         "destination": "/country/japan/",         "statusCode": 301 },
     { "source": "/country/argentina",     "destination": "/country/argentina/",     "statusCode": 301 },
     { "source": "/country/united-kingdom", "destination": "/country/united-kingdom/", "statusCode": 301 },
+    { "source": "/country/philippines",    "destination": "/country/philippines/",    "statusCode": 301 },
 
     { "source": "/categories/indian", "destination": "/country/india/", "statusCode": 301 },
     { "source": "/categories/indian/", "destination": "/country/india/", "statusCode": 301 },
@@ -176,6 +177,8 @@
     { "source": "/united-states.html", "destination": "/country/united-states/","statusCode": 301 },
     { "source": "/argentina.html",     "destination": "/country/argentina/",   "statusCode": 301 },
     { "source": "/united-kingdom.html", "destination": "/country/united-kingdom/", "statusCode": 301 },
+    { "source": "/philippines.html",     "destination": "/country/philippines/",    "statusCode": 301 },
+    { "source": "/es/philippines.html", "destination": "/es/country/philippines/", "statusCode": 301 },
 
     { "source": "/es/index.html",        "destination": "/es/",                        "statusCode": 301 },
     { "source": "/es/blog.html",          "destination": "/es/blog/",                  "statusCode": 301 },
