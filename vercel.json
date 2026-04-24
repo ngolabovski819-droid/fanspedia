@@ -32,6 +32,8 @@
     { "source": "/es/wishlist/", "destination": "/wishlist.html" },
     { "source": "/about", "destination": "/about.html" },
     { "source": "/about/", "destination": "/about.html" },
+    { "source": "/promote", "destination": "/promote.html" },
+    { "source": "/promote/", "destination": "/promote.html" },
     { "source": "/contact-us", "destination": "/contact.html" },
     { "source": "/contact-us/", "destination": "/contact.html" },
     { "source": "/dmca-policy", "destination": "/dmca.html" },
@@ -133,6 +135,7 @@
     { "source": "/privacy/",       "destination": "/privacy-policy/","statusCode": 301 },
 
     { "source": "/about.html",         "destination": "/about/",          "statusCode": 301 },
+    { "source": "/promote.html",       "destination": "/promote/",        "statusCode": 301 },
     { "source": "/terms.html",         "destination": "/terms/",          "statusCode": 301 },
     { "source": "/contact.html",       "destination": "/contact-us/",     "statusCode": 301 },
     { "source": "/dmca.html",          "destination": "/dmca-policy/",    "statusCode": 301 },

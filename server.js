@@ -234,6 +234,11 @@ app.get(['/es/country/:name', '/es/country/:name/'], async (req, res) => {
   }
 });
 
+// Promote page
+app.get(['/promote', '/promote/'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'promote.html'));
+});
+
 // About page
 app.get(['/about', '/about/'], (req, res) => {
   res.sendFile(path.join(__dirname, 'about.html'));
@@ -263,7 +268,7 @@ app.get(['/terms', '/terms/'], (req, res) => {
 app.get('/:username([a-zA-Z0-9_.-]+)', (req, res, next) => {
   const username = req.params.username;
   if (username.match(/\.(js|css|png|jpg|jpeg|svg|ico|webp|map|json)$/i)) return next();
-  if (["index", "category", "creator", "static", "config", "api", "public", "tests", "about", "contact-us", "dmca-policy", "privacy-policy", "terms"].includes(username)) return next();
+  if (["index", "category", "creator", "static", "config", "api", "public", "tests", "about", "contact-us", "dmca-policy", "privacy-policy", "terms", "promote"].includes(username)) return next();
   return res.redirect(302, '/');
 });
 
