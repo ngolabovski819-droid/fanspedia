@@ -171,17 +171,6 @@
     .mobile-search-suggestion { display:flex; align-items:center; gap:12px; padding:14px 16px; background:var(--bg-primary); border-radius:12px; text-decoration:none; color:var(--text-primary); font-weight:600; font-size:15px; transition:all .2s ease; }
     .mobile-search-suggestion:hover { background:var(--bg-secondary); transform:translateX(4px); }
     .mobile-search-suggestion i { color:#00AFF0; font-size:16px; }
-    .safe-search-modal { position:fixed; inset:0; background:rgba(0,0,0,0.75); backdrop-filter:blur(10px); z-index:10002; display:none; align-items:center; justify-content:center; padding:20px; }
-    .safe-search-modal.show { display:flex; }
-    .safe-search-modal-content { background:var(--bg-secondary); border-radius:24px; padding:40px; max-width:520px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,0.3); }
-    .safe-search-modal-icon { width:80px; height:80px; background:linear-gradient(135deg,#00AFF0 0%,#0099D6 100%); border-radius:20px; display:flex; align-items:center; justify-content:center; margin:0 auto 24px; font-size:36px; color:white; }
-    .safe-search-modal h2 { font-size:28px; font-weight:800; color:var(--text-primary); margin-bottom:12px; text-align:center; }
-    .safe-search-modal p { color:var(--text-secondary); font-size:16px; line-height:1.6; text-align:center; margin-bottom:32px; }
-    .safe-search-modal-actions { display:flex; gap:12px; flex-direction:column; }
-    .safe-search-modal-btn { padding:16px 32px; border-radius:12px; font-weight:700; font-size:16px; cursor:pointer; transition:all 0.3s ease; border:none; text-align:center; }
-    .safe-search-modal-btn-primary { background:linear-gradient(135deg,#34c759 0%,#30b350 100%); color:white; }
-    .safe-search-modal-btn-secondary { background:var(--bg-primary); color:var(--text-primary); border:2px solid var(--border-color); }
-    .safe-search-modal-footer { margin-top:24px; text-align:center; font-size:13px; color:var(--text-muted); }
     .breadcrumbs-wrapper { background:var(--bg-secondary); border-bottom:1px solid var(--border-color); }
     .breadcrumbs { max-width:1400px; margin:0 auto; padding:12px 16px; display:flex; align-items:center; flex-wrap:wrap; gap:6px; font-size:13px; list-style:none; }
     .breadcrumb-item { display:inline-flex; align-items:center; color:var(--text-secondary); font-weight:500; }
@@ -418,20 +407,6 @@
     <div class="mobile-search-content">
       <div class="mobile-search-label">Popular Searches</div>
       <div class="mobile-search-suggestions" id="mobileSearchSuggestionsContainer"></div>
-    </div>
-  </div>
-
-  <!-- Safe Search Modal -->
-  <div class="safe-search-modal" id="safeSearchModal" role="dialog" aria-modal="true">
-    <div class="safe-search-modal-content">
-      <div class="safe-search-modal-icon"><i class="fas fa-shield-alt"></i></div>
-      <h2>Enable Safe Search?</h2>
-      <p>Safe Search blurs potentially NSFW content, making browsing more comfortable in public spaces. You can toggle it anytime using the shield button.</p>
-      <div class="safe-search-modal-actions">
-        <button class="safe-search-modal-btn safe-search-modal-btn-primary" id="enableSafeSearchBtn"><i class="fas fa-check"></i> Enable Safe Search</button>
-        <button class="safe-search-modal-btn safe-search-modal-btn-secondary" id="dismissSafeSearchBtn">No Thanks, I'll Enable It Later</button>
-      </div>
-      <div class="safe-search-modal-footer">Safe Search is OFF by default. Your choice is saved locally.</div>
     </div>
   </div>
 
@@ -954,9 +929,6 @@
     // Safe Search
     (function() {
       var toggle = document.getElementById('safeSearchToggle');
-      var modal = document.getElementById('safeSearchModal');
-      var enableBtn = document.getElementById('enableSafeSearchBtn');
-      var dismissBtn = document.getElementById('dismissSafeSearchBtn');
       function applyState(on) {
         if (on) { toggle.classList.add('active'); toggle.title = 'Safe Search: ON'; }
         else { toggle.classList.remove('active'); toggle.title = 'Safe Search: OFF'; }
@@ -964,9 +936,6 @@
       }
       applyState(localStorage.getItem('safeSearch') === '1');
       toggle.addEventListener('click', function() { applyState(localStorage.getItem('safeSearch') !== '1'); });
-      if (!localStorage.getItem('safeSearchModalShown')) { setTimeout(function() { modal.classList.add('show'); }, 3000); }
-      if (enableBtn) enableBtn.addEventListener('click', function() { applyState(true); localStorage.setItem('safeSearchModalShown','1'); modal.classList.remove('show'); });
-      if (dismissBtn) dismissBtn.addEventListener('click', function() { localStorage.setItem('safeSearchModalShown','1'); modal.classList.remove('show'); });
     })();
 
     // Mobile search modal
