@@ -174,7 +174,7 @@ export default async function handler(req, res) {
       apikey: SUPABASE_KEY,
       Authorization: `Bearer ${SUPABASE_KEY}`,
       'Accept-Profile': 'public',
-      Prefer: 'count=exact',
+      Prefer: 'count=estimated',
     };
 
     const popularParams = new URLSearchParams({

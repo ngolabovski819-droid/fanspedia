@@ -170,7 +170,7 @@ async function buildAndCache(SUPABASE_URL, SUPABASE_KEY, rawHtml) {
       apikey: SUPABASE_KEY,
       Authorization: `Bearer ${SUPABASE_KEY}`,
       'Accept-Profile': 'public',
-      Prefer: 'count=exact',
+      Prefer: 'count=estimated',
     };
     const popularParams = new URLSearchParams({ select: SELECT_COLS, order: 'favoritedcount.desc', limit: String(POPULAR_LIMIT) });
     const newestParams  = new URLSearchParams({ select: SELECT_COLS, order: 'joindate.desc',       limit: String(NEWEST_LIMIT)  });
@@ -256,7 +256,7 @@ export default async function handler(req, res) {
       apikey: SUPABASE_KEY,
       Authorization: `Bearer ${SUPABASE_KEY}`,
       'Accept-Profile': 'public',
-      Prefer: 'count=exact',
+      Prefer: 'count=estimated',
     };
 
     // --- 1. Two parallel fetches ---

@@ -112,7 +112,7 @@ export default async function handler(req, res) {
       'Authorization': `Bearer ${SUPABASE_KEY}`,
       'Accept-Profile': 'public',
       'Content-Profile': 'public',
-      'Prefer': 'count=exact'
+      'Prefer': 'count=estimated'
     };
 
     let r;
