@@ -161,7 +161,7 @@ export default async function handler(req, res) {
     const label = isCompound ? compoundCategories[slug].displayLabel : slugToLabel(slug);
 
     // --- 2. Fetch creators from Supabase ---
-    const searchCols = ['username', 'name', 'about', 'location'];
+    const searchCols = ['username', 'name'];
     const expressions = terms.flatMap(t =>
       searchCols.map(c => `${c}.ilike.*${t}*`)
     );

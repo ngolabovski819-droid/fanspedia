@@ -214,7 +214,7 @@ export default async function handler(req, res) {
     // --- 1. Build Supabase OR query ---
     const page = Math.max(1, parseInt(req.query.page || '1', 10));
     const offset = (page - 1) * PAGE_SIZE;
-    const searchCols = ['username', 'name', 'about', 'location'];
+    const searchCols = ['username', 'name', 'location'];
     const expressions = config.terms.flatMap(term =>
       searchCols.map(col => `${col}.ilike.*${term}*`)
     );

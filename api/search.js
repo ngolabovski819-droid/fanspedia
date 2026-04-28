@@ -75,7 +75,7 @@ export default async function handler(req, res) {
         .map(s => s.trim())
         .filter(Boolean)
         .filter(c => allowedCols.has(c));
-      const cols = requestedCols.length ? requestedCols : ['username','name','about'];
+      const cols = requestedCols.length ? requestedCols : ['username','name'];
       const expressions = (terms.length ? terms : [rawQ]).flatMap(term => cols.map(c => `${c}.ilike.*${term}*`));
       params.set('or', `(${expressions.join(',')})`);
     }
