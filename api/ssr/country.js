@@ -845,11 +845,21 @@ export default async function handler(req, res) {
 
   try {
     // --- 1. Build Supabase OR query ---
-    // Only search location — country names belong there, not in usernames/bios.
-    // This cuts query complexity: e.g. India 6 → 2 expressions, Australia 15 → 5.
+    // Location: all terms (country, nationality, cities).
+    // Username / Name / About: first 2 terms only (country + nationality adjective).
+    // Creators put country names in bios/usernames but not city names, so this
+    // recovers all relevant profiles without exploding expression count.
     const page = Math.max(1, parseInt(req.query.page || '1', 10));
     const offset = (page - 1) * PAGE_SIZE;
-    const expressions = config.terms.map(term => `location.ilike.*${term}*`);
+    const primaryTerms = config.terms.slice(0, 2);
+    const expressions = [
+      ...config.terms.map(term => `location.ilike.*${term}*`),
+      ...primaryTerms.flatMap(term => [
+        `username.ilike.*${term}*`,
+        `name.ilike.*${term}*`,
+        `about.ilike.*${term}*`,
+      ]),
+    ];
 
     const selectCols = [
       'id', 'username', 'name', 'avatar', 'avatar_c144',

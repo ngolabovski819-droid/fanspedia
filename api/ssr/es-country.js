@@ -932,10 +932,18 @@ export default async function handler(req, res) {
 
   try {
     // --- 1. Build Supabase OR query ---
-    // Only search location — reduces ILIKE expressions 3× for faster queries.
+    // Location: all terms. Username / Name / About: first 2 terms only.
     const page = Math.max(1, parseInt(req.query.page || '1', 10));
     const offset = (page - 1) * PAGE_SIZE;
-    const expressions = config.terms.map(term => `location.ilike.*${term}*`);
+    const primaryTerms = config.terms.slice(0, 2);
+    const expressions = [
+      ...config.terms.map(term => `location.ilike.*${term}*`),
+      ...primaryTerms.flatMap(term => [
+        `username.ilike.*${term}*`,
+        `name.ilike.*${term}*`,
+        `about.ilike.*${term}*`,
+      ]),
+    ];
 
     const selectCols = [
       'id', 'username', 'name', 'avatar', 'avatar_c144',
