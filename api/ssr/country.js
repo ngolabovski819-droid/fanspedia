@@ -844,13 +844,12 @@ export default async function handler(req, res) {
   }
 
   try {
-    // --- 1. Build Supabase OR query (mirrors client-side country page logic) ---
+    // --- 1. Build Supabase OR query ---
+    // Only search location — country names belong there, not in usernames/bios.
+    // This cuts query complexity: e.g. India 6 → 2 expressions, Australia 15 → 5.
     const page = Math.max(1, parseInt(req.query.page || '1', 10));
     const offset = (page - 1) * PAGE_SIZE;
-    const searchCols = ['username', 'name', 'location'];
-    const expressions = config.terms.flatMap(term =>
-      searchCols.map(col => `${col}.ilike.*${term}*`)
-    );
+    const expressions = config.terms.map(term => `location.ilike.*${term}*`);
 
     const selectCols = [
       'id', 'username', 'name', 'avatar', 'avatar_c144',
@@ -865,14 +864,22 @@ export default async function handler(req, res) {
       or: `(${expressions.join(',')})`,
     });
 
-    const supaFetch = await fetch(`${SUPABASE_URL}/rest/v1/onlyfans_profiles?${params}`, {
-      headers: {
-        apikey: SUPABASE_KEY,
-        Authorization: `Bearer ${SUPABASE_KEY}`,
-        'Accept-Profile': 'public',
-        Prefer: 'count=estimated',
-      },
-    });
+    const abortCtrl = new AbortController();
+    const abortTimer = setTimeout(() => abortCtrl.abort(), 3000);
+    let supaFetch;
+    try {
+      supaFetch = await fetch(`${SUPABASE_URL}/rest/v1/onlyfans_profiles?${params}`, {
+        signal: abortCtrl.signal,
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+          'Accept-Profile': 'public',
+          Prefer: 'count=estimated',
+        },
+      });
+    } finally {
+      clearTimeout(abortTimer);
+    }
 
     // 416 = Range Not Satisfiable: offset is beyond total count → treat as empty page
     let creators, totalCount;
