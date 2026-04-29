@@ -113,7 +113,7 @@ const XSL_PI = `<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>`;
 function buildBaseSitemap(blogSlugs) {
   let xml = `<?xml version="1.0" encoding="UTF-8"?>\n${XSL_PI}\n<urlset ${URLSET_NS}>\n`;
   const d = today();
-  const countries = ['united-states', 'canada', 'india', 'japan', 'argentina', 'united-kingdom', 'philippines'];
+  const countries = ['united-states', 'canada', 'india', 'japan', 'argentina', 'united-kingdom', 'philippines', 'armenia', 'australia', 'austria', 'bahamas', 'barbados', 'belarus', 'belgium', 'bolivia', 'bosnia-and-herzegovina', 'brazil', 'bulgaria', 'cambodia', 'chile', 'china', 'colombia', 'costa-rica', 'croatia', 'cuba', 'cyprus', 'czech-republic', 'denmark', 'dominican-republic', 'ecuador', 'egypt', 'el-salvador', 'estonia', 'finland', 'france', 'georgia', 'germany', 'ghana', 'greece', 'guam', 'guatemala', 'honduras', 'hong-kong', 'hungary', 'iceland', 'indonesia', 'ireland', 'israel', 'italy', 'jamaica', 'kenya', 'latvia', 'lebanon', 'lithuania', 'luxembourg', 'malaysia', 'malta', 'mexico', 'moldova', 'monaco', 'montenegro', 'morocco', 'netherlands', 'new-zealand', 'nigeria', 'norway', 'pakistan', 'panama', 'paraguay', 'peru', 'poland', 'portugal', 'puerto-rico', 'romania', 'russia', 'saudi-arabia', 'scotland', 'serbia', 'singapore', 'slovakia', 'slovenia', 'south-africa', 'south-korea', 'spain', 'sri-lanka', 'sweden', 'switzerland', 'taiwan', 'thailand', 'trinidad-and-tobago', 'tunisia', 'turkey', 'ukraine', 'united-arab-emirates', 'uruguay', 'venezuela', 'vietnam'];
 
   // Homepage
   xml += wrapUrl(`${BASE_URL}/`, 'daily', '1.0', d,
@@ -172,7 +172,7 @@ function buildBaseSitemap(blogSlugs) {
 function buildSpanishBaseSitemap(blogSlugs) {
   let xml = `<?xml version="1.0" encoding="UTF-8"?>\n${XSL_PI}\n<urlset ${URLSET_NS}>\n`;
   const d = today();
-  const countries = ['united-states', 'canada', 'india', 'japan', 'argentina', 'united-kingdom', 'philippines'];
+  const countries = ['united-states', 'canada', 'india', 'japan', 'argentina', 'united-kingdom', 'philippines', 'armenia', 'australia', 'austria', 'bahamas', 'barbados', 'belarus', 'belgium', 'bolivia', 'bosnia-and-herzegovina', 'brazil', 'bulgaria', 'cambodia', 'chile', 'china', 'colombia', 'costa-rica', 'croatia', 'cuba', 'cyprus', 'czech-republic', 'denmark', 'dominican-republic', 'ecuador', 'egypt', 'el-salvador', 'estonia', 'finland', 'france', 'georgia', 'germany', 'ghana', 'greece', 'guam', 'guatemala', 'honduras', 'hong-kong', 'hungary', 'iceland', 'indonesia', 'ireland', 'israel', 'italy', 'jamaica', 'kenya', 'latvia', 'lebanon', 'lithuania', 'luxembourg', 'malaysia', 'malta', 'mexico', 'moldova', 'monaco', 'montenegro', 'morocco', 'netherlands', 'new-zealand', 'nigeria', 'norway', 'pakistan', 'panama', 'paraguay', 'peru', 'poland', 'portugal', 'puerto-rico', 'romania', 'russia', 'saudi-arabia', 'scotland', 'serbia', 'singapore', 'slovakia', 'slovenia', 'south-africa', 'south-korea', 'spain', 'sri-lanka', 'sweden', 'switzerland', 'taiwan', 'thailand', 'trinidad-and-tobago', 'tunisia', 'turkey', 'ukraine', 'united-arab-emirates', 'uruguay', 'venezuela', 'vietnam'];
 
   // Spanish Homepage
   xml += wrapUrl(`${BASE_URL}/es/`, 'daily', '1.0', d,
