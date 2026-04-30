@@ -2208,7 +2208,7 @@
     // If SSR pre-rendered by api/ssr/country.js, skip the initial client fetch �
     // cards are already in the DOM. window.__COUNTRY_SSR = { name, count, hasMore }
     const ssrData = window.__COUNTRY_SSR;
-    if (ssrData && ssrData.name === 'argentina') {
+    if (ssrData) {
       hasMore = ssrData.hasMore !== false;
       statusDiv.textContent = '';
       try {
