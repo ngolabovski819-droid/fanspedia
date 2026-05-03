@@ -914,6 +914,69 @@ function buildJsonLd(name, label, creators, canonicalUrl) {
 }
 
 // ---------------------------------------------------------------------------
+// Bloque SEO desplegable — inyectado sobre el grid de resultados en cada país
+// ---------------------------------------------------------------------------
+const SEO_INLINE_CSS = `<style id="seoInlineCSS">
+.seo-inline-block{max-width:900px;margin:16px auto;padding:12px 18px;background:var(--bg-secondary,#fff);border:1px solid var(--border-color,#e0e0e0);border-radius:10px}
+.seo-inline-content{max-height:0;overflow:hidden;transition:max-height 0.38s ease}
+.seo-inline-content.seo-open{max-height:900px}
+.seo-inline-content p{color:var(--text-primary,#1a1a1a);font-size:15px;line-height:1.75;margin:12px 0 0}
+.seo-inline-content p:first-child{margin-top:10px}
+.seo-toggle-btn{background:none;border:1px solid rgba(0,175,240,0.35);color:#00AFF0;border-radius:20px;padding:5px 18px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:6px;margin:10px auto 0;transition:border-color .2s,background .2s}
+.seo-toggle-btn:hover{border-color:#00AFF0;background:rgba(0,175,240,0.07)}
+</style>`;
+
+function buildEsCountrySeoSection(slug, label) {
+  const year = new Date().getFullYear();
+
+  const intros = {
+    'united-states':      `Las creadoras de OnlyFans de Estados Unidos dominan los rankings de mayores ingresos de la plataforma y representan el segmento de creadoras de un solo país más grande en ${year}. La economía creativa de EE.UU. se beneficia de infraestructura de pago madura, mercados de equipos de producción profesional y una base de suscriptores doméstica con presupuestos de suscripción por encima del promedio.`,
+    'canada':             `Las creadoras canadienses de OnlyFans han construido una sólida reputación en la plataforma por su participación amigable, opciones de contenido bilingüe y frecuencia de publicación por encima del promedio. Estas cualidades se traducen directamente en menor abandono de suscriptores y relaciones de fans a largo plazo que superan la media global de la plataforma.`,
+    'united-kingdom':     `Las creadoras de OnlyFans del Reino Unido han posicionado a Gran Bretaña como la tercera nación creadora más grande de la plataforma, con acentos regionales distintivos, sensibilidades de moda y un ingenio característico que resuena con audiencias angloparlantes de todo el mundo.`,
+    'australia':          `Las creadoras de OnlyFans de Australia aportan cultura de playa, estética de estilo de vida al aire libre y una confianza relajada que da a los perfiles australianos un aspecto inmediatamente reconocible. La comunidad creadora australiana es colaborativa y activa en múltiples plataformas, lo que produce creadoras con seguidores por encima del promedio.`,
+    'argentina':          `Las creadoras de OnlyFans argentinas aportan la sofisticación europea de Buenos Aires, la pasión de la cultura del tango y la expresividad sudamericana a perfiles que atraen constantemente audiencias internacionales mucho más allá del mundo hispanohablante.`,
+    'philippines':        `Las creadoras filipinas de OnlyFans han construido una de las comunidades de creadoras más activas del Sudeste Asiático en la plataforma, impulsadas por el inglés como lengua común, una fuerte cultura de redes sociales y un estilo de contenido cálido y centrado en el suscriptor.`,
+    'india':              `Las creadoras de OnlyFans de India representan uno de los segmentos internacionales de mayor crecimiento en la plataforma en ${year}, reflejando tanto la expansión de la economía de contenido digital de India como una gran audiencia de la diáspora global que busca activamente representación sudasiática en contenido premium.`,
+    'japan':              `Las creadoras de OnlyFans de Japón han cultivado algunos de los perfiles más distintivos de la plataforma, combinando estética J-idol, cultura de moda kawaii y sensibilidades de producción meticulosas que impulsan precios de suscripción premium y retención a largo plazo excepcional.`,
+    'brazil':             `Las creadoras de OnlyFans de Brasil han convertido las credenciales estéticas internacionalmente reconocidas del país — cultura de carnaval, estilo de vida playero, expresividad natural — en algunos de los perfiles de mayor participación de la plataforma. Las creadoras brasileñas están entre los perfiles internacionales más buscados en toda la plataforma.`,
+    'colombia':           `Las creadoras de OnlyFans de Colombia representan una de las comunidades latinas más activas de la plataforma, combinando la escena de moda urbana de Bogotá con la calidez costera de Cartagena y Medellín y una franqueza natural en la comunicación con fans que los suscriptores de América del Norte y Europa destacan constantemente.`,
+    'mexico':             `Las creadoras de OnlyFans de México combinan rica herencia cultural, estéticas costeras de Cancún y Puerto Vallarta y una escena creativa urbana centrada en Ciudad de México para producir una comunidad de creadoras con un alcance notable. México es el mercado de creadoras más grande de América Latina en OnlyFans.`,
+    'germany':            `Las creadoras de OnlyFans de Alemania combinan sofisticación europea, estilos de comunicación directos y altos estándares de producción que las comunidades de suscriptores califican constantemente por su transparencia y calidad de contenido.`,
+    'france':             `Las creadoras de OnlyFans de Francia aprovechan las estéticas de la dolce vie, una de las tradiciones de moda culturalmente más resonantes del mundo, y una sensibilidad creativa distintiva que impulsa tarifas de suscripción premium entre audiencias internacionales que buscan contenido europeo refinado.`,
+    'spain':              `Las creadoras de OnlyFans de España aportan la expresividad ibérica, la pasión de la cultura flamenca y una calidez mediterránea a perfiles que resuenan tanto con audiencias hispanohablantes de Europa como de América Latina — una de las huellas de audiencia natural más amplias de cualquier mercado de creadoras europeo en la plataforma.`,
+    'italy':              `Las creadoras de OnlyFans de Italia aprovechan la dolce vita, los estándares de belleza mediterráneos y siglos de cultura de moda y arte para producir contenido con una sofisticación estética inmediatamente reconocible.`,
+    'venezuela':          `Las creadoras de OnlyFans de Venezuela han construido una comunidad próspera en la plataforma, con muchas creadoras operando desde bases internacionales. Las creadoras venezolanas aportan una expresividad apasionada y fuertes prácticas de comunicación con fans que se traducen en retención de suscriptores por encima del promedio globalmente.`,
+    'chile':              `Las creadoras de OnlyFans de Chile aportan la estética urbana cosmopolita de Santiago, la energía creativa bohemia de Valparaíso y contenido de estilo de vida inspirado en la Patagonia a perfiles que atraen constantemente seguidores sólidos entre audiencias hispanohablantes de las Américas.`,
+    'peru':               `Las creadoras de OnlyFans de Perú combinan la diversidad estética andina y costera con la creciente escena creativa urbana de Lima, produciendo una comunidad de creadoras que ha crecido rápidamente junto a la creciente adopción de pagos digitales del país.`,
+    'colombia':           `Las creadoras colombianas de OnlyFans representan una de las comunidades de América Latina más activas en la plataforma, combinando la escena de moda de Bogotá con la calidez de la costa caribe y el Pacífico, generando perfiles con audiencias leales tanto locales como internacionales.`,
+    'dominican-republic': `Las creadoras de OnlyFans de República Dominicana aportan energía caribeña, estéticas del merengue y bachata y una vibrante escena creativa en Santo Domingo a perfiles que tienen un rendimiento particularmente fuerte con audiencias de suscriptores latinos en EE.UU. y España.`,
+    'puerto-rico':        `Las creadoras de OnlyFans de Puerto Rico fusionan la calidez latina y americana, combinando la cultura del reggaetón, el dominio total del inglés y la energía caribeña que le da a los perfiles de PR acceso simultáneo tanto al mercado de suscriptores doméstico de EE.UU. como a las audiencias de América Latina hispanohablantes.`,
+  };
+
+  const defaultIntro = `Las creadoras de OnlyFans de ${label} representan un segmento reconocido internacionalmente de la comunidad de creadoras de la plataforma en ${year}. Los perfiles mostrados arriba han sido clasificados por participación de suscriptores y actividad de fans en lugar de por colocación de pago, reflejando genuinamente las creadoras más seguidas y activas de ${label} disponibles ahora mismo en la plataforma.`;
+
+  const closers = [
+    `FansPedia hace que explorar creadoras de OnlyFans de ${label} sea más rápido y enfocado que buscar directamente en la plataforma. Todos los perfiles están clasificados por datos de participación real, actualizados regularmente a medida que las creadoras cambian su precio y frecuencia de publicación. Filtra por precio de suscripción, activa solo-verificadas para limitar los resultados a cuentas confirmadas, o navega libremente y carga páginas adicionales.`,
+    `Suscribirse a una creadora de OnlyFans de ${label} es un apoyo financiero directo al negocio de contenido de esa persona. Los perfiles clasificados aquí se han verificado como cuentas reales y activas. Usa los filtros al inicio de la página para reducir por precio de suscripción o estado de verificación, luego haz clic en cualquier perfil para visitar directamente su página de OnlyFans.`,
+    `No todas las cuentas de OnlyFans de ${label} son igualmente activas. FansPedia muestra primero a las creadoras más comprometidas, clasificadas por métricas de fans reales, para que puedas identificar inmediatamente quién está publicando contenido nuevo activamente. Carga más resultados para explorar más allá de la primera página de perfiles de ${label}.`,
+  ];
+
+  const intro = intros[slug] || defaultIntro;
+  const hash = slug.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+  const closer = closers[hash % closers.length];
+
+  return `${SEO_INLINE_CSS}<div id="seoBlock" class="seo-inline-block">
+  <div id="seoContent" class="seo-inline-content" aria-hidden="true">
+    <p>${intro}</p>
+    <p>${closer}</p>
+  </div>
+  <button id="seoToggleBtn" class="seo-toggle-btn" onclick="(function(){var c=document.getElementById('seoContent');var b=document.getElementById('seoToggleBtn');var i=document.getElementById('seoToggleIcon');var open=c.classList.toggle('seo-open');c.setAttribute('aria-hidden',String(!open));b.setAttribute('aria-expanded',String(open));i.textContent=open?'\u25b2':'\u25bc';})()" aria-expanded="false" aria-controls="seoContent">
+    Sobre creadoras de ${label} OnlyFans <span id="seoToggleIcon">&#9660;</span>
+  </button>
+</div>`;
+}
+
+// ---------------------------------------------------------------------------
 // Main handler
 // ---------------------------------------------------------------------------
 export default async function handler(req, res) {
@@ -1055,6 +1118,12 @@ export default async function handler(req, res) {
     html = html.replace(
       '<div class="row" id="results"></div>',
       `<div class="row" id="results">\n${cardsHtml}\n</div>`
+    );
+
+    // --- 5b. Bloque SEO desplegable sobre el grid de resultados ---
+    html = html.replace(
+      /<div class="row" id="results">/,
+      `${buildEsCountrySeoSection(name, config.label)}\n<div class="row" id="results">`
     );
 
     // --- 6. Send ---

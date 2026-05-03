@@ -312,6 +312,15 @@
     .safe-search-modal-btn-secondary:hover { background:var(--bg-secondary); border-color:var(--text-secondary); }
     .safe-search-modal-footer { margin-top:24px; text-align:center; font-size:13px; color:var(--text-muted); }
     @media(max-width:576px){ .safe-search-modal-content{padding:32px 24px;} .safe-search-modal h2{font-size:24px;} .safe-search-modal p{font-size:15px;} }
+
+    /* -------- Collapsible SEO block (below filters) -------- */
+    .seo-inline-block { max-width:900px; margin:16px auto 0; padding:12px 18px; background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:10px; }
+    .seo-inline-content { max-height:0; overflow:hidden; transition:max-height 0.38s ease; }
+    .seo-inline-content.seo-open { max-height:900px; }
+    .seo-inline-content p { color:var(--text-primary); font-size:15px; line-height:1.75; margin:12px 0 0; }
+    .seo-inline-content p:first-child { margin-top:10px; }
+    .seo-toggle-btn { background:none; border:1px solid rgba(0,175,240,0.35); color:#00AFF0; border-radius:20px; padding:5px 18px; cursor:pointer; font-size:13px; display:flex; align-items:center; gap:6px; margin:10px auto 0; transition:border-color .2s,background .2s; }
+    .seo-toggle-btn:hover { border-color:#00AFF0; background:rgba(0,175,240,0.07); }
   </style>
     <link rel="alternate" hreflang="en" href="https://fanspedia.net/" />
   <link rel="alternate" hreflang="es" href="https://fanspedia.net/es/" />
@@ -539,6 +548,9 @@
           <button id="resetFilters" type="button" class="btn-reset">Reset filters</button>
         </div>
       </div>
+
+      <!-- SEO inline block (filled by SSR) -->
+      <div id="seoBlock"></div>
 
       <!-- Active filters chips -->
       <div id="activeFilters" class="recent-searches" aria-live="polite"></div>

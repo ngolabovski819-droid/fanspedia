@@ -315,6 +315,70 @@ ${p('The best way is to explore categorized lists and filters based on:')}
 }
 
 // ---------------------------------------------------------------------------
+// Collapsible SEO block — injected below filters for every category
+// ---------------------------------------------------------------------------
+function buildCategorySeoSection(slug, label) {
+  const year = new Date().getFullYear();
+
+  // Category-specific opening paragraphs
+  const intros = {
+    'best':        `When it comes to finding the absolute best OnlyFans creators, volume is the enemy of discovery. With over 4.6 million profiles on the platform, the top performers distinguish themselves through posting consistency, genuine fan interaction, and exclusive content that cannot be found anywhere else. Subscriber count and favorited metrics are the most reliable public signals of quality — the creators ranked here score highly on both.`,
+    'free':        `Free OnlyFans accounts have become one of the platform's most effective discovery strategies in ${year} — creators offer no-paywall access to build an audience and monetise through pay-per-view posts, tips, and custom content requests. The best free accounts post regularly and use the free tier as a genuine showcase, not an abandoned page.`,
+    'verified':    `Verified OnlyFans creators have completed the platform's official identity verification process, giving subscribers confidence that the person behind the account is exactly who they present themselves as. In a space where impersonation and catfishing remain real concerns, the verified badge is the most meaningful trust signal available — and it's what separates professional creator businesses from throwaway accounts.`,
+    'blonde':      `Blonde OnlyFans creators consistently rank among the most searched profiles on the platform, driven by enduring pop-culture associations and a style range spanning natural honey tones to platinum transformations. The highest-performing blonde creators pair their aesthetic with high posting frequency and active fan communication — keeping subscribers engaged well beyond the first month.`,
+    'brunette':    `Brunette OnlyFans creators represent the platform's largest aesthetic segment, which means the competition to stand out is fierce. The profiles ranked here differentiate themselves through content quality, posting frequency exceeding the platform average, and subscriber interaction rates that drive long-term retention over one-time sign-ups.`,
+    'redhead':     `Natural redhead OnlyFans creators are among the rarest profiles on the platform — genuine gingers account for roughly 2% of the world's population, which directly drives the outsized search demand and premium subscription pricing this category commands. Authentic redhead profiles consistently outperform dyed alternatives on every subscriber retention metric.`,
+    'milf':        `MILF OnlyFans creators have become one of the platform's fastest-growing niches in ${year}, fuelled by an audience that values confidence, maturity, and a grounded approach to content that contrasts sharply with younger creators. The most successful profiles in this category combine experience with authenticity — qualities that directly translate into lower churn and higher tips-per-subscriber ratios.`,
+    'petite':      `Petite OnlyFans creators attract one of the platform's most dedicated subscriber bases — fans who specifically seek out the petite aesthetic for its distinctive look and the intimate, approachable content style many small-frame creators naturally bring to their feeds. Subscription retention in this niche consistently outperforms the platform average.`,
+    'big-tits':    `OnlyFans big tits creators represent one of the site's most consistently high-traffic search categories, attracting a loyal audience that ranges from subscribers seeking amateur authentic profiles to fans of professional studio-produced content with premium production values. The best accounts in this category balance visual content with genuine personality to keep subscribers renewing month after month.`,
+    'bbw':         `BBW and curvy OnlyFans creators have built some of the platform's most loyal communities by turning body positivity into a sustainable content business. Subscribers in this niche show above-average engagement rates and below-average churn — metrics that reflect genuine community attachment rather than fleeting curiosity. The profiles ranked here consistently score at the top on both fan count and posting activity.`,
+    'latina':      `Latina OnlyFans creators span an enormous geographic and cultural range — Colombian, Mexican, Brazilian, Puerto Rican, Dominican, and Spain-based creators all contribute to a niche that's grown into one of the platform's highest-demand categories in ${year}. The best Latina profiles combine vibrant personality with high content volume and active DM engagement that builds lasting subscriber relationships.`,
+    'ebony':       `Ebony OnlyFans creators have built some of the most engaged communities on the platform, combining authentic personal branding, diverse aesthetics across the African diaspora, and content that resonates with subscribers seeking genuine representation. Fan loyalty metrics in the ebony creator niche consistently rank among the highest platform-wide.`,
+    'asian':       `Asian OnlyFans creators span a remarkable range of geographic and cultural identities — Japanese, Korean, Thai, Filipino, Vietnamese, and Chinese creators all bring distinctive aesthetic sensibilities and unique content styles that have helped make this one of the platform's most internationally diverse and actively searched niches.`,
+    'trans':       `Trans OnlyFans creators have built some of the platform's most loyal and supportive communities, with subscribers drawn to authentic self-expression, high-quality content production, and the direct financial support model that OnlyFans provides. The platform's direct creator-to-fan payment structure has made it particularly powerful for trans creators seeking financial independence from traditional industry gatekeepers.`,
+    'feet':        `Feet OnlyFans content has grown from a niche request into one of the platform's top-performing content categories in ${year}, with dedicated creators building sustainable subscription businesses around high-quality foot photography, custom video content, and interactive fan engagement. The best feet creators combine aesthetic quality with responsive communication to maximise tips and custom order revenue.`,
+    'fitness':     `Fitness OnlyFans creators occupy a unique and lucrative intersection of wellness culture and exclusive content, offering subscribers workout programming, meal strategies, physique-focused content, and behind-the-scenes training access that mainstream fitness platforms explicitly prohibit. The subscription model perfectly aligns incentives — creators post more when subscribers are engaged, subscribers stay when content delivers real value.`,
+    'cosplay':     `Cosplay OnlyFans creators have transformed convention culture passion projects into thriving subscription businesses, giving dedicated fans exclusive access to elaborate costume shoots, crafting content, and character-based media that reveals the real work behind every completed build. The crossover audience of anime, gaming, and comic fans makes cosplay one of OnlyFans' most genuinely niche-focused communities.`,
+    'gaming':      `Gaming OnlyFans creators bridge the gap between Twitch culture and exclusive content platforms, attracting subscribers who want behind-the-scenes access to the personalities behind the streams. The most successful gaming creators use OnlyFans as the premium tier of a broader content ecosystem — Discord communities, public streams, and exclusive subscriber-only content working together.`,
+    'amateur':     `Amateur OnlyFans creators represent the authentic core of the platform — real people building genuine subscriber relationships rather than polished studio productions, and it's that unfiltered authenticity that drives some of the highest fan loyalty numbers on the site. Subscribers consistently report that amateur profiles feel more personal, more responsive, and more worth maintaining than high-production alternatives.`,
+    'couple':      `Couples OnlyFans accounts offer something no solo creator can replicate — documented relationship chemistry, genuine shared energy, and the intimacy of watching two real people create content together. This authenticity resonates strongly with subscribers seeking connection over performance, and it drives above-average subscription duration metrics compared to solo profiles.`,
+    'hentai':      `Hentai and anime-themed OnlyFans creators have built a dedicated niche community by combining cosplay craftsmanship with ahegao aesthetics, kawaii personality, and character-driven content that appeals to anime fans looking for exclusive takes on familiar archetypes. The overlap with cosplay and gaming communities gives creators in this niche unusually broad cross-platform reach.`,
+    'teen':        `18+ young adult OnlyFans creators attract subscribers drawn to college-age aesthetics, spontaneous real-life content style, and the fresh authenticity that many creators in this age group naturally bring to their platforms. All creators in this directory are verified adults — FansPedia only indexes profiles from verified 18+ OnlyFans accounts in compliance with platform rules.`,
+    'indian':      `Indian OnlyFans creators represent one of the fastest-growing international segments on the platform in ${year}, reflecting both India's expanding digital content economy and a large global diaspora audience actively seeking South Asian representation in premium creator content. The most popular Indian creators have built multi-platform presences that extend their reach well beyond the OnlyFans ecosystem.`,
+    'japanese':    `Japanese OnlyFans creators have cultivated some of the platform's most distinct visual identities, blending J-idol aesthetics, fashion magazine production values, and content sensibilities that drive premium subscription pricing and exceptional long-term fan retention compared to the global creator average.`,
+    'colombian':   `Colombian OnlyFans creators bring Bogotá's urban fashion sensibilities together with Caribbean coastal warmth and the natural expressiveness of South American culture to produce content with a distinctive energy that resonates powerfully with North American and European subscriber audiences.`,
+    'korean':      `Korean OnlyFans creators combine K-beauty aesthetics, fashion-forward styling, and a meticulous approach to content production that reflects South Korea's broader cultural export power. K-pop fan culture has directly fuelled subscriber demand for Korean creator content across multiple platforms, and OnlyFans has captured a meaningful share of that audience.`,
+    'curvy':       `Curvy OnlyFans creators have turned body confidence into high-performing subscription businesses, combining natural aesthetics with the body-positive community values that drive genuine long-term fan attachment. The profiles ranked here score at the top on both subscriber volume and engagement frequency — the metrics that matter most for sustainable creator businesses.`,
+    'tattoo':      `Tattooed OnlyFans creators attract a dedicated subscriber base that values body art as aesthetic identity rather than just decoration. The most successful tattoo creators use their ink as a visual brand differentiator and build communities around both the content and the art — driving fan conversations, custom requests, and above-average tips-per-post ratios.`,
+  };
+
+  const defaultIntro = `${label} OnlyFans creators represent one of the platform's actively searched categories in ${year}. The profiles shown here have been ranked by subscriber engagement and favorited counts — real fan metrics that reflect genuine content quality and posting consistency rather than self-reported follower numbers. Every creator listed is verified to be an active, real account, not an abandoned profile.`;
+
+  // Rotating second paragraph — varied by slug hash so each category gets a consistent closer
+  const closers = [
+    `FansPedia makes finding the right ${label} OnlyFans creator significantly faster than browsing the platform directly. Use the verified toggle to limit results to identity-confirmed accounts, set a maximum subscription price with the slider to match your budget, or enable the bundles filter to surface creators offering discounted multi-month subscriptions. All profile data updates automatically as creators change their pricing or posting frequency.`,
+    `Subscribing to a ${label} OnlyFans creator is a direct financial contribution to that person's content business — no algorithm cuts, no label splits. The creators ranked here score at the top of the ${label} niche on subscriber count and fan engagement. Use the price slider above to filter by monthly budget, toggle verified-only to exclude unconfirmed accounts, or browse freely and load more results to explore beyond the first page.`,
+    `Not all ${label} OnlyFans accounts deliver the same value. Posting frequency, response time to fan messages, and active subscription pricing all vary significantly across profiles. FansPedia ranks ${label} creators by real engagement metrics so you can immediately identify who is actively posting and who has gone quiet. Filter by verification status and price to match your preferences, then click through to any profile to view their OnlyFans page directly.`,
+    `The best ${label} OnlyFans subscriptions combine content quality with regular posting schedules and genuine fan interaction. The profiles surfaced here rank highly on all three — with actively maintained accounts, competitive subscription pricing, and verified status where available. Use the filters above to narrow by price and verification, enable bundles to find multi-month discount offers, and scroll down to load more ${label} creators.`,
+    `Finding great ${label} OnlyFans content used to mean scrolling through thousands of profiles with no way to filter by price, activity, or trust signals. FansPedia solves that — every profile in this directory is ranked by real fan engagement data, filterable by subscription price, and flagged for identity verification status. The result is a curated starting point for discovering the best active ${label} creators, updated regularly so you're always seeing current data.`,
+  ];
+
+  const intro = intros[slug] || defaultIntro;
+  const hash = slug.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+  const closer = closers[hash % closers.length];
+
+  return `<div id="seoBlock" class="seo-inline-block">
+  <div id="seoContent" class="seo-inline-content" aria-hidden="true">
+    <p>${intro}</p>
+    <p>${closer}</p>
+  </div>
+  <button id="seoToggleBtn" class="seo-toggle-btn" onclick="(function(){var c=document.getElementById('seoContent');var b=document.getElementById('seoToggleBtn');var i=document.getElementById('seoToggleIcon');var open=c.classList.toggle('seo-open');c.setAttribute('aria-hidden',String(!open));b.setAttribute('aria-expanded',String(open));i.textContent=open?'\u25b2':'\u25bc';})()" aria-expanded="false" aria-controls="seoContent">
+    About ${label} OnlyFans <span id="seoToggleIcon">&#9660;</span>
+  </button>
+</div>`;
+}
+
+// ---------------------------------------------------------------------------
 // Main handler
 // ---------------------------------------------------------------------------
 export default async function handler(req, res) {
@@ -496,6 +560,9 @@ export default async function handler(req, res) {
         buildBestSeoContent()
       );
     }
+
+    // --- 8. Collapsible SEO block below filters ---
+    html = html.replace('<div id="seoBlock"></div>', buildCategorySeoSection(slug, label));
 
     // --- 6. Send ---
     res.setHeader('Content-Type', 'text/html; charset=utf-8');

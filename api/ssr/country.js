@@ -824,6 +824,81 @@ function buildJsonLd(slug, label, creators, canonicalUrl) {
 }
 
 // ---------------------------------------------------------------------------
+// Collapsible SEO block — injected above results grid on every country page
+// ---------------------------------------------------------------------------
+const SEO_INLINE_CSS = `<style id="seoInlineCSS">
+.seo-inline-block{max-width:900px;margin:16px auto;padding:12px 18px;background:var(--bg-secondary,#fff);border:1px solid var(--border-color,#e0e0e0);border-radius:10px}
+.seo-inline-content{max-height:0;overflow:hidden;transition:max-height 0.38s ease}
+.seo-inline-content.seo-open{max-height:900px}
+.seo-inline-content p{color:var(--text-primary,#1a1a1a);font-size:15px;line-height:1.75;margin:12px 0 0}
+.seo-inline-content p:first-child{margin-top:10px}
+.seo-toggle-btn{background:none;border:1px solid rgba(0,175,240,0.35);color:#00AFF0;border-radius:20px;padding:5px 18px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:6px;margin:10px auto 0;transition:border-color .2s,background .2s}
+.seo-toggle-btn:hover{border-color:#00AFF0;background:rgba(0,175,240,0.07)}
+</style>`;
+
+function buildCountrySeoSection(slug, label) {
+  const year = new Date().getFullYear();
+
+  const intros = {
+    'united-states':       `American OnlyFans creators dominate the platform's top-earning charts and represent the largest single-country creator segment in ${year}. The US creator economy benefits from mature payment infrastructure, professional production equipment markets, and a domestic subscriber base with above-average subscription budgets — a combination that drives competitive earnings per subscriber and high content quality standards across the board.`,
+    'canada':              `Canadian OnlyFans creators have built a strong platform reputation for friendly engagement, bilingual content options, and above-average posting frequency — qualities that translate directly into low subscriber churn and long-term fan relationships. The Canadian creator community spans coastal BC, Ontario's urban centres, and Quebec's French-language scene, producing genuine content diversity across a single national page.`,
+    'united-kingdom':      `UK OnlyFans creators have positioned Britain as the third-largest creator nation on the platform, with distinctive regional accents, fashion sensibilities, and a dry wit that resonates powerfully with English-speaking audiences worldwide. British creators frequently command premium subscription rates driven by the immediate recognisability of their regional identity and the trust that comes with English-as-first-language communication.`,
+    'australia':           `Australian OnlyFans creators bring beach culture, outdoor lifestyle aesthetics, and a relaxed confidence that gives Aussie profiles an instantly recognisable look. The Australian creator community is collaborative and cross-platform active, which tends to produce creators with above-average social followings and strong subscriber conversion from external traffic sources.`,
+    'argentina':           `Argentine OnlyFans creators bring Buenos Aires' European-influenced sophistication, tango culture's passion, and South American expressiveness to profiles that consistently attract international audiences far beyond the Spanish-speaking world. Argentine creators are known for strong fan communication and above-average response rates to subscriber messages — a key driver of their high retention metrics.`,
+    'philippines':         `Filipino OnlyFans creators have built one of Southeast Asia's most active creator communities on the platform, driven by near-universal English fluency, a strong social media culture, and a warm, subscriber-first content style. Philippines-based creators show some of the highest direct fan message engagement rates in the region — a quality that drives subscription renewals far above regional benchmarks.`,
+    'india':               `Indian OnlyFans creators represent one of the fastest-growing international segments on the platform in ${year}, reflecting both India's expanding digital economy and a large global diaspora audience actively seeking South Asian representation. The creator community spans diverse regional aesthetics — from North Indian to South Indian to diaspora creators in the UK, US, and Canada.`,
+    'japan':               `Japanese OnlyFans creators have cultivated some of the platform's most distinctive profiles, blending J-idol aesthetics, kawaii fashion culture, and meticulous production sensibilities that drive premium subscription pricing and exceptional long-term retention. Japan's deep creator economy infrastructure — established idol management, photography studios, and fan club culture — translates directly into professional-grade OnlyFans production.`,
+    'brazil':              `Brazilian OnlyFans creators have turned the country's globally recognised aesthetic credentials — carnival culture, beach lifestyle, and natural expressiveness — into some of the platform's highest-engagement profiles. Brazilian creators are among the most-searched international profiles platform-wide, and the community continues to grow rapidly as digital payments infrastructure improves across Brazil.`,
+    'colombia':            `Colombian OnlyFans creators represent one of Latin America's most active communities on the platform, combining Bogotá's urban fashion scene with coastal warmth from Cartagena and Medellín and a natural directness in fan communication that subscribers across North America and Europe consistently highlight as a differentiating quality.`,
+    'mexico':              `Mexican OnlyFans creators combine rich cultural heritage, coastal aesthetics from Cancún and Puerto Vallarta, and an urban creative scene centred in Mexico City to produce a creator community with remarkable range. Mexico is Latin America's largest single-country creator market on OnlyFans, with a domestic subscriber base that's grown significantly alongside the country's expanding digital payments adoption.`,
+    'germany':             `German OnlyFans creators combine European sophistication, direct communication styles, and high production standards that subscriber communities consistently rate for transparency and content quality. Germany's progressive cultural attitudes and digital infrastructure support a thriving premium creator economy that punches well above its weight relative to population size.`,
+    'france':              `French OnlyFans creators leverage la dolce vie aesthetics, one of the world's most culturally resonant fashion traditions, and a distinctive creative sensibility that drives premium subscription rates among international audiences seeking refined European content. French creators benefit from a deep domestic creative culture that elevates production quality across the board.`,
+    'italy':               `Italian OnlyFans creators draw on la dolce vita, Mediterranean beauty standards, and centuries of fashion and art culture to produce content with an immediately recognisable aesthetic sophistication. Italian creators are particularly well-represented in lifestyle and fashion-adjacent content subcategories, and Rome and Milan producers set production standards for the broader European creator market.`,
+    'spain':               `Spanish OnlyFans creators bring Iberian expressiveness, flamenco culture's passion, and a Mediterranean warmth to profiles that resonate equally with Spanish-speaking audiences across Europe and Latin America — one of the broadest natural audience footprints of any European creator market on the platform.`,
+    'netherlands':         `Dutch OnlyFans creators benefit from the Netherlands' famously progressive cultural attitudes, excellent digital infrastructure, and near-universal English fluency that makes profiles accessible to global subscriber audiences without language barriers. Amsterdam's established creative industries also supply Dutch creators with professional photography and production resources.`,
+    'sweden':              `Swedish OnlyFans creators bring Scandinavian minimalist aesthetics, world-class English fluency, and a cultural openness that has made Nordic profiles consistently popular with international subscribers. Sweden's high internet adoption rate and digital payment maturity also means Swedish creators maintain more active, responsive accounts on average than comparable markets.`,
+    'norway':              `Norwegian OnlyFans creators combine natural Nordic beauty, dramatic outdoor landscape aesthetics, and a straightforward authenticity that resonates with subscribers looking for creators who feel genuinely accessible. Norway's high average income and digital sophistication translate into a domestic subscriber base with above-average willingness to pay for premium content.`,
+    'ireland':             `Irish OnlyFans creators bring warmth, quick wit, and a distinctly Celtic charm to the platform — from dramatic Atlantic coastal backdrops to the city character of Dublin and Cork. Irish creators consistently receive above-average fan message response ratings, a quality that drives subscription renewals well beyond the global creator average.`,
+    'czech-republic':      `Czech OnlyFans creators bring Prague's established creative production infrastructure and decades of European content industry experience to the platform. The Czech creator community has some of the highest average production values in Eastern Europe, with professional photography studios, established talent networks, and above-average content consistency.`,
+    'hungary':             `Hungarian OnlyFans creators represent one of Central Europe's most active communities on the platform, with Budapest emerging as a regional content production hub. Hungarian creators combine Eastern European aesthetics with increasingly professional production standards and strong English-language communication skills that drive international subscriber bases.`,
+    'romania':             `Romanian OnlyFans creators have grown rapidly into one of the platform's most recognised Eastern European creator communities, driven by high technology adoption, English proficiency, and a diverse range of aesthetic styles. Romania's creator community shows above-average social media cross-platform presence, which drives consistent new subscriber acquisition from Instagram, TikTok, and Twitter traffic.`,
+    'ukraine':             `Ukrainian OnlyFans creators have demonstrated extraordinary commitment to their subscriber communities despite challenging circumstances, and that resilience has deepened fan loyalty significantly. The Ukrainian creator community combines Eastern European aesthetic traditions with strong fan communication practices that drive above-average subscription renewal rates.`,
+    'south-africa':        `South African OnlyFans creators bring genuine multicultural aesthetic diversity — Cape Town's cosmopolitan beach culture, Johannesburg's urban energy, and a wide range of ethnic and cultural backgrounds across Zulu, Xhosa, Afrikaner, Cape Malay, and Indian South African communities — to produce one of sub-Saharan Africa's most varied creator markets.`,
+    'new-zealand':         `New Zealand OnlyFans creators share the outdoor-lifestyle aesthetic of neighbouring Australia but bring a distinctly Kiwi unpretentious warmth that subscribers consistently distinguish from larger markets. New Zealand's small but highly digitally-connected population supports a creator community that punches above its weight in content quality and subscriber engagement.`,
+    'thailand':            `Thai OnlyFans creators bring Southeast Asian beauty aesthetics, Bangkok's thriving creative production scene, and a subscriber-first service mentality to profiles that have helped establish Thailand as one of Asia's fastest-growing creator markets. Thai creators show particularly strong performance in custom content requests and PPV upsells.`,
+    'singapore':           `Singapore OnlyFans creators benefit from the city-state's world-class digital infrastructure, diverse multicultural aesthetics, and English as an official language — giving Singapore-based profiles immediate accessibility to the platform's largest English-speaking subscriber audiences without language barriers.`,
+    'venezuela':           `Venezuelan OnlyFans creators have built a thriving community on the platform, with many creators now operating from international bases across Latin America, North America, and Europe. Venezuelan creators bring a passionate expressiveness and strong fan communication practices that translate into above-average subscriber retention globally.`,
+    'puerto-rico':         `Puerto Rican OnlyFans creators bridge Latin and American creator cultures, combining Caribbean warmth, reggaeton and Latin music aesthetics, and full English fluency that gives PR-based creators native access to both the US domestic subscriber market and Spanish-speaking Latin American audiences simultaneously.`,
+    'dominican-republic':  `Dominican Republic OnlyFans creators bring Caribbean energy, merengue and bachata cultural aesthetics, and a vibrant Santo Domingo-centred creator scene to profiles that perform particularly well with US Latino and Spanish-speaking subscriber audiences.`,
+    'peru':                `Peruvian OnlyFans creators bring Andean and coastal aesthetic diversity together with Lima's growing urban creative scene, producing a creator community that's expanded rapidly alongside Peru's growing digital payments adoption and smartphone penetration rates.`,
+    'ecuador':             `Ecuadorian OnlyFans creators represent a growing South American creator community, combining Quito's highland aesthetics with Guayaquil's coastal energy and strong community ties to the large Ecuadorian diaspora in Spain and the United States.`,
+    'chile':               `Chilean OnlyFans creators bring Santiago's cosmopolitan urban aesthetic, Valparaíso's bohemian creative energy, and Patagonia-inspired outdoor lifestyle content to profiles that consistently attract strong followings among Spanish-speaking subscriber audiences across the Americas.`,
+  };
+
+  const defaultIntro = `${label} OnlyFans creators represent an internationally recognised segment of the platform's creator community in ${year}. The profiles shown above have been ranked by subscriber engagement and fan activity rather than paid placement — so the first results genuinely reflect the most-followed, most-active creators from ${label} available on the platform right now.`;
+
+  const closers = [
+    `FansPedia makes browsing ${label} OnlyFans creators faster and more focused than searching the platform directly. All profiles are ranked by real engagement data, updated regularly as creators change their pricing and posting frequency. Use the price filter to match your subscription budget, toggle verified-only to limit results to identity-confirmed accounts, or browse freely and load additional pages to explore the full range of ${label} creator talent.`,
+    `Subscribing to a ${label} OnlyFans creator provides direct financial support to that individual's content business — no algorithm cuts, no intermediary fees, no label splits. The profiles ranked here have been verified as real, active accounts. Use the filters at the top of the page to narrow by subscription price or verification status, then click any profile to visit their OnlyFans page directly.`,
+    `Not all ${label} OnlyFans accounts are equally active. Posting frequency, DM response time, and subscription pricing vary significantly across the creator landscape. FansPedia surfaces the most engaged creators first — ranked by real fan metrics so you can immediately identify who is actively posting new content versus who has gone quiet. Load more results to explore beyond the top page of ${label} profiles.`,
+  ];
+
+  const intro = intros[slug] || defaultIntro;
+  const hash = slug.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+  const closer = closers[hash % closers.length];
+
+  return `${SEO_INLINE_CSS}<div id="seoBlock" class="seo-inline-block">
+  <div id="seoContent" class="seo-inline-content" aria-hidden="true">
+    <p>${intro}</p>
+    <p>${closer}</p>
+  </div>
+  <button id="seoToggleBtn" class="seo-toggle-btn" onclick="(function(){var c=document.getElementById('seoContent');var b=document.getElementById('seoToggleBtn');var i=document.getElementById('seoToggleIcon');var open=c.classList.toggle('seo-open');c.setAttribute('aria-hidden',String(!open));b.setAttribute('aria-expanded',String(open));i.textContent=open?'\u25b2':'\u25bc';})()" aria-expanded="false" aria-controls="seoContent">
+    About ${label} OnlyFans Creators <span id="seoToggleIcon">&#9660;</span>
+  </button>
+</div>`;
+}
+
+// ---------------------------------------------------------------------------
 // Main handler
 // ---------------------------------------------------------------------------
 export default async function handler(req, res) {
@@ -956,6 +1031,12 @@ export default async function handler(req, res) {
     html = html.replace(
       '<div class="row" id="results"></div>',
       `<div class="row" id="results">\n${cardsHtml}\n</div>`
+    );
+
+    // --- 5b. Collapsible SEO block above results grid ---
+    html = html.replace(
+      /<div class="row" id="results">/,
+      `${buildCountrySeoSection(name, config.label)}\n<div class="row" id="results">`
     );
 
     // --- 6. Send ---

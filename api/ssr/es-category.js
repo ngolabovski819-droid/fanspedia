@@ -137,6 +137,55 @@ function buildJsonLd(slug, label, creators, canonicalUrl) {
 }
 
 // ---------------------------------------------------------------------------
+// Bloque SEO desplegable — inyectado debajo de los filtros en cada categoría
+// ---------------------------------------------------------------------------
+function buildEsCategorySeoSection(slug, label) {
+  const year = new Date().getFullYear();
+
+  const intros = {
+    'best':       `Las mejores creadoras de OnlyFans en ${year} se distinguen por su constancia en publicaciones, interacción genuina con sus seguidores y contenido exclusivo que no se encuentra en ningún otro lugar. Con más de 4,6 millones de perfiles en la plataforma, el recuento de suscriptores y favoritos son las métricas públicas más fiables para identificar a las creadoras de mayor calidad.`,
+    'free':       `Las cuentas de OnlyFans gratuitas se han convertido en una de las estrategias de descubrimiento más eficaces de la plataforma en ${year}. Las mejores cuentas gratuitas publican contenido regularmente y usan el nivel gratuito como un escaparate genuino, no como una página abandonada, monetizando a través de publicaciones de pago por visión, propinas y solicitudes personalizadas.`,
+    'verified':   `Las creadoras verificadas de OnlyFans han completado el proceso oficial de verificación de identidad de la plataforma, ofreciendo a los suscriptores la confianza de que la persona detrás de la cuenta es exactamente quien dice ser. En un espacio donde la suplantación de identidad es una preocupación real, la insignia de verificación es la señal de confianza más significativa disponible.`,
+    'blonde':     `Las creadoras de OnlyFans rubias se encuentran entre los perfiles más buscados de la plataforma, impulsados por asociaciones culturales duraderas y una variedad de estilos que va desde tonos dorados naturales hasta transformaciones platino. Las mejores perfiles rubias combinan su estética con alta frecuencia de publicación y comunicación activa con sus fans.`,
+    'brunette':   `Las creadoras de OnlyFans morenas representan el segmento estético más grande de la plataforma, lo que significa que la competencia por destacar es feroz. Los perfiles clasificados aquí se diferencian por la calidad del contenido, la frecuencia de publicación por encima del promedio de la plataforma y las tasas de interacción con suscriptores que impulsan la retención a largo plazo.`,
+    'milf':       `Las creadoras MILF de OnlyFans han sido uno de los nichos de mayor crecimiento de la plataforma en ${year}, impulsadas por una audiencia que valora la confianza, la madurez y un enfoque fundamentado del contenido. Los perfiles más exitosos combinan experiencia con autenticidad, cualidades que se traducen directamente en menor abandono de suscriptores y mayores propinas por suscriptor.`,
+    'latina':     `Las creadoras latinas de OnlyFans abarcan una enorme variedad geográfica y cultural — colombianas, mexicanas, brasileñas, puertorriqueñas, dominicanas y españolas contribuyen a un nicho que se ha convertido en una de las categorías más demandadas de la plataforma en ${year}. Las mejores perfiles latinas combinan personalidad vibrante con alto volumen de contenido y participación activa en DMs.`,
+    'ebony':      `Las creadoras ebony de OnlyFans han construido algunas de las comunidades más comprometidas de la plataforma, combinando marca personal auténtica, diversas estéticas de la diáspora africana y contenido que resuena con suscriptores que buscan representación genuina. Las métricas de lealtad de los fans en este nicho se encuentran constantemente entre las más altas de la plataforma.`,
+    'asian':      `Las creadoras asiáticas de OnlyFans abarcan una notable variedad de identidades geográficas y culturales — japonesas, coreanas, tailandesas, filipinas, vietnamitas y chinas aportan sensibilidades estéticas distintivas que han convertido este nicho en uno de los más activamente buscados internacionalmente.`,
+    'petite':     `Las creadoras petite de OnlyFans atraen a una de las bases de suscriptores más dedicadas de la plataforma — fans que buscan específicamente la estética petite por su aspecto distintivo y el estilo de contenido íntimo y accesible que muchas creadoras de figura pequeña aportan naturalmente a sus perfiles.`,
+    'bbw':        `Las creadoras BBW y curvilíneas de OnlyFans han construido algunas de las comunidades más leales de la plataforma convirtiendo la positividad corporal en un negocio de suscripciones sostenible. Los suscriptores en este nicho muestran tasas de participación por encima del promedio y menor abandono que reflejan un apego comunitario genuino.`,
+    'trans':      `Las creadoras trans de OnlyFans han construido algunas de las comunidades más leales y solidarias de la plataforma, con suscriptores atraídos por la autoexpresión auténtica, la producción de contenido de alta calidad y el modelo de pago directo creadora-fan que ofrece OnlyFans.`,
+    'feet':       `El contenido de pies en OnlyFans ha crecido de una solicitud de nicho a una de las categorías de mayor rendimiento en ${year}, con creadoras dedicadas que construyen negocios de suscripción sostenibles basados en fotografía de alta calidad, videos personalizados y participación interactiva de fans.`,
+    'fitness':    `Las creadoras de fitness de OnlyFans ocupan una intersección única y lucrativa entre la cultura de bienestar y el contenido exclusivo, ofreciendo a los suscriptores rutinas de entrenamiento, estrategias nutricionales, contenido centrado en la condición física y acceso entre bastidores que las plataformas de fitness convencionales prohíben explícitamente.`,
+    'cosplay':    `Las creadoras de cosplay de OnlyFans han transformado los proyectos de pasión de la cultura de las convenciones en prósperos negocios de suscripción, dando a los fans dedicados acceso exclusivo a sesiones de disfraces elaborados, contenido de artesanía y medios basados en personajes.`,
+    'amateur':    `Las creadoras amateur de OnlyFans representan el corazón auténtico de la plataforma — personas reales que construyen relaciones genuinas con suscriptores en lugar de producciones de estudio pulidas. Es esa autenticidad sin filtros la que impulsa algunos de los números de lealtad de fans más altos del sitio.`,
+    'hentai':     `Las creadoras de contenido hentai y anime de OnlyFans han construido una comunidad de nicho dedicada combinando artesanía de cosplay, estética ahegao, personalidad kawaii y contenido basado en personajes que atrae a fans del anime que buscan interpretaciones exclusivas de arquetipos familiares.`,
+  };
+
+  const defaultIntro = `Las creadoras de OnlyFans en la categoría ${label} representan uno de los segmentos más buscados de la plataforma en ${year}. Los perfiles mostrados aquí han sido clasificados por participación de suscriptores y conteos de favoritos — métricas reales de fans que reflejan la calidad genuina del contenido y la constancia en publicaciones, no números de seguidores autoreportados.`;
+
+  const closers = [
+    `FansPedia hace que encontrar la creadora de OnlyFans ${label} adecuada sea significativamente más rápido que navegar directamente por la plataforma. Usa el filtro de verificación para limitarte a cuentas confirmadas, ajusta el precio máximo con el control deslizante para adaptarte a tu presupuesto, o activa el filtro de paquetes para descubrir creadoras que ofrecen suscripciones multi-mes con descuento. Todos los datos de perfil se actualizan automáticamente.`,
+    `Suscribirse a una creadora de OnlyFans ${label} es una contribución financiera directa al negocio de contenido de esa persona. Las creadoras clasificadas aquí obtienen los mejores resultados en este nicho en recuento de suscriptores y participación de fans. Usa el control deslizante de precio para filtrar por presupuesto mensual, activa solo-verificadas para excluir cuentas no confirmadas, o explora libremente y carga más resultados para descubrir más perfiles.`,
+    `No todas las cuentas de OnlyFans ${label} ofrecen el mismo valor. La frecuencia de publicación, el tiempo de respuesta a mensajes de fans y los precios de suscripción activos varían significativamente entre perfiles. FansPedia clasifica a las creadoras ${label} por métricas de participación real para que puedas identificar inmediatamente quién está publicando activamente. Filtra por estado de verificación y precio para adaptar los resultados a tus preferencias.`,
+  ];
+
+  const intro = intros[slug] || defaultIntro;
+  const hash = slug.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+  const closer = closers[hash % closers.length];
+
+  return `<div id="seoBlock" class="seo-inline-block">
+  <div id="seoContent" class="seo-inline-content" aria-hidden="true">
+    <p>${intro}</p>
+    <p>${closer}</p>
+  </div>
+  <button id="seoToggleBtn" class="seo-toggle-btn" onclick="(function(){var c=document.getElementById('seoContent');var b=document.getElementById('seoToggleBtn');var i=document.getElementById('seoToggleIcon');var open=c.classList.toggle('seo-open');c.setAttribute('aria-hidden',String(!open));b.setAttribute('aria-expanded',String(open));i.textContent=open?'\u25b2':'\u25bc';})()" aria-expanded="false" aria-controls="seoContent">
+    Sobre ${label} OnlyFans <span id="seoToggleIcon">&#9660;</span>
+  </button>
+</div>`;
+}
+
+// ---------------------------------------------------------------------------
 // Main handler
 // ---------------------------------------------------------------------------
 export default async function handler(req, res) {
@@ -290,6 +339,9 @@ export default async function handler(req, res) {
       '<div id="results" class="row g-3 justify-content-center"></div>',
       `<div id="results" class="row g-3 justify-content-center">\n${cardsHtml}\n</div>`
     );
+
+    // --- 7. Collapsible SEO block below filters ---
+    html = html.replace('<div id="seoBlock"></div>', buildEsCategorySeoSection(slug, label));
 
     // --- 6. Send ---
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
