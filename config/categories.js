@@ -13,7 +13,7 @@ export const categories = [
   'footjob', 'foot fetish', 'dick ratings', 'bbw', 'mature', 'teacher', 'pussy', 'cuckold', 'big ass', 'squirting', 'hottest',
   'best', 'amateur', 'blonde', 'instagram', 'pawg', 'gangbang', 'redhead', 'male', 'vip', 'famous',
   'twins', 'ass', 'deepthroat', 'pregnant', 'handjob', 'facial', 'asmr', 'pegging', 'no ppv', 'nurse', 'smoking fetish', 'goth-free',
-  'big natural boobs', 'olympian', 'pussy-play'
+  'big natural boobs', 'olympian', 'pussy-play', 'hentai'
 ];
 
 // Compound categories: special categories that combine search terms with automatic filters
@@ -79,7 +79,8 @@ const synonymsOverrides = {
   'girl': ['girl','girls','babe'],
   'male': ['male','man','men'],
   '18 years old': ['18 years old','teen 18','18yo','18+','teen 18+','barely legal','just 18'],
-  'best': ['best','top','elite','greatest','top creator','finest']
+  'best': ['best','top','elite','greatest','top creator','finest'],
+  'hentai': ['hentai','anime','cosplay','ahegao','waifu','neko','kawaii']
 };
 
 function normalizeTerm(s){
