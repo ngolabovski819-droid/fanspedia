@@ -827,13 +827,17 @@ function buildJsonLd(slug, label, creators, canonicalUrl) {
 // Collapsible SEO block — injected above results grid on every country page
 // ---------------------------------------------------------------------------
 const SEO_INLINE_CSS = `<style id="seoInlineCSS">
-.seo-inline-block{max-width:900px;margin:16px auto;padding:12px 18px;background:var(--bg-secondary,#fff);border:1px solid var(--border-color,#e0e0e0);border-radius:10px}
-.seo-inline-content{max-height:0;overflow:hidden;transition:max-height 0.38s ease}
+.seo-inline-block{max-width:900px;margin:16px auto;background:var(--bg-secondary,#fff);border:1px solid rgba(0,175,240,0.2);border-left:3px solid #00AFF0;border-radius:10px;overflow:hidden}
+.seo-toggle-header{width:100%;background:none;border:none;padding:13px 18px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:background .2s;text-align:left}
+.seo-toggle-header:hover{background:rgba(0,175,240,0.07)}
+.seo-header-label{display:flex;align-items:center;gap:8px;color:#00AFF0;font-size:14px;font-weight:600}
+.seo-info-icon{font-size:15px;opacity:.85}
+.seo-caret{color:#00AFF0;font-size:11px;transition:transform .3s;flex-shrink:0}
+.seo-toggle-header[aria-expanded="true"] .seo-caret{transform:rotate(180deg)}
+.seo-inline-content{max-height:0;overflow:hidden;transition:max-height 0.4s ease}
 .seo-inline-content.seo-open{max-height:900px}
-.seo-inline-content p{color:var(--text-primary,#1a1a1a);font-size:15px;line-height:1.75;margin:12px 0 0}
-.seo-inline-content p:first-child{margin-top:10px}
-.seo-toggle-btn{background:none;border:1px solid rgba(0,175,240,0.35);color:#00AFF0;border-radius:20px;padding:5px 18px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:6px;margin:10px auto 0;transition:border-color .2s,background .2s}
-.seo-toggle-btn:hover{border-color:#00AFF0;background:rgba(0,175,240,0.07)}
+.seo-inline-content p{color:var(--text-primary,#1a1a1a);font-size:15px;line-height:1.75;padding:0 18px;margin:0 0 14px}
+.seo-inline-content p:first-child{padding-top:4px}
 </style>`;
 
 function buildCountrySeoSection(slug, label) {
@@ -888,13 +892,14 @@ function buildCountrySeoSection(slug, label) {
   const closer = closers[hash % closers.length];
 
   return `${SEO_INLINE_CSS}<div id="seoBlock" class="seo-inline-block">
+  <button id="seoToggleBtn" class="seo-toggle-header" onclick="(function(){var c=document.getElementById('seoContent');var b=document.getElementById('seoToggleBtn');var open=c.classList.toggle('seo-open');c.setAttribute('aria-hidden',String(!open));b.setAttribute('aria-expanded',String(open));})()" aria-expanded="false" aria-controls="seoContent">
+    <span class="seo-header-label"><span class="seo-info-icon">&#9432;</span> About ${label} OnlyFans Creators</span>
+    <span class="seo-caret">&#9660;</span>
+  </button>
   <div id="seoContent" class="seo-inline-content" aria-hidden="true">
     <p>${intro}</p>
     <p>${closer}</p>
   </div>
-  <button id="seoToggleBtn" class="seo-toggle-btn" onclick="(function(){var c=document.getElementById('seoContent');var b=document.getElementById('seoToggleBtn');var i=document.getElementById('seoToggleIcon');var open=c.classList.toggle('seo-open');c.setAttribute('aria-hidden',String(!open));b.setAttribute('aria-expanded',String(open));i.textContent=open?'\u25b2':'\u25bc';})()" aria-expanded="false" aria-controls="seoContent">
-    About ${label} OnlyFans Creators <span id="seoToggleIcon">&#9660;</span>
-  </button>
 </div>`;
 }
 

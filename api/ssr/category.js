@@ -368,13 +368,14 @@ function buildCategorySeoSection(slug, label) {
   const closer = closers[hash % closers.length];
 
   return `<div id="seoBlock" class="seo-inline-block">
+  <button id="seoToggleBtn" class="seo-toggle-header" onclick="(function(){var c=document.getElementById('seoContent');var b=document.getElementById('seoToggleBtn');var open=c.classList.toggle('seo-open');c.setAttribute('aria-hidden',String(!open));b.setAttribute('aria-expanded',String(open));})()" aria-expanded="false" aria-controls="seoContent">
+    <span class="seo-header-label"><span class="seo-info-icon">&#9432;</span> About ${escHtml(label)} OnlyFans Creators</span>
+    <span class="seo-caret">&#9660;</span>
+  </button>
   <div id="seoContent" class="seo-inline-content" aria-hidden="true">
     <p>${intro}</p>
     <p>${closer}</p>
   </div>
-  <button id="seoToggleBtn" class="seo-toggle-btn" onclick="(function(){var c=document.getElementById('seoContent');var b=document.getElementById('seoToggleBtn');var i=document.getElementById('seoToggleIcon');var open=c.classList.toggle('seo-open');c.setAttribute('aria-hidden',String(!open));b.setAttribute('aria-expanded',String(open));i.textContent=open?'\u25b2':'\u25bc';})()" aria-expanded="false" aria-controls="seoContent">
-    About ${label} OnlyFans <span id="seoToggleIcon">&#9660;</span>
-  </button>
 </div>`;
 }
 
