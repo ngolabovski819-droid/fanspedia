@@ -405,10 +405,19 @@ export default async function handler(req, res) {
     const label = isCompound ? compoundCategories[slug].displayLabel : slugToLabel(slug);
 
     // --- 2. Fetch creators from Supabase ---
-    const searchCols = ['username', 'name'];
-    const expressions = terms.flatMap(t =>
-      searchCols.map(c => `${c}.ilike.*${t}*`)
-    );
+    // Tier the search by term length to keep ilike scans bounded:
+    //   < 3 chars  → skipped entirely (e.g. "tg" matches everything, full table scan)
+    //   3–5 chars → username + name only
+    //   ≥ 6 chars → username + name + about (bio)
+    const ABOUT_MIN_LEN = 6;
+    const SHORT_MIN_LEN = 3;
+    const usableTerms = terms.filter(t => t && t.length >= SHORT_MIN_LEN);
+    const expressions = (usableTerms.length ? usableTerms : terms).flatMap(t => {
+      const cols = t.length >= ABOUT_MIN_LEN
+        ? ['username', 'name', 'about']
+        : ['username', 'name'];
+      return cols.map(c => `${c}.ilike.*${t}*`);
+    });
 
     const selectCols = [
       'id', 'username', 'name', 'avatar', 'avatar_c144',
@@ -451,10 +460,13 @@ export default async function handler(req, res) {
       totalCount = parseInt(contentRange.split('/')[1] || '0', 10) || creators.length;
     }
 
-    // Unknown slug with no results → hard 404 to prevent GSC soft-404
-    if (creators.length === 0 && totalCount === 0 && page === 1) {
+    // Only return a hard 404 if the slug is NOT a known category (taxonomy miss).
+    // For known slugs with 0 hits we still render the normal page with an empty state
+    // — bouncing real categories to 404 was breaking /reddit, /pussy-play, etc.
+    const isKnownSlug = isCompound || !!synonymsMap[slug];
+    if (creators.length === 0 && totalCount === 0 && page === 1 && !isKnownSlug) {
       res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=604800');
-    res.setHeader('Vercel-CDN-Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=604800');
+      res.setHeader('Vercel-CDN-Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=604800');
       return res.status(404).send('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Category Not Found | FansPedia</title><link rel="canonical" href="https://fanspedia.net/categories/"></head><body><h1>Category Not Found</h1><p><a href="/categories/">Browse all categories</a></p></body></html>');
     }
 

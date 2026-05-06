@@ -1313,7 +1313,7 @@
         const verified = verifiedToggle.checked;
         const bundles = bundlesToggle.checked;
         const price = priceRange.value;
-        let apiUrl = `/api/search?q=${encodeURIComponent(q)}&price=${price}&page=${currentPage}&page_size=${pageSize}`;
+        let apiUrl = `/api/search?q=${encodeURIComponent(q)}&price=${price}&page=${currentPage}&page_size=${pageSize}&fields=username,name,about`;
         if (verified) apiUrl += '&verified=true';
         if (bundles) apiUrl += '&bundles=true';
         // log analytics best-effort

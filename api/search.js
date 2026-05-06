@@ -76,7 +76,21 @@ export default async function handler(req, res) {
         .filter(Boolean)
         .filter(c => allowedCols.has(c));
       const cols = requestedCols.length ? requestedCols : ['username','name'];
-      const expressions = (terms.length ? terms : [rawQ]).flatMap(term => cols.map(c => `${c}.ilike.*${term}*`));
+      // Tier by term length:
+      //   < 3 chars  → dropped (avoids huge ilike scans on "tg", "x", etc.)
+      //   3–5 chars → username/name only (skip about)
+      //   ≥ 6 chars → all requested cols
+      const ABOUT_MIN_LEN = 6;
+      const SHORT_MIN_LEN = 3;
+      const baseTerms = terms.length ? terms : [rawQ];
+      const filteredTerms = baseTerms.filter(t => t && t.length >= SHORT_MIN_LEN);
+      const finalTerms = filteredTerms.length ? filteredTerms : baseTerms;
+      const expressions = finalTerms.flatMap(term => {
+        const useCols = cols.includes('about') && term.length < ABOUT_MIN_LEN
+          ? cols.filter(c => c !== 'about')
+          : cols;
+        return useCols.map(c => `${c}.ilike.*${term}*`);
+      });
       params.set('or', `(${expressions.join(',')})`);
     }
 
