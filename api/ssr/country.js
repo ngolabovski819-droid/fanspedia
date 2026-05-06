@@ -925,12 +925,18 @@ export default async function handler(req, res) {
 
   try {
     // --- 1. Build Supabase OR query ---
-    // search_text is a STORED generated column: lower(username||name||about||location).
-    // A GIN trigram index (idx_search_text_trgm) makes every ilike here an index
-    // lookup instead of a full table scan — all terms × all 4 fields, fast.
+    // Country lookups target the dedicated `location` column only — much smaller
+    // text than the full search_text (username||name||about||location), so the
+    // trigram index lookup is dramatically faster and avoids Postgres' 8s
+    // statement_timeout on common short terms (uk, tg, etc.) and high-volume
+    // matches (thailand→bio mentions).
     const page = Math.max(1, parseInt(req.query.page || '1', 10));
     const offset = (page - 1) * PAGE_SIZE;
-    const expressions = config.terms.map(term => `search_text.ilike.*${term}*`);
+    // Drop terms <3 chars: trigram index requires 3+ chars; shorter terms
+    // force a seq scan and timeout (e.g. "uk" matched 9k+ rows in bios).
+    const filteredTerms = config.terms.filter(t => t && t.length >= 3);
+    const expressions = (filteredTerms.length ? filteredTerms : config.terms)
+      .map(term => `location.ilike.*${term}*`);
 
     const selectCols = [
       'id', 'username', 'name', 'avatar', 'avatar_c144',
@@ -946,7 +952,7 @@ export default async function handler(req, res) {
     });
 
     const abortCtrl = new AbortController();
-    const abortTimer = setTimeout(() => abortCtrl.abort(), 3000);
+    const abortTimer = setTimeout(() => abortCtrl.abort(), 8000);
     let supaFetch;
     try {
       supaFetch = await fetch(`${SUPABASE_URL}/rest/v1/onlyfans_profiles?${params}`, {
