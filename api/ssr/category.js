@@ -25,6 +25,7 @@ import {
   compoundCategories,
   slugToLabel,
 } from '../../config/categories.js';
+import { categorySeoEn } from './seo-meta.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const CATEGORY_HTML = join(__dirname, '..', '..', 'category.html');
@@ -477,8 +478,10 @@ export default async function handler(req, res) {
       ? `${BASE_URL}/categories/${slug}/${page}/`
       : `${BASE_URL}/categories/${slug}/`;
     const pageLabel = page > 1 ? ` - Page ${page}` : '';
-    const titleText = `Best ${label} OnlyFans Creators${pageLabel} (${YEAR}) | FansPedia`;
-    const metaDescription = `Browse ${totalCount > 0 ? totalCount + '+' : 'top'} ${label} OnlyFans creators on FansPedia. Filter by verified status, bundles, and price.${page > 1 ? ` Page ${page}.` : ''}`;
+    // Conversion-optimized title + meta description, rotated by slug hash
+    const { title: seoTitle, description: seoDesc } = categorySeoEn(slug, label);
+    const titleText = `${seoTitle}${pageLabel}`;
+    const metaDescription = page > 1 ? `${seoDesc} Page ${page}.` : seoDesc;
 
     // rel prev / next for paginated series
     const prevLink = page > 2
@@ -497,12 +500,22 @@ export default async function handler(req, res) {
     );
     html = html.replace(
       /(<meta name="description" content=")[^"]*(")/,
-      `$1${metaDescription}$2`
+      `$1${escHtml(metaDescription)}$2`
     );
     html = html.replace(
       /(<link id="canonicalLink" rel="canonical" href=")[^"]*(")/,
       `$1${canonicalUrl}$2`
     );
+    // Open Graph + Twitter (idempotent — strip then re-inject)
+    const ogTags = `<meta property="og:title" content="${escHtml(titleText)}">
+<meta property="og:description" content="${escHtml(metaDescription)}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="${canonicalUrl}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${escHtml(titleText)}">
+<meta name="twitter:description" content="${escHtml(metaDescription)}">`;
+    html = html.replace(/\s*<meta\s+(?:property|name)="(?:og:[^"]+|twitter:[^"]+)"[^>]*>/g, '');
+    html = html.replace('</head>', `${ogTags}\n</head>`);
 
     const jsonLd = buildJsonLd(slug, label, creators, canonicalUrl);
     const ssrFlag = `<script>window.__CATEGORY_SSR={slug:${JSON.stringify(slug)},count:${totalCount},hasMore:${creators.length === PAGE_SIZE},page:${page}};</script>`;

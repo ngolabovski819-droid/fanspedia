@@ -14,6 +14,7 @@
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { countrySeoEs } from './seo-meta.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..', '..');
@@ -1091,20 +1092,33 @@ export default async function handler(req, res) {
       html = html.replace('</head>', `  <link rel="canonical" href="${canonicalUrl}">\n</head>`);
     }
 
-    // Spanish title with page suffix
-    const titleSuffix = page > 1 ? ` - Página ${page}` : '';
+    // Generate conversion-optimized ES title + meta description (rotated by slug hash)
+    const { title: seoTitle, description: seoDesc } = countrySeoEs(name, config.label);
+    const finalTitle = page > 1 ? `${seoTitle} - Página ${page}` : seoTitle;
+    const finalDesc = page > 1 ? `${seoDesc} Página ${page}.` : seoDesc;
     html = html.replace(
-      /<title>([^<]*)<\/title>/,
-      `<title>${escHtml(config.titleEs.replace(` (${YEAR})`, `${titleSuffix} (${YEAR})`))}</title>`
+      /<title>[^<]*<\/title>/,
+      `<title>${escHtml(finalTitle)}</title>`
     );
-
-    // Update meta description on first page only (template already has Spanish text)
-    if (page === 1 && /<meta name="description"/.test(html)) {
+    if (/<meta name="description"/.test(html)) {
       html = html.replace(
         /(<meta name="description" content=")[^"]*(")/,
-        `$1${config.metaDesc}$2`
+        `$1${escHtml(finalDesc)}$2`
       );
+    } else {
+      html = html.replace('</head>', `  <meta name="description" content="${escHtml(finalDesc)}">\n</head>`);
     }
+    // Open Graph + Twitter (idempotent)
+    const ogTags = `<meta property="og:title" content="${escHtml(finalTitle)}">
+<meta property="og:description" content="${escHtml(finalDesc)}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="${canonicalUrl}">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${escHtml(finalTitle)}">
+<meta name="twitter:description" content="${escHtml(finalDesc)}">`;
+    html = html.replace(/\s*<meta\s+(?:property|name)="(?:og:[^"]+|twitter:[^"]+)"[^>]*>/g, '');
+    html = html.replace('</head>', `${ogTags}\n</head>`);
 
     // --- 4. Inject JSON-LD + SSR flag + hreflang + pagination ---
     const jsonLd = buildJsonLd(name, config.label, creators, canonicalUrl);

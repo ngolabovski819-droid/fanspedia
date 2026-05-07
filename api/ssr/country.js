@@ -20,6 +20,7 @@
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { countrySeoEn } from './seo-meta.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..', '..');
@@ -1006,12 +1007,33 @@ export default async function handler(req, res) {
     } else {
       html = html.replace('</head>', `  <link rel="canonical" href="${canonicalUrl}">\n</head>`);
     }
-    if (page > 1) {
+    // Generate conversion-optimized title + meta description (rotated by slug hash)
+    const { title: seoTitle, description: seoDesc } = countrySeoEn(name, config.label, config.metaDesc || '');
+    const finalTitle = page > 1 ? `${seoTitle} - Page ${page}` : seoTitle;
+    const finalDesc = page > 1 ? `${seoDesc} Page ${page}.` : seoDesc;
+    html = html.replace(
+      /<title>[^<]*<\/title>/,
+      `<title>${escHtml(finalTitle)}</title>`
+    );
+    if (/<meta name="description"/.test(html)) {
       html = html.replace(
-        /<title>([^<]*)<\/title>/,
-        `<title>$1 - Page ${page}</title>`
+        /(<meta name="description" content=")[^"]*(")/,
+        `$1${escHtml(finalDesc)}$2`
       );
+    } else {
+      html = html.replace('</head>', `  <meta name="description" content="${escHtml(finalDesc)}">\n</head>`);
     }
+    // Open Graph + Twitter (add if missing, refresh if present)
+    const ogTags = `<meta property="og:title" content="${escHtml(finalTitle)}">
+<meta property="og:description" content="${escHtml(finalDesc)}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="${canonicalUrl}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${escHtml(finalTitle)}">
+<meta name="twitter:description" content="${escHtml(finalDesc)}">`;
+    // Strip any existing og:/twitter: tags then re-inject (idempotent)
+    html = html.replace(/\s*<meta\s+(?:property|name)="(?:og:[^"]+|twitter:[^"]+)"[^>]*>/g, '');
+    html = html.replace('</head>', `${ogTags}\n</head>`);
 
     // --- 4. Inject JSON-LD + SSR flag + hreflang + pagination links ---
     const jsonLd = buildJsonLd(name, config.label, creators, canonicalUrl);
