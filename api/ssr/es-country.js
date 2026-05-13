@@ -20,7 +20,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..', '..');
 
 const BASE_URL = 'https://fanspedia.net';
-const PAGE_SIZE = 50;
+const PAGE_SIZE = 24;
 const YEAR = new Date().getFullYear();
 
 // ---------------------------------------------------------------------------

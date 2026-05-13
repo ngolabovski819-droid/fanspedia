@@ -31,7 +31,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const CATEGORY_HTML = join(__dirname, '..', '..', 'category.html');
 
 const BASE_URL = 'https://fanspedia.net';
-const PAGE_SIZE = 50;
+const PAGE_SIZE = 24;
 const YEAR = new Date().getFullYear();
 
 // ---------------------------------------------------------------------------
