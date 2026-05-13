@@ -31,8 +31,13 @@ const ROOT = join(__dirname, '..', '..');
 
 const BASE_URL = 'https://fanspedia.net';
 const YEAR = new Date().getFullYear();
-const POPULAR_LIMIT = 25;
-const NEWEST_LIMIT = 25;
+// Reduced from 25+25=50 to 12+12 → ~16-20 unique cards after dedup.
+// Smaller initial HTML = faster parse, paint, LCP. Client JS still serves
+// "Load More" pagination so users get the full list on demand.
+const POPULAR_LIMIT = 12;
+const NEWEST_LIMIT = 12;
+// Cap inline __TC_POOL JSON — trending carousel only shows 3-4 cards at a time.
+const TC_POOL_MAX = 16;
 
 const SELECT_COLS = [
   'id', 'username', 'name', 'avatar', 'avatar_c144',
@@ -308,7 +313,8 @@ export default async function handler(req, res) {
     const updatedAt = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     const ssrFlag = `<script>window.__HOME_SSR={count:${creators.length},hasMore:true,updatedAt:"${updatedAt}"};</script>`;
     // Inject creator pool for the Top Creators client-side carousel (avoids a second API call)
-    const tcPoolData = creators.map(c => ({
+    // Cap at TC_POOL_MAX to keep inline JSON small — carousel only renders 3-4 visible at once.
+    const tcPoolData = creators.slice(0, TC_POOL_MAX).map(c => ({
       username: c.username || '',
       name: c.name || '',
       avatar: c.avatar || c.avatar_c144 || '',
