@@ -211,8 +211,9 @@ function renderArticleHtml(post) {
     const base = post.featuredImage.trim();
     const alt = escHtml(post.featuredImageAlt || post.title || '');
     const absBase = base.startsWith('/') ? `https://fanspedia.net${base}` : base;
-    const desk = escHtml(`https://images.weserv.nl/?url=${encodeURIComponent(absBase)}&w=1200&h=675&fit=cover&output=webp&q=85`);
-    const mob  = escHtml(`https://images.weserv.nl/?url=${encodeURIComponent(absBase)}&w=800&h=450&fit=cover&output=webp&q=85`);
+    const cacheBust = encodeURIComponent(post.slug || '').slice(0, 32);
+    const desk = escHtml(`https://images.weserv.nl/?url=${encodeURIComponent(absBase)}&w=1200&h=675&fit=cover&output=webp&q=85&v=${cacheBust}`);
+    const mob  = escHtml(`https://images.weserv.nl/?url=${encodeURIComponent(absBase)}&w=800&h=450&fit=cover&output=webp&q=85&v=${cacheBust}`);
     heroImageHTML = `
     <div class="blog-hero-image">
       <picture>
