@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Build: 2025-11-16-1315 -->
+  <!-- Build: 2026-05-15-1 (composited shimmer) -->
   <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg">
   <!-- Preconnect to external domains for faster loading -->
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -746,12 +746,23 @@
       aspect-ratio: 3/4;
       overflow: hidden;
       border-radius: 20px 20px 0 0;
-      background: linear-gradient(90deg, #e8e8e8 25%, #f0f0f0 50%, #e8e8e8 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.5s infinite;
+      background: #e8e8e8;
+      position: relative;
     }
-    [data-theme="dark"] .card-img-wrap {
-      background: linear-gradient(90deg, #2a2a3e 25%, #323246 50%, #2a2a3e 75%);
+    .card-img-wrap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.55) 50%, transparent 100%);
+      transform: translateX(-100%);
+      animation: shimmer 1.5s infinite;
+      will-change: transform;
+      pointer-events: none;
+      z-index: 0;
+    }
+    [data-theme="dark"] .card-img-wrap { background: #2a2a3e; }
+    [data-theme="dark"] .card-img-wrap::before {
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%);
     }
     .card img {
       border-radius: 0;
@@ -759,11 +770,12 @@
       width: 100%;
       height: 100%;
       display: block;
+      position: relative;
+      z-index: 1;
       transition: filter 0.3s ease, opacity 0.3s ease;
     }
     @keyframes shimmer {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
+      100% { transform: translateX(100%); }
     }
     
     /* Safe Search blur effect */
@@ -1799,13 +1811,23 @@
     .ntw-skeleton {
       aspect-ratio: 3/4;
       border-radius: 16px;
-      background: linear-gradient(90deg,#e8e8e8 25%,#f0f0f0 50%,#e8e8e8 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.5s infinite;
+      background: #e8e8e8;
+      position: relative;
+      overflow: hidden;
     }
-    [data-theme="dark"] .ntw-skeleton {
-      background: linear-gradient(90deg,#2a2a3e 25%,#323246 50%,#2a2a3e 75%);
-      background-size: 200% 100%;
+    .ntw-skeleton::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.55) 50%, transparent 100%);
+      transform: translateX(-100%);
+      animation: shimmer 1.5s infinite;
+      will-change: transform;
+      pointer-events: none;
+    }
+    [data-theme="dark"] .ntw-skeleton { background: #2a2a3e; }
+    [data-theme="dark"] .ntw-skeleton::before {
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%);
     }
     .ntw-arrow {
       position: absolute;
@@ -2083,13 +2105,23 @@
     .cat-skeleton {
       aspect-ratio: 2/3;
       border-radius: 16px;
-      background: linear-gradient(90deg,#e8e8e8 25%,#f0f0f0 50%,#e8e8e8 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.5s infinite;
+      background: #e8e8e8;
+      position: relative;
+      overflow: hidden;
     }
-    [data-theme="dark"] .cat-skeleton {
-      background: linear-gradient(90deg,#2a2a3e 25%,#323246 50%,#2a2a3e 75%);
-      background-size: 200% 100%;
+    .cat-skeleton::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.55) 50%, transparent 100%);
+      transform: translateX(-100%);
+      animation: shimmer 1.5s infinite;
+      will-change: transform;
+      pointer-events: none;
+    }
+    [data-theme="dark"] .cat-skeleton { background: #2a2a3e; }
+    [data-theme="dark"] .cat-skeleton::before {
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%);
     }
     /* reuse ntw-arrow styles ? just alias */
     .cat-arrow-btn {
@@ -2247,13 +2279,23 @@
     .blog-card-skel {
       border-radius: 16px;
       aspect-ratio: 3/2;
-      background: linear-gradient(90deg,#e8e8e8 25%,#f0f0f0 50%,#e8e8e8 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.5s infinite;
+      background: #e8e8e8;
+      position: relative;
+      overflow: hidden;
     }
-    [data-theme="dark"] .blog-card-skel {
-      background: linear-gradient(90deg,#2a2a3e 25%,#323246 50%,#2a2a3e 75%);
-      background-size: 200% 100%;
+    .blog-card-skel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.55) 50%, transparent 100%);
+      transform: translateX(-100%);
+      animation: shimmer 1.5s infinite;
+      will-change: transform;
+      pointer-events: none;
+    }
+    [data-theme="dark"] .blog-card-skel { background: #2a2a3e; }
+    [data-theme="dark"] .blog-card-skel::before {
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%);
     }
     @media (max-width: 900px) { .blog-cards-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 576px) {
