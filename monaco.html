@@ -21,7 +21,7 @@
   </script>
 
   <title>Best OnlyFans Creators in Monaco | FansPedia</title>
-  <meta name="description" content="Discover the most popular OnlyFans creators from Monaco. Browse verified profiles, free accounts, and exclusive content from Monégasque creators.">
+  <meta name="description" content="Discover the most popular OnlyFans creators from Monaco. Browse verified profiles, free accounts, and exclusive content from Monï¿½gasque creators.">
   
   <!-- Bootstrap 5.3 -->
   <link rel="preload" as="style" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" onload="this.onload=null;this.rel='stylesheet'">
@@ -702,12 +702,23 @@
       aspect-ratio: 3/4;
       overflow: hidden;
       border-radius: 20px 20px 0 0;
-      background: linear-gradient(90deg, #e8e8e8 25%, #f0f0f0 50%, #e8e8e8 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.5s infinite;
+      background: #e8e8e8;
+      position: relative;
     }
-    [data-theme="dark"] .card-img-wrap {
-      background: linear-gradient(90deg, #2a2a3e 25%, #323246 50%, #2a2a3e 75%);
+    .card-img-wrap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.55) 50%, transparent 100%);
+      transform: translateX(-100%);
+      animation: shimmer 1.5s infinite;
+      will-change: transform;
+      pointer-events: none;
+      z-index: 0;
+    }
+    [data-theme="dark"] .card-img-wrap { background: #2a2a3e; }
+    [data-theme="dark"] .card-img-wrap::before {
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%);
     }
     .card img {
       border-radius: 0;
@@ -715,12 +726,11 @@
       width: 100%;
       height: 100%;
       display: block;
+      position: relative;
+      z-index: 1;
       transition: filter 0.3s ease, opacity 0.3s ease;
     }
-    @keyframes shimmer {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
+    @keyframes shimmer { 100% { transform: translateX(100%); } }
     
     /* Safe Search blur effect */
     body.safe-search-active .card img {
@@ -1447,7 +1457,7 @@
 
   <!-- SEO Content Section -->
   <section class="mt-5 pt-5" style="max-width: 900px; margin-left: auto; margin-right: auto; text-align: left; border-top: 1px solid var(--border-color);">
-    <h2 style="color:#00AFF0;font-weight:700;font-size:28px;margin-bottom:20px;">Monégasque OnlyFans Creators: Discover the Best Monaco OnlyFans Profiles</h2>
+    <h2 style="color:#00AFF0;font-weight:700;font-size:28px;margin-bottom:20px;">Monï¿½gasque OnlyFans Creators: Discover the Best Monaco OnlyFans Profiles</h2>
 
     <p style="color: var(--text-primary); font-size: 16px; line-height: 1.7; margin-bottom: 20px;">
       Argentine OnlyFans creators are known for their passionate, expressive style and vibrant personalities. The Argentina OnlyFans scene features creators across fashion, fitness, glamour, cosplay, and lifestyle content, making it easy to find a profile that fits your preferences.
