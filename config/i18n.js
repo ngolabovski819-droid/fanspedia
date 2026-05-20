@@ -80,10 +80,13 @@ function setLanguage(lang) {
 function applyTranslations() {
   const lang = getCurrentLanguage();
   
-  // Translate text content
+  // Translate text content — skip no-op mutations to avoid resetting LCP clock
   document.querySelectorAll('[data-i18n-key]').forEach(el => {
     const key = el.dataset.i18nKey;
-    el.textContent = t(key, lang);
+    const translated = t(key, lang);
+    if (el.textContent.trim() !== translated.trim()) {
+      el.textContent = translated;
+    }
   });
   
   // Translate placeholders

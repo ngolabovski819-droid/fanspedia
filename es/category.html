@@ -79,8 +79,15 @@
     .form-check-input { width: 1em; height: 1em; margin-top: .25em; vertical-align: top; background-color: #fff; border: 1px solid rgba(0,0,0,.25); appearance: none; }
     .form-check-input[type=checkbox] { border-radius: .25em; }
     .form-check-input:checked { background-color: #0d6efd; border-color: #0d6efd; }
+    /* Form switch (toggle) — prevents CLS when Bootstrap CSS loads async */
+    .form-switch { padding-left: 2.5em; }
+    .form-switch .form-check-input { width: 2em; margin-left: -2.5em; border-radius: 2em; }
+    /* Form range — fixes height before Bootstrap loads */
+    .form-range { width: 100%; height: 1.4rem; padding: 0; appearance: none; background: transparent; }
     .form-label { margin-bottom: .5rem; }
     .visually-hidden, .visually-hidden-focusable:not(:focus):not(:focus-within) { position: absolute!important; width: 1px!important; height: 1px!important; padding: 0!important; margin: -1px!important; overflow: hidden!important; clip: rect(0,0,0,0)!important; white-space: nowrap!important; border: 0!important; }
+    /* Gap utilities — used in filter bar flex container */
+    .gap-1{gap:.25rem!important}.gap-2{gap:.5rem!important}.gap-3{gap:1rem!important}.gap-4{gap:1.5rem!important}
     /* g-3 gap */
     .g-3, .gx-3 { --bs-gutter-x: 1rem; }
     .g-3, .gy-3 { --bs-gutter-y: 1rem; }
