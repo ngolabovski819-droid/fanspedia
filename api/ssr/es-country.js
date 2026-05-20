@@ -857,6 +857,7 @@ function renderCard(item, index) {
   const profileUrl = username ? `https://onlyfans.com/${encodeURIComponent(username)}` : '#';
   const loading = index === 0 ? 'eager' : 'lazy';
   const fetchpriority = index === 0 ? ' fetchpriority="high"' : '';
+  const decoding = index === 0 ? 'sync' : 'async';
   const priceHtml = priceText === 'GRATIS'
     ? `<p class="price-free" style="color:#34c759;font-weight:700;font-size:16px;text-transform:uppercase;">GRATIS</p>`
     : `<p class="price-tag" style="color:#34c759;font-weight:700;font-size:18px;">${priceText}</p>`;
@@ -869,7 +870,7 @@ function renderCard(item, index) {
     <div class="card-img-wrap">
       <img src="${src}" srcset="${srcset}" sizes="${sizes}"
         alt="${name} creadora de OnlyFans" loading="${loading}"${fetchpriority}
-        decoding="async" referrerpolicy="no-referrer"
+        decoding="${decoding}" referrerpolicy="no-referrer"
         onerror="if(this.src!=='/static/no-image.png'){this.removeAttribute('srcset');this.removeAttribute('sizes');this.src='${escHtml(imgSrc)}';this.style.opacity='0.4';}">
     </div>
     <div class="card-body">
@@ -983,6 +984,13 @@ function buildEsCountrySeoSection(slug, label) {
 }
 
 // ---------------------------------------------------------------------------
+// In-memory per-country HTML cache — avoids Supabase roundtrip on every CDN
+// miss. Key: `${name}:${page}`. TTL: 5 minutes.
+// ---------------------------------------------------------------------------
+const _esCountryCache = new Map(); // key → { html, expiresAt }
+const ES_COUNTRY_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+// ---------------------------------------------------------------------------
 // Main handler
 // ---------------------------------------------------------------------------
 export default async function handler(req, res) {
@@ -1007,6 +1015,17 @@ export default async function handler(req, res) {
     // statement_timeout on common short terms (uk, tg, etc.) and high-volume
     // matches (thailand→bio mentions).
     const page = Math.max(1, parseInt(req.query.page || '1', 10));
+
+    // ── Memory cache check ──────────────────────────────────────────────────
+    const cacheKey = `${name}:${page}`;
+    const cachedEntry = _esCountryCache.get(cacheKey);
+    if (cachedEntry && Date.now() < cachedEntry.expiresAt) {
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=604800');
+      res.setHeader('Vercel-CDN-Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=604800');
+      return res.status(200).send(cachedEntry.html);
+    }
+    // ────────────────────────────────────────────────────────────────────────
     const offset = (page - 1) * PAGE_SIZE;
     // Drop terms <3 chars: trigram index requires 3+ chars; shorter terms
     // force a seq scan and timeout (e.g. "uk" matched 9k+ rows in bios).
@@ -1130,9 +1149,16 @@ export default async function handler(req, res) {
     const preloadLink = _lcpSrc
       ? (() => { const { src, srcset, sizes } = buildResponsiveSources(_lcpSrc); return `<link rel="preload" as="image" fetchpriority="high" href="${src}" imagesrcset="${srcset}" imagesizes="${sizes}">`; })()
       : '';
+    // Inject preload early in <head> — browser discovers LCP image before scripts/styles
+    if (preloadLink) {
+      html = html.replace(
+        '<meta name="viewport" content="width=device-width, initial-scale=1.0" />',
+        `<meta name="viewport" content="width=device-width, initial-scale=1.0" />\n  ${preloadLink}`
+      );
+    }
     html = html.replace(
       '</head>',
-      `${preloadLink ? preloadLink + '\n' : ''}${jsonLd}\n${ssrFlag}\n${hreflangLinks}\n${paginationLinks ? paginationLinks + '\n' : ''}</head>`
+      `${jsonLd}\n${ssrFlag}\n${hreflangLinks}\n${paginationLinks ? paginationLinks + '\n' : ''}</head>`
     );
 
     // --- 5. Pre-rendered creator cards ---
@@ -1150,6 +1176,9 @@ export default async function handler(req, res) {
       /<div class="row" id="results">/,
       `${buildEsCountrySeoSection(name, config.label)}\n<div class="row" id="results">`
     );
+
+    // Store in memory cache so warm instances skip Supabase next request
+    _esCountryCache.set(cacheKey, { html, expiresAt: Date.now() + ES_COUNTRY_CACHE_TTL });
 
     // --- 6. Send ---
     res.setHeader('Content-Type', 'text/html; charset=utf-8');

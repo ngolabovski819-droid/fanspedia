@@ -1,11 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Preconnect to critical third-party origins (LCP / image performance) -->
-  <link rel="preconnect" href="https://images.weserv.nl" crossorigin>
+  <link rel="preconnect" href="https://images.weserv.nl">
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="dns-prefetch" href="https://images.weserv.nl">
@@ -64,7 +64,7 @@
       display: flex;
       flex-direction: column;
     }
-    /* ── Header ── */
+    /* -- Header -- */
     .superior-header {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -112,7 +112,7 @@
     }
     .theme-toggle:hover { background: rgba(255,255,255,0.28); }
 
-    /* ── 404 main content ── */
+    /* -- 404 main content -- */
     .not-found-section {
       flex: 1;
       display: flex;
@@ -211,7 +211,7 @@
       border-color: var(--brand-color);
     }
 
-    /* ── Footer ── */
+    /* -- Footer -- */
     .simple-footer {
       background: var(--bg-secondary);
       border-top: 1px solid var(--border-color);
@@ -232,7 +232,7 @@
 </head>
 <body>
 
-  <!-- ── Header ── -->
+  <!-- -- Header -- -->
   <header class="superior-header" id="mainHeader">
     <div class="header-main">
       <div class="header-container">
@@ -262,11 +262,11 @@
     </div>
   </header>
 
-  <!-- ── 404 Content ── -->
+  <!-- -- 404 Content -- -->
   <main class="not-found-section">
     <div class="not-found-card">
       <div class="not-found-code">404</div>
-      <div class="not-found-icon">🔍</div>
+      <div class="not-found-icon">??</div>
       <h1 class="not-found-title">Page Not Found</h1>
       <p class="not-found-desc">The page you're looking for doesn't exist or has been moved. Try searching for a creator below.</p>
 
@@ -286,14 +286,14 @@
     </div>
   </main>
 
-  <!-- ── Footer ── -->
+  <!-- -- Footer -- -->
   <footer class="simple-footer">
     <p>&copy; 2025 FansPedia &mdash; <a href="/privacy-policy">Privacy Policy</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/dmca-policy">DMCA</a></p>
     <p style="margin-top:6px;font-size:12px;opacity:0.7;">FansPedia is a fan-made directory and is not affiliated with OnlyFans or Fenix International Ltd.</p>
   </footer>
 
   <script>
-    // ── Dark mode ──
+    // -- Dark mode --
     (function () {
       const saved = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
       document.documentElement.setAttribute('data-theme', saved);
@@ -310,7 +310,7 @@
       icon.className = next === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
     });
 
-    // ── Search forms ──
+    // -- Search forms --
     function doSearch(q) {
       if (q.trim()) window.location.href = '/?q=' + encodeURIComponent(q.trim());
     }

@@ -76,6 +76,7 @@ function renderCard(item, index) {
   const profileUrl = username ? `https://onlyfans.com/${encodeURIComponent(username)}` : '#';
   const loading = index === 0 ? 'eager' : 'lazy';
   const fetchpriority = index === 0 ? ' fetchpriority="high"' : '';
+  const decoding = index === 0 ? 'sync' : 'async';
   const priceHtml = priceText === 'FREE'
     ? `<p class="price-free" style="color:#34c759;font-weight:700;font-size:16px;text-transform:uppercase;">GRATIS</p>`
     : `<p class="price-tag" style="color:#34c759;font-weight:700;font-size:18px;">${priceText}</p>`;
@@ -88,7 +89,7 @@ function renderCard(item, index) {
     <div class="card-img-wrap">
       <img src="${src}" srcset="${srcset}" sizes="${sizes}"
         alt="${name} OnlyFans creator" loading="${loading}"${fetchpriority}
-        decoding="async" referrerpolicy="no-referrer"
+        decoding="${decoding}" referrerpolicy="no-referrer"
         onerror="if(this.src!=='/static/no-image.png'){this.removeAttribute('srcset');this.removeAttribute('sizes');this.src='${escHtml(imgSrc)}';this.style.opacity='0.4';}">
     </div>
     <div class="card-body">
@@ -226,7 +227,14 @@ export default async function handler(req, res) {
       : '';
     const updatedAt = new Date().toLocaleDateString('es-ES', { month: 'short', day: 'numeric', year: 'numeric' });
     const ssrFlag = `<script>window.__HOME_SSR={count:${creators.length},hasMore:true,updatedAt:"${updatedAt}"};</script>`;
-    html = html.replace('</head>', `${preloadLink ? preloadLink + '\n' : ''}${jsonLd}\n${ssrFlag}\n</head>`);
+    // Inject preload early in <head> — browser discovers LCP image before scripts/styles
+    if (preloadLink) {
+      html = html.replace(
+        '<meta name="viewport" content="width=device-width, initial-scale=1.0" />',
+        `<meta name="viewport" content="width=device-width, initial-scale=1.0" />\n  ${preloadLink}`
+      );
+    }
+    html = html.replace('</head>', `${jsonLd}\n${ssrFlag}\n</head>`);
 
     // Pre-render cards
     const cardsHtml = creators.length > 0
