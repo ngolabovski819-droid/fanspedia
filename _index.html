@@ -5870,7 +5870,12 @@
         });
     }
 
-    if ('requestIdleCallback' in window) {
+    // Use SSR-injected pool if available — avoids a cold API call on first visit
+    if (window.__NTW_POOL && window.__NTW_POOL.length) {
+      pool = window.__NTW_POOL;
+      idx = 0;
+      renderCards();
+    } else if ('requestIdleCallback' in window) {
       requestIdleCallback(load, { timeout: 1500 });
     } else {
       setTimeout(load, 150);

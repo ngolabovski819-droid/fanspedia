@@ -197,6 +197,18 @@ async function buildAndCache(SUPABASE_URL, SUPABASE_KEY, rawHtml) {
     const preloadLink = _lcpSrc ? (() => { const { src, srcset, sizes } = buildResponsiveSources(_lcpSrc); return `<link rel="preload" as="image" fetchpriority="high" href="${src}" imagesrcset="${srcset}" imagesizes="${sizes}">`; })() : '';
     const updatedAt = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     const ssrFlag = `<script>window.__HOME_SSR={count:${creators.length},hasMore:true,updatedAt:"${updatedAt}"};</script>`;
+    const tcPoolData = popular.slice(0, TC_POOL_MAX).map(c => ({
+      username: c.username || '', name: c.name || '',
+      avatar: c.avatar || c.avatar_c144 || '',
+      subscribePrice: c.subscribeprice != null ? c.subscribeprice : null,
+    }));
+    const tcPoolFlag = `<script>window.__TC_POOL=${JSON.stringify(tcPoolData)};</script>`;
+    const ntwPoolData = newest.slice(0, 16).map(c => ({
+      username: c.username || '', name: c.name || '',
+      avatar: c.avatar || c.avatar_c144 || '',
+      subscribePrice: c.subscribeprice != null ? c.subscribeprice : null,
+    }));
+    const ntwPoolFlag = `<script>window.__NTW_POOL=${JSON.stringify(ntwPoolData)};</script>`;
     // Inject preload early in <head> — browser discovers LCP image before scripts/styles
     if (preloadLink) {
       html = html.replace(
@@ -204,7 +216,7 @@ async function buildAndCache(SUPABASE_URL, SUPABASE_KEY, rawHtml) {
         `<meta name="viewport" content="width=device-width, initial-scale=1.0" />\n  ${preloadLink}`
       );
     }
-    html = html.replace('</head>', `${jsonLd}\n${ssrFlag}\n</head>`);
+    html = html.replace('</head>', `${jsonLd}\n${ssrFlag}\n${tcPoolFlag}\n${ntwPoolFlag}\n</head>`);
     const cardsHtml = creators.map((c, i) => renderCard(c, i)).join('\n');
     if (cardsHtml) html = html.replace('<div id="results" class="row g-3 justify-content-center"></div>', `<div id="results" class="row g-3 justify-content-center">\n${cardsHtml}\n</div>`);
     _htmlCache = html;
@@ -329,7 +341,15 @@ export default async function handler(req, res) {
       subscribePrice: c.subscribeprice != null ? c.subscribeprice : null,
     }));
     const tcPoolFlag = `<script>window.__TC_POOL=${JSON.stringify(tcPoolData)};</script>`;
-    html = html.replace('</head>', `${preloadLink ? preloadLink + '\n' : ''}${jsonLd}\n${ssrFlag}\n${tcPoolFlag}\n</head>`);
+    // Inject newest pool so "New This Week" carousel skips its own API call
+    const ntwPoolData = newest.slice(0, 16).map(c => ({
+      username: c.username || '',
+      name: c.name || '',
+      avatar: c.avatar || c.avatar_c144 || '',
+      subscribePrice: c.subscribeprice != null ? c.subscribeprice : null,
+    }));
+    const ntwPoolFlag = `<script>window.__NTW_POOL=${JSON.stringify(ntwPoolData)};</script>`;
+    html = html.replace('</head>', `${preloadLink ? preloadLink + '\n' : ''}${jsonLd}\n${ssrFlag}\n${tcPoolFlag}\n${ntwPoolFlag}\n</head>`);
 
     // --- 4. Store in memory cache + Send ---
     _htmlCache = html;
