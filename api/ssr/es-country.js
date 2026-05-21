@@ -1,4 +1,4 @@
-/**
+﻿/**
  * SSR handler for /es/country/:name pages
  *
  * Spanish mirror of api/ssr/country.js.
@@ -1151,10 +1151,7 @@ export default async function handler(req, res) {
       : '';
     // Inject preload early in <head> — browser discovers LCP image before scripts/styles
     if (preloadLink) {
-      html = html.replace(
-        '<meta name="viewport" content="width=device-width, initial-scale=1.0" />',
-        `<meta name="viewport" content="width=device-width, initial-scale=1.0" />\n  ${preloadLink}`
-      );
+      html = html.replace(/<meta name="viewport"[^>]*>/, m => `${m}\n  ${preloadLink}`);
     }
     html = html.replace(
       '</head>',

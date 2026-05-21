@@ -1,4 +1,4 @@
-/**
+﻿/**
  * SSR handler for /country/:name pages
  *
  * Fetches top creators for a given country and returns a fully rendered HTML
@@ -1075,10 +1075,7 @@ export default async function handler(req, res) {
       : '';
     // Inject preload early in <head> — browser discovers LCP image before scripts/styles
     if (preloadLink) {
-      html = html.replace(
-        '<meta name="viewport" content="width=device-width, initial-scale=1.0" />',
-        `<meta name="viewport" content="width=device-width, initial-scale=1.0" />\n  ${preloadLink}`
-      );
+      html = html.replace(/<meta name="viewport"[^>]*>/, m => `${m}\n  ${preloadLink}`);
     }
     html = html.replace('</head>', `${jsonLd}\n${ssrFlag}\n${hreflangLinks}\n${paginationLinks ? paginationLinks + '\n' : ''}</head>`);
 
