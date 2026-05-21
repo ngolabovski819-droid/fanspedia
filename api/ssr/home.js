@@ -41,7 +41,7 @@ const TC_POOL_MAX = 16;
 
 const SELECT_COLS = [
   'id', 'username', 'name', 'avatar', 'avatar_c144',
-  'isverified', 'subscribeprice', 'favoritedcount', 'subscriberscount', 'joindate',
+  'isverified', 'subscribeprice', 'favoritedcount', 'subscriberscount', 'first_seen_at',
 ].join(',');
 
 // ---------------------------------------------------------------------------
@@ -179,7 +179,7 @@ async function buildAndCache(SUPABASE_URL, SUPABASE_KEY, rawHtml) {
       Prefer: 'count=estimated',
     };
     const popularParams = new URLSearchParams({ select: SELECT_COLS, order: 'favoritedcount.desc', limit: String(POPULAR_LIMIT) });
-    const newestParams  = new URLSearchParams({ select: SELECT_COLS, order: 'joindate.desc',       limit: String(NEWEST_LIMIT)  });
+    const newestParams  = new URLSearchParams({ select: SELECT_COLS, order: 'first_seen_at.desc.nullslast', limit: String(NEWEST_LIMIT)  });
     const [popularRes, newestRes] = await Promise.all([
       fetch(`${SUPABASE_URL}/rest/v1/onlyfans_profiles?${popularParams}`, { headers }),
       fetch(`${SUPABASE_URL}/rest/v1/onlyfans_profiles?${newestParams}`,  { headers }),
@@ -247,6 +247,7 @@ export default async function handler(req, res) {
   if (!SUPABASE_URL || !SUPABASE_KEY) {
     // No credentials — serve plain HTML for client-side rendering
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('X-SSR-Path', 'no-creds');
     return res.status(200).send(rawHtml);
   }
 
@@ -292,7 +293,7 @@ export default async function handler(req, res) {
     });
     const newestParams = new URLSearchParams({
       select: SELECT_COLS,
-      order: 'joindate.desc',
+      order: 'first_seen_at.desc.nullslast',
       limit: String(NEWEST_LIMIT),
     });
 
@@ -357,6 +358,7 @@ export default async function handler(req, res) {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=604800');
     res.setHeader('Vercel-CDN-Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=604800');
+    res.setHeader('X-SSR-Path', 'success-' + creators.length);
     return res.status(200).send(html);
 
   } catch (err) {
@@ -365,6 +367,7 @@ export default async function handler(req, res) {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=3600');
     res.setHeader('Vercel-CDN-Cache-Control', 'public, s-maxage=60, stale-while-revalidate=3600');
+    res.setHeader('X-SSR-Path', 'catch-' + err.message.substring(0, 40).replace(/[^\w\-]/g, '_'));
     return res.status(200).send(rawHtml);
   }
 }
