@@ -67,9 +67,14 @@ function escHtml(str) {
 // Card renderer (same markup as EN — view-profile-btn labelled in ES template)
 // ---------------------------------------------------------------------------
 function renderCard(item, index) {
-  const img = item.avatar || item.avatar_c144 || '';
+  // LCP card (index 0): avatar_c144 direct from OnlyFans CDN — bypasses wsrv.nl cold cache (8-13s)
+  // Other cards: wsrv.nl responsive srcset — lazy-loaded, cold cache doesn't affect LCP
+  const isLCP = index === 0;
+  const img = isLCP ? (item.avatar_c144 || item.avatar || '') : (item.avatar || item.avatar_c144 || '');
   const imgSrc = img && img.startsWith('http') ? img : '/static/no-image.png';
-  const { src, srcset, sizes } = buildResponsiveSources(imgSrc);
+  const responsive = isLCP ? null : buildResponsiveSources(imgSrc);
+  const src = isLCP ? imgSrc : responsive.src;
+  const srcsetAttr = isLCP ? '' : ` srcset="${responsive.srcset}" sizes="${responsive.sizes}"`;
 
   const name = escHtml(item.name || 'Unknown');
   const username = escHtml(item.username || '');
@@ -93,10 +98,10 @@ function renderCard(item, index) {
       <span>♡</span>
     </button>
     <div class="card-img-wrap">
-      <img src="${src}" srcset="${srcset}" sizes="${sizes}"
+      <img src="${escHtml(src)}"${srcsetAttr}
         alt="${name} creadora de OnlyFans" loading="${loading}"${fetchpriority}
         decoding="${decoding}" referrerpolicy="no-referrer"
-        onerror="if(this.src!=='/static/no-image.png'){this.removeAttribute('srcset');this.removeAttribute('sizes');this.src='${escHtml(imgSrc)}';this.style.opacity='0.4';}">
+        onerror="if(this.src!=='/static/no-image.png'){this.removeAttribute('srcset');this.removeAttribute('sizes');this.src='/static/no-image.png';this.style.opacity='0.4';}">  
     </div>
     <div class="card-body">
       <h3 style="font-size:1rem;font-weight:700;margin-bottom:4px;">${verifiedBadge}${name}</h3>
@@ -346,15 +351,15 @@ export default async function handler(req, res) {
     const ssrFlag = `<script>window.__CATEGORY_SSR={slug:${JSON.stringify(slug)},count:${totalCount},hasMore:${creators.length === PAGE_SIZE},page:${page}};</script>`;
     const paginationLinks = [prevLink, nextLink].filter(Boolean).join('\n');
     // LCP preload
-    const _lcpImg = creators[0]?.avatar || creators[0]?.avatar_c144 || '';
+    const _lcpImg = creators[0]?.avatar_c144 || creators[0]?.avatar || '';
     const _lcpSrc = _lcpImg.startsWith('http') ? _lcpImg : '';
     const preloadLink = _lcpSrc
-      ? (() => { const { src, srcset, sizes } = buildResponsiveSources(_lcpSrc); return `<link rel="preload" as="image" fetchpriority="high" href="${src}" imagesrcset="${srcset}" imagesizes="${sizes}">`; })()
+      ? `<link rel="preload" as="image" fetchpriority="high" href="${escHtml(_lcpSrc)}">` 
       : '';
-    // Inject critGrid + preload early in <head> — eliminates Bootstrap CLS and discovers LCP image before scripts/styles
+    // Inject preconnect + critGrid + preload early in <head> — eliminates Bootstrap CLS and discovers LCP image before scripts/styles
     html = html.replace(
       '<meta name="viewport" content="width=device-width, initial-scale=1.0" />',
-      `<meta name="viewport" content="width=device-width, initial-scale=1.0" />\n  ${CRITICAL_GRID_CSS}${preloadLink ? '\n  ' + preloadLink : ''}`
+      `<meta name="viewport" content="width=device-width, initial-scale=1.0" />\n  <link rel="preconnect" href="https://thumbs.onlyfans.com" crossorigin>\n  ${CRITICAL_GRID_CSS}${preloadLink ? '\n  ' + preloadLink : ''}`
     );
     html = html.replace(
       '</head>',

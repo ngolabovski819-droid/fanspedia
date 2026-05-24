@@ -7,6 +7,17 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Missing or invalid 'url' query parameter" });
     }
 
+    // SSRF protection — only allow known image CDN domains
+    const ALLOWED_DOMAINS = ['public.onlyfans.com', 'thumbs.onlyfans.com', 'images.weserv.nl'];
+    try {
+      const parsed = new URL(url);
+      if (!ALLOWED_DOMAINS.includes(parsed.hostname)) {
+        return res.status(403).json({ error: 'Domain not allowed' });
+      }
+    } catch {
+      return res.status(400).json({ error: 'Invalid URL' });
+    }
+
     // Fetch the remote image
     const response = await fetch(url, {
       headers: {
