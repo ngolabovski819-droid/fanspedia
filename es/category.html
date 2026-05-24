@@ -15,6 +15,11 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-3XB30HS12L');
+    window.addEventListener('load', () => {
+      if (typeof gtag === 'function') {
+        gtag('event', 'page_visible', { page_path: location.pathname, page_category: 'category' });
+      }
+    });
   </script>
 
   <!-- Vercel Analytics -->
@@ -399,22 +404,6 @@
   </script>
   <!-- Header -->
   <header class="superior-header" id="mainHeader">
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3XB30HS12L"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);} 
-    gtag('js', new Date());
-    gtag('config', 'G-3XB30HS12L', { 'anonymize_ip': true, 'debug_mode': true });
-    window.addEventListener('load', () => {
-      if (typeof gtag === 'function') {
-        gtag('event', 'page_visible', { page_path: location.pathname, page_category: 'category' });
-        console.log('[GA4] page_visible sent');
-      } else {
-        console.warn('[GA4] gtag not available');
-      }
-    });
-  </script>
     <div class="header-main">
       <div class="header-container">
         <a href="/" class="logo-section">

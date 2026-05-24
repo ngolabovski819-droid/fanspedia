@@ -28,6 +28,8 @@ const BASE_URL = 'https://fanspedia.net';
 const PAGE_SIZE = 24;
 const YEAR = new Date().getFullYear();
 
+const CRITICAL_GRID_CSS = `<style id="critGrid">.row{--bs-gutter-x:1.5rem;--bs-gutter-y:0;display:flex;flex-wrap:wrap;margin-top:calc(-1*var(--bs-gutter-y));margin-right:calc(-.5*var(--bs-gutter-x));margin-left:calc(-.5*var(--bs-gutter-x))}.row>*{flex-shrink:0;width:100%;max-width:100%;padding-right:calc(var(--bs-gutter-x)*.5);padding-left:calc(var(--bs-gutter-x)*.5);margin-top:var(--bs-gutter-y)}.g-3,.gx-3{--bs-gutter-x:1rem}.g-3,.gy-3{--bs-gutter-y:1rem}@media(min-width:576px){.col-sm-6{flex:0 0 auto;width:50%}}@media(min-width:768px){.col-md-4{flex:0 0 auto;width:33.33333%}}@media(min-width:992px){.col-lg-3{flex:0 0 auto;width:25%}}.h-100{height:100%!important}.mb-4{margin-bottom:1.5rem!important}.justify-content-center{justify-content:center!important}.card{display:flex;flex-direction:column;min-width:0}.card-body{flex:1 1 auto}</style>`;
+
 // ---------------------------------------------------------------------------
 // Image helpers
 // ---------------------------------------------------------------------------
@@ -349,13 +351,11 @@ export default async function handler(req, res) {
     const preloadLink = _lcpSrc
       ? (() => { const { src, srcset, sizes } = buildResponsiveSources(_lcpSrc); return `<link rel="preload" as="image" fetchpriority="high" href="${src}" imagesrcset="${srcset}" imagesizes="${sizes}">`; })()
       : '';
-    // Inject preload early in <head> — browser discovers LCP image before scripts/styles
-    if (preloadLink) {
-      html = html.replace(
-        '<meta name="viewport" content="width=device-width, initial-scale=1.0" />',
-        `<meta name="viewport" content="width=device-width, initial-scale=1.0" />\n  ${preloadLink}`
-      );
-    }
+    // Inject critGrid + preload early in <head> — eliminates Bootstrap CLS and discovers LCP image before scripts/styles
+    html = html.replace(
+      '<meta name="viewport" content="width=device-width, initial-scale=1.0" />',
+      `<meta name="viewport" content="width=device-width, initial-scale=1.0" />\n  ${CRITICAL_GRID_CSS}${preloadLink ? '\n  ' + preloadLink : ''}`
+    );
     html = html.replace(
       '</head>',
       `${jsonLd}\n${ssrFlag}\n${hreflangLinks}\n${paginationLinks ? paginationLinks + '\n' : ''}</head>`
