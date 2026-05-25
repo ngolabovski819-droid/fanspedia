@@ -5664,6 +5664,7 @@
               '<img src="' + thumb + '"',
               '  alt="' + name.replace(/"/g, '&quot;') + '"',
               '  loading="' + (tcIdx === 0 && i === 0 ? 'eager' : 'lazy') + '"',
+              '  fetchpriority="' + (tcIdx === 0 && i === 0 ? 'high' : 'auto') + '"',
               '  decoding="async" referrerpolicy="no-referrer"',
               '  onerror="if(this.src!==\'/static/no-image.png\'){this.removeAttribute(\'srcset\');this.src=\'' + src.replace(/'/g, "\\'") + '\';}"',
               '>',

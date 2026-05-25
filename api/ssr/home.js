@@ -123,6 +123,31 @@ function renderCard(item, index) {
 }
 
 // ---------------------------------------------------------------------------
+// Carousel card renderer — matches the carousel JS thumbnail exactly so the
+// SSR-injected card and the JS-rendered card use the same image URL, making
+// the <link rel="preload"> an exact cache hit.
+// ---------------------------------------------------------------------------
+function renderCarouselCard(item, index) {
+  const raw = item.avatar || item.avatar_c144 || '';
+  const imgSrc = raw.startsWith('http') ? raw : '/static/no-image.png';
+  const thumb = proxyImg(imgSrc, 400, 533);
+  const name = escHtml(item.name || item.username || 'Unknown');
+  const user = escHtml(item.username || '');
+  const subscribePrice = item.subscribePrice ?? item.subscribeprice;
+  const priceText = (subscribePrice && !isNaN(subscribePrice))
+    ? `$${parseFloat(subscribePrice).toFixed(2)}`
+    : 'FREE';
+  const priceHtml = priceText === 'FREE'
+    ? '<p class="price-free">FREE</p>'
+    : `<p class="price-tag">${priceText}</p>`;
+  const url = user ? `https://onlyfans.com/${encodeURIComponent(user)}` : '#';
+  const loading = index === 0 ? 'eager' : 'lazy';
+  const fetchpriority = index === 0 ? ' fetchpriority="high"' : '';
+  const decoding = index === 0 ? 'sync' : 'async';
+  return `<div class="card h-100"><div class="card-img-wrap"><img src="${thumb}" alt="${name}" loading="${loading}"${fetchpriority} decoding="${decoding}" referrerpolicy="no-referrer" onerror="if(this.src!=='/static/no-image.png'){this.removeAttribute('srcset');this.src='${escHtml(imgSrc)}';}" ></div><div class="card-body"><h5>${name}</h5><p class="username">@${user}</p>${priceHtml}<a href="${escHtml(url)}" class="view-profile-btn" target="_blank" rel="noopener noreferrer">View Profile</a></div></div>`;
+}
+
+// ---------------------------------------------------------------------------
 // JSON-LD structured data
 // ---------------------------------------------------------------------------
 function buildJsonLd(creators) {
@@ -194,7 +219,9 @@ async function buildAndCache(SUPABASE_URL, SUPABASE_KEY, rawHtml) {
     const jsonLd = buildJsonLd(creators);
     const _lcpImg = creators[0]?.avatar || creators[0]?.avatar_c144 || '';
     const _lcpSrc = _lcpImg.startsWith('http') ? _lcpImg : '';
-    const preloadLink = _lcpSrc ? (() => { const { src, srcset, sizes } = buildResponsiveSources(_lcpSrc); return `<link rel="preload" as="image" fetchpriority="high" href="${src}" imagesrcset="${srcset}" imagesizes="${sizes}">`; })() : '';
+    const preloadLink = _lcpSrc
+      ? `<link rel="preload" as="image" fetchpriority="high" href="${proxyImg(_lcpSrc, 400, 533)}">`
+      : '';
     const updatedAt = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     const ssrFlag = `<script>window.__HOME_SSR={count:${creators.length},hasMore:true,updatedAt:"${updatedAt}"};</script>`;
     const tcPoolData = popular.slice(0, TC_POOL_MAX).map(c => ({
@@ -217,8 +244,16 @@ async function buildAndCache(SUPABASE_URL, SUPABASE_KEY, rawHtml) {
       );
     }
     html = html.replace('</head>', `${jsonLd}\n${ssrFlag}\n${tcPoolFlag}\n${ntwPoolFlag}\n</head>`);
+    // Pre-render the first 3 Top Creators carousel cards — LCP image is in the HTML, no JS needed to paint it
+    const carouselCards = popular.slice(0, 3).map((c, i) => renderCarouselCard(c, i)).join('\n');
+    if (carouselCards) {
+      html = html.replace(
+        /<div class="ntw-cards" id="tcCards">(\s*<div class="ntw-skeleton"><\/div>){3}\s*<\/div>/,
+        `<div class="ntw-cards" id="tcCards">\n${carouselCards}\n        </div>`
+      );
+    }
     const cardsHtml = creators.map((c, i) => renderCard(c, i)).join('\n');
-    if (cardsHtml) html = html.replace('<div id="results" class="row g-3 justify-content-center"></div>', `<div id="results" class="row g-3 justify-content-center">\n${cardsHtml}\n</div>`);
+    if (cardsHtml) html = html.replace('<div id="results" class="row g-3 justify-content-center" style="display:none;"></div>', `<div id="results" class="row g-3 justify-content-center" style="display:none;">\n${cardsHtml}\n</div>`);
     _htmlCache = html;
     _cacheExpiresAt = Date.now() + HTML_CACHE_TTL;
   } catch (err) {
@@ -329,13 +364,13 @@ export default async function handler(req, res) {
     const _lcpImg = creators[0]?.avatar || creators[0]?.avatar_c144 || '';
     const _lcpSrc = _lcpImg.startsWith('http') ? _lcpImg : '';
     const preloadLink = _lcpSrc
-      ? (() => { const { src, srcset, sizes } = buildResponsiveSources(_lcpSrc); return `<link rel="preload" as="image" fetchpriority="high" href="${src}" imagesrcset="${srcset}" imagesizes="${sizes}">`; })()
+      ? `<link rel="preload" as="image" fetchpriority="high" href="${proxyImg(_lcpSrc, 400, 533)}">`
       : '';
     const updatedAt = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     const ssrFlag = `<script>window.__HOME_SSR={count:${creators.length},hasMore:true,updatedAt:"${updatedAt}"};</script>`;
     // Inject creator pool for the Top Creators client-side carousel (avoids a second API call)
     // Cap at TC_POOL_MAX to keep inline JSON small — carousel only renders 3-4 visible at once.
-    const tcPoolData = creators.slice(0, TC_POOL_MAX).map(c => ({
+    const tcPoolData = popular.slice(0, TC_POOL_MAX).map(c => ({
       username: c.username || '',
       name: c.name || '',
       avatar: c.avatar || c.avatar_c144 || '',
@@ -350,7 +385,24 @@ export default async function handler(req, res) {
       subscribePrice: c.subscribeprice != null ? c.subscribeprice : null,
     }));
     const ntwPoolFlag = `<script>window.__NTW_POOL=${JSON.stringify(ntwPoolData)};</script>`;
-    html = html.replace('</head>', `${preloadLink ? preloadLink + '\n' : ''}${jsonLd}\n${ssrFlag}\n${tcPoolFlag}\n${ntwPoolFlag}\n</head>`);
+    // Inject preload early in <head> — browser discovers LCP image before scripts/styles
+    if (preloadLink) {
+      html = html.replace(
+        '<meta name="viewport" content="width=device-width, initial-scale=1.0" />',
+        `<meta name="viewport" content="width=device-width, initial-scale=1.0" />\n  ${preloadLink}`
+      );
+    }
+    html = html.replace('</head>', `${jsonLd}\n${ssrFlag}\n${tcPoolFlag}\n${ntwPoolFlag}\n</head>`);
+    // Pre-render the first 3 Top Creators carousel cards — LCP image is in the HTML, no JS needed to paint it
+    const carouselCards = popular.slice(0, 3).map((c, i) => renderCarouselCard(c, i)).join('\n');
+    if (carouselCards) {
+      html = html.replace(
+        /<div class="ntw-cards" id="tcCards">(\s*<div class="ntw-skeleton"><\/div>){3}\s*<\/div>/,
+        `<div class="ntw-cards" id="tcCards">\n${carouselCards}\n        </div>`
+      );
+    }
+    const cardsHtml = creators.map((c, i) => renderCard(c, i)).join('\n');
+    if (cardsHtml) html = html.replace('<div id="results" class="row g-3 justify-content-center" style="display:none;"></div>', `<div id="results" class="row g-3 justify-content-center" style="display:none;">\n${cardsHtml}\n</div>`);
 
     // --- 4. Store in memory cache + Send ---
     _htmlCache = html;
