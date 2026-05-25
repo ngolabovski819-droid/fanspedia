@@ -5,14 +5,15 @@ import { getCategoryBySlug, ALL_CATEGORY_SLUGS } from '@/config/categories';
 import CreatorGrid from '@/components/CreatorGrid';
 import FAQ from '@/components/FAQ';
 
-export const revalidate = 3600;
+export const revalidate = 60;
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
+// Pages are generated on-demand (ISR) to avoid flooding Supabase during build
 export async function generateStaticParams() {
-  return ALL_CATEGORY_SLUGS.map((slug) => ({ slug }));
+  return [];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

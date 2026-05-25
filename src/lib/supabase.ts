@@ -122,7 +122,7 @@ export async function fetchCreators(params: SearchParams = {}): Promise<SearchRe
     urlStr += `&or=(${clauses.join(',')})`;
   }
 
-  const res = await fetch(urlStr, {
+  const fetchOptions = {
     headers: {
       apikey: SUPABASE_KEY,
       Authorization: `Bearer ${SUPABASE_KEY}`,
@@ -130,10 +130,20 @@ export async function fetchCreators(params: SearchParams = {}): Promise<SearchRe
       Prefer: 'count=estimated',
     },
     next: { revalidate },
-  });
+  };
 
-  if (!res.ok) {
-    console.error('Supabase fetch error', res.status, urlStr);
+  // Retry up to 3 times on 500 (transient Supabase overload during build)
+  const MAX_RETRIES = 3;
+  let res: Response | null = null;
+  for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+    res = await fetch(urlStr, fetchOptions);
+    if (res.ok) break;
+    if (res.status !== 500 || attempt === MAX_RETRIES - 1) break;
+    await new Promise((r) => setTimeout(r, 600 * (attempt + 1)));
+  }
+
+  if (!res || !res.ok) {
+    console.error('Supabase fetch error', res?.status, urlStr);
     return { creators: [], total: 0, hasMore: false };
   }
 
