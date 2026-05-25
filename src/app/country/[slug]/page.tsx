@@ -14,11 +14,18 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
-// No build-time Supabase fetches — pages render on-demand and are cached after the
-// first request. The Suspense boundary below streams the shell instantly while the
-// grid fetches in the background, so users always see content within ~50ms.
+// Pre-render the most-trafficked country pages at build time (sequential builds
+// via staticGenerationMaxConcurrency:1 prevent Supabase throttling).
+// Long-tail countries remain on-demand ISR — first visit streams skeleton, then caches.
+const POPULAR_COUNTRIES = [
+  'united-states', 'united-kingdom', 'canada', 'australia', 'india',
+  'philippines', 'japan', 'germany', 'france', 'brazil',
+  'colombia', 'mexico', 'thailand', 'spain', 'italy',
+  'argentina', 'south-africa', 'south-korea', 'russia', 'ukraine',
+];
+
 export async function generateStaticParams() {
-  return [];
+  return POPULAR_COUNTRIES.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

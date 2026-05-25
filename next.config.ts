@@ -1,6 +1,12 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  // Build popular category/country pages one at a time so Supabase is never
+  // flooded with concurrent requests. Sequential build takes ~20s extra but
+  // means every popular page is fully pre-rendered with cards — no skeleton ever.
+  experimental: {
+    staticGenerationMaxConcurrency: 1,
+  },
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'images.weserv.nl' },

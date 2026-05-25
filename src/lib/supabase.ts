@@ -132,14 +132,15 @@ export async function fetchCreators(params: SearchParams = {}): Promise<SearchRe
     next: { revalidate },
   };
 
-  // Retry up to 3 times on 500 (transient Supabase overload during build)
-  const MAX_RETRIES = 3;
+  // Retry up to 5 times on 500 (transient Supabase overload during build).
+  // Generous backoff: 1s, 2s, 3s, 4s — gives Supabase time to recover between attempts.
+  const MAX_RETRIES = 5;
   let res: Response | null = null;
   for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
     res = await fetch(urlStr, fetchOptions);
     if (res.ok) break;
     if (res.status !== 500 || attempt === MAX_RETRIES - 1) break;
-    await new Promise((r) => setTimeout(r, 600 * (attempt + 1)));
+    await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)));
   }
 
   if (!res || !res.ok) {

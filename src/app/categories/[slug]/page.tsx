@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { fetchCreators } from '@/lib/supabase';
-import { getCategoryBySlug, type CategoryConfig } from '@/config/categories';
+import { getCategoryBySlug, popularCategories, type CategoryConfig } from '@/config/categories';
 import CreatorGrid from '@/components/CreatorGrid';
 import CreatorGridSkeleton from '@/components/CreatorGridSkeleton';
 import FAQ from '@/components/FAQ';
@@ -14,11 +14,11 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
-// No build-time Supabase fetches — pages render on-demand and are cached after the
-// first request. The Suspense boundary below streams the shell instantly while the
-// grid fetches in the background, so users always see content within ~50ms.
+// Pre-render the most-trafficked category pages at build time (sequential builds
+// via staticGenerationMaxConcurrency:1 prevent Supabase throttling).
+// Long-tail categories remain on-demand ISR — first visit streams skeleton, then caches.
 export async function generateStaticParams() {
-  return [];
+  return popularCategories.map((c) => ({ slug: c.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
