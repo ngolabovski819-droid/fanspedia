@@ -1,17 +1,22 @@
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { fetchCreators } from '@/lib/supabase';
-import { getCountry, ALL_COUNTRY_SLUGS } from '@/config/countries';
+import { getCountry, type CountryConfig } from '@/config/countries';
 import CreatorGrid from '@/components/CreatorGrid';
+import CreatorGridSkeleton from '@/components/CreatorGridSkeleton';
 import FAQ from '@/components/FAQ';
 
-export const revalidate = 60;
+// ISR: once rendered, serve from cache for 1 hour (matches fetch cache in supabase.ts)
+export const revalidate = 3600;
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
-// Pages are generated on-demand (ISR) to avoid flooding Supabase during build
+// No build-time Supabase fetches — pages render on-demand and are cached after the
+// first request. The Suspense boundary below streams the shell instantly while the
+// grid fetches in the background, so users always see content within ~50ms.
 export async function generateStaticParams() {
   return [];
 }
@@ -46,17 +51,30 @@ function buildFAQ(label: string) {
   ];
 }
 
-export default async function CountryPage({ params }: Props) {
-  const { slug } = await params;
-  const country = getCountry(slug);
-  if (!country) notFound();
-
+// Async server component — suspends while Supabase fetches, streams in via Suspense below
+async function CountryCreators({ country }: { country: CountryConfig }) {
   const { creators, total, hasMore } = await fetchCreators({
     locationTerms: country.terms,
     sort: 'popular',
     pageSize: 24,
     revalidate: 3600,
   });
+
+  return (
+    <CreatorGrid
+      initialCreators={creators}
+      initialHasMore={hasMore}
+      initialTotal={total}
+      locationTerms={country.terms}
+      sort="popular"
+    />
+  );
+}
+
+export default async function CountryPage({ params }: Props) {
+  const { slug } = await params;
+  const country = getCountry(slug);
+  if (!country) notFound();
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -72,7 +90,7 @@ export default async function CountryPage({ params }: Props) {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      {/* Breadcrumb */}
+      {/* Breadcrumb — renders immediately, no data needed */}
       <nav className="breadcrumb" aria-label="Breadcrumb">
         <a href="/">Home</a>
         <span>/</span>
@@ -81,20 +99,16 @@ export default async function CountryPage({ params }: Props) {
         <span>{country.label}</span>
       </nav>
 
-      {/* Hero */}
+      {/* Hero — renders immediately */}
       <section className="page-hero">
         <h1>{country.h1}</h1>
         <p>{country.metaDesc}</p>
       </section>
 
-      {/* Grid */}
-      <CreatorGrid
-        initialCreators={creators}
-        initialHasMore={hasMore}
-        initialTotal={total}
-        locationTerms={country.terms}
-        sort="popular"
-      />
+      {/* Grid — skeleton shows instantly, real content streams in when Supabase responds */}
+      <Suspense fallback={<CreatorGridSkeleton />}>
+        <CountryCreators country={country} />
+      </Suspense>
 
       {/* FAQ */}
       <FAQ items={buildFAQ(country.label)} />
