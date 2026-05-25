@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { fetchCreators } from '@/lib/supabase';
-import { getCategoryBySlug, popularCategories, type CategoryConfig } from '@/config/categories';
+import { getCategoryBySlug, ALL_CATEGORY_SLUGS, type CategoryConfig } from '@/config/categories';
 import CreatorGrid from '@/components/CreatorGrid';
 import CreatorGridSkeleton from '@/components/CreatorGridSkeleton';
 import FAQ from '@/components/FAQ';
@@ -14,11 +14,11 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
-// Pre-render the most-trafficked category pages at build time (sequential builds
-// via staticGenerationMaxConcurrency:1 prevent Supabase throttling).
-// Long-tail categories remain on-demand ISR — first visit streams skeleton, then caches.
+// Pre-render ALL category pages at build time.
+// staticGenerationMaxConcurrency: 1 (next.config.ts) serialises Supabase fetches
+// so they never compete with each other regardless of how many pages there are.
 export async function generateStaticParams() {
-  return popularCategories.map((c) => ({ slug: c.slug }));
+  return ALL_CATEGORY_SLUGS.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { fetchCreators } from '@/lib/supabase';
-import { getCountry, type CountryConfig } from '@/config/countries';
+import { getCountry, ALL_COUNTRY_SLUGS, type CountryConfig } from '@/config/countries';
 import CreatorGrid from '@/components/CreatorGrid';
 import CreatorGridSkeleton from '@/components/CreatorGridSkeleton';
 import FAQ from '@/components/FAQ';
@@ -14,18 +14,11 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
-// Pre-render the most-trafficked country pages at build time (sequential builds
-// via staticGenerationMaxConcurrency:1 prevent Supabase throttling).
-// Long-tail countries remain on-demand ISR — first visit streams skeleton, then caches.
-const POPULAR_COUNTRIES = [
-  'united-states', 'united-kingdom', 'canada', 'australia', 'india',
-  'philippines', 'japan', 'germany', 'france', 'brazil',
-  'colombia', 'mexico', 'thailand', 'spain', 'italy',
-  'argentina', 'south-africa', 'south-korea', 'russia', 'ukraine',
-];
-
+// Pre-render ALL country pages at build time.
+// staticGenerationMaxConcurrency: 1 (next.config.ts) serialises Supabase fetches
+// so they never compete with each other regardless of how many pages there are.
 export async function generateStaticParams() {
-  return POPULAR_COUNTRIES.map((slug) => ({ slug }));
+  return ALL_COUNTRY_SLUGS.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

@@ -16,8 +16,8 @@ function termsFor(label: string, overrides?: string[]): string[] {
   base.add(l);
   base.add(l.replace(/\s+/g, '-'));
   base.add(l.replace(/\s+/g, ''));
-  const words = l.split(/\s+/);
-  if (words.length > 1) base.add(words[0]);
+  // NOTE: intentionally NOT adding words[0] for compound labels — single words like
+  // 'big' match far too many rows and cause Supabase query timeouts during builds.
   if (overrides) overrides.forEach((v) => base.add(v));
   return Array.from(base).filter(Boolean);
 }
@@ -26,10 +26,10 @@ const synonymOverrides: Record<string, string[]> = {
   'big-ass': ['big ass', 'big butt', 'booty', 'thick', 'dump truck', 'phat'],
   ass: ['ass', 'booty', 'butt', 'bottom'],
   pawg: ['pawg', 'phat ass white girl', 'phat ass', 'thick white', 'big booty white'],
-  'big-tits': ['big tits', 'big boobs', 'large breasts', 'boobs', 'tits'],
+  'big-tits': ['big tits', 'big boobs', 'large breasts'],
   boobs: ['boobs', 'tits', 'breasts'],
   tits: ['tits', 'boobs', 'breasts'],
-  'big-natural-boobs': ['big natural boobs', 'natural boobs', 'big naturals', 'natural big boobs', 'natural breasts', 'natural tits', 'big natural', 'bignaturals'],
+  'big-natural-boobs': ['natural boobs', 'natural tits', 'big naturals'],
   milf: ['milf', 'mom', 'hot mom', 'mature mom', 'cougar'],
   mature: ['mature', 'cougar', 'older'],
   ebony: ['ebony', 'black', 'melanin'],
@@ -43,10 +43,10 @@ const synonymOverrides: Record<string, string[]> = {
   'foot-fetish': ['foot fetish', 'feet', 'toes'],
   footjob: ['footjob', 'foot job', 'feet'],
   'dick-ratings': ['dick ratings', 'rate my dick', 'rmd', 'rating'],
-  blowjobs: ['blowjobs', 'blowjob', 'bj', 'oral'],
+  blowjobs: ['blowjobs', 'blowjob', 'oral'],
   anal: ['anal', 'backdoor'],
   creampie: ['creampie', 'cream pie'],
-  handjob: ['handjob', 'hand job', 'hj'],
+  handjob: ['handjob', 'hand job'],
   asmr: ['asmr', 'audio'],
   instagram: ['instagram', 'ig'],
   twitter: ['twitter', 'x', 'x.com'],
@@ -56,7 +56,7 @@ const synonymOverrides: Record<string, string[]> = {
   famous: ['famous', 'celebrity', 'popular'],
   bbw: ['bbw', 'plus size', 'curvy', 'thick'],
   pussy: ['pussy', 'kitty', 'coochie'],
-  'pussy-play': ['pussy play', 'coochie play', 'clit play', 'kitty play'],
+  'pussy-play': ['pussy play', 'clit play', 'kitty play'],
   pregnant: ['pregnant', 'preggo', 'expecting'],
   deepthroat: ['deepthroat', 'deep throat', 'oral'],
   pegging: ['pegging', 'strap-on', 'strapon'],
@@ -66,11 +66,11 @@ const synonymOverrides: Record<string, string[]> = {
   sex: ['sex', 'xxx', 'nsfw'],
   nude: ['nude', 'nudity', 'naked'],
   reddit: ['reddit', 'subreddit'],
-  girl: ['girl', 'girls', 'babe'],
+  girl: ['girl', 'girls'],
   male: ['male', 'man', 'men'],
-  '18-years-old': ['18 years old', 'teen 18', '18yo', '18+', 'teen 18+', 'barely legal', 'just 18'],
-  best: ['best', 'top', 'elite', 'greatest', 'top creator', 'finest'],
-  hentai: ['hentai', 'anime', 'cosplay', 'ahegao', 'waifu', 'neko', 'kawaii'],
+  '18-years-old': ['18 years old', '18yo', 'barely legal', 'just 18'],
+  best: ['best', 'elite', 'top creator', 'finest'],
+  hentai: ['hentai', 'anime', 'cosplay', 'ahegao', 'waifu'],
 };
 
 const RAW_LABELS = [
