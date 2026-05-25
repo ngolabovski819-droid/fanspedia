@@ -8,10 +8,10 @@ const CARD_COLS = [
   'avatar', 'avatar_c144',
   'isverified', 'subscribeprice', 'favoritedcount', 'subscriberscount',
   'postscount', 'photoscount', 'videoscount',
-  'bundle1price', 'bundle1duration', 'bundle1discount',
-  'bundle2price', 'bundle2duration', 'bundle2discount',
-  'bundle3price', 'bundle3duration', 'bundle3discount',
-  'promotion1price', 'promotion1discount',
+  'bundle1_price', 'bundle1_duration', 'bundle1_discount',
+  'bundle2_price', 'bundle2_duration', 'bundle2_discount',
+  'bundle3_price', 'bundle3_duration', 'bundle3_discount',
+  'promotion1_price', 'promotion1_discount',
 ].join(',');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -31,17 +31,17 @@ function mapCreator(row: Record<string, any>): Creator {
     postsCount: row.postscount ?? null,
     photosCount: row.photoscount ?? null,
     videosCount: row.videoscount ?? null,
-    bundle1Price: row.bundle1price ?? null,
-    bundle1Duration: row.bundle1duration ?? null,
-    bundle1Discount: row.bundle1discount ?? null,
-    bundle2Price: row.bundle2price ?? null,
-    bundle2Duration: row.bundle2duration ?? null,
-    bundle2Discount: row.bundle2discount ?? null,
-    bundle3Price: row.bundle3price ?? null,
-    bundle3Duration: row.bundle3duration ?? null,
-    bundle3Discount: row.bundle3discount ?? null,
-    promotion1Price: row.promotion1price ?? null,
-    promotion1Discount: row.promotion1discount ?? null,
+    bundle1Price: row.bundle1_price ?? null,
+    bundle1Duration: row.bundle1_duration ?? null,
+    bundle1Discount: row.bundle1_discount ?? null,
+    bundle2Price: row.bundle2_price ?? null,
+    bundle2Duration: row.bundle2_duration ?? null,
+    bundle2Discount: row.bundle2_discount ?? null,
+    bundle3Price: row.bundle3_price ?? null,
+    bundle3Duration: row.bundle3_duration ?? null,
+    bundle3Discount: row.bundle3_discount ?? null,
+    promotion1Price: row.promotion1_price ?? null,
+    promotion1Discount: row.promotion1_discount ?? null,
   };
 }
 
@@ -82,7 +82,6 @@ export async function fetchCreators(params: SearchParams = {}): Promise<SearchRe
   const urlParams = new URLSearchParams();
 
   urlParams.set('select', CARD_COLS);
-  urlParams.set('isperformer', 'eq.true');
 
   if (verified) urlParams.set('isverified', 'eq.true');
   if (maxPrice !== undefined) urlParams.set('subscribeprice', `lte.${maxPrice}`);
