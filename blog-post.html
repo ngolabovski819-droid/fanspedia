@@ -764,6 +764,35 @@
     [data-theme="dark"] .mobile-drawer > a { color: var(--text-primary); }
   </style>
   <script src="/config/i18n.js?v=20260226-1" defer></script>
+
+  <!-- mobile-header-fix-v1 -->
+  <style>
+    /* Mobile header fix: prevent header overflow on small screens */
+    @media (max-width: 480px) {
+      .logo-section svg { width: 100px; height: auto; }
+      .header-container { gap: 8px; }
+      .header-actions { gap: 6px; }
+      .lang-toggle, .theme-toggle, .safe-search-toggle,
+      .mobile-menu-toggle, .mobile-search-trigger { width: 36px; height: 36px; font-size: 16px; }
+    }
+    /* Dark mode: mobile drawer */
+    [data-theme="dark"] .mobile-drawer { background: var(--bg-primary); }
+    [data-theme="dark"] .mobile-drawer .drawer-close { color: var(--text-primary); }
+    [data-theme="dark"] .mobile-drawer > a { color: var(--text-primary); }
+    [data-theme="dark"] .mobile-drawer > a:hover { background: var(--bg-secondary); }
+    [data-theme="dark"] .drawer-categories-toggle,
+    [data-theme="dark"] .drawer-locations-toggle { color: var(--text-primary); }
+    [data-theme="dark"] .drawer-categories-toggle:hover,
+    [data-theme="dark"] .drawer-locations-toggle:hover { background: var(--bg-secondary); }
+    [data-theme="dark"] #drawerCategories a,
+    [data-theme="dark"] #drawerLocations a { color: var(--text-secondary); }
+    [data-theme="dark"] #drawerCategories a:hover,
+    [data-theme="dark"] #drawerLocations a:hover { background: var(--bg-secondary); color: #00AFF0; }
+    /* Dark mode: desktop categories dropdown */
+    [data-theme="dark"] .desktop-nav .dropdown-menu { background: var(--bg-primary); border: 1px solid var(--border-color); }
+    [data-theme="dark"] .desktop-nav .dropdown-menu a { color: var(--text-primary); }
+    [data-theme="dark"] .desktop-nav .dropdown-menu a:hover { background: var(--bg-secondary); color: #00AFF0; }
+  </style>
 </head>
 <body data-lang-toggle-placement="footer">
 
@@ -1215,7 +1244,7 @@
     const q = encodeURIComponent(prompt);
     if (provider === 'chatgpt') return `${AI_ASSISTANT_URLS.chatgpt}?q=${q}`;
     if (provider === 'perplexity') return `${AI_ASSISTANT_URLS.perplexity}?q=${q}`;
-    if (provider === 'gemini') return AI_ASSISTANT_URLS.gemini; // Gemini ignores URL query params — prompt is pre-copied to clipboard
+    if (provider === 'gemini') return AI_ASSISTANT_URLS.gemini; // Gemini ignores URL query params â€” prompt is pre-copied to clipboard
     if (provider === 'claude') return `${AI_ASSISTANT_URLS.claude}?q=${q}`;
     if (provider === 'grok') return `${AI_ASSISTANT_URLS.grok}?q=${q}`;
     return `${AI_ASSISTANT_URLS.chatgpt}?q=${q}`;
@@ -1253,7 +1282,7 @@
     const aiUrl = buildAiPromptUrl(provider, prompt);
 
     if (provider === 'gemini') {
-      // Gemini has no URL prefill — show inline notice with manual link instead
+      // Gemini has no URL prefill â€” show inline notice with manual link instead
       const notice = clickedButton.closest('.ai-summary-panel')?.querySelector('.ai-gemini-notice')
                   || document.getElementById('geminiNotice');
       if (notice) notice.classList.add('visible');
@@ -1265,7 +1294,7 @@
       showAiSummaryToast('Popup blocked. Please allow popups for this site.');
       return;
     }
-    showAiSummaryToast('Opened — prompt prefilled.');
+    showAiSummaryToast('Opened â€” prompt prefilled.');
   }
 
   function buildTOC() {
@@ -1363,7 +1392,7 @@
       })
       .catch(err => renderError(err.message || 'Please try again later.'));
   }
-  // Author card — tap to toggle tooltip on mobile
+  // Author card â€” tap to toggle tooltip on mobile
   document.addEventListener('click', e => {
     const aiButton = e.target.closest('.ai-summary-btn');
     if (aiButton) {
