@@ -61,7 +61,7 @@ async function CategoryCreators({ cat }: { cat: CategoryConfig }) {
     sort: 'popular',
     pageSize: 24,
     skipLocationFilter: true,
-    revalidate: 3600,
+    revalidate: 300,
   });
 
   return (

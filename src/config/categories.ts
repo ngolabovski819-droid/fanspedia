@@ -68,7 +68,7 @@ const synonymOverrides: Record<string, string[]> = {
   reddit: ['reddit', 'subreddit'],
   girl: ['girl', 'girls'],
   male: ['male', 'man', 'men'],
-  '18-years-old': ['18 years old', '18yo', 'barely legal', 'just 18'],
+  '18-years-old': ['18 years old', '18yo', 'barely legal', 'just 18', 'teen', 'young'],
   best: ['best', 'elite', 'top creator', 'finest'],
   hentai: ['hentai', 'anime', 'cosplay', 'ahegao', 'waifu'],
 };

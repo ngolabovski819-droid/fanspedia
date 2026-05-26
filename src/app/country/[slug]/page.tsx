@@ -57,7 +57,7 @@ async function CountryCreators({ country }: { country: CountryConfig }) {
     locationTerms: country.terms,
     sort: 'popular',
     pageSize: 24,
-    revalidate: 3600,
+    revalidate: 300,
   });
 
   return (
