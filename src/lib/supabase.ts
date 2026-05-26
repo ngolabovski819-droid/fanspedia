@@ -114,8 +114,17 @@ export async function fetchCreators(params: SearchParams = {}): Promise<SearchRe
     const clauses = categoryTerms.map((t) => `search_text.ilike.*${t}*`);
     urlStr += `&or=(${clauses.join(',')})`;
   } else if (q) {
-    // Single-column ilike on search_text is ~4x faster than 4-column OR
-    urlStr += `&search_text=ilike.*${encodeURIComponent(q)}*`;
+    // Split multi-word queries into tokens and AND them together.
+    // PostgREST ANDs multiple same-column filters: &col=ilike.*a*&col=ilike.*b*
+    // e.g. "big cock oral" → must contain "big" AND "cock" AND "oral"
+    const tokens = q.trim().split(/\s+/).filter((w) => w.length >= 2);
+    if (tokens.length <= 1) {
+      urlStr += `&search_text=ilike.*${encodeURIComponent(q.trim())}*`;
+    } else {
+      for (const token of tokens) {
+        urlStr += `&search_text=ilike.*${encodeURIComponent(token)}*`;
+      }
+    }
   }
 
   const fetchOptions = {
