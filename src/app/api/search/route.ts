@@ -55,13 +55,16 @@ export async function GET(req: NextRequest) {
     skipLocationFilter,
     locationTerms,
     categoryTerms,
-    revalidate: 30,
+    revalidate: 3600,
     maxRetries: 2, // fail fast at runtime — max ~3s delay vs 10s with 5 retries
   });
 
   return NextResponse.json(result, {
     headers: {
-      'Cache-Control': 'public, s-maxage=30, stale-while-revalidate=60',
+      // Cache at Vercel's edge for 1 hour; serve stale for up to 24h while
+      // revalidating in background. Reduces Supabase hits dramatically and
+      // keeps creators visible even when Supabase CPU is exhausted.
+      'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
     },
   });
 }
