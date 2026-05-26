@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { fetchCreators } from '@/lib/supabase';
 
-// Edge Runtime: always warm globally, zero cold starts vs serverless 2-5s boot.
-// In-memory rate limiter still works per-instance (prevents single-IP spam).
-export const runtime = 'edge';
+// Node.js runtime (not Edge) — keeps function in iad1 (same region as Supabase us-east-1).
+// Edge Runtime caused 18s+ hangs because cross-region latency killed the Supabase fetch.
 
 // Simple in-memory rate limiter: 15 requests per 10 seconds per IP
 const rateMap = new Map<string, { count: number; reset: number }>();

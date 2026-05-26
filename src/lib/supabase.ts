@@ -144,6 +144,9 @@ export async function fetchCreators(params: SearchParams = {}): Promise<SearchRe
   return {
     creators,
     total,
-    hasMore: page * pageSize + creators.length < total,
+    // Use page-length check rather than estimated total — count=estimated can be
+    // inaccurate, and if a fetch returns 0 rows this keeps hasMore=false so the
+    // Load More button disappears instead of staying stuck.
+    hasMore: creators.length === pageSize,
   };
 }

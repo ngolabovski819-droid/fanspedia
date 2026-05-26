@@ -128,6 +128,12 @@ export default function CreatorGrid({
       if (!res.ok) throw new Error('Search failed');
       const data: { creators: Creator[]; hasMore: boolean } = await res.json();
 
+      if (data.creators.length === 0) {
+        // Nothing came back (API error or end of results) — stop the button
+        setHasMore(false);
+        return;
+      }
+
       setCreators((prev) => [...prev, ...data.creators]);
       setHasMore(data.hasMore);
       setPage((p) => p + 1);
