@@ -3,15 +3,12 @@ import type { Creator } from '@/types/creator';
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_KEY!;
 
+// Only select columns that CreatorCard actually renders — keeps payloads small.
+// ORDER BY (favoritedcount) works without it being in SELECT.
 const CARD_COLS = [
-  'id', 'username', 'name', 'about', 'location',
+  'id', 'username', 'name',
   'avatar', 'avatar_c144',
-  'isverified', 'subscribeprice', 'favoritedcount', 'subscriberscount',
-  'postscount', 'photoscount', 'videoscount',
-  'bundle1_price', 'bundle1_duration', 'bundle1_discount',
-  'bundle2_price', 'bundle2_duration', 'bundle2_discount',
-  'bundle3_price', 'bundle3_duration', 'bundle3_discount',
-  'promotion1_price', 'promotion1_discount',
+  'isverified', 'subscribeprice',
 ].join(',');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -20,28 +17,10 @@ function mapCreator(row: Record<string, any>): Creator {
     id: row.id,
     username: row.username,
     name: row.name ?? null,
-    about: row.about ?? null,
-    location: row.location ?? null,
     avatar: row.avatar ?? null,
     avatarC144: row.avatar_c144 ?? null,
     isVerified: Boolean(row.isverified),
     subscribePrice: row.subscribeprice ?? null,
-    favoritedCount: row.favoritedcount ?? 0,
-    subscribersCount: row.subscriberscount ?? null,
-    postsCount: row.postscount ?? null,
-    photosCount: row.photoscount ?? null,
-    videosCount: row.videoscount ?? null,
-    bundle1Price: row.bundle1_price ?? null,
-    bundle1Duration: row.bundle1_duration ?? null,
-    bundle1Discount: row.bundle1_discount ?? null,
-    bundle2Price: row.bundle2_price ?? null,
-    bundle2Duration: row.bundle2_duration ?? null,
-    bundle2Discount: row.bundle2_discount ?? null,
-    bundle3Price: row.bundle3_price ?? null,
-    bundle3Duration: row.bundle3_duration ?? null,
-    bundle3Discount: row.bundle3_discount ?? null,
-    promotion1Price: row.promotion1_price ?? null,
-    promotion1Discount: row.promotion1_discount ?? null,
   };
 }
 

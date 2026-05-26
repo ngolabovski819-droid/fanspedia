@@ -38,6 +38,8 @@ export default function CreatorGrid({
   // True while auto-fetching on mount for pages that built empty (build-time 500)
   const [healing, setHealing] = useState(initialCreators.length === 0);
   const healedRef = useRef(false);
+  // Prefetched page-1 data — populated silently on mount so first "Load More" is instant
+  const prefetchRef = useRef<{ creators: Creator[]; hasMore: boolean } | null>(null);
 
   // Self-heal: if the server built this page with no creators (Supabase 500 during
   // build), fetch page 0 on mount so the first visitor never sees an empty grid.
@@ -75,10 +77,42 @@ export default function CreatorGrid({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Prefetch page 1 silently on mount when we already have page 0 data.
+  // This makes the first "Load More" click instant — data is already in memory.
+  useEffect(() => {
+    if (initialCreators.length === 0 || !initialHasMore) return;
+    const params = new URLSearchParams();
+    params.set('page', '1');
+    params.set('page_size', '24');
+    if (locationTerms?.length) params.set('location_terms', locationTerms.join(','));
+    if (categoryTerms?.length) params.set('category_terms', categoryTerms.join(','));
+    if (skipLocationFilter) params.set('skip_location_filter', '1');
+    if (verified) params.set('verified', '1');
+    if (maxPrice !== undefined) params.set('price', String(maxPrice));
+    if (sort) params.set('sort', sort);
+    if (q) params.set('q', q);
+    fetch(`/api/search?${params.toString()}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => { if (data) prefetchRef.current = data; })
+      .catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const loadMore = useCallback(async () => {
     if (loading || !hasMore) return;
     setLoading(true);
     try {
+      // Use prefetched page-1 data if available — makes first "Load More" instant
+      if (page === 1 && prefetchRef.current) {
+        const data = prefetchRef.current;
+        prefetchRef.current = null;
+        setCreators((prev) => [...prev, ...data.creators]);
+        setHasMore(data.hasMore);
+        setPage(2);
+        setLoading(false);
+        return;
+      }
+
       const params = new URLSearchParams();
       params.set('page', String(page));
       params.set('page_size', '24');
