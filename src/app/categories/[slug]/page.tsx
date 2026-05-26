@@ -7,8 +7,8 @@ import CreatorGrid from '@/components/CreatorGrid';
 import CreatorGridSkeleton from '@/components/CreatorGridSkeleton';
 import FAQ from '@/components/FAQ';
 
-// ISR: once rendered, serve from cache for 1 hour (matches fetch cache in supabase.ts)
-export const revalidate = 3600;
+// ISR: regenerate every 5 min. Short enough to fix pages that built empty (Supabase 500).
+export const revalidate = 300;
 
 interface Props {
   params: Promise<{ slug: string }>;

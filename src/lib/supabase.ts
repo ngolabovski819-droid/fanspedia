@@ -56,6 +56,8 @@ export interface SearchParams {
   categoryTerms?: string[];
   skipLocationFilter?: boolean;
   revalidate?: number;
+  /** Max Supabase retry attempts on 500. Default 5 (build-time). Use 2 for runtime API calls. */
+  maxRetries?: number;
 }
 
 export interface SearchResult {
@@ -76,6 +78,7 @@ export async function fetchCreators(params: SearchParams = {}): Promise<SearchRe
     categoryTerms,
     skipLocationFilter = false,
     revalidate = 3600,
+    maxRetries = 5,
   } = params;
 
   const base = `${SUPABASE_URL}/rest/v1/onlyfans_profiles`;
@@ -137,14 +140,13 @@ export async function fetchCreators(params: SearchParams = {}): Promise<SearchRe
     next: { revalidate },
   };
 
-  // Retry up to 5 times on 500 (transient Supabase overload during build).
-  // Generous backoff: 1s, 2s, 3s, 4s — gives Supabase time to recover between attempts.
-  const MAX_RETRIES = 5;
+  // Retry on 500 (transient Supabase overload). Build-time default: 5 retries.
+  // Runtime API calls pass maxRetries:2 so the endpoint fails fast (~3s max) instead of ~10s.
   let res: Response | null = null;
-  for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
     res = await fetch(urlStr, fetchOptions);
     if (res.ok) break;
-    if (res.status !== 500 || attempt === MAX_RETRIES - 1) break;
+    if (res.status !== 500 || attempt === maxRetries - 1) break;
     await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)));
   }
 

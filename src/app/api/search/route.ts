@@ -53,6 +53,7 @@ export async function GET(req: NextRequest) {
     locationTerms,
     categoryTerms,
     revalidate: 30,
+    maxRetries: 2, // fail fast at runtime — max ~3s delay vs 10s with 5 retries
   });
 
   return NextResponse.json(result, {
