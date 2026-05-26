@@ -54,7 +54,10 @@ function buildFAQ(label: string) {
 // Async server component — suspends while Supabase fetches, streams in via Suspense below
 async function CountryCreators({ country }: { country: CountryConfig }) {
   const { creators, total, hasMore } = await fetchCreators({
-    locationTerms: country.terms,
+    // Use categoryTerms + skipLocationFilter so the query goes through the
+    // search_text column (has trigram index) instead of location column (no index).
+    categoryTerms: country.terms,
+    skipLocationFilter: true,
     sort: 'popular',
     pageSize: 24,
     revalidate: 300,
@@ -65,7 +68,8 @@ async function CountryCreators({ country }: { country: CountryConfig }) {
       initialCreators={creators}
       initialHasMore={hasMore}
       initialTotal={total}
-      locationTerms={country.terms}
+      categoryTerms={country.terms}
+      skipLocationFilter
       sort="popular"
     />
   );
