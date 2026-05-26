@@ -35,6 +35,30 @@ export default function FilteredCreatorGrid({
   const [filtering, setFiltering] = useState(false);
 
   const isInitialMount = useRef(true);
+  const healedRef = useRef(false);
+
+  // Self-heal: if the page built empty (Supabase 504 during static gen),
+  // fetch page 0 on mount so the user never sees an empty grid.
+  useEffect(() => {
+    if (initialCreators.length === 0 && !healedRef.current) {
+      healedRef.current = true;
+      void (async () => {
+        setFiltering(true);
+        try {
+          const params = buildParams(0);
+          const res = await fetch(`/api/search?${params.toString()}`);
+          if (!res.ok) throw new Error();
+          const data: { creators: Creator[]; hasMore: boolean; total: number } = await res.json();
+          setCreators(data.creators);
+          setHasMore(data.hasMore);
+          setTotal(data.total);
+          setPage(1);
+        } catch { /* leave empty */ }
+        setFiltering(false);
+      })();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function buildParams(p: number, overrides?: Partial<{ sort: SortOption; freeOnly: boolean; verifiedOnly: boolean }>) {
     const params = new URLSearchParams();

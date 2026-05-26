@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { fetchCreators } from '@/lib/supabase';
-import { getCategoryBySlug, ALL_CATEGORY_SLUGS, type CategoryConfig } from '@/config/categories';
+import { getCategoryBySlug, popularCategories, type CategoryConfig } from '@/config/categories';
 import FilteredCreatorGrid from '@/components/FilteredCreatorGrid';
 import CreatorGridSkeleton from '@/components/CreatorGridSkeleton';
 import FAQ from '@/components/FAQ';
@@ -14,11 +14,14 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
-// Pre-render ALL category pages at build time.
-// staticGenerationMaxConcurrency: 1 (next.config.ts) serialises Supabase fetches
-// so they never compete with each other regardless of how many pages there are.
+// Only pre-render the most popular category pages at build time.
+// All other slugs are generated on first request via ISR (dynamicParams = true is the default).
+// Returning all 70+ slugs causes Supabase 504s because Next.js 16 ignores
+// experimental.staticGenerationMaxConcurrency and runs 22 workers concurrently.
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
-  return ALL_CATEGORY_SLUGS.map((slug) => ({ slug }));
+  return popularCategories.map((c) => ({ slug: c.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

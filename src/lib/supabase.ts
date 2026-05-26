@@ -35,7 +35,7 @@ export interface SearchParams {
   categoryTerms?: string[];
   skipLocationFilter?: boolean;
   revalidate?: number;
-  /** Max Supabase retry attempts on 500. Default 5 (build-time). Use 2 for runtime API calls. */
+  /** Max Supabase retry attempts on 500/504. Default 2. */
   maxRetries?: number;
 }
 
@@ -57,7 +57,7 @@ export async function fetchCreators(params: SearchParams = {}): Promise<SearchRe
     categoryTerms,
     skipLocationFilter = false,
     revalidate = 3600,
-    maxRetries = 5,
+    maxRetries = 2,
   } = params;
 
   const base = `${SUPABASE_URL}/rest/v1/onlyfans_profiles`;
