@@ -14,19 +14,13 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
-// Only pre-render the most-trafficked country pages at build time.
-// All other slugs are generated on first request via ISR (dynamicParams = true is the default).
-// Returning all 110+ slugs causes Supabase 504s because Next.js 16 ignores
-// experimental.staticGenerationMaxConcurrency and runs 22 workers concurrently.
+// Do NOT pre-render any country pages at build time — same reason as categories:
+// concurrent ilike queries overwhelm Supabase during the Next.js build.
+// All pages are generated on first request via ISR.
 export const dynamicParams = true;
 
-const TOP_COUNTRY_SLUGS = [
-  'united-states', 'united-kingdom', 'canada', 'australia',
-  'germany', 'france', 'brazil', 'philippines',
-];
-
 export async function generateStaticParams() {
-  return TOP_COUNTRY_SLUGS.map((slug) => ({ slug }));
+  return [];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

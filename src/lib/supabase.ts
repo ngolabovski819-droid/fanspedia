@@ -117,13 +117,21 @@ export async function fetchCreators(params: SearchParams = {}): Promise<SearchRe
       Prefer: 'count=estimated',
     },
     next: { revalidate },
+    // Hard 20-second timeout — prevents build workers from hanging 60s waiting
+    // for a slow Supabase response and getting killed by Next.js's page timeout.
+    signal: AbortSignal.timeout(20000),
   };
 
-  // Retry on 500 (transient Supabase overload). Build-time default: 5 retries.
-  // Runtime API calls pass maxRetries:2 so the endpoint fails fast (~3s max) instead of ~10s.
+  // Retry on 500 (transient Supabase overload). Fail fast on timeout/504.
   let res: Response | null = null;
   for (let attempt = 0; attempt < maxRetries; attempt++) {
-    res = await fetch(urlStr, fetchOptions);
+    try {
+      res = await fetch(urlStr, fetchOptions);
+    } catch {
+      // AbortError from 20s timeout — fail immediately, don't retry
+      console.error('Supabase fetch error (timeout)', urlStr);
+      return { creators: [], total: 0, hasMore: false };
+    }
     if (res.ok) break;
     if (res.status !== 500 || attempt === maxRetries - 1) break;
     await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)));
