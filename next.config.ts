@@ -39,9 +39,7 @@ const nextConfig: NextConfig = {
     ];
   },
   async redirects() {
-    return [
-      { source: '/search', destination: '/search/', permanent: false },
-    ];
+    return [];
   },
 };
 

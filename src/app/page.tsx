@@ -4,6 +4,7 @@ import { fetchCreators } from '@/lib/supabase';
 import CreatorGrid from '@/components/CreatorGrid';
 import { popularCategories } from '@/config/categories';
 import { COUNTRIES_LIST } from '@/config/countries';
+import HomeSearch from '@/components/HomeSearch';
 
 export const revalidate = 300;
 
@@ -29,7 +30,8 @@ export default async function HomePage() {
       <section className="page-hero">
         <h1>Find the Best OnlyFans Creators</h1>
         <p>Browse thousands of verified creators by category, location, and price.</p>
-        <div style={{ marginTop: 20, display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+        <HomeSearch />
+        <div style={{ marginTop: 12, display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
           <Link href="/categories/" className="btn-primary" style={{ borderRadius: 10, textDecoration: 'none' }}>Browse Categories</Link>
           <Link href="/locations/" style={{ padding: '12px 24px', borderRadius: 10, border: '1px solid var(--border)', color: 'var(--text-muted)', fontSize: 15 }}>By Location</Link>
         </div>
