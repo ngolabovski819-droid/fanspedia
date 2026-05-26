@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { fetchCreators } from '@/lib/supabase';
 import { getCategoryBySlug, ALL_CATEGORY_SLUGS, type CategoryConfig } from '@/config/categories';
-import CreatorGrid from '@/components/CreatorGrid';
+import FilteredCreatorGrid from '@/components/FilteredCreatorGrid';
 import CreatorGridSkeleton from '@/components/CreatorGridSkeleton';
 import FAQ from '@/components/FAQ';
 
@@ -65,14 +65,12 @@ async function CategoryCreators({ cat }: { cat: CategoryConfig }) {
   });
 
   return (
-    <CreatorGrid
+    <FilteredCreatorGrid
       initialCreators={creators}
       initialHasMore={hasMore}
       initialTotal={total}
       categoryTerms={cat.terms}
       skipLocationFilter
-      sort="popular"
-      {...(cat.maxPrice !== undefined ? { maxPrice: cat.maxPrice } : {})}
     />
   );
 }

@@ -28,8 +28,11 @@ export default function Footer() {
             <li><Link href="/">Home</Link></li>
             <li><Link href="/categories/">Categories</Link></li>
             <li><Link href="/locations/">Locations</Link></li>
+            <li><Link href="/near-me/">Near Me</Link></li>
             <li><Link href="/search/">Search</Link></li>
+            <li><Link href="/wishlist/">My Wishlist</Link></li>
             <li><Link href="/blog/">Blog</Link></li>
+            <li><Link href="/promote/">Promote Your Page</Link></li>
           </ul>
         </div>
 
@@ -62,6 +65,7 @@ export default function Footer() {
           <Link href="/about/">About</Link>
           <Link href="/contact/">Contact</Link>
           <Link href="/privacy/">Privacy Policy</Link>
+          <Link href="/terms/">Terms of Service</Link>
           <Link href="/dmca/">DMCA</Link>
         </nav>
       </div>

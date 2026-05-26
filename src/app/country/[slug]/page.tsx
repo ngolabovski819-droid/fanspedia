@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { fetchCreators } from '@/lib/supabase';
 import { getCountry, ALL_COUNTRY_SLUGS, type CountryConfig } from '@/config/countries';
-import CreatorGrid from '@/components/CreatorGrid';
+import FilteredCreatorGrid from '@/components/FilteredCreatorGrid';
 import CreatorGridSkeleton from '@/components/CreatorGridSkeleton';
 import FAQ from '@/components/FAQ';
 
@@ -64,13 +64,12 @@ async function CountryCreators({ country }: { country: CountryConfig }) {
   });
 
   return (
-    <CreatorGrid
+    <FilteredCreatorGrid
       initialCreators={creators}
       initialHasMore={hasMore}
       initialTotal={total}
       categoryTerms={country.terms}
       skipLocationFilter
-      sort="popular"
     />
   );
 }

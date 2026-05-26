@@ -6,6 +6,8 @@ import { useState, useRef, useEffect } from 'react';
 import { COUNTRIES_LIST } from '@/config/countries';
 import { categories } from '@/config/categories';
 
+const SAFE_SEARCH_KEY = 'safeSearch';
+
 export default function Nav() {
   const pathname = usePathname();
   const router = useRouter();
@@ -13,8 +15,18 @@ export default function Nav() {
   const [countriesOpen, setCountriesOpen] = useState(false);
   const [catsOpen, setCatsOpen] = useState(false);
   const [q, setQ] = useState('');
+  const [safeSearch, setSafeSearch] = useState(false);
   const countriesRef = useRef<HTMLDivElement>(null);
   const catsRef = useRef<HTMLDivElement>(null);
+
+  // Load safe search preference
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(SAFE_SEARCH_KEY) === 'true';
+      setSafeSearch(stored);
+      if (stored) document.body.classList.add('safe-search-active');
+    } catch {}
+  }, []);
 
   // Close dropdowns on outside click
   useEffect(() => {
@@ -34,6 +46,13 @@ export default function Nav() {
     e.preventDefault();
     const term = q.trim();
     if (term) router.push(`/search?q=${encodeURIComponent(term)}`);
+  }
+
+  function handleSafeSearch() {
+    const next = !safeSearch;
+    setSafeSearch(next);
+    try { localStorage.setItem(SAFE_SEARCH_KEY, next ? 'true' : 'false'); } catch {}
+    document.body.classList.toggle('safe-search-active', next);
   }
 
   const isActive = (href: string) =>
@@ -118,6 +137,17 @@ export default function Nav() {
 
           <Link href="/locations/" className={`nav-link${isActive('/locations') ? ' active' : ''}`}>Locations</Link>
           <Link href="/blog/" className={`nav-link${isActive('/blog') ? ' active' : ''}`}>Blog</Link>
+          <Link href="/wishlist/" className={`nav-link${isActive('/wishlist') ? ' active' : ''}`} aria-label="My wishlist">♥</Link>
+
+          {/* Safe Search toggle */}
+          <button
+            className={`nav-link nav-safe-search${safeSearch ? ' active' : ''}`}
+            onClick={handleSafeSearch}
+            aria-label={safeSearch ? 'Disable Safe Search' : 'Enable Safe Search (blur images)'}
+            title={safeSearch ? 'Safe Search ON — click to disable' : 'Safe Search OFF — click to enable'}
+          >
+            {safeSearch ? '🔒' : '👁'}
+          </button>
         </nav>
 
         {/* Mobile burger */}
@@ -150,12 +180,21 @@ export default function Nav() {
           { href: '/', label: 'Home' },
           { href: '/locations/', label: 'Locations' },
           { href: '/categories/', label: 'Categories' },
+          { href: '/near-me/', label: 'Near Me' },
+          { href: '/wishlist/', label: '♥ Wishlist' },
           { href: '/blog/', label: 'Blog' },
         ].map(({ href, label }) => (
           <Link key={href} href={href} className="nav-mobile-link" onClick={() => setMobileOpen(false)}>
             {label}
           </Link>
         ))}
+        <button
+          className={`nav-mobile-link nav-mobile-safe-search${safeSearch ? ' active' : ''}`}
+          onClick={() => { handleSafeSearch(); setMobileOpen(false); }}
+          style={{ width: '100%', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer', color: safeSearch ? 'var(--accent)' : 'var(--text-muted)', padding: '10px 0', fontSize: 16, borderBottom: '1px solid var(--border-subtle)' }}
+        >
+          {safeSearch ? '🔒 Safe Search ON' : '👁 Safe Search OFF'}
+        </button>
       </div>
     </header>
   );
