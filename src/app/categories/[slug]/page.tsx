@@ -15,13 +15,13 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
-// Pre-render all category pages at build time, one at a time (staticGenerationMaxConcurrency: 1
-// in next.config.ts). Combined with revalidate=86400, this gives instant static pages AND
-// daily ISR refresh. fetchCreators returns [] gracefully on build-time Supabase failures.
-export const dynamicParams = false;
+// generateStaticParams returns [] so no pages are pre-rendered at build time.
+// Vercel uses 22 parallel workers which would hammer Supabase's shared CPU plan.
+// Instead, pages are generated on first request (ISR) and cached for 24h.
+export const dynamicParams = true;
 
 export async function generateStaticParams() {
-  return ALL_CATEGORY_SLUGS.map((slug) => ({ slug }));
+  return [];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
