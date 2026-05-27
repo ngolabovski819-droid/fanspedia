@@ -26,5 +26,7 @@ export function toggleWishlist(username: string): boolean {
   try {
     localStorage.setItem(KEY, JSON.stringify(Array.from(set)));
   } catch {}
+  // Notify Nav badge and wishlist page of the change
+  try { window.dispatchEvent(new Event('wishlistUpdated')); } catch {}
   return set.has(username);
 }

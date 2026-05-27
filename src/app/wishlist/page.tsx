@@ -1,13 +1,9 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import type { Metadata } from 'next';
 import CreatorCard from '@/components/CreatorCard';
 import type { Creator } from '@/types/creator';
 import { getWishlist, toggleWishlist } from '@/lib/wishlist';
-
-// Note: metadata must be in a server component — this page is 'use client'
-// so metadata is handled via the layout title template
 
 export default function WishlistPage() {
   const [creators, setCreators] = useState<Creator[]>([]);
@@ -22,11 +18,10 @@ export default function WishlistPage() {
       return;
     }
     try {
-      const params = new URLSearchParams({ q: usernames.join(','), page_size: '48' });
-      const res = await fetch(`/api/search?${params.toString()}`);
+      const res = await fetch(`/api/wishlist?usernames=${encodeURIComponent(usernames.join(','))}`);
       if (!res.ok) throw new Error();
       const data: { creators: Creator[] } = await res.json();
-      // Keep wishlist order and only show what's actually wishlisted
+      // Preserve wishlist order
       const byUsername = new Map(data.creators.map((c) => [c.username, c]));
       const ordered = usernames.flatMap((u) => (byUsername.has(u) ? [byUsername.get(u)!] : []));
       setCreators(ordered);
@@ -39,6 +34,9 @@ export default function WishlistPage() {
 
   useEffect(() => {
     void loadWishlist();
+    // Re-sync when a card heart is toggled (e.g. removing an item)
+    window.addEventListener('wishlistUpdated', loadWishlist);
+    return () => window.removeEventListener('wishlistUpdated', loadWishlist);
   }, [loadWishlist]);
 
   function handleClearAll() {

@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useState, useRef, useEffect } from 'react';
 import { COUNTRIES_LIST } from '@/config/countries';
 import { categories } from '@/config/categories';
+import { getWishlist } from '@/lib/wishlist';
 
 const SAFE_SEARCH_KEY = 'safeSearch';
 
@@ -16,6 +17,7 @@ export default function Nav() {
   const [catsOpen, setCatsOpen] = useState(false);
   const [q, setQ] = useState('');
   const [safeSearch, setSafeSearch] = useState(false);
+  const [wishlistCount, setWishlistCount] = useState(0);
   const countriesRef = useRef<HTMLDivElement>(null);
   const catsRef = useRef<HTMLDivElement>(null);
 
@@ -26,6 +28,20 @@ export default function Nav() {
       setSafeSearch(stored);
       if (stored) document.body.classList.add('safe-search-active');
     } catch {}
+  }, []);
+
+  // Sync wishlist badge on mount and whenever wishlistUpdated fires
+  useEffect(() => {
+    function syncCount() {
+      setWishlistCount(getWishlist().length);
+    }
+    syncCount();
+    window.addEventListener('wishlistUpdated', syncCount);
+    window.addEventListener('storage', syncCount);
+    return () => {
+      window.removeEventListener('wishlistUpdated', syncCount);
+      window.removeEventListener('storage', syncCount);
+    };
   }, []);
 
   // Close dropdowns on outside click
@@ -137,7 +153,12 @@ export default function Nav() {
 
           <Link href="/locations/" className={`nav-link${isActive('/locations') ? ' active' : ''}`}>Locations</Link>
           <Link href="/blog/" className={`nav-link${isActive('/blog') ? ' active' : ''}`}>Blog</Link>
-          <Link href="/wishlist/" className={`nav-link${isActive('/wishlist') ? ' active' : ''}`} aria-label="My wishlist">♥</Link>
+          <Link href="/wishlist/" className={`nav-link nav-wishlist-link${isActive('/wishlist') ? ' active' : ''}`} aria-label="My wishlist">
+            ♥
+            {wishlistCount > 0 && (
+              <span className="nav-wishlist-badge">{wishlistCount > 99 ? '99+' : wishlistCount}</span>
+            )}
+          </Link>
 
           {/* Safe Search toggle */}
           <button
