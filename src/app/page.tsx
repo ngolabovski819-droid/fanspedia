@@ -6,7 +6,7 @@ import { popularCategories } from '@/config/categories';
 import { COUNTRIES_LIST } from '@/config/countries';
 import HomeSearch from '@/components/HomeSearch';
 
-export const revalidate = 300;
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: 'FansPedia — Find the Best OnlyFans Creators',
@@ -19,7 +19,7 @@ export default async function HomePage() {
   const { creators, total, hasMore } = await fetchCreators({
     sort: 'popular',
     pageSize: 24,
-    revalidate: 300,
+    revalidate: 3600,
   });
 
   const featuredCountries = COUNTRIES_LIST.slice(0, 20);

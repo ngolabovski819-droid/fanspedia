@@ -61,9 +61,6 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json(result, {
     headers: {
-      // Cache at Vercel's edge for 1 hour; serve stale for up to 24h while
-      // revalidating in background. Reduces Supabase hits dramatically and
-      // keeps creators visible even when Supabase CPU is exhausted.
       'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
     },
   });

@@ -8,7 +8,8 @@ import CreatorGridSkeleton from '@/components/CreatorGridSkeleton';
 import FAQ from '@/components/FAQ';
 
 // ISR: regenerate every 5 min. Short enough to fix pages that built empty (Supabase 500).
-export const revalidate = 300;
+// ISR: regenerate every 24h. Stale-while-revalidate so users never wait.
+export const revalidate = 86400;
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -62,7 +63,7 @@ async function CountryCreators({ country }: { country: CountryConfig }) {
     skipLocationFilter: true,
     sort: 'popular',
     pageSize: 24,
-    revalidate: 300,
+    revalidate: 86400,
   });
 
   return (

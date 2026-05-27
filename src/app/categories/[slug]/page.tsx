@@ -7,8 +7,9 @@ import FilteredCreatorGrid from '@/components/FilteredCreatorGrid';
 import CreatorGridSkeleton from '@/components/CreatorGridSkeleton';
 import FAQ from '@/components/FAQ';
 
-// ISR: regenerate every 5 min. Short enough to fix pages that built empty (Supabase 500).
-export const revalidate = 300;
+// ISR: regenerate every 24h. Pages serve stale-while-revalidate so users never wait.
+// Supabase queries only happen once per day per page after the cache warms up.
+export const revalidate = 86400;
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -64,7 +65,7 @@ async function CategoryCreators({ cat }: { cat: CategoryConfig }) {
     sort: 'popular',
     pageSize: 24,
     skipLocationFilter: true,
-    revalidate: 300,
+    revalidate: 86400,
   });
 
   return (

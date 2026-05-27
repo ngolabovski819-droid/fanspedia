@@ -114,7 +114,7 @@ export async function fetchCreators(params: SearchParams = {}): Promise<SearchRe
       apikey: SUPABASE_KEY,
       Authorization: `Bearer ${SUPABASE_KEY}`,
       'Accept-Profile': 'public',
-      Prefer: 'count=estimated',
+      Prefer: page === 0 ? 'count=estimated' : 'count=none',
     },
     next: { revalidate },
     // Hard 20-second timeout — prevents build workers from hanging 60s waiting

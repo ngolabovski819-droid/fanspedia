@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "warm": "node scripts/warm-cache.mjs",
+    "warm:local": "node scripts/warm-cache.mjs http://localhost:3000"
   },
   "dependencies": {
     "@next/third-parties": "^16.2.4",
