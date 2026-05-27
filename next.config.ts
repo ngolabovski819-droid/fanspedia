@@ -1,6 +1,11 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  experimental: {
+    // Build one page at a time so Supabase isn't hit by N concurrent ilike queries.
+    // 163 pages × ~3 s avg ≈ 8-min build — well within Vercel's 45-min limit.
+    staticGenerationMaxConcurrency: 1,
+  },
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'images.weserv.nl' },

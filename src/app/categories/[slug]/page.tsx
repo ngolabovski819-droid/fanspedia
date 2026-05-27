@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { fetchCreators } from '@/lib/supabase';
-import { getCategoryBySlug, type CategoryConfig } from '@/config/categories';
+import { getCategoryBySlug, ALL_CATEGORY_SLUGS, type CategoryConfig } from '@/config/categories';
 import FilteredCreatorGrid from '@/components/FilteredCreatorGrid';
 import CreatorGridSkeleton from '@/components/CreatorGridSkeleton';
 import FAQ from '@/components/FAQ';
@@ -15,14 +15,13 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
-// Do NOT pre-render any category pages at build time.
-// Supabase cannot handle concurrent ilike queries from 22 build workers — even
-// 15 pages overwhelm it with 504s. All pages are generated on first request via
-// ISR instead (dynamicParams = true is the default in Next.js App Router).
-export const dynamicParams = true;
+// Pre-render all category pages at build time, one at a time (staticGenerationMaxConcurrency: 1
+// in next.config.ts). Combined with revalidate=86400, this gives instant static pages AND
+// daily ISR refresh. fetchCreators returns [] gracefully on build-time Supabase failures.
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  return [];
+  return ALL_CATEGORY_SLUGS.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -66,6 +65,7 @@ async function CategoryCreators({ cat }: { cat: CategoryConfig }) {
     pageSize: 24,
     skipLocationFilter: true,
     revalidate: 86400,
+    maxRetries: 3,
   });
 
   return (

@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { fetchCreators } from '@/lib/supabase';
-import { getCountry, type CountryConfig } from '@/config/countries';
+import { getCountry, ALL_COUNTRY_SLUGS, type CountryConfig } from '@/config/countries';
 import FilteredCreatorGrid from '@/components/FilteredCreatorGrid';
 import CreatorGridSkeleton from '@/components/CreatorGridSkeleton';
 import FAQ from '@/components/FAQ';
@@ -15,13 +15,12 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
-// Do NOT pre-render any country pages at build time — same reason as categories:
-// concurrent ilike queries overwhelm Supabase during the Next.js build.
-// All pages are generated on first request via ISR.
-export const dynamicParams = true;
+// Pre-render all country pages at build time, one at a time (staticGenerationMaxConcurrency: 1
+// in next.config.ts). fetchCreators returns [] gracefully on build-time Supabase failures.
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  return [];
+  return ALL_COUNTRY_SLUGS.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -64,6 +63,7 @@ async function CountryCreators({ country }: { country: CountryConfig }) {
     sort: 'popular',
     pageSize: 24,
     revalidate: 86400,
+    maxRetries: 3,
   });
 
   return (
