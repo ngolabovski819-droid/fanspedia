@@ -20,39 +20,42 @@ const DELAY_MS = 400; // pause between requests — be gentle on Supabase
 const TIMEOUT_MS = 30_000;
 
 // ---------------------------------------------------------------------------
-// Category slugs — keep in sync with src/config/categories.ts
+// Category slugs — generated from src/config/categories.ts RAW_LABELS
+// Run: node -e "const c=require('./src/config/categories.ts');console.log(c.ALL_CATEGORY_SLUGS)"
+// to regenerate if categories change.
 // ---------------------------------------------------------------------------
 const CATEGORY_SLUGS = [
-  'blonde', 'brunette', 'redhead', 'teen', 'milf', 'mature', 'bbw', 'curvy',
-  'petite', 'busty', 'big-boobs', 'small-boobs', 'big-ass', 'latina', 'asian',
-  'ebony', 'arab', 'indian', 'amateur', 'model', 'fitness', 'tattooed', 'pierced',
-  'alt', 'goth', 'cosplay', 'gamer', 'nerd', 'nurse', 'teacher', 'stepsister',
-  'bdsm', 'dominant', 'submissive', 'lesbian', 'bisexual', 'trans', 'non-binary',
-  'solo', 'couples', 'group', 'squirting', 'anal', 'oral', 'feet', 'joi',
-  'sph', 'cuckold', 'femdom', 'strapon', 'pegging', 'pregnant', 'milking',
-  'nude', 'topless', 'bikini', 'lingerie', 'free', 'girl', 'boy', 'gay',
-  'natural', 'big-naturals', 'natural-boobs',
+  'nude', 'reddit', 'models', 'sex', 'gay', 'anal', 'feet', 'twitter', 'trans',
+  'lesbian', 'squirt', 'couple', 'milf', 'tiktok', 'girl', 'big-tits', 'blowjobs',
+  'boobs', 'sextape', 'creampie', 'joi', 'threesome', '18-years-old', 'shemale',
+  'bbc', 'tits', 'ebony', 'pornhub', 'footjob', 'foot-fetish', 'dick-ratings',
+  'bbw', 'mature', 'teacher', 'pussy', 'cuckold', 'big-ass', 'squirting', 'hottest',
+  'best', 'amateur', 'blonde', 'instagram', 'pawg', 'gangbang', 'redhead', 'male',
+  'vip', 'famous', 'twins', 'ass', 'deepthroat', 'pregnant', 'handjob', 'facial',
+  'asmr', 'pegging', 'no-ppv', 'nurse', 'smoking-fetish', 'big-natural-boobs',
+  'olympian', 'pussy-play', 'hentai', 'goth-free',
 ];
 
 // ---------------------------------------------------------------------------
-// Country slugs — keep in sync with src/config/countries.ts
+// Country slugs — from src/config/countries.ts COUNTRIES keys
 // ---------------------------------------------------------------------------
 const COUNTRY_SLUGS = [
-  'united-states', 'united-kingdom', 'canada', 'australia', 'germany', 'france',
-  'spain', 'italy', 'netherlands', 'sweden', 'norway', 'denmark', 'finland',
-  'brazil', 'argentina', 'colombia', 'mexico', 'chile', 'peru', 'venezuela',
-  'russia', 'ukraine', 'poland', 'czech-republic', 'hungary', 'romania',
-  'japan', 'south-korea', 'china', 'india', 'philippines', 'thailand',
-  'indonesia', 'malaysia', 'singapore', 'hong-kong', 'taiwan',
-  'south-africa', 'nigeria', 'kenya', 'egypt', 'morocco',
-  'israel', 'turkey', 'saudi-arabia', 'uae', 'iran',
-  'new-zealand', 'ireland', 'scotland', 'portugal', 'belgium',
-  'switzerland', 'austria', 'greece', 'croatia', 'serbia',
-  'ukraine', 'slovakia', 'bulgaria', 'latvia', 'estonia', 'lithuania',
-  'puerto-rico', 'jamaica', 'cuba', 'dominican-republic', 'panama',
-  'costa-rica', 'el-salvador', 'guatemala', 'honduras',
-  'ecuador', 'bolivia', 'paraguay', 'uruguay',
-  'guam', 'bahamas', 'barbados',
+  'united-states', 'canada', 'argentina', 'united-kingdom', 'philippines',
+  'india', 'japan', 'armenia', 'australia', 'austria', 'bahamas', 'barbados',
+  'belarus', 'belgium', 'bolivia', 'bosnia-and-herzegovina', 'brazil', 'bulgaria',
+  'cambodia', 'chile', 'china', 'colombia', 'costa-rica', 'croatia', 'cuba',
+  'cyprus', 'czech-republic', 'denmark', 'dominican-republic', 'ecuador', 'egypt',
+  'el-salvador', 'estonia', 'finland', 'france', 'georgia', 'germany', 'ghana',
+  'greece', 'guam', 'guatemala', 'honduras', 'hong-kong', 'hungary', 'iceland',
+  'indonesia', 'ireland', 'israel', 'italy', 'jamaica', 'kenya', 'latvia',
+  'lebanon', 'lithuania', 'luxembourg', 'malaysia', 'malta', 'mexico', 'moldova',
+  'monaco', 'montenegro', 'morocco', 'netherlands', 'new-zealand', 'nigeria',
+  'norway', 'pakistan', 'panama', 'paraguay', 'peru', 'poland', 'portugal',
+  'puerto-rico', 'romania', 'russia', 'saudi-arabia', 'scotland', 'serbia',
+  'singapore', 'slovakia', 'slovenia', 'south-africa', 'south-korea', 'spain',
+  'sri-lanka', 'sweden', 'switzerland', 'taiwan', 'thailand', 'trinidad-and-tobago',
+  'tunisia', 'turkey', 'ukraine', 'united-arab-emirates', 'uruguay', 'venezuela',
+  'vietnam',
 ];
 
 // Deduplicate
