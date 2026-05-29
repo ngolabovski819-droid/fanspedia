@@ -79,6 +79,33 @@ export default async function BlogPostPage({ params }: Props) {
         </div>
       </div>
 
+      {/* Author card */}
+      <div className="author-card-wrap">
+        <div className="author-card" tabIndex={0}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="author-avatar" src="/uploads/author-nick.jpg" alt="Nick Golabovski" width={44} height={44} loading="lazy" />
+          <div className="author-info">
+            <span className="author-name">Nick Golabovski</span>
+            <span className="author-jobtitle">Founder, FansPedia</span>
+          </div>
+          <div className="author-tooltip" role="tooltip">
+            <div className="author-tooltip-header">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img className="author-tooltip-avatar" src="/uploads/author-nick.jpg" alt="Nick Golabovski" width={56} height={56} loading="lazy" />
+              <div>
+                <div className="author-tooltip-name">Nick Golabovski</div>
+                <div className="author-tooltip-title">Founder, FansPedia</div>
+              </div>
+            </div>
+            <p className="author-tooltip-bio">Nick has been researching the creator economy since 2021. He built FansPedia to help fans discover real OnlyFans creators. He writes data-driven guides on creator platforms, monetisation, and audience growth.</p>
+            <a className="author-tooltip-linkedin" href="https://www.linkedin.com/in/nikola-golabovski-28b124209/" target="_blank" rel="noopener noreferrer">
+              <svg width={15} height={15} viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              Connect on LinkedIn
+            </a>
+          </div>
+        </div>
+      </div>
+
       {/* Featured image — full 16:9, max 860px */}
       {post.featuredImage && (
         <div className="blog-hero-image">
@@ -103,6 +130,101 @@ export default async function BlogPostPage({ params }: Props) {
       </article>
 
       <style>{`
+        /* Author card */
+        .author-card-wrap {
+          max-width: 860px;
+          margin: 0 auto 28px;
+          padding: 0 20px;
+          display: flex;
+          justify-content: center;
+        }
+        .author-card {
+          display: inline-flex;
+          align-items: center;
+          gap: 14px;
+          padding: 10px 20px 10px 10px;
+          border: 1px solid var(--border);
+          border-radius: 48px;
+          background: var(--surface);
+          cursor: pointer;
+          position: relative;
+          transition: border-color .2s, box-shadow .2s, background .2s;
+          outline: none;
+        }
+        .author-card:hover, .author-card:focus-within {
+          border-color: var(--accent);
+          box-shadow: 0 4px 20px rgba(0,175,240,0.1);
+        }
+        .author-avatar {
+          width: 44px; height: 44px;
+          border-radius: 50%;
+          object-fit: cover;
+          flex-shrink: 0;
+          border: 2px solid var(--accent);
+        }
+        .author-info { display: flex; flex-direction: column; gap: 2px; }
+        .author-name { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.2; }
+        .author-jobtitle { font-size: 11px; font-weight: 600; color: var(--accent); letter-spacing: .02em; }
+        .author-tooltip {
+          position: absolute;
+          top: calc(100% + 10px);
+          left: 50%;
+          transform: translateX(-50%) translateY(6px);
+          z-index: 200;
+          background: var(--bg);
+          border: 1px solid var(--border);
+          border-radius: 16px;
+          padding: 20px;
+          width: 320px;
+          box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity .2s ease, transform .2s ease;
+        }
+        .author-card:hover .author-tooltip,
+        .author-card:focus-within .author-tooltip {
+          opacity: 1;
+          pointer-events: auto;
+          transform: translateX(-50%) translateY(0);
+        }
+        .author-tooltip::before {
+          content: '';
+          position: absolute;
+          top: -7px; left: 50%;
+          transform: translateX(-50%) rotate(45deg);
+          width: 12px; height: 12px;
+          background: var(--bg);
+          border-left: 1px solid var(--border);
+          border-top: 1px solid var(--border);
+        }
+        .author-tooltip-header {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          margin-bottom: 12px;
+          padding-bottom: 12px;
+          border-bottom: 1px solid var(--border);
+        }
+        .author-tooltip-avatar { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 2px solid var(--accent); }
+        .author-tooltip-name { font-size: 16px; font-weight: 700; color: var(--text); line-height: 1.2; }
+        .author-tooltip-title { font-size: 12px; color: var(--accent); font-weight: 600; margin-top: 3px; }
+        .author-tooltip-bio { font-size: 13px; line-height: 1.65; color: var(--text-muted); margin: 0 0 14px; }
+        .author-tooltip-linkedin {
+          display: inline-flex;
+          align-items: center;
+          gap: 7px;
+          padding: 8px 16px;
+          background: #0A66C2;
+          color: #fff;
+          border-radius: 20px;
+          font-size: 13px;
+          font-weight: 700;
+          text-decoration: none;
+          transition: background .2s;
+        }
+        .author-tooltip-linkedin:hover { background: #004182; }
+        @media (max-width: 480px) { .author-tooltip { width: calc(100vw - 48px); } }
+
         .article-hero {
           max-width: 860px;
           margin: 0 auto;
