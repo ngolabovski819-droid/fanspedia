@@ -20,6 +20,12 @@ export default function Footer() {
           <p style={{ fontSize: 12 }}>
             FansPedia is an independent directory. We are not affiliated with OnlyFans.
           </p>
+          <address style={{ fontSize: 12, fontStyle: 'normal', marginTop: 10, lineHeight: 1.6, color: 'var(--text-muted)' }}>
+            <strong style={{ color: 'var(--text)' }}>INCREVATE LLC</strong><br />
+            75 E 3RD ST, STE 7<br />
+            Sheridan, WY 82801<br />
+            USA
+          </address>
         </div>
 
         <div className="footer-col">

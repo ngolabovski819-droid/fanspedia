@@ -41,6 +41,15 @@ const orgSchema = {
   name: 'FansPedia',
   url: SITE_URL,
   logo: `${SITE_URL}/favicon.ico`,
+  legalName: 'INCREVATE LLC',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '75 E 3RD ST, STE 7',
+    addressLocality: 'Sheridan',
+    addressRegion: 'WY',
+    postalCode: '82801',
+    addressCountry: 'US',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
