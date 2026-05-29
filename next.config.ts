@@ -21,13 +21,13 @@ const nextConfig: NextConfig = {
       {
         source: '/country/:path*',
         headers: [
-          { key: 'Cache-Control', value: 'public, s-maxage=3600, stale-while-revalidate=600' },
+          { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=3600' },
         ],
       },
       {
         source: '/categories/:path*',
         headers: [
-          { key: 'Cache-Control', value: 'public, s-maxage=3600, stale-while-revalidate=600' },
+          { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=3600' },
         ],
       },
     ];
