@@ -1,7 +1,7 @@
 ﻿import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Promote Your OnlyFans \u2014 Get Real Subscribers from Google | FansPedia",
+  title: "Promote Your OnlyFans — Get Real Subscribers from Google | FansPedia",
   description: "Feature your OnlyFans profile on FansPedia and reach fans who are actively searching on Google. High-intent SEO traffic that converts. Get started today.",
   alternates: { canonical: "https://fanspedia.net/promote/" },
 };
@@ -13,17 +13,17 @@ export default function PromotePage() {
 function PromoteContent() {
   const steps = [
     { n: "1", title: "Submit Your Profile", body: "Send us your OnlyFans username and the categories or niches you want to be featured in. We review every submission to ensure quality." },
-    { n: "2", title: "We Optimize Your Listing", body: "Our team crafts your profile placement for maximum visibility \u2014 right categories, right keywords, right pages that already rank on Google page one." },
+    { n: "2", title: "We Optimize Your Listing", body: "Our team crafts your profile placement for maximum visibility — right categories, right keywords, right pages that already rank on Google page one." },
     { n: "3", title: "Go Live in 24 Hours", body: "Your profile goes live on FansPedia within 24 hours. You immediately start appearing in front of fans searching for creators like you." },
-    { n: "4", title: "Watch Subscribers Grow", body: "Fans discover your profile through Google search, click through, and subscribe. Track your growth via OnlyFans analytics \u2014 no extra tools needed." },
+    { n: "4", title: "Watch Subscribers Grow", body: "Fans discover your profile through Google search, click through, and subscribe. Track your growth via OnlyFans analytics — no extra tools needed." },
   ];
   const whyCards = [
-    { icon: "\uD83C\uDFAF", title: "High-Intent Audience", body: "Someone typing best fitness OnlyFans or free OnlyFans near me into Google is not casually scrolling. They are actively looking to subscribe and spend money right now." },
-    { icon: "\uD83D\uDCC8", title: "Consistent, Predictable Traffic", body: "Unlike viral social posts that spike and die, SEO traffic is consistent month after month. Your featured listing keeps delivering new fans without ongoing effort from you." },
-    { icon: "\uD83D\uDEE1\uFE0F", title: "100% Safe & Compliant", body: "We never touch your OnlyFans account. We simply feature your public profile on our directory pages \u2014 the same way any editorial recommendation site would. No ToS risks." },
-    { icon: "\uD83D\uDC65", title: "Fans Who Stick Around", body: "SEO-sourced fans spend more per month, renew subscriptions at higher rates, and engage more in DMs. Quality over quantity \u2014 fans who actually pay." },
-    { icon: "\uD83D\uDCCD", title: "Niche & Location Targeting", body: "FansPedia organizes by category, niche, and location. Your profile reaches exactly the right audience \u2014 fitness fans, cosplay lovers, fans in your city \u2014 not just random clicks." },
-    { icon: "\u23F0", title: "No Ongoing Work Required", body: "Post your content on OnlyFans as normal. We handle the promotion. Your listing runs 24/7 without requiring constant social media activity from your side." },
+    { icon: "🎯", title: "High-Intent Audience", body: "Someone typing best fitness OnlyFans or free OnlyFans near me into Google is not casually scrolling. They are actively looking to subscribe and spend money right now." },
+    { icon: "📈", title: "Consistent, Predictable Traffic", body: "Unlike viral social posts that spike and die, SEO traffic is consistent month after month. Your featured listing keeps delivering new fans without ongoing effort from you." },
+    { icon: "🛡️", title: "100% Safe & Compliant", body: "We never touch your OnlyFans account. We simply feature your public profile on our directory pages — the same way any editorial recommendation site would. No ToS risks." },
+    { icon: "👥", title: "Fans Who Stick Around", body: "SEO-sourced fans spend more per month, renew subscriptions at higher rates, and engage more in DMs. Quality over quantity — fans who actually pay." },
+    { icon: "📍", title: "Niche & Location Targeting", body: "FansPedia organizes by category, niche, and location. Your profile reaches exactly the right audience — fitness fans, cosplay lovers, fans in your city — not just random clicks." },
+    { icon: "⏰", title: "No Ongoing Work Required", body: "Post your content on OnlyFans as normal. We handle the promotion. Your listing runs 24/7 without requiring constant social media activity from your side." },
   ];
   const campaigns = [
     { fans: 300, maxFans: 300, subs: 47, chats: 156, revenue: 10591, gain: 21, spend: 450, added: 300, arpu: "$35.30", romi: "1,946%", ago: "5m 27s" },
@@ -34,18 +34,18 @@ function PromoteContent() {
     { fans: 201, maxFans: 200, subs: 19, chats: 88,  revenue: 1484,  gain: 0,  spend: 300, added: 200, arpu: "$7.38",  romi: "312%",   ago: "17m 57s" },
   ];
   const faqs = [
-    { q: "Is it safe? Will this violate OnlyFans Terms of Service?", a: "Completely safe. FansPedia is an independent directory site. We feature your public OnlyFans profile on our pages \u2014 the same way any editorial recommendation site or magazine would. We never access your account, never touch your login credentials, and never use bots. Fans discover you through our site, then choose to subscribe on their own." },
+    { q: "Is it safe? Will this violate OnlyFans Terms of Service?", a: "Completely safe. FansPedia is an independent directory site. We feature your public OnlyFans profile on our pages — the same way any editorial recommendation site or magazine would. We never access your account, never touch your login credentials, and never use bots. Fans discover you through our site, then choose to subscribe on their own." },
     { q: "Do I need to give you my OnlyFans password?", a: "Never. We only need your public OnlyFans username. Your account credentials stay entirely private and under your control at all times." },
     { q: "How quickly will I go live?", a: "Most profiles are live within 24 hours of payment and a quick onboarding chat. We verify your profile, select the best categories for targeting, and publish your listing." },
-    { q: "How is this different from buying fake followers?", a: "Completely different. Fake follower services deliver bot accounts that never spend money. FansPedia drives real people from Google search to your OnlyFans page. These are genuine fans with intent to subscribe \u2014 not inflated numbers." },
+    { q: "How is this different from buying fake followers?", a: "Completely different. Fake follower services deliver bot accounts that never spend money. FansPedia drives real people from Google search to your OnlyFans page. These are genuine fans with intent to subscribe — not inflated numbers." },
     { q: "Can agencies promote multiple creators?", a: "Yes. Many of our partners are agencies managing multiple creator accounts. We offer bulk pricing, a dedicated account manager, and unified analytics. Contact us for a custom quote." },
-    { q: "What niches and categories does FansPedia cover?", a: "FansPedia covers hundreds of categories \u2014 fitness, cosplay, MILF, free OnlyFans, location-based searches, and many more. Whatever your niche, we have category and search pages already ranking on Google." },
+    { q: "What niches and categories does FansPedia cover?", a: "FansPedia covers hundreds of categories — fitness, cosplay, MILF, free OnlyFans, location-based searches, and many more. Whatever your niche, we have category and search pages already ranking on Google." },
     { q: "What results can I expect?", a: "Results vary based on your niche, content quality, pricing, and engagement. Creators with well-optimized profiles and strong content libraries typically see the fastest growth. We recommend at least 20 posts live before going live." },
   ];
   return (
     <>
       <nav className="promo-breadcrumb" aria-label="Breadcrumb">
-        <a href="/">\uD83C\uDFE0 Home</a><span aria-hidden="true"> / </span><span aria-current="page">Promote Your OnlyFans</span>
+        <a href="/">🏠 Home</a><span aria-hidden="true"> / </span><span aria-current="page">Promote Your OnlyFans</span>
       </nav>
       <section className="promo-hero">
         <div className="promo-hero-inner">
@@ -53,9 +53,9 @@ function PromoteContent() {
           <h1>Promote Your OnlyFans and Get <span className="promo-yellow">Real Paying Fans</span> from Google</h1>
           <p className="promo-hero-sub">FansPedia reaches millions of fans who search Google for creators every month. Get your profile featured in front of high-intent audiences who are ready to subscribe.</p>
           <div className="promo-cta-wrap">
-            <div className="promo-urgency"><span className="promo-dot" /> 3 spots left this week \u2014 filling fast</div>
-            <a href="https://form.typeform.com/to/rkipgsyL" target="_blank" rel="noopener noreferrer" className="promo-hero-cta">\uD83D\uDE80 Claim Your Spot \u2014 Go Live in 24h</a>
-            <p className="promo-hero-note">No password required &nbsp;\u00b7&nbsp; Free to apply &nbsp;\u00b7&nbsp; Real Google traffic</p>
+            <div className="promo-urgency"><span className="promo-dot" /> 3 spots left this week — filling fast</div>
+            <a href="https://form.typeform.com/to/rkipgsyL" target="_blank" rel="noopener noreferrer" className="promo-hero-cta">🚀 Claim Your Spot — Go Live in 24h</a>
+            <p className="promo-hero-note">No password required &nbsp;·&nbsp; Free to apply &nbsp;·&nbsp; Real Google traffic</p>
           </div>
         </div>
       </section>
@@ -70,7 +70,7 @@ function PromoteContent() {
         <div className="promo-inner">
           <div className="promo-eyebrow-sm">Simple Process</div>
           <h2 className="promo-section-title">How Promoting on FansPedia Works</h2>
-          <p className="promo-section-lead">Getting your profile in front of motivated fans takes less than 24 hours. No technical setup, no passwords \u2014 just results.</p>
+          <p className="promo-section-lead">Getting your profile in front of motivated fans takes less than 24 hours. No technical setup, no passwords — just results.</p>
           <div className="promo-steps-grid">
             {steps.map((s) => (
               <div key={s.n} className="promo-step-card">
@@ -86,7 +86,7 @@ function PromoteContent() {
         <div className="promo-inner">
           <div className="promo-eyebrow-sm">Why It Works</div>
           <h2 className="promo-section-title">Why SEO Traffic Converts Better Than Social Media</h2>
-          <p className="promo-section-lead">Not all traffic is equal. Fans who find you through Google are actively searching for a creator to subscribe to \u2014 they already have their wallet out.</p>
+          <p className="promo-section-lead">Not all traffic is equal. Fans who find you through Google are actively searching for a creator to subscribe to — they already have their wallet out.</p>
           <div className="promo-why-grid">
             {whyCards.map((w) => (
               <div key={w.title} className="promo-why-card">
@@ -106,11 +106,11 @@ function PromoteContent() {
             <table className="promo-table">
               <thead><tr><th>Channel</th><th>Subscriber Conversion</th><th>Fan Spend Quality</th><th>Consistency</th></tr></thead>
               <tbody>
-                <tr className="promo-table-hl"><td><strong>FansPedia SEO</strong></td><td><span className="bg-good">25\u201335%</span></td><td><span className="bg-good">High \u2014 long retention</span></td><td><span className="bg-good">Consistent monthly</span></td></tr>
-                <tr><td>Reddit Promotion</td><td><span className="bg-mid">5\u201315%</span></td><td><span className="bg-mid">Mixed, often free-seekers</span></td><td><span className="bg-mid">Spiky, short-lived</span></td></tr>
-                <tr><td>Twitter / X Drops</td><td><span className="bg-bad">3\u201310%</span></td><td><span className="bg-bad">Low spend, high churn</span></td><td><span className="bg-bad">Days to weeks</span></td></tr>
-                <tr><td>Instagram Shoutouts</td><td><span className="bg-mid">5\u201312%</span></td><td><span className="bg-mid">Moderate spend</span></td><td><span className="bg-mid">Weeks only</span></td></tr>
-                <tr><td>Bought Followers</td><td><span className="bg-bad">0%</span></td><td><span className="bg-bad">Bots \u2014 zero spend</span></td><td><span className="bg-bad">Negative ROI</span></td></tr>
+                <tr className="promo-table-hl"><td><strong>FansPedia SEO</strong></td><td><span className="bg-good">25–35%</span></td><td><span className="bg-good">High — long retention</span></td><td><span className="bg-good">Consistent monthly</span></td></tr>
+                <tr><td>Reddit Promotion</td><td><span className="bg-mid">5–15%</span></td><td><span className="bg-mid">Mixed, often free-seekers</span></td><td><span className="bg-mid">Spiky, short-lived</span></td></tr>
+                <tr><td>Twitter / X Drops</td><td><span className="bg-bad">3–10%</span></td><td><span className="bg-bad">Low spend, high churn</span></td><td><span className="bg-bad">Days to weeks</span></td></tr>
+                <tr><td>Instagram Shoutouts</td><td><span className="bg-mid">5–12%</span></td><td><span className="bg-mid">Moderate spend</span></td><td><span className="bg-mid">Weeks only</span></td></tr>
+                <tr><td>Bought Followers</td><td><span className="bg-bad">0%</span></td><td><span className="bg-bad">Bots — zero spend</span></td><td><span className="bg-bad">Negative ROI</span></td></tr>
               </tbody>
             </table>
           </div>
@@ -120,7 +120,7 @@ function PromoteContent() {
         <div className="promo-inner">
           <div className="promo-eyebrow-sm">Proof It Works</div>
           <h2 className="promo-section-title">Live Campaign Feed</h2>
-          <p className="promo-section-lead" style={{marginBottom:"32px"}}>Updated in real time \u2014 exactly what our partners saw: fans gained, revenue, and ROMI.</p>
+          <p className="promo-section-lead" style={{marginBottom:"32px"}}>Updated in real time — exactly what our partners saw: fans gained, revenue, and ROMI.</p>
           <div className="promo-feed">
             {campaigns.map((c, i) => {
               const pct = Math.round((c.fans / c.maxFans) * 100);
@@ -131,23 +131,23 @@ function PromoteContent() {
                     <div className="promo-feed-bar-lbl">{c.fans} / {c.maxFans} fans</div>
                   </div>
                   <div className="promo-feed-stats">
-                    <span className="promo-pill">\uD83D\uDC65 {c.fans}</span>
-                    <span className="promo-pill promo-pill-blue">\u2705 {c.subs} \uD83D\uDCAC {c.chats}</span>
-                    <span className="promo-pill">\u2709\uFE0F ${c.revenue.toLocaleString()}{c.gain > 0 && <span style={{color:"#22a24a"}}> +${c.gain}</span>}</span>
-                    <span className="promo-pill promo-pill-green">\uD83D\uDCB5 ${c.spend.toFixed(2)}</span>
-                    <span className="promo-pill">\u2B06\uFE0F +{c.added}</span>
+                    <span className="promo-pill">👥 {c.fans}</span>
+                    <span className="promo-pill promo-pill-blue">✅ {c.subs} 💬 {c.chats}</span>
+                    <span className="promo-pill">✉️ ${c.revenue.toLocaleString()}{c.gain > 0 && <span style={{color:"#22a24a"}}> +${c.gain}</span>}</span>
+                    <span className="promo-pill promo-pill-green">💵 ${c.spend.toFixed(2)}</span>
+                    <span className="promo-pill">⬆️ +{c.added}</span>
                   </div>
                   <div className="promo-feed-metrics">
                     <div><div className="promo-mlabel">ARPU</div><div className="promo-mval">{c.arpu}</div></div>
                     <div><div className="promo-mlabel">ROMI</div><div className="promo-mromi">{c.romi}</div></div>
-                    <div className="promo-mago">\uD83D\uDD04 {c.ago} ago</div>
+                    <div className="promo-mago">🔄 {c.ago} ago</div>
                   </div>
                 </div>
               );
             })}
           </div>
           <div style={{textAlign:"center",marginTop:"32px"}}>
-            <a href="https://form.typeform.com/to/rkipgsyL" target="_blank" rel="noopener noreferrer" className="promo-hero-cta" style={{display:"inline-flex"}}>\uD83D\uDE80 Start Your Campaign</a>
+            <a href="https://form.typeform.com/to/rkipgsyL" target="_blank" rel="noopener noreferrer" className="promo-hero-cta" style={{display:"inline-flex"}}>🚀 Start Your Campaign</a>
           </div>
         </div>
       </section>
@@ -158,7 +158,7 @@ function PromoteContent() {
           <div className="promo-faq-list">
             {faqs.map((f) => (
               <details key={f.q} className="promo-faq-item">
-                <summary className="promo-faq-q">{f.q} <span className="promo-faq-icon">\uFF0B</span></summary>
+                <summary className="promo-faq-q">{f.q} <span className="promo-faq-icon">＋</span></summary>
                 <div className="promo-faq-a">{f.a}</div>
               </details>
             ))}
@@ -168,7 +168,7 @@ function PromoteContent() {
       <div className="promo-bottom-cta">
         <h2>Ready to Grow Your OnlyFans?</h2>
         <p>Join thousands of creators already getting discovered by high-intent fans through FansPedia every day.</p>
-        <a href="https://form.typeform.com/to/rkipgsyL" target="_blank" rel="noopener noreferrer" className="promo-bottom-btn">\uD83D\uDE80 Get Featured Today</a>
+        <a href="https://form.typeform.com/to/rkipgsyL" target="_blank" rel="noopener noreferrer" className="promo-bottom-btn">🚀 Get Featured Today</a>
       </div>
       <style>{`
         .promo-breadcrumb{max-width:1100px;margin:0 auto;padding:14px 20px;font-size:13px;color:var(--text-muted)}
