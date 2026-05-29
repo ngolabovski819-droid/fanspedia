@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getAllPostSlugs, getPostBySlug } from '@/lib/blog';
 import { MDXRemote } from 'next-mdx-remote/rsc';
+import AiSummaryPanel from '@/components/AiSummaryPanel';
 
 export const revalidate = 86400;
 
@@ -89,6 +90,12 @@ export default async function BlogPostPage({ params }: Props) {
           />
         </div>
       )}
+
+      {/* AI summary panel */}
+      <div style={{ maxWidth: 860, margin: '0 auto 0', padding: '0 20px 4px' }}>
+        <hr style={{ border: 'none', height: 1, background: 'linear-gradient(90deg, transparent, var(--border), transparent)' }} />
+      </div>
+      <AiSummaryPanel blogUrl={`https://fanspedia.net/blog/${post.slug}`} />
 
       {/* Article body */}
       <article className="article-body blog-prose">
