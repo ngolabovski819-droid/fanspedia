@@ -64,58 +64,153 @@ export default async function BlogPostPage({ params }: Props) {
         <span>{post.title}</span>
       </nav>
 
-      <article className="prose-page">
-        {post.featuredImage && (
-          <div style={{ marginBottom: 28, borderRadius: 12, overflow: 'hidden', aspectRatio: '16/9' }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={post.featuredImage}
-              alt={post.featuredImageAlt}
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              loading="eager"
-            />
-          </div>
+      {/* Article hero — category, title, meta */}
+      <div className="article-hero">
+        {post.categoryLabel && (
+          <span className="article-tag">{post.categoryLabel}</span>
         )}
-
-        <div style={{ marginBottom: 12 }}>
-          {post.categoryLabel && (
-            <span style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--accent)', marginRight: 12 }}>
-              {post.categoryLabel}
-            </span>
-          )}
+        <h1 className="article-title">{post.seoTitle || post.title}</h1>
+        <div className="article-meta">
           {post.date && (
-            <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>
-              {new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-            </span>
+            <span>📅 {new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
           )}
-          {post.readTime && (
-            <span style={{ fontSize: 13, color: 'var(--text-muted)' }}> · {post.readTime}</span>
-          )}
+          {post.readTime && <span>⏱ {post.readTime}</span>}
         </div>
+      </div>
 
-        <div
-          style={{
-            color: 'var(--text-muted)',
-            lineHeight: 1.8,
-          }}
-          className="blog-prose"
-        >
-          <MDXRemote source={post.content} />
+      {/* Featured image — full 16:9, max 860px */}
+      {post.featuredImage && (
+        <div className="blog-hero-image">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={post.featuredImage}
+            alt={post.featuredImageAlt}
+            loading="eager"
+          />
         </div>
+      )}
+
+      {/* Article body */}
+      <article className="article-body blog-prose">
+        <MDXRemote source={post.content} />
       </article>
 
       <style>{`
-        .blog-prose h1, .blog-prose h2, .blog-prose h3 { color: var(--accent); font-family: 'Oswald', sans-serif; margin: 28px 0 14px; }
-        .blog-prose h1 { font-size: 28px; }
-        .blog-prose h2 { font-size: 22px; }
-        .blog-prose h3 { font-size: 18px; }
-        .blog-prose p { margin-bottom: 16px; font-size: 15px; }
-        .blog-prose ul, .blog-prose ol { padding-left: 24px; margin-bottom: 16px; }
-        .blog-prose li { margin-bottom: 8px; font-size: 15px; }
-        .blog-prose a { color: var(--accent); }
-        .blog-prose strong { color: var(--text); }
-        .blog-prose blockquote { border-left: 3px solid var(--accent); padding-left: 16px; color: var(--text-muted); margin: 20px 0; }
-        .blog-prose code { background: var(--surface-raised); padding: 2px 6px; border-radius: 4px; font-size: 13px; }
+        .article-hero {
+          max-width: 860px;
+          margin: 0 auto;
+          padding: 32px 20px 24px;
+          text-align: center;
+        }
+        .article-tag {
+          display: inline-flex;
+          align-items: center;
+          padding: 4px 14px;
+          border-radius: 20px;
+          font-size: 12px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          background: rgba(0,175,240,0.12);
+          color: var(--accent);
+          margin-bottom: 20px;
+        }
+        .article-title {
+          font-size: clamp(1.6rem, 4vw, 2.4rem);
+          font-weight: 800;
+          letter-spacing: -0.02em;
+          line-height: 1.25;
+          color: var(--text);
+          margin-bottom: 16px;
+        }
+        .article-meta {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 20px;
+          font-size: 13px;
+          color: var(--text-muted);
+          flex-wrap: wrap;
+        }
+        .blog-hero-image {
+          max-width: 860px;
+          margin: 0 auto 32px;
+          padding: 0 20px;
+        }
+        .blog-hero-image img {
+          width: 100%;
+          aspect-ratio: 16 / 9;
+          object-fit: cover;
+          border-radius: 16px;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+          display: block;
+        }
+        .article-body {
+          max-width: 760px;
+          margin: 0 auto;
+          padding: 0 20px 80px;
+          font-size: 17px;
+          line-height: 1.75;
+          color: var(--text-muted);
+        }
+        .blog-prose h2 {
+          font-size: 1.45rem;
+          font-weight: 700;
+          color: var(--text);
+          margin-top: 2.2em;
+          margin-bottom: 0.7em;
+          padding-bottom: 12px;
+          position: relative;
+        }
+        .blog-prose h2::after {
+          content: '';
+          display: block;
+          position: absolute;
+          left: 0; bottom: 0;
+          height: 3px;
+          width: 100%;
+          border-radius: 3px;
+          background: linear-gradient(90deg, #00AFF0 0%, #0099D6 30%, transparent 72%);
+        }
+        .blog-prose h3 {
+          font-size: 1.15rem;
+          font-weight: 700;
+          color: var(--text);
+          margin-top: 1.8em;
+          margin-bottom: 0.6em;
+          padding-bottom: 8px;
+          position: relative;
+        }
+        .blog-prose h3::after {
+          content: '';
+          display: block;
+          position: absolute;
+          left: 0; bottom: 0;
+          height: 2px;
+          width: 100%;
+          border-radius: 2px;
+          background: linear-gradient(90deg, rgba(0,175,240,0.55) 0%, rgba(0,153,214,0.4) 28%, transparent 60%);
+        }
+        .blog-prose p { margin-bottom: 1.3em; }
+        .blog-prose ul, .blog-prose ol { padding-left: 1.5em; margin-bottom: 1.3em; }
+        .blog-prose li { margin-bottom: 0.5em; }
+        .blog-prose a { color: var(--accent); text-decoration: underline; }
+        .blog-prose strong { color: var(--text); font-weight: 700; }
+        .blog-prose blockquote {
+          border-left: 4px solid var(--accent);
+          margin: 1.5em 0;
+          padding: 12px 20px;
+          background: rgba(0,175,240,0.07);
+          border-radius: 0 8px 8px 0;
+          font-style: italic;
+          color: var(--text-muted);
+        }
+        .blog-prose code { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 2px 6px; font-size: 0.87em; }
+        .blog-prose img { max-width: 100%; border-radius: 12px; margin: 1.5em 0; display: block; }
+        .blog-prose hr { border: none; border-top: 1px solid var(--border); margin: 2em 0; }
+        .blog-prose table { width: 100%; border-collapse: collapse; font-size: 0.95em; margin: 1.5em 0; border: 2px solid var(--border); }
+        .blog-prose th, .blog-prose td { border: 1px solid var(--border); padding: 10px 14px; vertical-align: top; }
+        .blog-prose th { background: var(--surface); font-weight: 700; text-align: left; }
       `}</style>
     </>
   );
