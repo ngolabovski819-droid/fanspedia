@@ -61,7 +61,12 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json(result, {
     headers: {
-      'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+      // Browser cache: 60s fresh, then revalidate
+      'Cache-Control': 'public, max-age=60, stale-while-revalidate=300',
+      // Vercel CDN cache: 5 min fresh, serve stale for up to 24h while revalidating
+      // x-vercel-cdn-cache-control is Vercel's explicit CDN directive and is NOT
+      // stripped by Next.js unlike s-maxage inside Cache-Control for Node.js routes.
+      'x-vercel-cdn-cache-control': 'public, s-maxage=300, stale-while-revalidate=86400',
     },
   });
 }
