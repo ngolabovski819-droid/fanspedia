@@ -1,0 +1,23 @@
+name: Warm Cache
+
+on:
+  schedule:
+    # Every 4 hours — keeps Vercel CDN fresh and function containers warm.
+    # Stagger from the hour (xx:20) so it doesn't conflict with other cron jobs.
+    - cron: '20 */4 * * *'
+  workflow_dispatch: # allow manual trigger
+
+jobs:
+  warm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Run warm-cache
+        run: node scripts/warm-cache.mjs https://fanspedia.net

@@ -56,6 +56,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
+        {/* Establish early connection to image CDN so avatars start loading sooner */}
+        <link rel="preconnect" href="https://images.weserv.nl" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://images.weserv.nl" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
