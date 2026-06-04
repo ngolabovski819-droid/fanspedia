@@ -1,8 +1,8 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { fetchCreators } from '@/lib/supabase';
 import { getCategoryBySlug, ALL_CATEGORY_SLUGS, type CategoryConfig } from '@/config/categories';
+import { fetchFeaturedPage, categoryScope } from '@/config/featured';
 import FilteredCreatorGrid from '@/components/FilteredCreatorGrid';
 import CreatorGridSkeleton from '@/components/CreatorGridSkeleton';
 import FAQ from '@/components/FAQ';
@@ -58,15 +58,20 @@ function buildFAQ(label: string) {
 
 // Async server component — suspends while Supabase fetches, streams in via Suspense below
 async function CategoryCreators({ cat }: { cat: CategoryConfig }) {
-  const { creators, total, hasMore } = await fetchCreators({
-    categoryTerms: cat.terms,
-    maxPrice: cat.maxPrice,
-    sort: 'popular',
-    pageSize: 24,
-    skipLocationFilter: true,
-    revalidate: 86400,
-    maxRetries: 3,
-  });
+  const scope = categoryScope(cat.slug);
+  const { creators, total, hasMore } = await fetchFeaturedPage(
+    scope,
+    {
+      categoryTerms: cat.terms,
+      maxPrice: cat.maxPrice,
+      sort: 'popular',
+      skipLocationFilter: true,
+      revalidate: 86400,
+      maxRetries: 3,
+    },
+    0,
+    24,
+  );
 
   return (
     <FilteredCreatorGrid
@@ -75,6 +80,7 @@ async function CategoryCreators({ cat }: { cat: CategoryConfig }) {
       initialTotal={total}
       categoryTerms={cat.terms}
       skipLocationFilter
+      scope={scope}
     />
   );
 }

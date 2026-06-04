@@ -403,6 +403,38 @@ img { max-width: 100%; display: block; }
   letter-spacing: 0.04em;
 }
 
+/* Sponsored / paid placement — highlighted to draw clicks, labelled as an ad
+   so visitors are not misled. */
+.creator-card-sponsored {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent), 0 8px 28px rgba(0, 175, 240, 0.22);
+}
+
+.creator-card-sponsored:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent), 0 14px 38px rgba(0, 175, 240, 0.34);
+}
+
+.card-sponsored {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.72);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 10px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: 1px solid var(--accent);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}
+
 /* Wishlist button */
 .card-wishlist {
   position: absolute;

@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { fetchCreators } from '@/lib/supabase';
 import CreatorGrid from '@/components/CreatorGrid';
 import { popularCategories } from '@/config/categories';
 import { COUNTRIES_LIST } from '@/config/countries';
 import HomeSearch from '@/components/HomeSearch';
 import { proxyImg } from '@/lib/image';
+import { fetchFeaturedPage } from '@/config/featured';
 
 export const revalidate = 3600;
 
@@ -17,11 +17,12 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const { creators, total, hasMore } = await fetchCreators({
-    sort: 'popular',
-    pageSize: 24,
-    revalidate: 3600,
-  });
+  const { creators, total, hasMore } = await fetchFeaturedPage(
+    'home',
+    { sort: 'popular', revalidate: 3600 },
+    0,
+    24,
+  );
 
   const featuredCountries = COUNTRIES_LIST.slice(0, 20);
 
@@ -73,6 +74,7 @@ export default async function HomePage() {
         initialHasMore={hasMore}
         initialTotal={total}
         sort="popular"
+        scope="home"
       />
 
       {/* Countries */}

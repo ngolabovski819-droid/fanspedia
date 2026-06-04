@@ -6,4 +6,6 @@ export interface Creator {
   avatarC144: string | null;
   isVerified: boolean;
   subscribePrice: number | null;
+  /** True when this creator is a paid/pinned placement (shown as "Sponsored"). */
+  sponsored?: boolean;
 }

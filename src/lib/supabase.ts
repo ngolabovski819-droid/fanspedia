@@ -37,6 +37,10 @@ export interface SearchParams {
   revalidate?: number;
   /** Max Supabase retry attempts on 500/504. Default 2. */
   maxRetries?: number;
+  /** Usernames to exclude from results at the DB level (case-insensitive-ish). */
+  excludeUsernames?: string[];
+  /** Explicit row offset. Overrides page*pageSize when provided. */
+  offset?: number;
 }
 
 export interface SearchResult {
@@ -58,6 +62,8 @@ export async function fetchCreators(params: SearchParams = {}): Promise<SearchRe
     skipLocationFilter = false,
     revalidate = 3600,
     maxRetries = 2,
+    excludeUsernames,
+    offset,
   } = params;
 
   const base = `${SUPABASE_URL}/rest/v1/onlyfans_profiles`;
@@ -78,7 +84,7 @@ export async function fetchCreators(params: SearchParams = {}): Promise<SearchRe
 
   // Pagination
   urlParams.set('limit', String(pageSize));
-  urlParams.set('offset', String(page * pageSize));
+  urlParams.set('offset', String(offset ?? page * pageSize));
 
   let urlStr = `${base}?${urlParams.toString()}`;
 
@@ -107,6 +113,14 @@ export async function fetchCreators(params: SearchParams = {}): Promise<SearchRe
         urlStr += `&search_text=ilike.*${encodeURIComponent(token)}*`;
       }
     }
+  }
+
+  // Exclude specific usernames at the DB level so offset/limit stay aligned.
+  if (excludeUsernames && excludeUsernames.length > 0) {
+    const list = excludeUsernames
+      .map((u) => `"${u.replace(/"/g, '')}"`)
+      .join(',');
+    urlStr += `&username=not.in.(${list})`;
   }
 
   const fetchOptions = {
@@ -157,4 +171,51 @@ export async function fetchCreators(params: SearchParams = {}): Promise<SearchRe
     // Load More button disappears instead of staying stuck.
     hasMore: creators.length === pageSize,
   };
+}
+
+/**
+ * Fetch specific creators by exact username (case-insensitive).
+ * Used to "pin" featured creators onto a page even when they don't
+ * naturally rank into the popular results. Returns whatever is found —
+ * missing usernames are silently skipped.
+ */
+export async function fetchCreatorsByUsernames(
+  usernames: string[],
+  revalidate = 86400,
+): Promise<Creator[]> {
+  const cleaned = usernames.map((u) => u.trim()).filter(Boolean);
+  if (cleaned.length === 0) return [];
+
+  const base = `${SUPABASE_URL}/rest/v1/onlyfans_profiles`;
+  const urlParams = new URLSearchParams();
+  urlParams.set('select', CARD_COLS);
+  // Case-insensitive match on each username, OR'd together.
+  const orClauses = cleaned.map((u) => `username.ilike.${u}`).join(',');
+  urlParams.set('or', `(${orClauses})`);
+  urlParams.set('limit', String(cleaned.length));
+
+  const urlStr = `${base}?${urlParams.toString()}`;
+
+  try {
+    const res = await fetch(urlStr, {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+        'Accept-Profile': 'public',
+        Prefer: 'count=none',
+      },
+      next: { revalidate },
+      signal: AbortSignal.timeout(20000),
+    });
+    if (!res.ok) {
+      console.error('Supabase fetchCreatorsByUsernames error', res.status, urlStr);
+      return [];
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const rows: Record<string, any>[] = await res.json();
+    return rows.map(mapCreator);
+  } catch {
+    console.error('Supabase fetchCreatorsByUsernames error (timeout)', urlStr);
+    return [];
+  }
 }

@@ -168,6 +168,80 @@ npm run dev
 
 ---
 
+## Featured Placements: Pinning, Excluding & Sponsored Creators
+
+Paid placements and removals are **config-driven** from a single file: `src/config/featured.ts`. This is the ONLY file to edit to pin, position, or remove a creator from any grid. No page/component code changes are needed.
+
+### How it works
+- `FEATURED: Record<string, FeaturedRule>` maps a **scope** to its rules.
+- Scopes:
+  - `'home'` — homepage Top Creators grid
+  - `'category:<slug>'` — e.g. `'category:bbw'` (built via `categoryScope(slug)`)
+  - `'country:<slug>'` — e.g. `'country:argentina'` (built via `countryScope(slug)`)
+- A `FeaturedRule` has two optional arrays:
+  - `pinned: { username, position }[]` — places a creator at an **exact 1-based GLOBAL position** across the whole paginated list (position 1-24 = page 1, 25-48 = page 2, etc.). Pinned creators are auto-fetched even if they don't naturally rank onto that page.
+  - `excluded: string[]` — usernames hidden from the page entirely.
+- Username matching is **case-insensitive**. Use the exact OnlyFans username (the `username` column), e.g. `miss-meringue`.
+- `fetchFeaturedPage(scope, baseParams, page, pageSize)` is the orchestrator. It fetches the right natural slice with DB-level `not.in` exclusion (so the grid still shows a full 24 cards and pins never appear twice), injects pinned creators at their positions, and marks each pinned creator with `sponsored: true`.
+- The `scope` is threaded through `/api/search`, so pins/exclusions also apply to **"Load More"**, not just the first page.
+
+### Sponsored / "Ad" treatment
+- Every **pinned** creator is automatically flagged `sponsored: true` (set in `fetchFeaturedPage`).
+- `CreatorCard` renders an `AD · Sponsored` pill (`.card-sponsored`) and a highlighted accent border (`.creator-card-sponsored`) when `creator.sponsored` is true. Styles live in `src/app/globals.css`.
+- This is a legal/ethical disclosure — pinned = paid placement = always labelled. Do not pin a creator without the sponsored label.
+- `excluded` creators are NOT sponsored; they're just hidden.
+
+### To pin (add) a paying creator
+Edit `src/config/featured.ts` and add an entry under the right scope:
+```typescript
+export const FEATURED: Record<string, FeaturedRule> = {
+  home: {
+    pinned: [
+      { username: 'miss-meringue', position: 1 },   // first card on homepage
+      { username: 'newcustomer',   position: 2 },   // second card
+    ],
+    excluded: ['shaylust'],
+  },
+  'category:bbw': {
+    pinned: [{ username: 'somecreator', position: 1 }],
+  },
+  'country:argentina': {
+    pinned: [
+      { username: 'a', position: 1 },
+      { username: 'b', position: 25 },  // first card on page 2
+    ],
+  },
+};
+```
+Rules: positions should be unique per scope; if a pinned username doesn't exist in the DB, that slot falls back to the next natural creator.
+
+### To remove (hide) a creator
+Add the username to the `excluded` array for that scope (create the scope entry if it doesn't exist):
+```typescript
+home: { excluded: ['shaylust', 'unwanteduser'] },
+```
+
+### Verify, then push live
+1. Make sure the dev server is up on **port 3001** (port 3000 is reserved): `npm run dev -- -p 3001`.
+2. Quick API check (no browser needed) — confirms position + sponsored flag:
+   ```powershell
+   $r = Invoke-WebRequest -Uri "http://localhost:3001/api/search?scope=home&page=0&page_size=24&sort=popular" -UseBasicParsing
+   $c = ($r.Content | ConvertFrom-Json).creators
+   "pos1: $($c[0].username) | sponsored: $($c[0].sponsored)"
+   ```
+   For category/country use `?scope=category:bbw` or `?scope=country:argentina`.
+3. Visit the page(s) in the browser to eyeball the highlight + `AD · Sponsored` badge.
+4. Commit locally: `git commit -am "feat: pin <creator> on <scope>"`.
+5. **Push only when the user explicitly says "push"/"deploy"** — then `git push` to `main` (Vercel auto-deploys to fanspedia.net).
+
+### Files involved (reference, usually no need to touch)
+- `src/config/featured.ts` — the config + `fetchFeaturedPage` orchestrator (**edit here**).
+- `src/lib/supabase.ts` — `fetchCreators` supports `excludeUsernames` + `offset`; `fetchCreatorsByUsernames` pulls pinned creators by name.
+- `src/types/creator.ts` — `sponsored?: boolean` flag.
+- `src/components/CreatorCard.tsx` — renders the sponsored badge + highlight.
+- `src/app/globals.css` — `.creator-card-sponsored` and `.card-sponsored` styles.
+- `src/app/page.tsx`, `src/app/categories/[slug]/page.tsx`, `src/app/country/[slug]/page.tsx`, `src/app/api/search/route.ts` — already wired to call `fetchFeaturedPage` and pass `scope`.
+
 ## GA4 Analytics
 Handled globally in `src/app/layout.tsx` via `<GoogleAnalytics gaId="G-3XB30HS12L" />` from `@next/third-parties/google`. No need to add GA tags to individual pages.
 
@@ -178,3 +252,4 @@ Handled globally in `src/app/layout.tsx` via `<GoogleAnalytics gaId="G-3XB30HS12
 - Do not re-enable creator profile pages without explicit decision
 - Do not commit `.env`, `cookies.json`, `*.csv`, `failed_batch.json`, `failed_ids_v2.json`, `progress_urls.json`
 - Creator cards always link to `https://onlyfans.com/{username}` - no internal profile pages
+- Pin/exclude creators ONLY via `src/config/featured.ts` (never hardcode in pages); every pinned creator MUST keep the `AD · Sponsored` label (disclosure)

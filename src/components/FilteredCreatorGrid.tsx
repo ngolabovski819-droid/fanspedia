@@ -13,6 +13,7 @@ interface Props {
   categoryTerms?: string[];
   locationTerms?: string[];
   skipLocationFilter?: boolean;
+  scope?: string;
 }
 
 export default function FilteredCreatorGrid({
@@ -22,6 +23,7 @@ export default function FilteredCreatorGrid({
   categoryTerms,
   locationTerms,
   skipLocationFilter,
+  scope,
 }: Props) {
   const [sort, setSort] = useState<SortOption>('popular');
   const [freeOnly, setFreeOnly] = useState(false);
@@ -67,6 +69,7 @@ export default function FilteredCreatorGrid({
     if (categoryTerms?.length) params.set('category_terms', categoryTerms.join(','));
     if (locationTerms?.length) params.set('location_terms', locationTerms.join(','));
     if (skipLocationFilter) params.set('skip_location_filter', '1');
+    if (scope) params.set('scope', scope);
     const s = overrides?.sort ?? sort;
     const fr = overrides?.freeOnly ?? freeOnly;
     const vr = overrides?.verifiedOnly ?? verifiedOnly;
@@ -107,7 +110,10 @@ export default function FilteredCreatorGrid({
       const res = await fetch(`/api/search?${params.toString()}`);
       if (!res.ok) throw new Error();
       const data: { creators: Creator[]; hasMore: boolean; total: number } = await res.json();
-      setCreators((prev) => [...prev, ...data.creators]);
+      setCreators((prev) => {
+        const seen = new Set(prev.map((c) => c.id));
+        return [...prev, ...data.creators.filter((c) => !seen.has(c.id))];
+      });
       setHasMore(data.hasMore);
       setPage((p) => p + 1);
     } catch {}

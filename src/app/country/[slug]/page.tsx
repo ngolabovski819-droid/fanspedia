@@ -1,8 +1,8 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { fetchCreators } from '@/lib/supabase';
 import { getCountry, ALL_COUNTRY_SLUGS, type CountryConfig } from '@/config/countries';
+import { fetchFeaturedPage, countryScope } from '@/config/featured';
 import FilteredCreatorGrid from '@/components/FilteredCreatorGrid';
 import CreatorGridSkeleton from '@/components/CreatorGridSkeleton';
 import FAQ from '@/components/FAQ';
@@ -56,16 +56,21 @@ function buildFAQ(label: string) {
 
 // Async server component — suspends while Supabase fetches, streams in via Suspense below
 async function CountryCreators({ country }: { country: CountryConfig }) {
-  const { creators, total, hasMore } = await fetchCreators({
-    // Use categoryTerms + skipLocationFilter so the query goes through the
-    // search_text column (has trigram index) instead of location column (no index).
-    categoryTerms: country.terms,
-    skipLocationFilter: true,
-    sort: 'popular',
-    pageSize: 24,
-    revalidate: 86400,
-    maxRetries: 3,
-  });
+  const scope = countryScope(country.slug);
+  const { creators, total, hasMore } = await fetchFeaturedPage(
+    scope,
+    {
+      // Use categoryTerms + skipLocationFilter so the query goes through the
+      // search_text column (has trigram index) instead of location column (no index).
+      categoryTerms: country.terms,
+      skipLocationFilter: true,
+      sort: 'popular',
+      revalidate: 86400,
+      maxRetries: 3,
+    },
+    0,
+    24,
+  );
 
   return (
     <FilteredCreatorGrid
@@ -74,6 +79,7 @@ async function CountryCreators({ country }: { country: CountryConfig }) {
       initialTotal={total}
       categoryTerms={country.terms}
       skipLocationFilter
+      scope={scope}
     />
   );
 }

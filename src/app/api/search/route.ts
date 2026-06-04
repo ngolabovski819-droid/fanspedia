@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { fetchCreators } from '@/lib/supabase';
+import { fetchFeaturedPage, hasFeatured } from '@/config/featured';
 
 // Node.js runtime (not Edge) — keeps function in iad1 (same region as Supabase us-east-1).
 // Edge Runtime caused 18s+ hangs because cross-region latency killed the Supabase fetch.
@@ -45,10 +46,10 @@ export async function GET(req: NextRequest) {
   const categoryTermsRaw = searchParams.get('category_terms');
   const categoryTerms = categoryTermsRaw ? categoryTermsRaw.split(',').filter(Boolean) : undefined;
 
-  const result = await fetchCreators({
+  const scope = searchParams.get('scope') ?? undefined;
+
+  const baseParams = {
     q,
-    page,
-    pageSize,
     sort,
     verified: verified || undefined,
     maxPrice,
@@ -57,7 +58,14 @@ export async function GET(req: NextRequest) {
     categoryTerms,
     revalidate: 3600,
     maxRetries: 2, // fail fast at runtime — max ~3s delay vs 10s with 5 retries
-  });
+  };
+
+  // When a scope with featured rules is supplied, apply pins/exclusions so paid
+  // placements stay consistent across every page of pagination.
+  const result =
+    scope && hasFeatured(scope)
+      ? await fetchFeaturedPage(scope, baseParams, page, pageSize)
+      : await fetchCreators({ ...baseParams, page, pageSize });
 
   return NextResponse.json(result, {
     headers: {

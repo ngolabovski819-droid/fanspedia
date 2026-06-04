@@ -30,7 +30,7 @@ export default function CreatorCard({ creator, index }: Props) {
   const isFree = creator.subscribePrice === 0 || creator.subscribePrice === null;
 
   return (
-    <article className="creator-card">
+    <article className={`creator-card${creator.sponsored ? ' creator-card-sponsored' : ''}`}>
       <div className="card-img-wrap">
         <Image
           src={src}
@@ -43,6 +43,11 @@ export default function CreatorCard({ creator, index }: Props) {
           unoptimized
           {...(srcSet ? { srcSet } : {})}
         />
+        {creator.sponsored && (
+          <span className="card-sponsored" title="Paid placement — this creator paid to be featured here">
+            Ad · Sponsored
+          </span>
+        )}
         {creator.isVerified && (
           <span className="card-verified" aria-label="Verified creator">✓ Verified</span>
         )}

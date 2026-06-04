@@ -16,6 +16,7 @@ interface Props {
   maxPrice?: number;
   sort?: string;
   q?: string;
+  scope?: string;
 }
 
 export default function CreatorGrid({
@@ -29,6 +30,7 @@ export default function CreatorGrid({
   maxPrice,
   sort,
   q,
+  scope,
 }: Props) {
   const [creators, setCreators] = useState<Creator[]>(initialCreators);
   const [hasMore, setHasMore] = useState(initialHasMore);
@@ -58,6 +60,7 @@ export default function CreatorGrid({
           if (maxPrice !== undefined) params.set('price', String(maxPrice));
           if (sort) params.set('sort', sort);
           if (q) params.set('q', q);
+          if (scope) params.set('scope', scope);
           const res = await fetch(`/api/search?${params.toString()}`);
           if (res.ok) {
             const data: { creators: Creator[]; hasMore: boolean; total: number } = await res.json();
@@ -91,6 +94,7 @@ export default function CreatorGrid({
     if (maxPrice !== undefined) params.set('price', String(maxPrice));
     if (sort) params.set('sort', sort);
     if (q) params.set('q', q);
+    if (scope) params.set('scope', scope);
     fetch(`/api/search?${params.toString()}`)
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => { if (data) prefetchRef.current = data; })
@@ -106,7 +110,10 @@ export default function CreatorGrid({
       if (page === 1 && prefetchRef.current) {
         const data = prefetchRef.current;
         prefetchRef.current = null;
-        setCreators((prev) => [...prev, ...data.creators]);
+        setCreators((prev) => {
+          const seen = new Set(prev.map((c) => c.id));
+          return [...prev, ...data.creators.filter((c) => !seen.has(c.id))];
+        });
         setHasMore(data.hasMore);
         setPage(2);
         setLoading(false);
@@ -123,6 +130,7 @@ export default function CreatorGrid({
       if (maxPrice !== undefined) params.set('price', String(maxPrice));
       if (sort) params.set('sort', sort);
       if (q) params.set('q', q);
+      if (scope) params.set('scope', scope);
 
       const res = await fetch(`/api/search?${params.toString()}`);
       if (!res.ok) throw new Error('Search failed');
@@ -134,7 +142,10 @@ export default function CreatorGrid({
         return;
       }
 
-      setCreators((prev) => [...prev, ...data.creators]);
+      setCreators((prev) => {
+        const seen = new Set(prev.map((c) => c.id));
+        return [...prev, ...data.creators.filter((c) => !seen.has(c.id))];
+      });
       setHasMore(data.hasMore);
       setPage((p) => p + 1);
     } catch (err) {
@@ -142,7 +153,7 @@ export default function CreatorGrid({
     } finally {
       setLoading(false);
     }
-  }, [loading, hasMore, page, locationTerms, categoryTerms, skipLocationFilter, verified, maxPrice, sort, q]);
+  }, [loading, hasMore, page, locationTerms, categoryTerms, skipLocationFilter, verified, maxPrice, sort, q, scope]);
 
   if (healing) return <CreatorGridSkeleton />;
 
