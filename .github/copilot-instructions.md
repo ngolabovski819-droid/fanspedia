@@ -245,6 +245,14 @@ home: { excluded: ['shaylust', 'unwanteduser'] },
 ## GA4 Analytics
 Handled globally in `src/app/layout.tsx` via `<GoogleAnalytics gaId="G-3XB30HS12L" />` from `@next/third-parties/google`. No need to add GA tags to individual pages.
 
+## Supabase Query Quirks (learned the hard way)
+- **Max 3 multi-word `ilike` terms per OR filter on `search_text`** when combined with `ORDER BY favoritedcount`. The 4-term combo `('bolivia','bolivian','la paz','santa cruz')` reproducibly returns HTTP 500 (statement_timeout — the planner can't use the trigram index efficiently for that many multi-word patterns with a sort). `fetchCreators` swallows the 500 and returns `{ creators: [], total: 0 }`, which renders the page as **"No creators found matching these filters."** — silent failure mode.
+  - When defining `terms` arrays in `src/config/countries.ts` / `src/config/categories.ts`, **prefer single-word terms**; cap multi-word terms at 3 total. Drop the noisiest/most generic place name first (e.g. `'santa cruz'` exists worldwide).
+  - Symptom to recognise: a category/country page shows empty grid but the same terms work when you remove any one of them. Always test against Supabase directly (`curl` the REST endpoint with the exact OR clause) before blaming the frontend.
+- All DB column references are **lowercase** — PostgREST is case-sensitive. `isverified` not `isVerified`, `favoritedcount` not `favoritedCount`.
+- `search_text` has a trigram index (fast). `location` does NOT — use `categoryTerms` + `skipLocationFilter: true` for country pages.
+- `AbortSignal.timeout(20000)` in `fetchCreators` caps each fetch at 20s. Queries hitting ~7s+ (e.g. `dominican-republic`) are at risk; thin terms if you see them creep.
+
 ## Guardrails
 - Always work in `src/` - never edit root HTML files, `api/`, `server.js`, `es/`, or `scripts/`
 - All DB column references must be **lowercase**
@@ -253,3 +261,4 @@ Handled globally in `src/app/layout.tsx` via `<GoogleAnalytics gaId="G-3XB30HS12
 - Do not commit `.env`, `cookies.json`, `*.csv`, `failed_batch.json`, `failed_ids_v2.json`, `progress_urls.json`
 - Creator cards always link to `https://onlyfans.com/{username}` - no internal profile pages
 - Pin/exclude creators ONLY via `src/config/featured.ts` (never hardcode in pages); every pinned creator MUST keep the `AD · Sponsored` label (disclosure)
+- The other `.github/*.md` files (`QUICKSTART.md`, `PATTERNS.md`, `ARCHITECTURE.md`, `CHECKLISTS.md`, `TROUBLESHOOTING.md`, `SETUP_COMPLETE.md`) describe the **legacy vanilla-JS/Python stack** and are stale — **do not follow them**. Only this file (`copilot-instructions.md`) is current.
