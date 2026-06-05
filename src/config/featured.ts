@@ -142,39 +142,46 @@ export async function fetchFeaturedPage(
   const naturalOffset = Math.max(0, windowStart - pinsBefore);
   const naturalNeeded = pageSize - pinsInWindow;
 
-  // Fetch the natural creators that fill the non-pinned slots.
-  let natural: Creator[] = [];
-  let naturalTotal = 0;
-  if (naturalNeeded > 0) {
-    const res = await fetchCreators({
-      ...baseParams,
-      excludeUsernames: dbExclude,
-      offset: naturalOffset,
-      pageSize: naturalNeeded,
-      page: 0, // ensures count is requested for total
-    });
-    // Safety net against case-mismatched exclusions slipping through.
-    natural = res.creators.filter(
-      (c) => !excludedLower.has((c.username ?? '').toLowerCase()),
-    );
-    naturalTotal = res.total;
-  } else {
-    // Window is entirely pins — still grab the total cheaply.
-    const res = await fetchCreators({
-      ...baseParams,
-      excludeUsernames: dbExclude,
-      offset: 0,
-      pageSize: 1,
-      page: 0,
-    });
-    naturalTotal = res.total;
-  }
-
-  // Resolve creator data for the pins shown in this window.
+  // Resolve pinned creators and the natural fill in parallel — they're
+  // independent Supabase calls, so running them serially just doubles latency.
   const windowPinUsernames = [...pinByIndex.values()];
-  const pinnedCreators = windowPinUsernames.length
-    ? await fetchCreatorsByUsernames(windowPinUsernames)
-    : [];
+
+  const naturalPromise =
+    naturalNeeded > 0
+      ? fetchCreators({
+          ...baseParams,
+          excludeUsernames: dbExclude,
+          offset: naturalOffset,
+          pageSize: naturalNeeded,
+          page: 0, // ensures count is requested for total
+        })
+      : // Window is entirely pins — still grab the total cheaply.
+        fetchCreators({
+          ...baseParams,
+          excludeUsernames: dbExclude,
+          offset: 0,
+          pageSize: 1,
+          page: 0,
+        });
+
+  const pinnedPromise = windowPinUsernames.length
+    ? fetchCreatorsByUsernames(windowPinUsernames)
+    : Promise.resolve([] as Creator[]);
+
+  const [naturalRes, pinnedCreators] = await Promise.all([
+    naturalPromise,
+    pinnedPromise,
+  ]);
+
+  // Safety net against case-mismatched exclusions slipping through.
+  const natural =
+    naturalNeeded > 0
+      ? naturalRes.creators.filter(
+          (c) => !excludedLower.has((c.username ?? '').toLowerCase()),
+        )
+      : [];
+  const naturalTotal = naturalRes.total;
+
   const pinnedMap = new Map(
     pinnedCreators.map((c) => [(c.username ?? '').toLowerCase(), c]),
   );

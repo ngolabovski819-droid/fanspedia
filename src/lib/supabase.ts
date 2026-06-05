@@ -128,7 +128,12 @@ export async function fetchCreators(params: SearchParams = {}): Promise<SearchRe
       apikey: SUPABASE_KEY,
       Authorization: `Bearer ${SUPABASE_KEY}`,
       'Accept-Profile': 'public',
-      Prefer: page === 0 ? 'count=estimated' : 'count=none',
+      // count=planned uses pg_class.reltuples and is ~10x faster than
+      // count=estimated for filtered OR-ilike queries (160ms vs 1.5s on a
+      // 4-term ilike OR over 474k rows). The displayed total is slightly
+      // approximate but that's fine for "X creators" UI — exact counts aren't
+      // worth the latency tax. Subsequent pages skip counting entirely.
+      Prefer: page === 0 ? 'count=planned' : 'count=none',
     },
     next: { revalidate },
     // Hard 20-second timeout — prevents build workers from hanging 60s waiting
@@ -157,11 +162,20 @@ export async function fetchCreators(params: SearchParams = {}): Promise<SearchRe
   }
 
   const contentRange = res.headers.get('content-range') ?? '';
-  const total = parseInt(contentRange.split('/')[1] ?? '0', 10) || 0;
+  const rawTotal = parseInt(contentRange.split('/')[1] ?? '0', 10) || 0;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const rows: Record<string, any>[] = await res.json();
   const creators = rows.map(mapCreator);
+
+  const hasMore = creators.length === pageSize;
+  const effectiveOffset = offset ?? page * pageSize;
+  // count=planned uses pg_class statistics and can wildly undercount filtered
+  // queries (e.g. argentina ilike-OR returns planned=190 but exact=5454).
+  // Clamp the displayed total to a sensible floor so "X creators found" never
+  // contradicts what the user is actually seeing on screen.
+  const floor = effectiveOffset + creators.length + (hasMore ? 1 : 0);
+  const total = Math.max(rawTotal, floor);
 
   return {
     creators,
@@ -169,7 +183,7 @@ export async function fetchCreators(params: SearchParams = {}): Promise<SearchRe
     // Use page-length check rather than estimated total — count=estimated can be
     // inaccurate, and if a fetch returns 0 rows this keeps hasMore=false so the
     // Load More button disappears instead of staying stuck.
-    hasMore: creators.length === pageSize,
+    hasMore,
   };
 }
 
