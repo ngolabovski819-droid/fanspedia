@@ -107,7 +107,12 @@ export const COUNTRIES: Record<string, CountryConfig> = {
   },
   bolivia: {
     slug: 'bolivia',
-    terms: ['bolivia', 'bolivian', 'la paz', 'santa cruz'],
+    // NOTE: keep this list to ≤3 multi-word terms. A 4-term ilike-OR on
+    // search_text combined with ORDER BY favoritedcount blows past Supabase's
+    // statement_timeout and 500s (Postgres can't use the trigram index well
+    // for that many multi-word patterns). 'santa cruz' was removed for this
+    // reason — it was also the noisiest term (Santa Cruz exists worldwide).
+    terms: ['bolivia', 'bolivian', 'la paz'],
     label: 'Bolivia',
     h1: 'The Best OnlyFans Creators From Bolivia',
     metaDesc: 'Discover the most popular OnlyFans creators from Bolivia. Browse verified profiles, free accounts, and exclusive content from Bolivian creators.',
