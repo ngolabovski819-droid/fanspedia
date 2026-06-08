@@ -20,9 +20,10 @@ export default function WishlistPage() {
     try {
       const res = await fetch(`/api/wishlist?usernames=${encodeURIComponent(usernames.join(','))}`);
       if (!res.ok) throw new Error();
-      const data: { creators: Creator[] } = await res.json();
+      const data: { creators?: Creator[] } = await res.json();
+      const list = Array.isArray(data.creators) ? data.creators : [];
       // Preserve wishlist order
-      const byUsername = new Map(data.creators.map((c) => [c.username, c]));
+      const byUsername = new Map(list.map((c) => [c.username, c]));
       const ordered = usernames.flatMap((u) => (byUsername.has(u) ? [byUsername.get(u)!] : []));
       setCreators(ordered);
     } catch {
