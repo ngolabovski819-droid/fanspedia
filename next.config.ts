@@ -33,7 +33,20 @@ const nextConfig: NextConfig = {
     ];
   },
   async redirects() {
-    return [];
+    return [
+      // Legacy Spanish (/es/*) URLs were dropped in the React migration.
+      // Permanently redirect them to their English equivalents.
+      {
+        source: '/es',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/es/:path*',
+        destination: '/:path*',
+        permanent: true,
+      },
+    ];
   },
 };
 
