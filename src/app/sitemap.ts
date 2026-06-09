@@ -14,11 +14,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/`, lastModified: now, changeFrequency: 'daily', priority: 1.0 },
     { url: `${BASE}/categories/`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${BASE}/locations/`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${BASE}/near-me/`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE}/search/`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${BASE}/blog/`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${BASE}/promote/`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${BASE}/about/`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${BASE}/contact/`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
     { url: `${BASE}/privacy/`, lastModified: now, changeFrequency: 'monthly', priority: 0.3 },
+    { url: `${BASE}/terms/`, lastModified: now, changeFrequency: 'monthly', priority: 0.3 },
     { url: `${BASE}/dmca/`, lastModified: now, changeFrequency: 'monthly', priority: 0.3 },
   ];
 
