@@ -2,9 +2,10 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { fetchCreatorProfile, fetchCreatorSnapshots } from '@/lib/supabase';
+import { fetchCreatorProfile, fetchCreatorSnapshots, fetchCreators } from '@/lib/supabase';
 import { proxyImg } from '@/lib/image';
 import CreatorCharts from '@/components/CreatorCharts';
+import SimilarCreators from '@/components/SimilarCreators';
 import type { CreatorProfile } from '@/types/creator';
 
 // ISR: refresh every 5 min so newly-scraped snapshots show up without a rebuild.
@@ -92,6 +93,20 @@ export default async function CreatorPage({ params }: Props) {
   if (!creator) notFound();
 
   const snapshots = await fetchCreatorSnapshots(creator.id);
+
+  // "Similar creators" — prefer same location (search_text is indexed), fall back
+  // to globally popular when the location is missing or too long to query safely.
+  const loc = creator.location?.trim();
+  const similarTerms = loc && loc.split(/\s+/).length <= 3 ? [loc] : undefined;
+  const similar = await fetchCreators({
+    categoryTerms: similarTerms,
+    skipLocationFilter: true,
+    sort: 'popular',
+    pageSize: 13, // fetch one extra so we still show 12 after dropping self
+    excludeUsernames: [creator.username],
+    revalidate: 300,
+  });
+  const similarCreators = similar.creators.slice(0, 12);
 
   const display = creator.name ?? creator.username;
   const avatarUrl = creator.avatar ?? creator.avatarC144;
@@ -213,6 +228,19 @@ export default async function CreatorPage({ params }: Props) {
 
         {/* Growth charts from snapshots */}
         <CreatorCharts snapshots={snapshots} />
+
+        {/* Similar creators */}
+        {similarCreators.length > 0 && (
+          <section className="cp-similar">
+            <h2 className="cp-similar-heading">More OnlyFans Creators Like {display}</h2>
+            <SimilarCreators
+              initialCreators={similarCreators}
+              initialHasMore={similar.hasMore}
+              categoryTerms={similarTerms}
+              excludeUsername={creator.username}
+            />
+          </section>
+        )}
       </div>
     </>
   );
