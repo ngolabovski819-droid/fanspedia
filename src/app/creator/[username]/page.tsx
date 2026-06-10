@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!creator) return { title: 'Creator not found' };
 
   const display = creator.name ?? creator.username;
-  const title = `${display} OnlyFans profile, free trial link, photos and charts`;
+  const title = `${display} (@${creator.username}) OnlyFans Profile`;
   const description = `${display} (@${creator.username}) OnlyFans stats: photos, videos, posts, likes and growth charts tracked over time on FansPedia.`;
   const url = `https://fanspedia.net/creator/${creator.username}/`;
 
@@ -98,6 +98,11 @@ export default async function CreatorPage({ params }: Props) {
   const ofUrl = `https://onlyfans.com/${creator.username}`;
   const price = priceLabel(creator);
   const about = creator.about ? plainText(creator.about) : '';
+  // Best (largest) bundle discount, used for the bundle CTA button.
+  const bestBundle =
+    creator.bundles.length > 0
+      ? creator.bundles.reduce((a, b) => (b.discount > a.discount ? b : a))
+      : null;
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -160,24 +165,28 @@ export default async function CreatorPage({ params }: Props) {
               >
                 Get OnlyFans ({price})
               </Link>
-              <Link
-                href={ofUrl}
-                target="_blank"
-                rel="noopener noreferrer nofollow"
-                className="cp-btn cp-btn-trial"
-              >
-                🎁 Free Trial
-              </Link>
+              {bestBundle && (
+                <Link
+                  href={ofUrl}
+                  target="_blank"
+                  rel="noopener noreferrer nofollow"
+                  className="cp-btn cp-btn-bundle"
+                >
+                  💎 Bundle Deals — save up to {bestBundle.discount}%
+                </Link>
+              )}
             </div>
           </aside>
 
           {/* Right column — title + stats */}
           <div className="cp-main">
             <h1 className="cp-title">
-              {display} OnlyFans profile, free trial link, photos and charts
+              {display} (@{creator.username}) OnlyFans Profile
             </h1>
 
             {about && <p className="cp-about">{about}</p>}
+
+            <h2 className="cp-stats-heading">{display} OnlyFans Statistics</h2>
 
             <div className="cp-stats-card">
               <div className="cp-stats-grid">

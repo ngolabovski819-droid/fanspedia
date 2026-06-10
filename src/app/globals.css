@@ -1410,8 +1410,8 @@ body.safe-search-active .card-img-wrap img {
   box-shadow: 0 6px 20px var(--accent-glow);
 }
 
-.cp-btn-trial {
-  background: linear-gradient(135deg, #ff5fa2 0%, #ffae42 100%);
+.cp-btn-bundle {
+  background: linear-gradient(135deg, #7c3aed 0%, #db2777 100%);
   color: #fff;
 }
 
@@ -1431,6 +1431,12 @@ body.safe-search-active .card-img-wrap img {
   line-height: 1.7;
   margin-bottom: 18px;
   white-space: pre-line;
+}
+
+.cp-stats-heading {
+  font-size: clamp(18px, 2.4vw, 22px);
+  color: var(--text);
+  margin-bottom: 12px;
 }
 
 .cp-stats-card {

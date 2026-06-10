@@ -10,6 +10,16 @@ export interface Creator {
   sponsored?: boolean;
 }
 
+/** A subscription bundle offer (multi-month discount) from the profile. */
+export interface BundleOffer {
+  /** Bundle length in months. */
+  duration: number;
+  /** Total bundle price. */
+  price: number;
+  /** Discount percentage off the regular monthly price. */
+  discount: number;
+}
+
 /** Full creator profile used by the standalone creator page template. */
 export interface CreatorProfile extends Creator {
   about: string | null;
@@ -26,6 +36,8 @@ export interface CreatorProfile extends Creator {
   subscribersCount: number | null;
   joinDate: string | null;
   lastSeen: string | null;
+  /** Active multi-month bundle offers, sorted by duration. Empty when none. */
+  bundles: BundleOffer[];
 }
 
 /**

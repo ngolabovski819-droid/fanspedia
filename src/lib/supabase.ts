@@ -1,4 +1,4 @@
-import type { Creator, CreatorProfile, Snapshot } from '@/types/creator';
+import type { Creator, CreatorProfile, BundleOffer, Snapshot } from '@/types/creator';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_KEY!;
@@ -242,7 +242,27 @@ const PROFILE_COLS = [
   'favoritedcount', 'photoscount', 'videoscount', 'postscount',
   'audioscount', 'mediascount', 'archivedpostscount', 'finishedstreamscount',
   'subscriberscount', 'joindate', 'lastseen',
+  'bundle1_price', 'bundle1_discount', 'bundle1_duration',
+  'bundle2_price', 'bundle2_discount', 'bundle2_duration',
+  'bundle3_price', 'bundle3_discount', 'bundle3_duration',
 ].join(',');
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function mapBundles(row: Record<string, any>): BundleOffer[] {
+  const bundles: BundleOffer[] = [];
+  for (const i of [1, 2, 3]) {
+    const price = row[`bundle${i}_price`];
+    const duration = row[`bundle${i}_duration`];
+    if (price != null && duration != null) {
+      bundles.push({
+        duration: Number(duration),
+        price: Number(price),
+        discount: row[`bundle${i}_discount`] != null ? Number(row[`bundle${i}_discount`]) : 0,
+      });
+    }
+  }
+  return bundles.sort((a, b) => a.duration - b.duration);
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function mapProfile(row: Record<string, any>): CreatorProfile {
@@ -268,6 +288,7 @@ function mapProfile(row: Record<string, any>): CreatorProfile {
     subscribersCount: row.subscriberscount ?? null,
     joinDate: row.joindate ?? null,
     lastSeen: row.lastseen ?? null,
+    bundles: mapBundles(row),
   };
 }
 
