@@ -1,0 +1,210 @@
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import Image from 'next/image';
+import Link from 'next/link';
+import { fetchCreatorProfile, fetchCreatorSnapshots } from '@/lib/supabase';
+import { proxyImg } from '@/lib/image';
+import CreatorCharts from '@/components/CreatorCharts';
+import type { CreatorProfile } from '@/types/creator';
+
+// ISR: refresh every 5 min so newly-scraped snapshots show up without a rebuild.
+export const revalidate = 300;
+export const dynamicParams = true;
+
+// Don't pre-render any creators at build time — generate on first request (ISR).
+export async function generateStaticParams() {
+  return [];
+}
+
+interface Props {
+  params: Promise<{ username: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { username } = await params;
+  const creator = await fetchCreatorProfile(decodeURIComponent(username));
+  if (!creator) return { title: 'Creator not found' };
+
+  const display = creator.name ?? creator.username;
+  const title = `${display} OnlyFans profile, free trial link, photos and charts`;
+  const description = `${display} (@${creator.username}) OnlyFans stats: photos, videos, posts, likes and growth charts tracked over time on FansPedia.`;
+  const url = `https://fanspedia.net/creator/${creator.username}/`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description,
+      url,
+      images: creator.avatar ? [{ url: proxyImg(creator.avatar, 480) }] : undefined,
+    },
+  };
+}
+
+const numberFmt = new Intl.NumberFormat('en-US');
+
+function fmtNum(n: number | null): string {
+  return n == null ? '—' : numberFmt.format(n);
+}
+
+function fmtDate(value: string | null): string {
+  if (!value) return '—';
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return '—';
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+// The `about` column can contain raw HTML (links, <br>, etc.). Strip tags and
+// decode the common entities so we render clean plain text.
+function plainText(html: string): string {
+  return html
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<[^>]*>/g, '')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
+function StatRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="cp-stat">
+      <span className="cp-stat-label">{label}</span>
+      <span className="cp-stat-value">{value}</span>
+    </div>
+  );
+}
+
+function priceLabel(creator: CreatorProfile): string {
+  if (creator.subscribePrice == null || creator.subscribePrice === 0) return 'Free';
+  return `$${creator.subscribePrice.toFixed(2)}`;
+}
+
+export default async function CreatorPage({ params }: Props) {
+  const { username } = await params;
+  const creator = await fetchCreatorProfile(decodeURIComponent(username));
+  if (!creator) notFound();
+
+  const snapshots = await fetchCreatorSnapshots(creator.id);
+
+  const display = creator.name ?? creator.username;
+  const avatarUrl = creator.avatar ?? creator.avatarC144;
+  const ofUrl = `https://onlyfans.com/${creator.username}`;
+  const price = priceLabel(creator);
+  const about = creator.about ? plainText(creator.about) : '';
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ProfilePage',
+    mainEntity: {
+      '@type': 'Person',
+      name: display,
+      alternateName: `@${creator.username}`,
+      url: ofUrl,
+      image: avatarUrl ? proxyImg(avatarUrl, 480) : undefined,
+    },
+  };
+
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
+      <nav className="breadcrumb" aria-label="Breadcrumb">
+        <Link href="/">Home</Link>
+        <span>/</span>
+        <span>{display}</span>
+      </nav>
+
+      <div className="cp-wrap">
+        <div className="cp-top">
+          {/* Left column — avatar + CTAs */}
+          <aside className="cp-aside">
+            <div className="cp-avatar">
+              {avatarUrl ? (
+                <Image
+                  src={proxyImg(avatarUrl, 480)}
+                  alt={display}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 280px"
+                  style={{ objectFit: 'cover' }}
+                  priority
+                  unoptimized
+                />
+              ) : (
+                <div className="cp-avatar-fallback">{display.charAt(0).toUpperCase()}</div>
+              )}
+            </div>
+
+            <div className="cp-name-block">
+              <h2 className="cp-name">
+                {display}
+                {creator.isVerified && (
+                  <span className="cp-verified" title="Verified &amp; Active" aria-label="Verified">✓</span>
+                )}
+              </h2>
+              <p className="cp-username">@{creator.username}</p>
+            </div>
+
+            <div className="cp-cta">
+              <Link
+                href={ofUrl}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                className="cp-btn cp-btn-primary"
+              >
+                Get OnlyFans ({price})
+              </Link>
+              <Link
+                href={ofUrl}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                className="cp-btn cp-btn-trial"
+              >
+                🎁 Free Trial
+              </Link>
+            </div>
+          </aside>
+
+          {/* Right column — title + stats */}
+          <div className="cp-main">
+            <h1 className="cp-title">
+              {display} OnlyFans profile, free trial link, photos and charts
+            </h1>
+
+            {about && <p className="cp-about">{about}</p>}
+
+            <div className="cp-stats-card">
+              <div className="cp-stats-grid">
+                <StatRow label="Joined" value={fmtDate(creator.joinDate)} />
+                <StatRow label="Last updated" value={fmtDate(creator.lastSeen)} />
+                <StatRow label="Location" value={creator.location || '—'} />
+                <StatRow label="Subscription" value={price} />
+                <StatRow label="Photos" value={fmtNum(creator.photosCount)} />
+                <StatRow label="Videos" value={fmtNum(creator.videosCount)} />
+                <StatRow label="Posts" value={fmtNum(creator.postsCount)} />
+                <StatRow label="Likes" value={fmtNum(creator.favoritedCount)} />
+                <StatRow label="Media" value={fmtNum(creator.mediasCount)} />
+                <StatRow label="Audios" value={fmtNum(creator.audiosCount)} />
+                <StatRow label="Archived posts" value={fmtNum(creator.archivedPostsCount)} />
+                <StatRow label="Finished streams" value={fmtNum(creator.finishedStreamsCount)} />
+                <StatRow
+                  label="Status"
+                  value={creator.isVerified ? 'Verified & Active' : 'Active'}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Growth charts from snapshots */}
+        <CreatorCharts snapshots={snapshots} />
+      </div>
+    </>
+  );
+}

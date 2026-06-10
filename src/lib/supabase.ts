@@ -1,4 +1,4 @@
-import type { Creator } from '@/types/creator';
+import type { Creator, CreatorProfile, Snapshot } from '@/types/creator';
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_KEY!;
@@ -230,6 +230,145 @@ export async function fetchCreatorsByUsernames(
     return rows.map(mapCreator);
   } catch {
     console.error('Supabase fetchCreatorsByUsernames error (timeout)', urlStr);
+    return [];
+  }
+}
+
+// Full set of columns for the standalone creator profile page.
+const PROFILE_COLS = [
+  'id', 'username', 'name', 'about', 'location',
+  'avatar', 'avatar_c144', 'header',
+  'isverified', 'subscribeprice',
+  'favoritedcount', 'photoscount', 'videoscount', 'postscount',
+  'audioscount', 'mediascount', 'archivedpostscount', 'finishedstreamscount',
+  'subscriberscount', 'joindate', 'lastseen',
+].join(',');
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function mapProfile(row: Record<string, any>): CreatorProfile {
+  return {
+    id: row.id,
+    username: row.username,
+    name: row.name ?? null,
+    avatar: row.avatar ?? null,
+    avatarC144: row.avatar_c144 ?? null,
+    isVerified: Boolean(row.isverified),
+    subscribePrice: row.subscribeprice ?? null,
+    about: row.about ?? null,
+    location: row.location ?? null,
+    header: row.header ?? null,
+    favoritedCount: row.favoritedcount ?? null,
+    photosCount: row.photoscount ?? null,
+    videosCount: row.videoscount ?? null,
+    postsCount: row.postscount ?? null,
+    audiosCount: row.audioscount ?? null,
+    mediasCount: row.mediascount ?? null,
+    archivedPostsCount: row.archivedpostscount ?? null,
+    finishedStreamsCount: row.finishedstreamscount ?? null,
+    subscribersCount: row.subscriberscount ?? null,
+    joinDate: row.joindate ?? null,
+    lastSeen: row.lastseen ?? null,
+  };
+}
+
+/**
+ * Fetch a single full creator profile by exact username (case-insensitive).
+ * Returns null when no creator matches — the page renders a 404.
+ */
+export async function fetchCreatorProfile(
+  username: string,
+  revalidate = 300,
+): Promise<CreatorProfile | null> {
+  const clean = username.trim();
+  if (!clean) return null;
+
+  const base = `${SUPABASE_URL}/rest/v1/onlyfans_profiles`;
+  const urlParams = new URLSearchParams();
+  urlParams.set('select', PROFILE_COLS);
+  urlParams.set('username', `ilike.${clean}`);
+  urlParams.set('limit', '1');
+
+  const urlStr = `${base}?${urlParams.toString()}`;
+
+  try {
+    const res = await fetch(urlStr, {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+        'Accept-Profile': 'public',
+        Prefer: 'count=none',
+      },
+      next: { revalidate },
+      signal: AbortSignal.timeout(20000),
+    });
+    if (!res.ok) {
+      console.error('Supabase fetchCreatorProfile error', res.status, urlStr);
+      return null;
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const rows: Record<string, any>[] = await res.json();
+    if (rows.length === 0) return null;
+    return mapProfile(rows[0]);
+  } catch {
+    console.error('Supabase fetchCreatorProfile error (timeout)', urlStr);
+    return null;
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function mapSnapshot(row: Record<string, any>): Snapshot {
+  return {
+    capturedAt: row.captured_at,
+    favoritedCount: row.favoritedcount ?? null,
+    finishedStreamsCount: row.finishedstreamscount ?? null,
+    postsCount: row.postscount ?? null,
+    videosCount: row.videoscount ?? null,
+    audiosCount: row.audioscount ?? null,
+    mediasCount: row.mediascount ?? null,
+    archivedPostsCount: row.archivedpostscount ?? null,
+  };
+}
+
+/**
+ * Fetch the historical snapshot series for a creator, oldest first.
+ * Each row is one scrape (1st time, 2nd time, ...) and feeds the growth charts.
+ */
+export async function fetchCreatorSnapshots(
+  creatorId: number,
+  revalidate = 300,
+): Promise<Snapshot[]> {
+  const base = `${SUPABASE_URL}/rest/v1/onlyfans_profile_snapshots`;
+  const urlParams = new URLSearchParams();
+  urlParams.set(
+    'select',
+    'captured_at,favoritedcount,finishedstreamscount,postscount,videoscount,audioscount,mediascount,archivedpostscount',
+  );
+  urlParams.set('creator_id', `eq.${creatorId}`);
+  urlParams.set('order', 'captured_at.asc');
+  urlParams.set('limit', '1000');
+
+  const urlStr = `${base}?${urlParams.toString()}`;
+
+  try {
+    const res = await fetch(urlStr, {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+        'Accept-Profile': 'public',
+        Prefer: 'count=none',
+      },
+      next: { revalidate },
+      signal: AbortSignal.timeout(20000),
+    });
+    if (!res.ok) {
+      console.error('Supabase fetchCreatorSnapshots error', res.status, urlStr);
+      return [];
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const rows: Record<string, any>[] = await res.json();
+    return rows.map(mapSnapshot);
+  } catch {
+    console.error('Supabase fetchCreatorSnapshots error (timeout)', urlStr);
     return [];
   }
 }
