@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { fetchCreatorProfile, fetchCreatorSnapshots, fetchCreators } from '@/lib/supabase';
 import { proxyImg } from '@/lib/image';
+import { PUBLISHED_CREATORS, isPublishedCreator } from '@/config/creators';
 import CreatorCharts from '@/components/CreatorCharts';
 import CreatorBio from '@/components/CreatorBio';
 import SimilarCreators from '@/components/SimilarCreators';
@@ -11,11 +12,13 @@ import type { CreatorProfile } from '@/types/creator';
 
 // ISR: refresh every 5 min so newly-scraped snapshots show up without a rebuild.
 export const revalidate = 300;
-export const dynamicParams = true;
+// Only usernames returned by generateStaticParams (the published allow-list) are
+// served — every other username 404s instead of generating on demand.
+export const dynamicParams = false;
 
-// Don't pre-render any creators at build time — generate on first request (ISR).
+// Pre-render exactly the creators we've explicitly chosen to publish.
 export async function generateStaticParams() {
-  return [];
+  return PUBLISHED_CREATORS.map((username) => ({ username }));
 }
 
 interface Props {
@@ -24,6 +27,7 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { username } = await params;
+  if (!isPublishedCreator(username)) return { title: 'Creator not found' };
   const creator = await fetchCreatorProfile(decodeURIComponent(username));
   if (!creator) return { title: 'Creator not found' };
 
@@ -90,6 +94,7 @@ function priceLabel(creator: CreatorProfile): string {
 
 export default async function CreatorPage({ params }: Props) {
   const { username } = await params;
+  if (!isPublishedCreator(username)) notFound();
   const creator = await fetchCreatorProfile(decodeURIComponent(username));
   if (!creator) notFound();
 
