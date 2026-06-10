@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { fetchCreatorProfile, fetchCreatorSnapshots, fetchCreators } from '@/lib/supabase';
 import { proxyImg } from '@/lib/image';
 import CreatorCharts from '@/components/CreatorCharts';
+import CreatorBio from '@/components/CreatorBio';
 import SimilarCreators from '@/components/SimilarCreators';
 import type { CreatorProfile } from '@/types/creator';
 
@@ -199,7 +200,7 @@ export default async function CreatorPage({ params }: Props) {
               {display} (@{creator.username}) OnlyFans Profile
             </h1>
 
-            {about && <p className="cp-about">{about}</p>}
+            {about && <CreatorBio text={about} />}
 
             <h2 className="cp-stats-heading">{display} OnlyFans Statistics</h2>
 
