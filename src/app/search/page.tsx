@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, Suspense } from 'react';
+import { useState, useEffect, useCallback, useRef, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import CreatorCard from '@/components/CreatorCard';
 import type { Creator } from '@/types/creator';
@@ -17,6 +17,9 @@ function SearchPageInner() {
   const [hasMore, setHasMore] = useState(false);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
+
+  // Track the last term we explicitly triggered so useEffect doesn't double-fetch
+  const lastSearchedRef = useRef('');
 
   const search = useCallback(async (term: string, pg: number, append: boolean) => {
     if (!term.trim()) return;
@@ -35,19 +38,28 @@ function SearchPageInner() {
     }
   }, []);
 
-  // Run search on mount / q change from URL
+  // Handle URL changes from initial load and browser back/forward navigation.
+  // Skip if handleSubmit already triggered the search for this term.
   useEffect(() => {
     const term = searchParams.get('q') ?? '';
     setQ(term);
     setInputVal(term);
-    if (term) search(term, 0, false);
+    if (term && term !== lastSearchedRef.current) {
+      lastSearchedRef.current = term;
+      search(term, 0, false);
+    }
   }, [searchParams, search]);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const term = inputVal.trim();
     if (!term) return;
+    // Mark as searched so useEffect won't double-fetch when the URL updates
+    lastSearchedRef.current = term;
+    setQ(term);
+    setCreators([]);
     router.push(`/search?q=${encodeURIComponent(term)}`);
+    search(term, 0, false);
   }
 
   return (
