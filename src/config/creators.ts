@@ -9,7 +9,7 @@
  * Example:
  *   export const PUBLISHED_CREATORS = ['thatfatgemini', 'britishbeautxo'];
  */
-export const PUBLISHED_CREATORS: string[] = ['thatfatgemini', 'littlelanacat'];
+export const PUBLISHED_CREATORS: string[] = ['thatfatgemini', 'littlelanacat', 'anastasiaplays'];
 
 const PUBLISHED_SET = new Set(PUBLISHED_CREATORS.map((u) => u.toLowerCase()));
 
