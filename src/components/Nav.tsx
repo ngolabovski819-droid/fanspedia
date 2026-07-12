@@ -153,6 +153,7 @@ export default function Nav() {
 
           <Link href="/locations/" className={`nav-link${isActive('/locations') ? ' active' : ''}`}>Locations</Link>
           <Link href="/blog/" className={`nav-link${isActive('/blog') ? ' active' : ''}`}>Blog</Link>
+          <Link href="/promote/" className={`nav-link${isActive('/promote') ? ' active' : ''}`}>Promote Your OnlyFans</Link>
           <Link href="/wishlist/" className={`nav-link nav-wishlist-link${isActive('/wishlist') ? ' active' : ''}`} aria-label="My wishlist">
             ♥
             {wishlistCount > 0 && (
@@ -204,6 +205,7 @@ export default function Nav() {
           { href: '/near-me/', label: 'Near Me' },
           { href: '/wishlist/', label: '♥ Wishlist' },
           { href: '/blog/', label: 'Blog' },
+          { href: '/promote/', label: 'Promote Your OnlyFans' },
         ].map(({ href, label }) => (
           <Link key={href} href={href} className="nav-mobile-link" onClick={() => setMobileOpen(false)}>
             {label}

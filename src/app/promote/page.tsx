@@ -54,7 +54,7 @@ function PromoteContent() {
           <p className="promo-hero-sub">FansPedia reaches millions of fans who search Google for creators every month. Get your profile featured in front of high-intent audiences who are ready to subscribe.</p>
           <div className="promo-cta-wrap">
             <div className="promo-urgency"><span className="promo-dot" /> 3 spots left this week — filling fast</div>
-            <a href="https://form.typeform.com/to/rkipgsyL" target="_blank" rel="noopener noreferrer" className="promo-hero-cta">🚀 Claim Your Spot — Go Live in 24h</a>
+            <a href="https://tally.so/r/kd16Xe" target="_blank" rel="noopener noreferrer" className="promo-hero-cta">🚀 Claim Your Spot — Go Live in 24h</a>
             <p className="promo-hero-note">No password required &nbsp;·&nbsp; Free to apply &nbsp;·&nbsp; Real Google traffic</p>
           </div>
         </div>
@@ -147,7 +147,7 @@ function PromoteContent() {
             })}
           </div>
           <div style={{textAlign:"center",marginTop:"32px"}}>
-            <a href="https://form.typeform.com/to/rkipgsyL" target="_blank" rel="noopener noreferrer" className="promo-hero-cta" style={{display:"inline-flex"}}>🚀 Start Your Campaign</a>
+            <a href="https://tally.so/r/kd16Xe" target="_blank" rel="noopener noreferrer" className="promo-hero-cta" style={{display:"inline-flex"}}>🚀 Start Your Campaign</a>
           </div>
         </div>
       </section>
@@ -168,7 +168,7 @@ function PromoteContent() {
       <div className="promo-bottom-cta">
         <h2>Ready to Grow Your OnlyFans?</h2>
         <p>Join thousands of creators already getting discovered by high-intent fans through FansPedia every day.</p>
-        <a href="https://form.typeform.com/to/rkipgsyL" target="_blank" rel="noopener noreferrer" className="promo-bottom-btn">🚀 Get Featured Today</a>
+        <a href="https://tally.so/r/kd16Xe" target="_blank" rel="noopener noreferrer" className="promo-bottom-btn">🚀 Get Featured Today</a>
       </div>
       <style>{`
         .promo-breadcrumb{max-width:1100px;margin:0 auto;padding:14px 20px;font-size:13px;color:var(--text-muted)}
