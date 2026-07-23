@@ -10,8 +10,37 @@ const SUPABASE_KEY = process.env.SUPABASE_KEY!;
 // Best-effort bot filter so crawlers/scanners don't inflate delivered-click counts.
 const BOT_UA_RE = /bot|crawl|spider|slurp|curl|wget|python-requests|headless|facebookexternalhit|bingpreview/i;
 
+const OWN_HOSTS = new Set(['fanspedia.net', 'www.fanspedia.net']);
+
+/**
+ * Turn a raw Referer header into a short human-readable placement label —
+ * 'home' / 'category:bbw' / 'country:germany' / 'profile' for our own pages,
+ * `external:<hostname>` for anywhere else (e.g. the client's own site), or
+ * null when no referrer was sent at all (some platforms strip it).
+ */
+function derivePlacement(referrer: string | null): string | null {
+  if (!referrer) return null;
+  let url: URL;
+  try {
+    url = new URL(referrer);
+  } catch {
+    return null;
+  }
+  if (!OWN_HOSTS.has(url.hostname)) return `external:${url.hostname}`;
+
+  const path = url.pathname;
+  if (path === '/') return 'home';
+  if (path.startsWith('/categories/')) return `category:${path.split('/')[2] ?? ''}`;
+  if (path.startsWith('/country/')) return `country:${path.split('/')[2] ?? ''}`;
+  if (path.startsWith('/creator/')) return 'profile';
+  if (path.startsWith('/search')) return 'search';
+  if (path.startsWith('/wishlist')) return 'wishlist';
+  return path;
+}
+
 async function logClick(table: string, req: NextRequest) {
   try {
+    const referrer = req.headers.get('referer') ?? null;
     await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
       method: 'POST',
       headers: {
@@ -23,7 +52,8 @@ async function logClick(table: string, req: NextRequest) {
       body: JSON.stringify([
         {
           user_agent: req.headers.get('user-agent') ?? null,
-          referrer: req.headers.get('referer') ?? null,
+          referrer,
+          placement: derivePlacement(referrer),
         },
       ]),
     });
