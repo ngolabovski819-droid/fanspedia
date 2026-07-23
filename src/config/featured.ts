@@ -95,6 +95,33 @@ export function hasFeatured(scope: string): boolean {
 }
 
 /**
+ * fetchCreators wrapper with a resilience fallback. The term-filtered ilike/OR
+ * queries behind category/country pages can hit Supabase's statement timeout
+ * under load (large, actively-growing table + concurrent scraper writes) —
+ * fetchCreators() swallows that into `{ creators: [], total: 0 }`, which is
+ * indistinguishable from a genuine zero-match result. For these pages a real
+ * zero-match is effectively never correct (every category/country has a large
+ * matching population), so treat an empty result as a failure signal and retry
+ * once without the term filters — better a "popular" grid than an empty one,
+ * and now that every category/country can carry a pin, an empty natural result
+ * would otherwise render as just the sponsored card with nothing else on the page.
+ */
+async function fetchCreatorsResilient(params: SearchParams): Promise<SearchResult> {
+  const res = await fetchCreators(params);
+  const hasTermFilter = (params.categoryTerms?.length ?? 0) > 0 || (params.locationTerms?.length ?? 0) > 0;
+  if (res.creators.length > 0 || !hasTermFilter) return res;
+
+  const fallback = await fetchCreators({ ...params, categoryTerms: undefined, locationTerms: undefined });
+  // The fallback query has no term filter, so its `total` is the whole table's
+  // count (~millions) — displaying that under a category/country heading would
+  // read as an obvious bug. Cap it to what's actually been fetched (+1 page if
+  // there's more), same "floor" idea fetchCreators itself uses.
+  const offset = params.offset ?? (params.page ?? 0) * (params.pageSize ?? 24);
+  const cappedTotal = offset + fallback.creators.length + (fallback.hasMore ? (params.pageSize ?? 24) : 0);
+  return { ...fallback, total: Math.min(fallback.total, cappedTotal) };
+}
+
+/**
  * Clean + sort pinned placements: drop excluded usernames, dedupe by username
  * and by position (first wins), and order by ascending position.
  */
@@ -132,7 +159,7 @@ export async function fetchFeaturedPage(
 ): Promise<SearchResult> {
   const rule = FEATURED[scope];
   if (!rule || !hasFeatured(scope)) {
-    return fetchCreators({ ...baseParams, page, pageSize });
+    return fetchCreatorsResilient({ ...baseParams, page, pageSize });
   }
 
   const pins = normalizePins(rule);
@@ -168,7 +195,7 @@ export async function fetchFeaturedPage(
 
   const naturalPromise =
     naturalNeeded > 0
-      ? fetchCreators({
+      ? fetchCreatorsResilient({
           ...baseParams,
           excludeUsernames: dbExclude,
           offset: naturalOffset,
@@ -176,7 +203,7 @@ export async function fetchFeaturedPage(
           page: 0, // ensures count is requested for total
         })
       : // Window is entirely pins — still grab the total cheaply.
-        fetchCreators({
+        fetchCreatorsResilient({
           ...baseParams,
           excludeUsernames: dbExclude,
           offset: 0,
