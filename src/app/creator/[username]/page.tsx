@@ -186,6 +186,7 @@ export default async function CreatorPage({ params }: Props) {
                 href={ctaUrl}
                 target="_blank"
                 rel={ctaRel}
+                prefetch={false}
                 className="cp-btn cp-btn-primary"
               >
                 Get OnlyFans ({price})
@@ -195,6 +196,7 @@ export default async function CreatorPage({ params }: Props) {
                   href={ctaUrl}
                   target="_blank"
                   rel={ctaRel}
+                  prefetch={false}
                   className="cp-btn cp-btn-bundle"
                 >
                   💎 Bundle Deals — save up to {bestBundle.discount}%

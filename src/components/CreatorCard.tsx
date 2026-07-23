@@ -75,6 +75,7 @@ export default function CreatorCard({ creator, index }: Props) {
         href={override?.linkOverride ? `/go/${creator.username}` : `https://onlyfans.com/${creator.username}`}
         target="_blank"
         rel={`noopener noreferrer nofollow${creator.sponsored ? ' sponsored' : ''}`}
+        prefetch={false}
         className="card-btn"
         aria-label={`View ${creator.name ?? creator.username} on OnlyFans`}
       >
