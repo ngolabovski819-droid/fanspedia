@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import type { Creator } from '@/types/creator';
 import { buildSrcset } from '@/lib/image';
+import { getSponsorOverride } from '@/config/sponsors';
 import { isWishlisted, toggleWishlist } from '@/lib/wishlist';
 
 interface Props {
@@ -14,8 +15,11 @@ interface Props {
 
 export default function CreatorCard({ creator, index }: Props) {
   const isEager = index < 4;
+  const override = getSponsorOverride(creator.username);
   const imgUrl = creator.avatar ?? creator.avatarC144;
-  const { src, srcSet, sizes } = buildSrcset(imgUrl);
+  const { src, srcSet, sizes } = override?.imageOverride
+    ? { src: override.imageOverride, srcSet: '', sizes: '' }
+    : buildSrcset(imgUrl);
   const [wishlisted, setWishlisted] = useState(false);
 
   useEffect(() => {
@@ -68,9 +72,9 @@ export default function CreatorCard({ creator, index }: Props) {
         <p className={`card-price${isFree ? ' card-price-free' : ''}`}>{price}</p>
       </div>
       <Link
-        href={`https://onlyfans.com/${creator.username}`}
+        href={override?.linkOverride ?? `https://onlyfans.com/${creator.username}`}
         target="_blank"
-        rel="noopener noreferrer nofollow"
+        rel={`noopener noreferrer nofollow${creator.sponsored ? ' sponsored' : ''}`}
         className="card-btn"
         aria-label={`View ${creator.name ?? creator.username} on OnlyFans`}
       >

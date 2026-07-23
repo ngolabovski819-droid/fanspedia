@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { fetchCreatorProfile, fetchCreatorSnapshots, fetchCreators } from '@/lib/supabase';
 import { proxyImg } from '@/lib/image';
 import { PUBLISHED_CREATORS, isPublishedCreator } from '@/config/creators';
+import { getSponsorOverride } from '@/config/sponsors';
 import CreatorCharts from '@/components/CreatorCharts';
 import CreatorBio from '@/components/CreatorBio';
 import SimilarCreators from '@/components/SimilarCreators';
@@ -117,6 +118,9 @@ export default async function CreatorPage({ params }: Props) {
   const display = creator.name ?? creator.username;
   const avatarUrl = creator.avatar ?? creator.avatarC144;
   const ofUrl = `https://onlyfans.com/${creator.username}`;
+  const override = getSponsorOverride(creator.username);
+  const ctaUrl = override?.linkOverride ?? ofUrl;
+  const ctaRel = `noopener noreferrer nofollow${override ? ' sponsored' : ''}`;
   const price = priceLabel(creator);
   const about = creator.about ? plainText(creator.about) : '';
   // Best (largest) bundle discount, used for the bundle CTA button.
@@ -179,18 +183,18 @@ export default async function CreatorPage({ params }: Props) {
 
             <div className="cp-cta">
               <Link
-                href={ofUrl}
+                href={ctaUrl}
                 target="_blank"
-                rel="noopener noreferrer nofollow"
+                rel={ctaRel}
                 className="cp-btn cp-btn-primary"
               >
                 Get OnlyFans ({price})
               </Link>
               {bestBundle && (
                 <Link
-                  href={ofUrl}
+                  href={ctaUrl}
                   target="_blank"
-                  rel="noopener noreferrer nofollow"
+                  rel={ctaRel}
                   className="cp-btn cp-btn-bundle"
                 >
                   💎 Bundle Deals — save up to {bestBundle.discount}%
