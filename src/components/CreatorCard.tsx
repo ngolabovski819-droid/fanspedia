@@ -72,7 +72,7 @@ export default function CreatorCard({ creator, index }: Props) {
         <p className={`card-price${isFree ? ' card-price-free' : ''}`}>{price}</p>
       </div>
       <Link
-        href={override?.linkOverride ?? `https://onlyfans.com/${creator.username}`}
+        href={override?.linkOverride ? `/go/${creator.username}` : `https://onlyfans.com/${creator.username}`}
         target="_blank"
         rel={`noopener noreferrer nofollow${creator.sponsored ? ' sponsored' : ''}`}
         className="card-btn"

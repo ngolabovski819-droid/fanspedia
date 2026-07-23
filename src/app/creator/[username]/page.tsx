@@ -119,7 +119,7 @@ export default async function CreatorPage({ params }: Props) {
   const avatarUrl = creator.avatar ?? creator.avatarC144;
   const ofUrl = `https://onlyfans.com/${creator.username}`;
   const override = getSponsorOverride(creator.username);
-  const ctaUrl = override?.linkOverride ?? ofUrl;
+  const ctaUrl = override?.linkOverride ? `/go/${creator.username}` : ofUrl;
   const ctaRel = `noopener noreferrer nofollow${override ? ' sponsored' : ''}`;
   const price = priceLabel(creator);
   const about = creator.about ? plainText(creator.about) : '';
