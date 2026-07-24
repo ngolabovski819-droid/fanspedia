@@ -11,7 +11,7 @@ The site has been **fully migrated to Next.js 16 + React 19 + TypeScript**. All 
 ## Big Picture
 - **Next.js 16 + React 19 + TypeScript** frontend, deployed on Vercel. Domain: `fanspedia.net`.
 - All application code lives in `src/`. Never edit the legacy root-level `.html` files, `api/` (old Vercel serverless), `server.js`, `es/`, or `scripts/`.
-- Creator profile pages are **intentionally disabled** - cards link directly to `https://onlyfans.com/{username}`. Do not re-enable without discussion.
+- Creator profile pages exist at `/creator/{username}/` but are **allow-list gated** (404 by default) — see "Published Creator Profile Pages" below. Cards always link out (either the plain OF URL or a sponsor's tracking link) rather than to the internal profile page, except that the profile page itself is reachable directly once published.
 - Blog content lives in `content/blog/` as Markdown with YAML frontmatter; rendered via `next-mdx-remote`.
 
 ## Project Structure
@@ -35,6 +35,8 @@ src/
     locations/page.tsx        # /locations/
     about/ contact/ dmca/ privacy/
     api/search/route.ts       # GET /api/search - proxies Supabase
+    creator/[username]/page.tsx  # /creator/{username}/ - allow-listed creators only
+    go/[username]/route.ts    # /go/{username} - sponsor click-tracking redirect
   components/
     Nav.tsx                   # Header + mobile drawer + dropdowns ('use client')
     Footer.tsx
@@ -47,6 +49,9 @@ src/
   config/
     categories.ts             # All category data (TypeScript)
     countries.ts              # All country data (TypeScript)
+    creators.ts               # PUBLISHED_CREATORS allow-list (profile pages)
+    featured.ts               # Pin/exclude rules + fetchFeaturedPage()
+    sponsors.ts                # Per-creator tracking-link/image overrides
   lib/
     supabase.ts               # fetchCreators() - raw fetch, no supabase-js
     image.ts                  # proxyImg(), buildSrcset() via images.weserv.nl
@@ -114,7 +119,7 @@ const { creators, total, hasMore } = await fetchCreators({
 **`CreatorCard`** - renders a single creator:
 - Uses `next/image` with `fill` + `buildSrcset()` from `src/lib/image.ts`
 - First 4 cards: `loading="eager" fetchPriority="high"`. Others: `loading="lazy"`
-- Card links directly to `https://onlyfans.com/{username}` (profiles disabled)
+- Card links to `https://onlyfans.com/{username}` by default, or `/go/{username}` if a sponsor `linkOverride` is configured (see "Sponsor Overrides & Click Tracking")
 - `.card-img-wrap` has `aspect-ratio: 3/4` in CSS - never use fixed height
 
 **`CreatorGrid`** - `'use client'` paginated grid:
@@ -168,9 +173,16 @@ npm run dev
 
 ---
 
+## Published Creator Profile Pages
+
+`/creator/{username}/` is a real page template (bio, stats, bundles, growth charts) but only **served for usernames explicitly added to `PUBLISHED_CREATORS`** in `src/config/creators.ts` — everything else 404s (`isPublishedCreator()` gate in `src/app/creator/[username]/page.tsx`, `dynamicParams = false`). To publish a creator: add their exact `username` (case-insensitive) to the array, commit, push — that's the entire change (see git history: `feat: publish creator <name>` commits are one-line diffs).
+
+- Data comes from `fetchCreatorProfile()` / `fetchCreatorSnapshots()` in `src/lib/supabase.ts`. Snapshots (growth charts) only exist for creators the ID-scanner/refresh-orchestrator scrapers have scraped more than once — a creator published right after a one-off scrape (see the onboarding runbook below) will correctly show "No snapshots recorded yet" until a normal refresh cycle picks them up. That's expected, not a bug.
+- `src/app/profile-sitemap/sitemap.ts` is generated directly from `PUBLISHED_CREATORS` (200 per file) — publishing a creator here adds them to the sitemap automatically, no separate step.
+
 ## Featured Placements: Pinning, Excluding & Sponsored Creators
 
-Paid placements and removals are **config-driven** from a single file: `src/config/featured.ts`. This is the ONLY file to edit to pin, position, or remove a creator from any grid. No page/component code changes are needed.
+Paid placements and removals are **config-driven** from a single file: `src/config/featured.ts`. This is the ONLY file to edit to pin, position, or remove a creator from any grid — WHERE a creator appears. (What their card LINKS TO and SHOWS once placed — tracking link, custom image, click logging — is a separate system; see "Sponsor Overrides & Click Tracking" below.) No page/component code changes are needed for placement itself.
 
 ### How it works
 - `FEATURED: Record<string, FeaturedRule>` maps a **scope** to its rules.
@@ -215,6 +227,8 @@ export const FEATURED: Record<string, FeaturedRule> = {
 ```
 Rules: positions should be unique per scope; if a pinned username doesn't exist in the DB, that slot falls back to the next natural creator.
 
+**Pinning across many scopes at once** (e.g. "every category" or "all Tier 1 countries"): don't hand-list dozens of entries — generate them. `countries.ts` has no tier field, so any such geo list (e.g. `TIER1_COUNTRIES`) is maintained directly in `featured.ts` per-order; category-wide pins are built from `ALL_CATEGORY_SLUGS` (from `categories.ts`) with `Object.fromEntries(...)` and spread into `FEATURED`. See the current `emilylopz` entries in the file for the exact pattern.
+
 ### To remove (hide) a creator
 Add the username to the `excluded` array for that scope (create the scope entry if it doesn't exist):
 ```typescript
@@ -242,6 +256,60 @@ home: { excluded: ['shaylust', 'unwanteduser'] },
 - `src/app/globals.css` — `.creator-card-sponsored` and `.card-sponsored` styles.
 - `src/app/page.tsx`, `src/app/categories/[slug]/page.tsx`, `src/app/country/[slug]/page.tsx`, `src/app/api/search/route.ts` — already wired to call `fetchFeaturedPage` and pass `scope`.
 
+## Sponsor Overrides & Click Tracking (paid placements)
+
+Two more pieces work together with `featured.ts` to fully support a paid placement:
+
+### `src/config/sponsors.ts` — tracking link & custom image
+- `SPONSOR_OVERRIDES: Record<string, SponsorOverride>`, per-creator, case-insensitive, looked up via `getSponsorOverride(username)`.
+- `linkOverride` — replaces the default `https://onlyfans.com/{username}` outbound link, wherever that creator's card appears **anywhere on the site** (home, category, country, search, wishlist, similar-creators, their own profile page) — not just their pinned slot. Intentional: any organic exposure should still credit the campaign.
+- `imageOverride` — replaces the scraped avatar with a custom image (local `/public/uploads/...` path or absolute URL). Deliberately NOT written to the `onlyfans_profiles.avatar` column, so it survives future scraper refreshes and is trivial to remove when a campaign ends.
+- `clickTable` — see below.
+- Consumed in `CreatorCard.tsx` and `src/app/creator/[username]/page.tsx`.
+
+### `/go/[username]` — click-tracking redirect
+`src/app/go/[username]/route.ts`. Any card/CTA for a creator with a `linkOverride` points here instead of linking straight out. On each request it:
+1. Looks up the destination (`linkOverride`, or the plain OF URL as a fallback for unknown/unconfigured usernames).
+2. If a `clickTable` is configured and the User-Agent doesn't match the bot filter (`BOT_UA_RE`), logs a row via `after()` — not a bare unawaited call, since that can get killed mid-flight on Vercel once the redirect response is sent.
+3. Issues a 302 redirect.
+
+Logged columns: `user_agent`, `referrer` (raw `Referer` header), and `placement` — derived server-side from the referrer into `home` / `category:<slug>` / `country:<slug>` / `profile` / `search` / `wishlist` for our own pages, `external:<hostname>` for outside traffic, or `null` when no referrer was sent at all (pasted link, messaging-app share, in-app browser — a browser/platform limitation, not a bug; the click is still counted).
+
+**Two critical gotchas — both caused real bugs, don't reintroduce them:**
+- **Never add `rel="noreferrer"`** to a link pointing at `/go/[username]`. It stops the browser sending a `Referer` header to our own route, which silently breaks the `referrer`/`placement` columns even for our own site's traffic. Use `noopener nofollow` (+ `sponsored` when `creator.sponsored`) — never `noreferrer` — on these links.
+- **Always set `prefetch={false}`** on these links. `next/link` auto-prefetches same-origin hrefs as soon as they scroll into the viewport (unlike a direct external `onlyfans.com` link, which Link never prefetches). Without `prefetch={false}`, that prefetch silently fires the click-log before any real click — logging page impressions as clicks.
+
+### Per-client click tables
+One Supabase table per paying client, named `sponsor_clicks_<username>` by convention (e.g. `sponsor_clicks_emilylopz`) — keeps each campaign's delivered-click count trivially isolated and easy to archive when it ends. Creating the table needs DDL, which the Supabase REST API can't run — write a migration under `scripts/migrations/` (`002_sponsor_clicks_emilylopz.sql` is the template) and run it once in the Supabase SQL Editor. Reading/counting/deleting rows afterward IS reachable via the REST API (used for verification and for cleaning out test rows during setup).
+
+Reading the count: `select count(*) from sponsor_clicks_<username>;`
+
+## Runbook: Onboarding a New Paid Creator Placement
+
+The repeatable process for a new paid order (this is exactly how `emilylopz` was onboarded):
+
+1. **One-off scrape**, if the creator isn't in `onlyfans_profiles` yet. Do NOT touch the live scraper processes (check `tasklist` for running `python.exe`s first) — instead run the ad-hoc URL scraper from an **isolated working directory**. Its progress/temp filenames (`progress_urls.json`, `temp.csv`) are hardcoded, not parameterized, so running it from the project root would collide with the scrapers' own state:
+   ```powershell
+   python scripts/mega_onlyfans_from_urls.py --input urls.txt --output out.csv --concurrent 1 --wait 20 --cookies <path-to-cookies.json>
+   ```
+   Then load the single row into Supabase with the already-parameterized loader (safe — never touches shared scraper state):
+   ```powershell
+   python scripts/load_csv_to_supabase.py --csv out.csv --table onlyfans_profiles --upsert --on-conflict id --batch-size 1
+   ```
+2. **Placement** — edit `src/config/featured.ts`: pin `{ username, position: 1 }` under `home`, whichever `country:<slug>` scopes were purchased, and/or `category:<slug>` scopes (generate across many scopes rather than hand-listing — see the pattern note above).
+3. **Tracking link + image** — add an entry to `SPONSOR_OVERRIDES` in `src/config/sponsors.ts` with `linkOverride` (and `clickTable: 'sponsor_clicks_<username>'` if tracking clicks). Leave `imageOverride` unset unless a custom creative was actually supplied.
+4. **Click-tracking table** (if tracking clicks) — copy `scripts/migrations/002_sponsor_clicks_emilylopz.sql` for the new username and run it once in the Supabase SQL Editor.
+5. **Publish a profile page** (optional, only if the order includes a `/creator/{username}/` landing page) — add the username to `PUBLISHED_CREATORS` in `src/config/creators.ts`.
+6. **Verify before pushing** — run dev on an unused port (check `tasklist`/`netstat` first; other local projects may already occupy 3000/4000), then check both the API and the actual rendered page HTML for every affected scope (a bare `/api/search?scope=...` call without `category_terms`/`location_terms` won't replicate what the real page sends, so it's not a valid test on its own):
+   ```powershell
+   curl "http://localhost:<port>/api/search?scope=home&page=0&page_size=24&sort=popular"
+   ```
+   confirm `pos1` = the new username and `sponsored: true`. Verify the tracking link and `prefetch={false}` behavior with a real browser (not curl) — this class of bug (impressions logged as clicks) is invisible to curl since it's pure client-side JS behavior.
+7. **Push only when explicitly told to** (standing rule — see Development Workflow above).
+
+### Known scaling issue: Supabase statement timeouts on term-filtered pages
+`onlyfans_profiles` is 1.7M+ rows and growing continuously from the live scrapers. Some `ilike`/OR search-term queries — even a single common word alone (e.g. `squirting`) — can hit Supabase's statement timeout under load; `fetchCreators()` swallows that into `{ creators: [], total: 0 }`. Because every category/country can now carry a pin, that used to render as **just the sponsored card and nothing else** on the affected page. `fetchCreatorsResilient()` in `src/config/featured.ts` mitigates this: if the term-filtered fetch comes back empty, it retries once without the term filters (falls back to a plain "popular" list) and caps the displayed total so the page doesn't show an absurd unfiltered count. This is a resilience patch, not a performance fix — if timeouts become frequent as the table keeps growing, the real fix is a proper full-text (`tsvector`/GIN) index instead of trigram `ILIKE` substring search.
+
 ## GA4 Analytics
 Handled globally in `src/app/layout.tsx` via `<GoogleAnalytics gaId="G-3XB30HS12L" />` from `@next/third-parties/google`. No need to add GA tags to individual pages.
 
@@ -249,6 +317,7 @@ Handled globally in `src/app/layout.tsx` via `<GoogleAnalytics gaId="G-3XB30HS12
 - **Max 3 multi-word `ilike` terms per OR filter on `search_text`** when combined with `ORDER BY favoritedcount`. The 4-term combo `('bolivia','bolivian','la paz','santa cruz')` reproducibly returns HTTP 500 (statement_timeout — the planner can't use the trigram index efficiently for that many multi-word patterns with a sort). `fetchCreators` swallows the 500 and returns `{ creators: [], total: 0 }`, which renders the page as **"No creators found matching these filters."** — silent failure mode.
   - When defining `terms` arrays in `src/config/countries.ts` / `src/config/categories.ts`, **prefer single-word terms**; cap multi-word terms at 3 total. Drop the noisiest/most generic place name first (e.g. `'santa cruz'` exists worldwide).
   - Symptom to recognise: a category/country page shows empty grid but the same terms work when you remove any one of them. Always test against Supabase directly (`curl` the REST endpoint with the exact OR clause) before blaming the frontend.
+  - On a scope with a pin, this same failure mode shows as **just the sponsored card and nothing else** rather than an empty grid — see `fetchCreatorsResilient()` in the "Runbook" section above for the mitigation already in place.
 - All DB column references are **lowercase** — PostgREST is case-sensitive. `isverified` not `isVerified`, `favoritedcount` not `favoritedCount`.
 - `search_text` has a trigram index (fast). `location` does NOT — use `categoryTerms` + `skipLocationFilter: true` for country pages.
 - `AbortSignal.timeout(20000)` in `fetchCreators` caps each fetch at 20s. Queries hitting ~7s+ (e.g. `dominican-republic`) are at risk; thin terms if you see them creep.
@@ -257,8 +326,9 @@ Handled globally in `src/app/layout.tsx` via `<GoogleAnalytics gaId="G-3XB30HS12
 - Always work in `src/` - never edit root HTML files, `api/`, `server.js`, `es/`, or `scripts/`
 - All DB column references must be **lowercase**
 - Never use fixed `height` on `.card img` - use `aspect-ratio` on `.card-img-wrap`
-- Do not re-enable creator profile pages without explicit decision
+- Publishing a creator's profile page is a one-line addition to `PUBLISHED_CREATORS` in `src/config/creators.ts` — no separate decision needed once you intend to publish
 - Do not commit `.env`, `cookies.json`, `*.csv`, `failed_batch.json`, `failed_ids_v2.json`, `progress_urls.json`
-- Creator cards always link to `https://onlyfans.com/{username}` - no internal profile pages
+- Creator cards link to `https://onlyfans.com/{username}` by default, or a sponsor's `linkOverride` via `/go/{username}` if one is configured in `src/config/sponsors.ts` — never hardcode a tracking link directly in a component
 - Pin/exclude creators ONLY via `src/config/featured.ts` (never hardcode in pages); every pinned creator MUST keep the `AD · Sponsored` label (disclosure)
+- Any link pointing at `/go/[username]` MUST have `prefetch={false}` and MUST NOT have `rel="noreferrer"` — see "Sponsor Overrides & Click Tracking" above; getting either wrong silently corrupts click-tracking data
 - The other `.github/*.md` files (`QUICKSTART.md`, `PATTERNS.md`, `ARCHITECTURE.md`, `CHECKLISTS.md`, `TROUBLESHOOTING.md`, `SETUP_COMPLETE.md`) describe the **legacy vanilla-JS/Python stack** and are stale — **do not follow them**. Only this file (`copilot-instructions.md`) is current.
