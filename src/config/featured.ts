@@ -75,7 +75,6 @@ const EMILYLOPZ_CATEGORY_PINS: Record<string, FeaturedRule> = Object.fromEntries
 export const FEATURED: Record<string, FeaturedRule> = {
   home: {
     pinned: pinFirst('emilylopz'),
-    excluded: ['shaylust'],
   },
   ...EMILYLOPZ_COUNTRY_PINS,
   ...EMILYLOPZ_CATEGORY_PINS,
