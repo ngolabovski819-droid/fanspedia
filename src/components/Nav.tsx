@@ -6,6 +6,8 @@ import { useState, useRef, useEffect } from 'react';
 import { COUNTRIES_LIST } from '@/config/countries';
 import { categories } from '@/config/categories';
 import { getWishlist } from '@/lib/wishlist';
+import { getSearchHistory, addSearchTerm, removeSearchTerm, clearSearchHistory } from '@/lib/searchHistory';
+import SearchHistoryDropdown from './SearchHistoryDropdown';
 
 const SAFE_SEARCH_KEY = 'safeSearch';
 
@@ -18,6 +20,8 @@ export default function Nav() {
   const [q, setQ] = useState('');
   const [safeSearch, setSafeSearch] = useState(false);
   const [wishlistCount, setWishlistCount] = useState(0);
+  const [searchHistory, setSearchHistory] = useState<string[]>([]);
+  const [activeSearchDropdown, setActiveSearchDropdown] = useState<'desktop' | 'mobile' | null>(null);
   const countriesRef = useRef<HTMLDivElement>(null);
   const catsRef = useRef<HTMLDivElement>(null);
 
@@ -29,6 +33,8 @@ export default function Nav() {
       if (stored) document.body.classList.add('safe-search-active');
     } catch {}
   }, []);
+
+  useEffect(() => { setSearchHistory(getSearchHistory()); }, []);
 
   // Sync wishlist badge on mount and whenever wishlistUpdated fires
   useEffect(() => {
@@ -58,10 +64,18 @@ export default function Nav() {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
+  function runSearch(term: string) {
+    const clean = term.trim();
+    if (!clean) return;
+    setSearchHistory(addSearchTerm(clean));
+    setQ('');
+    setActiveSearchDropdown(null);
+    router.push(`/search?q=${encodeURIComponent(clean)}`);
+  }
+
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
-    const term = q.trim();
-    if (term) router.push(`/search?q=${encodeURIComponent(term)}`);
+    runSearch(q);
   }
 
   function handleSafeSearch() {
@@ -81,7 +95,7 @@ export default function Nav() {
         <Link href="/" className="nav-logo">FansPedia</Link>
 
         {/* Desktop search */}
-        <form onSubmit={handleSearch} className="nav-search-bar" style={{ display: 'flex' }}>
+        <form onSubmit={handleSearch} className="nav-search-bar" style={{ display: 'flex', position: 'relative' }}>
           <button type="submit" aria-label="Search" style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ color: 'var(--text-muted)' }}>
               <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
@@ -90,9 +104,19 @@ export default function Nav() {
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
+            onFocus={() => setActiveSearchDropdown('desktop')}
+            onBlur={() => setActiveSearchDropdown(null)}
             placeholder="Search creators..."
             aria-label="Search creators"
           />
+          {activeSearchDropdown === 'desktop' && q.trim().length === 0 && (
+            <SearchHistoryDropdown
+              history={searchHistory}
+              onSelect={runSearch}
+              onRemove={(term) => setSearchHistory(removeSearchTerm(term))}
+              onClear={() => setSearchHistory(clearSearchHistory())}
+            />
+          )}
         </form>
 
         {/* Desktop links */}
@@ -187,16 +211,26 @@ export default function Nav() {
 
       {/* Mobile menu */}
       <div className={`nav-mobile-menu${mobileOpen ? ' open' : ''}`}>
-        <form onSubmit={handleSearch} style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
+        <form onSubmit={handleSearch} style={{ display: 'flex', gap: 8, marginBottom: 12, position: 'relative' }}>
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
+            onFocus={() => setActiveSearchDropdown('mobile')}
+            onBlur={() => setActiveSearchDropdown(null)}
             placeholder="Search creators..."
             style={{ flex: 1, background: 'var(--surface-raised)', border: '1px solid var(--border-subtle)', borderRadius: 8, padding: '8px 12px', color: 'var(--text)', fontSize: 14 }}
           />
           <button type="submit" style={{ padding: '8px 16px', background: 'var(--accent-gradient)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600, cursor: 'pointer' }}>
             Go
           </button>
+          {activeSearchDropdown === 'mobile' && q.trim().length === 0 && (
+            <SearchHistoryDropdown
+              history={searchHistory}
+              onSelect={runSearch}
+              onRemove={(term) => setSearchHistory(removeSearchTerm(term))}
+              onClear={() => setSearchHistory(clearSearchHistory())}
+            />
+          )}
         </form>
         {[
           { href: '/', label: 'Home' },

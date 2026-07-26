@@ -38,7 +38,7 @@ function derivePlacement(referrer: string | null): string | null {
   return path;
 }
 
-async function logClick(table: string, req: NextRequest) {
+async function logClick(table: string, req: NextRequest, placementOverride: string | null) {
   try {
     const referrer = req.headers.get('referer') ?? null;
     await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
@@ -53,7 +53,7 @@ async function logClick(table: string, req: NextRequest) {
         {
           user_agent: req.headers.get('user-agent') ?? null,
           referrer,
-          placement: derivePlacement(referrer),
+          placement: placementOverride ?? derivePlacement(referrer),
         },
       ]),
     });
@@ -69,12 +69,17 @@ export async function GET(
   const { username } = await params;
   const override = getSponsorOverride(username);
   const destination = override?.linkOverride ?? `https://onlyfans.com/${username}`;
+  // Lets a specific widget (e.g. the search-history dropdown) self-identify its
+  // placement instead of relying on derivePlacement()'s referrer-path guess,
+  // which can't tell "clicked from a dropdown on this page" from "clicked the
+  // page's own grid card".
+  const placementOverride = req.nextUrl.searchParams.get('placement');
 
   const ua = req.headers.get('user-agent') ?? '';
   if (override?.clickTable && !BOT_UA_RE.test(ua)) {
     // Runs after the redirect response is sent — visitor doesn't wait on it, and
     // `after()` (vs. a bare unawaited call) keeps it alive past the response on Vercel.
-    after(() => logClick(override.clickTable!, req));
+    after(() => logClick(override.clickTable!, req, placementOverride));
   }
 
   return NextResponse.redirect(destination, { status: 302 });

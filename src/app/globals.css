@@ -183,6 +183,139 @@ img { max-width: 100%; display: block; }
   background: var(--surface-raised);
 }
 
+/* Search history dropdown (recent searches) */
+.search-history-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 6px;
+  /* Caps at ~3 visible rows (+ a peek of the 4th) so the list scrolls
+     instead of growing tall once there are more than a few entries. */
+  max-height: 170px;
+  overflow-y: auto;
+  z-index: 200;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+}
+
+.search-history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.search-history-header button {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 12px;
+  cursor: pointer;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+/* Sponsored row pinned at the top of the dropdown — same "Ad · Sponsored"
+   disclosure language as CreatorCard, just laid out inline instead of
+   overlaid on an image. */
+.search-sponsor-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--accent);
+  background: rgba(0, 175, 240, 0.08);
+  transition: background 0.15s;
+}
+
+.search-sponsor-row:hover { background: rgba(0, 175, 240, 0.16); }
+
+.search-sponsor-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.search-sponsor-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Standalone (not composed with .card-sponsored) so it can't inherit that
+   class's `position: absolute; bottom/left` — cascade order in a shared
+   global stylesheet made that override unreliable. */
+.search-sponsor-badge {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.72);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 10px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: 1px solid var(--accent);
+}
+
+.search-history-divider {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 6px 4px;
+}
+
+.search-history-item {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.search-history-term {
+  flex: 1;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.search-history-term:hover { background: var(--surface-raised); }
+
+.search-history-remove {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.search-history-remove:hover { color: var(--text); background: var(--surface-raised); }
+
 /* Mobile hamburger */
 .nav-burger {
   display: none;
@@ -368,6 +501,15 @@ img { max-width: 100%; display: block; }
   transform: translateY(-3px);
   border-color: var(--border);
   box-shadow: 0 8px 32px rgba(0, 175, 240, 0.12);
+}
+
+/* Wraps the whole card (image, name, price, CTA) in one link so clicking
+   anywhere navigates — not just the "View Profile" button. */
+.card-clickable {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
 }
 
 /* CLS-safe image wrap — aspect-ratio prevents layout shift */

@@ -3,6 +3,8 @@
 import { useState, useEffect, useCallback, useRef, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import CreatorCard from '@/components/CreatorCard';
+import SearchHistoryDropdown from '@/components/SearchHistoryDropdown';
+import { getSearchHistory, addSearchTerm, removeSearchTerm, clearSearchHistory } from '@/lib/searchHistory';
 import type { Creator } from '@/types/creator';
 
 function SearchPageInner() {
@@ -17,6 +19,10 @@ function SearchPageInner() {
   const [hasMore, setHasMore] = useState(false);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const [history, setHistory] = useState<string[]>([]);
+
+  useEffect(() => { setHistory(getSearchHistory()); }, []);
 
   // Track the last term we explicitly triggered so useEffect doesn't double-fetch
   const lastSearchedRef = useRef('');
@@ -50,17 +56,25 @@ function SearchPageInner() {
     }
   }, [searchParams, search]);
 
+  function runSearch(term: string) {
+    const clean = term.trim();
+    if (!clean) return;
+    setHistory(addSearchTerm(clean));
+    // Mark as searched so useEffect won't double-fetch when the URL updates
+    lastSearchedRef.current = clean;
+    setQ(clean);
+    setInputVal(clean);
+    setCreators([]);
+    router.push(`/search?q=${encodeURIComponent(clean)}`);
+    search(clean, 0, false);
+  }
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const term = inputVal.trim();
-    if (!term) return;
-    // Mark as searched so useEffect won't double-fetch when the URL updates
-    lastSearchedRef.current = term;
-    setQ(term);
-    setCreators([]);
-    router.push(`/search?q=${encodeURIComponent(term)}`);
-    search(term, 0, false);
+    runSearch(inputVal);
   }
+
+  const showDropdown = focused && inputVal.trim().length === 0;
 
   return (
     <>
@@ -69,17 +83,27 @@ function SearchPageInner() {
         <p>Find creators by name, niche, or keyword.</p>
       </section>
 
-      <form onSubmit={handleSubmit} className="search-form">
+      <form onSubmit={handleSubmit} className="search-form" style={{ position: 'relative' }}>
         <div className="search-input-wrap">
           <input
             value={inputVal}
             onChange={(e) => setInputVal(e.target.value)}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
             placeholder="Search by name, username, location, niche..."
             aria-label="Search creators"
             autoFocus
           />
           <button type="submit">Search</button>
         </div>
+        {showDropdown && (
+          <SearchHistoryDropdown
+            history={history}
+            onSelect={runSearch}
+            onRemove={(term) => setHistory(removeSearchTerm(term))}
+            onClear={() => setHistory(clearSearchHistory())}
+          />
+        )}
       </form>
 
       {q && !loading && creators.length === 0 && (
