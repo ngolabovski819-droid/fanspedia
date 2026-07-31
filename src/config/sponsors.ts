@@ -41,12 +41,46 @@ export interface SponsorOverride {
    * fine for a single sponsored asset.
    */
   imageOverride?: string;
+  /** Short content labels displayed over the sponsored card image. */
+  tags?: string[];
+  /** Number displayed after the visible labels (for example, "+9"). */
+  additionalTagCount?: number;
+  /** Additional card-carousel images, served from public/ or an absolute URL. */
+  galleryImages?: string[];
 }
 
 const SPONSOR_OVERRIDES: Record<string, SponsorOverride> = {
   emilylopz: {
     linkOverride: 'https://onlyfans.com/emilylopz/c545',
     clickTable: 'sponsor_clicks_emilylopz',
+    tags: ['GFE', 'Feet fetish', 'Squirting'],
+    additionalTagCount: 9,
+    galleryImages: [
+      '/uploads/sponsors/emilylopz/emily-01.jpg',
+      '/uploads/sponsors/emilylopz/emily-02.jpg',
+      '/uploads/sponsors/emilylopz/emily-03.jpg',
+      '/uploads/sponsors/emilylopz/emily-04.jpg',
+      '/uploads/sponsors/emilylopz/emily-05.jpg',
+      '/uploads/sponsors/emilylopz/emily-06.jpg',
+      '/uploads/sponsors/emilylopz/emily-07.jpg',
+      '/uploads/sponsors/emilylopz/emily-08.jpg',
+      '/uploads/sponsors/emilylopz/emily-09.jpg',
+      '/uploads/sponsors/emilylopz/emily-10.jpg',
+      '/uploads/sponsors/emilylopz/emily-11.jpg',
+      '/uploads/sponsors/emilylopz/emily-12.jpg',
+      '/uploads/sponsors/emilylopz/emily-13.jpg',
+      '/uploads/sponsors/emilylopz/emily-14.jpg',
+      '/uploads/sponsors/emilylopz/emily-15.jpg',
+      '/uploads/sponsors/emilylopz/emily-16.jpg',
+      '/uploads/sponsors/emilylopz/emily-17.jpg',
+      '/uploads/sponsors/emilylopz/emily-18.jpg',
+      '/uploads/sponsors/emilylopz/emily-19.jpg',
+      '/uploads/sponsors/emilylopz/emily-20.jpg',
+      '/uploads/sponsors/emilylopz/emily-21.jpg',
+      '/uploads/sponsors/emilylopz/emily-22.jpg',
+      '/uploads/sponsors/emilylopz/emily-23.jpg',
+      '/uploads/sponsors/emilylopz/emily-24.jpg',
+    ],
     // imageOverride not set — current scraped OF avatar is being used as-is.
     // To swap in a custom creative later, drop the file in public/uploads/sponsors/
     // and set: imageOverride: '/uploads/sponsors/emilylopz.jpg',

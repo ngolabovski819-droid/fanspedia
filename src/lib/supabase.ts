@@ -7,7 +7,7 @@ const SUPABASE_KEY = process.env.SUPABASE_KEY!;
 // ORDER BY (favoritedcount) works without it being in SELECT.
 const CARD_COLS = [
   'id', 'username', 'name',
-  'avatar', 'avatar_c144',
+  'avatar', 'avatar_c144', 'header',
   'isverified', 'subscribeprice',
 ].join(',');
 
@@ -19,6 +19,7 @@ function mapCreator(row: Record<string, any>): Creator {
     name: row.name ?? null,
     avatar: row.avatar ?? null,
     avatarC144: row.avatar_c144 ?? null,
+    header: row.header ?? null,
     isVerified: Boolean(row.isverified),
     subscribePrice: row.subscribeprice ?? null,
   };
@@ -272,11 +273,11 @@ function mapProfile(row: Record<string, any>): CreatorProfile {
     name: row.name ?? null,
     avatar: row.avatar ?? null,
     avatarC144: row.avatar_c144 ?? null,
+    header: row.header ?? null,
     isVerified: Boolean(row.isverified),
     subscribePrice: row.subscribeprice ?? null,
     about: row.about ?? null,
     location: row.location ?? null,
-    header: row.header ?? null,
     favoritedCount: row.favoritedcount ?? null,
     photosCount: row.photoscount ?? null,
     videosCount: row.videoscount ?? null,

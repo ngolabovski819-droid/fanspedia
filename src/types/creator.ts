@@ -4,6 +4,7 @@ export interface Creator {
   name: string | null;
   avatar: string | null;
   avatarC144: string | null;
+  header: string | null;
   isVerified: boolean;
   subscribePrice: number | null;
   /** True when this creator is a paid/pinned placement (shown as "Sponsored"). */
@@ -24,7 +25,6 @@ export interface BundleOffer {
 export interface CreatorProfile extends Creator {
   about: string | null;
   location: string | null;
-  header: string | null;
   favoritedCount: number | null;
   photosCount: number | null;
   videosCount: number | null;

@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_KEY!;
 
-const CARD_COLS = 'id,username,name,avatar,avatar_c144,isverified,subscribeprice';
+const CARD_COLS = 'id,username,name,avatar,avatar_c144,header,isverified,subscribeprice';
 
 export const runtime = 'nodejs';
 
@@ -46,6 +46,7 @@ export async function GET(req: NextRequest) {
       name: row.name ?? null,
       avatar: row.avatar ?? null,
       avatarC144: row.avatar_c144 ?? null,
+      header: row.header ?? null,
       isVerified: Boolean(row.isverified),
       subscribePrice: row.subscribeprice ?? null,
     }));

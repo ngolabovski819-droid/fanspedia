@@ -16,15 +16,38 @@ interface Props {
 export default function CreatorCard({ creator, index }: Props) {
   const isEager = index < 4;
   const override = getSponsorOverride(creator.username);
-  const imgUrl = creator.avatar ?? creator.avatarC144;
-  const { src, srcSet, sizes } = override?.imageOverride
-    ? { src: override.imageOverride, srcSet: '', sizes: '' }
-    : buildSrcset(imgUrl);
+  const galleryImages = Array.from(new Set([
+    override?.imageOverride,
+    creator.avatar ?? creator.avatarC144,
+    creator.header,
+    ...(override?.galleryImages ?? []),
+  ].filter((url): url is string => Boolean(url))));
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const activeImage = galleryImages[activeImageIndex] ?? '/no-image.png';
+  const dotWindowSize = 7;
+  const dotWindowStart = Math.min(
+    Math.max(activeImageIndex - Math.floor(dotWindowSize / 2), 0),
+    Math.max(galleryImages.length - dotWindowSize, 0),
+  );
+  const visibleDotIndices = Array.from(
+    { length: Math.min(dotWindowSize, galleryImages.length) },
+    (_, offset) => dotWindowStart + offset,
+  );
+  const { src, srcSet, sizes } = activeImage.startsWith('/')
+    ? { src: activeImage, srcSet: '', sizes: '' }
+    : buildSrcset(activeImage);
   const [wishlisted, setWishlisted] = useState(false);
 
   useEffect(() => {
     setWishlisted(isWishlisted(creator.username));
+    setActiveImageIndex(0);
   }, [creator.username]);
+
+  const changeImage = (event: React.MouseEvent, direction: -1 | 1) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setActiveImageIndex((current) => (current + direction + galleryImages.length) % galleryImages.length);
+  };
 
   const price =
     creator.subscribePrice === 0 || creator.subscribePrice === null
@@ -55,13 +78,49 @@ export default function CreatorCard({ creator, index }: Props) {
             unoptimized
             {...(srcSet ? { srcSet } : {})}
           />
-          {creator.sponsored && (
-            <span className="card-sponsored" title="Paid placement — this creator paid to be featured here">
-              Ad · Sponsored
-            </span>
+          {galleryImages.length > 1 && (
+            <>
+              <button
+                type="button"
+                className="card-carousel-arrow card-carousel-arrow-prev"
+                aria-label="Previous creator image"
+                onClick={(event) => changeImage(event, -1)}
+              >
+                ‹
+              </button>
+              <button
+                type="button"
+                className="card-carousel-arrow card-carousel-arrow-next"
+                aria-label="Next creator image"
+                onClick={(event) => changeImage(event, 1)}
+              >
+                ›
+              </button>
+              <div className="card-carousel-dots" aria-label={`Image ${activeImageIndex + 1} of ${galleryImages.length}`}>
+                {visibleDotIndices.map((dotIndex) => (
+                  <button
+                    type="button"
+                    className={`card-carousel-dot${dotIndex === activeImageIndex ? ' active' : ''}`}
+                    aria-label={`Show creator image ${dotIndex + 1}`}
+                    key={dotIndex}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      event.stopPropagation();
+                      setActiveImageIndex(dotIndex);
+                    }}
+                  />
+                ))}
+              </div>
+            </>
           )}
-          {creator.isVerified && (
-            <span className="card-verified" aria-label="Verified creator">✓ Verified</span>
+          {creator.sponsored && (
+            <span
+              className="card-sponsored"
+              title="Paid placement — this creator paid to be featured here"
+              aria-label="Advertisement"
+            >
+              Ad
+            </span>
           )}
           <button
             className={`card-wishlist${wishlisted ? ' active' : ''}`}
@@ -74,9 +133,26 @@ export default function CreatorCard({ creator, index }: Props) {
           >
             {wishlisted ? '♥' : '♡'}
           </button>
+          {creator.sponsored && override?.tags && override.tags.length > 0 && (
+            <div className="card-content-tags" aria-label="Creator content tags">
+              {override.tags.map((tag) => (
+                <span className="card-content-tag" key={tag}>{tag}</span>
+              ))}
+              {Boolean(override.additionalTagCount) && (
+                <span className="card-content-tag card-content-tag-more">
+                  +{override.additionalTagCount}
+                </span>
+              )}
+            </div>
+          )}
         </div>
         <div className="card-body">
-          <p className="card-name">{creator.name ?? creator.username}</p>
+          <div className="card-name-row">
+            <p className="card-name">{creator.name ?? creator.username}</p>
+            {creator.isVerified && (
+              <span className="card-name-verified" aria-label="Verified creator" title="Verified">✓</span>
+            )}
+          </div>
           <p className="card-username">@{creator.username}</p>
           <p className={`card-price${isFree ? ' card-price-free' : ''}`}>{price}</p>
         </div>
