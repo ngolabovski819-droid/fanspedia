@@ -85,6 +85,37 @@ const SPONSOR_OVERRIDES: Record<string, SponsorOverride> = {
     // To swap in a custom creative later, drop the file in public/uploads/sponsors/
     // and set: imageOverride: '/uploads/sponsors/emilylopz.jpg',
   },
+  rocketreynaxo: {
+    linkOverride: 'https://onlyfans.com/rocketreynaxo/c58',
+    clickTable: 'sponsor_clicks_rocketreynaxo',
+    imageOverride: '/uploads/sponsors/rocketreynaxo/rocket-01.jpg',
+    tags: ['Asian MILF', 'Busty', 'Curvy'],
+    galleryImages: [
+      '/uploads/sponsors/rocketreynaxo/rocket-02.jpg',
+      '/uploads/sponsors/rocketreynaxo/rocket-03.jpg',
+      '/uploads/sponsors/rocketreynaxo/rocket-04.jpg',
+      '/uploads/sponsors/rocketreynaxo/rocket-05.jpg',
+      '/uploads/sponsors/rocketreynaxo/rocket-06.jpg',
+      '/uploads/sponsors/rocketreynaxo/rocket-07.jpg',
+      '/uploads/sponsors/rocketreynaxo/rocket-08.jpg',
+      '/uploads/sponsors/rocketreynaxo/rocket-09.jpg',
+      '/uploads/sponsors/rocketreynaxo/rocket-10.jpg',
+    ],
+  },
+  hannazuki: {
+    linkOverride: 'https://onlyfans.com/hannazuki/c1043',
+    clickTable: 'sponsor_clicks_hannazuki',
+    imageOverride: '/uploads/sponsors/hannazuki/hanna-01.jpg',
+    tags: ['asian', 'cosplay', 'egirl', 'GFE'],
+    galleryImages: [
+      '/uploads/sponsors/hannazuki/hanna-02.jpg',
+      '/uploads/sponsors/hannazuki/hanna-03.jpg',
+      '/uploads/sponsors/hannazuki/hanna-04.jpg',
+      '/uploads/sponsors/hannazuki/hanna-05.jpg',
+      '/uploads/sponsors/hannazuki/hanna-06.jpg',
+      '/uploads/sponsors/hannazuki/hanna-07.jpg',
+    ],
+  },
 };
 
 const NORMALIZED: Record<string, SponsorOverride> = Object.fromEntries(

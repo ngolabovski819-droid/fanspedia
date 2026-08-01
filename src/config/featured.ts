@@ -6,6 +6,7 @@ import {
   type SearchResult,
 } from '@/lib/supabase';
 import { ALL_CATEGORY_SLUGS } from './categories';
+import { ALL_COUNTRY_SLUGS } from './countries';
 
 /**
  * Per-page rules for hiding and pinning specific creators.
@@ -47,37 +48,30 @@ export interface FeaturedRule {
   excluded?: string[];
 }
 
-// Tier 1 GEOs (highest CPM/spend) — countries.ts has no tier field, so this list is
-// maintained here, order-by-order, for paid geo placements.
-const TIER1_COUNTRIES = [
-  'united-states',
-  'united-kingdom',
-  'canada',
-  'australia',
-  'germany',
-  'ireland',
-  'new-zealand',
-  'switzerland',
-  'netherlands',
+// Shared order for the two active site-wide sponsored placements.
+const sponsorPlacements = (): PinnedPlacement[] => [
+  { username: 'emilylopz', position: 1 },
+  { username: 'rocketreynaxo', position: 2 },
+  { username: 'hannazuki', position: 3 },
 ];
 
-const pinFirst = (username: string): PinnedPlacement[] => [{ username, position: 1 }];
-
-// Paid placement (emilylopz) — #1 on home, every Tier 1 country page, and every
-// category page. Remove these entries (or replace the username) when the order ends.
-const EMILYLOPZ_COUNTRY_PINS: Record<string, FeaturedRule> = Object.fromEntries(
-  TIER1_COUNTRIES.map((slug) => [`country:${slug}`, { pinned: pinFirst('emilylopz') }]),
+// Apply both sponsors to every country and category without hand-listing scopes.
+const SPONSOR_COUNTRY_PINS: Record<string, FeaturedRule> = Object.fromEntries(
+  ALL_COUNTRY_SLUGS.map((slug) => [`country:${slug}`, { pinned: sponsorPlacements() }]),
 );
-const EMILYLOPZ_CATEGORY_PINS: Record<string, FeaturedRule> = Object.fromEntries(
-  ALL_CATEGORY_SLUGS.map((slug) => [`category:${slug}`, { pinned: pinFirst('emilylopz') }]),
+const SPONSOR_CATEGORY_PINS: Record<string, FeaturedRule> = Object.fromEntries(
+  ALL_CATEGORY_SLUGS.map((slug) => [`category:${slug}`, { pinned: sponsorPlacements() }]),
 );
 
 export const FEATURED: Record<string, FeaturedRule> = {
   home: {
-    pinned: pinFirst('emilylopz'),
+    pinned: sponsorPlacements(),
   },
-  ...EMILYLOPZ_COUNTRY_PINS,
-  ...EMILYLOPZ_CATEGORY_PINS,
+  search: {
+    pinned: sponsorPlacements(),
+  },
+  ...SPONSOR_COUNTRY_PINS,
+  ...SPONSOR_CATEGORY_PINS,
 };
 
 /** Build the scope key for a category page. */

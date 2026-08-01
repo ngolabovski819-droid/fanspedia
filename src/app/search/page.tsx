@@ -31,7 +31,7 @@ function SearchPageInner() {
     if (!term.trim()) return;
     setLoading(true);
     try {
-      const params = new URLSearchParams({ q: term, page: String(pg), page_size: '24' });
+      const params = new URLSearchParams({ q: term, page: String(pg), page_size: '24', scope: 'search' });
       const res = await fetch(`/api/search?${params.toString()}`);
       if (!res.ok) throw new Error();
       const data: { creators: Creator[]; total: number; hasMore: boolean } = await res.json();

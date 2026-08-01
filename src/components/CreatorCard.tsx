@@ -17,10 +17,9 @@ export default function CreatorCard({ creator, index }: Props) {
   const isEager = index < 4;
   const override = getSponsorOverride(creator.username);
   const galleryImages = Array.from(new Set([
-    override?.imageOverride,
-    creator.avatar ?? creator.avatarC144,
-    creator.header,
+    override?.imageOverride ?? creator.avatar ?? creator.avatarC144,
     ...(override?.galleryImages ?? []),
+    ...(!override?.imageOverride && creator.header ? [creator.header] : []),
   ].filter((url): url is string => Boolean(url))));
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const activeImage = galleryImages[activeImageIndex] ?? '/no-image.png';

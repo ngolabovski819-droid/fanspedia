@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import type { Creator } from '@/types/creator';
-import { getSponsorPreview } from '@/lib/sponsorPreview';
+import { getSponsorPreviews } from '@/lib/sponsorPreview';
 import { getSponsorOverride } from '@/config/sponsors';
 import { proxyImg } from '@/lib/image';
 
@@ -19,46 +19,54 @@ interface SearchHistoryDropdownProps {
 const keepFocus = (e: React.MouseEvent) => e.preventDefault();
 
 export default function SearchHistoryDropdown({ history, onSelect, onRemove, onClear }: SearchHistoryDropdownProps) {
-  // undefined = still loading, null = no sponsor configured/found
-  const [sponsor, setSponsor] = useState<Creator | null | undefined>(undefined);
+  // undefined = still loading, [] = no sponsors configured/found
+  const [sponsors, setSponsors] = useState<Creator[] | undefined>(undefined);
 
   useEffect(() => {
     let cancelled = false;
-    getSponsorPreview().then((c) => { if (!cancelled) setSponsor(c); });
+    getSponsorPreviews().then((creators) => { if (!cancelled) setSponsors(creators); });
     return () => { cancelled = true; };
   }, []);
 
-  // Nothing to show yet (sponsor still loading, no history) — avoid an empty-box flash.
-  if (!sponsor && history.length === 0) return null;
-
-  const override = sponsor ? getSponsorOverride(sponsor.username) : undefined;
-  const sponsorHref = sponsor
-    ? override?.linkOverride
-      ? `/go/${sponsor.username}?placement=search-dropdown`
-      : `https://onlyfans.com/${sponsor.username}`
-    : undefined;
-  const sponsorImgUrl = override?.imageOverride ?? sponsor?.avatarC144 ?? sponsor?.avatar;
+  // Nothing to show yet (sponsors still loading, no history) — avoid an empty-box flash.
+  if ((!sponsors || sponsors.length === 0) && history.length === 0) return null;
 
   return (
     <div className="search-history-dropdown" role="listbox">
-      {sponsor && sponsorHref && (
+      {sponsors && sponsors.length > 0 && (
         <>
-          <Link
-            href={sponsorHref}
-            target="_blank"
-            rel="noopener nofollow sponsored"
-            prefetch={false}
-            className="search-sponsor-row"
-            onMouseDown={keepFocus}
-          >
-            {sponsorImgUrl && (
-              // Fixed small thumbnail — not worth next/image's responsive srcset ceremony.
-              // eslint-disable-next-line @next/next/no-img-element
-              <img className="search-sponsor-avatar" src={proxyImg(sponsorImgUrl, 72, 72)} alt="" width={36} height={36} />
-            )}
-            <span className="search-sponsor-name">{sponsor.name ?? sponsor.username}</span>
-            <span className="search-sponsor-badge">Ad · Sponsored</span>
-          </Link>
+          {sponsors.map((sponsor) => {
+            const override = getSponsorOverride(sponsor.username);
+            const sponsorHref = override?.linkOverride
+              ? `/go/${sponsor.username}?placement=search-dropdown`
+              : `https://onlyfans.com/${sponsor.username}`;
+            const sponsorImgUrl = override?.imageOverride ?? sponsor.avatarC144 ?? sponsor.avatar;
+            const thumbnailUrl = sponsorImgUrl?.startsWith('/')
+              ? sponsorImgUrl
+              : sponsorImgUrl
+                ? proxyImg(sponsorImgUrl, 72, 72)
+                : undefined;
+
+            return (
+              <Link
+                href={sponsorHref}
+                target="_blank"
+                rel="noopener nofollow sponsored"
+                prefetch={false}
+                className="search-sponsor-row"
+                onMouseDown={keepFocus}
+                key={sponsor.username}
+              >
+                {thumbnailUrl && (
+                  // Fixed small thumbnail — not worth next/image's responsive srcset ceremony.
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img className="search-sponsor-avatar" src={thumbnailUrl} alt="" width={36} height={36} />
+                )}
+                <span className="search-sponsor-name">{sponsor.name ?? sponsor.username}</span>
+                <span className="search-sponsor-badge">Ad · Sponsored</span>
+              </Link>
+            );
+          })}
           {history.length > 0 && <div className="search-history-divider" />}
         </>
       )}
