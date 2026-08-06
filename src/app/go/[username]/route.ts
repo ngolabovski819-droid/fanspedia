@@ -1,14 +1,17 @@
-import { NextRequest, NextResponse, after } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getSponsorOverride } from '@/config/sponsors';
+import { isBotUserAgent } from '@/lib/botDetection';
+import { extractClientIp, hashIp, isDatacenterIp, isRateLimited } from '@/lib/clickIntegrity';
+import { verifyClickToken } from '@/lib/clickToken';
 
 // Node.js runtime (not Edge) — same reasoning as /api/search: keeps the function
-// in the same region as Supabase so the click-log write doesn't add latency.
+// in the same region as Supabase so the click-log write (now awaited, see GET below)
+// adds as little latency as possible.
 
 const SUPABASE_URL = process.env.SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_KEY!;
-
-// Best-effort bot filter so crawlers/scanners don't inflate delivered-click counts.
-const BOT_UA_RE = /bot|crawl|spider|slurp|curl|wget|python-requests|headless|facebookexternalhit|bingpreview/i;
+const CLICK_IP_SALT = process.env.CLICK_IP_SALT;
+const CLICK_TOKEN_SECRET = process.env.CLICK_TOKEN_SECRET;
 
 const OWN_HOSTS = new Set(['fanspedia.net', 'www.fanspedia.net']);
 
@@ -38,9 +41,28 @@ function derivePlacement(referrer: string | null): string | null {
   return path;
 }
 
-async function logClick(table: string, req: NextRequest, placementOverride: string | null) {
+async function logClick(table: string, username: string, req: NextRequest, placementOverride: string | null) {
   try {
     const referrer = req.headers.get('referer') ?? null;
+    const clientIp = extractClientIp(req.headers.get('x-forwarded-for'));
+    const ipHash = clientIp && CLICK_IP_SALT ? hashIp(clientIp, CLICK_IP_SALT) : null;
+    const linkVerified = CLICK_TOKEN_SECRET
+      ? verifyClickToken(req.nextUrl.searchParams.get('t'), username, CLICK_TOKEN_SECRET)
+      : false;
+
+    // Same IP hammering this exact link is a script, whatever UA it claims — checked before
+    // logging so a rate-limited hit still gets its redirect but never counts as a click.
+    if (ipHash) {
+      const rateLimited = await isRateLimited({
+        supabaseUrl: SUPABASE_URL,
+        supabaseKey: SUPABASE_KEY,
+        table,
+        timestampColumn: 'clicked_at',
+        ipHash,
+      });
+      if (rateLimited) return;
+    }
+
     await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
       method: 'POST',
       headers: {
@@ -54,6 +76,9 @@ async function logClick(table: string, req: NextRequest, placementOverride: stri
           user_agent: req.headers.get('user-agent') ?? null,
           referrer,
           placement: placementOverride ?? derivePlacement(referrer),
+          ip_hash: ipHash,
+          is_datacenter_ip: isDatacenterIp(clientIp),
+          link_verified: linkVerified,
         },
       ]),
     });
@@ -76,10 +101,16 @@ export async function GET(
   const placementOverride = req.nextUrl.searchParams.get('placement');
 
   const ua = req.headers.get('user-agent') ?? '';
-  if (override?.clickTable && !BOT_UA_RE.test(ua)) {
-    // Runs after the redirect response is sent — visitor doesn't wait on it, and
-    // `after()` (vs. a bare unawaited call) keeps it alive past the response on Vercel.
-    after(() => logClick(override.clickTable!, req, placementOverride));
+  if (override?.clickTable && !isBotUserAgent(ua)) {
+    // Awaited, NOT deferred via after() — a previous `after()`-based version of this let the
+    // redirect return before the row (and the rate-limit check it depends on) landed, so a
+    // rapid-fire script could get several requests' worth of "no prior clicks yet" checks in
+    // before any of them had actually written a row (verified directly: 7 rapid hits from the
+    // same IP all got logged instead of being capped at 5). Rate limiting only means anything
+    // if "how many clicks already happened" is accurate at check time, which requires the write
+    // to finish before the next request's check can run — same tradeoff onlyamericanfans.com
+    // already made ("click accuracy for a paid deliverable matters more than shaving ~50-100ms").
+    await logClick(override.clickTable, username, req, placementOverride);
   }
 
   return NextResponse.redirect(destination, { status: 302 });
