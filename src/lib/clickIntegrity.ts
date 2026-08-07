@@ -19,6 +19,29 @@ export function hashIp(ip: string, salt: string): string {
   return crypto.createHash('sha256').update(`${salt}:${ip}`).digest('hex');
 }
 
+export interface ClickGeo {
+  country: string | null;
+  city: string | null;
+}
+
+// Vercel's edge network attaches these to every request that reaches a serverless function —
+// no third-party GeoIP call, no extra latency, no cost. Only present in production (Vercel's
+// own infrastructure sets them); always absent in local dev, which is expected, not a bug.
+// x-vercel-ip-city is URI-encoded (spaces etc.), the others aren't.
+export function extractGeo(headers: { get(name: string): string | null }): ClickGeo {
+  const country = headers.get('x-vercel-ip-country');
+  const rawCity = headers.get('x-vercel-ip-city');
+  let city: string | null = null;
+  if (rawCity) {
+    try {
+      city = decodeURIComponent(rawCity);
+    } catch {
+      city = rawCity;
+    }
+  }
+  return { country, city };
+}
+
 function ipv4ToInt(ip: string): number | null {
   const parts = ip.split('.').map(Number);
   if (parts.length !== 4 || parts.some((p) => !Number.isInteger(p) || p < 0 || p > 255)) return null;

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSponsorOverride } from '@/config/sponsors';
 import { isBotUserAgent } from '@/lib/botDetection';
-import { extractClientIp, hashIp, isDatacenterIp, isRateLimited } from '@/lib/clickIntegrity';
+import { extractClientIp, hashIp, isDatacenterIp, isRateLimited, extractGeo } from '@/lib/clickIntegrity';
 import { verifyClickToken } from '@/lib/clickToken';
 
 // Node.js runtime (not Edge) — same reasoning as /api/search: keeps the function
@@ -49,6 +49,7 @@ async function logClick(table: string, username: string, req: NextRequest, place
     const linkVerified = CLICK_TOKEN_SECRET
       ? verifyClickToken(req.nextUrl.searchParams.get('t'), username, CLICK_TOKEN_SECRET)
       : false;
+    const geo = extractGeo(req.headers);
 
     // Same IP hammering this exact link is a script, whatever UA it claims — checked before
     // logging so a rate-limited hit still gets its redirect but never counts as a click.
@@ -79,6 +80,9 @@ async function logClick(table: string, username: string, req: NextRequest, place
           ip_hash: ipHash,
           is_datacenter_ip: isDatacenterIp(clientIp),
           link_verified: linkVerified,
+          ip_address: clientIp,
+          country: geo.country,
+          city: geo.city,
         },
       ]),
     });
