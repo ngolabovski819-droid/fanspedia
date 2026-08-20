@@ -86,7 +86,7 @@ const SPONSOR_OVERRIDES: Record<string, SponsorOverride> = {
     // and set: imageOverride: '/uploads/sponsors/emilylopz.jpg',
   },
   rocketreynaxo: {
-    linkOverride: 'https://onlyfans.com/rocketreynaxo/c58',
+    linkOverride: 'https://onlyfans.com/rocketreynaxo/trial/12v36e0ushqqqe1bdaqa4gramuus1m2d',
     clickTable: 'sponsor_clicks_rocketreynaxo',
     imageOverride: '/uploads/sponsors/rocketreynaxo/rocket-01.jpg',
     tags: ['Asian MILF', 'Busty', 'Curvy'],
@@ -140,7 +140,7 @@ const SPONSOR_OVERRIDES: Record<string, SponsorOverride> = {
     ],
   },
   hannazuki: {
-    linkOverride: 'https://onlyfans.com/hannazuki/c1043',
+    linkOverride: 'https://onlyfans.com/hannazuki/trial/kqv4mhnqp9ifhpwin0vtfxnsscmlv9jy',
     clickTable: 'sponsor_clicks_hannazuki',
     imageOverride: '/uploads/sponsors/hannazuki/hanna-01.jpg',
     tags: ['asian', 'cosplay', 'egirl', 'GFE'],
