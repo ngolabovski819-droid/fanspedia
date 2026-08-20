@@ -48,11 +48,12 @@ export interface FeaturedRule {
   excluded?: string[];
 }
 
-// Shared order for the two active site-wide sponsored placements.
+// Shared order for the active site-wide sponsored placements.
 const sponsorPlacements = (): PinnedPlacement[] => [
-  { username: 'emilylopz', position: 1 },
+  { username: 'cosplaytsumiko', position: 1 },
   { username: 'rocketreynaxo', position: 2 },
   { username: 'hannazuki', position: 3 },
+  { username: 'emilylopz', position: 4 },
 ];
 
 // Apply both sponsors to every country and category without hand-listing scopes.
