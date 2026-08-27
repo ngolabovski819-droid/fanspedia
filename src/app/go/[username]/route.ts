@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSponsorOverride } from '@/config/sponsors';
+import { getSponsorOverride, resolveGoAlias } from '@/config/sponsors';
 import { isBotUserAgent } from '@/lib/botDetection';
 import { extractClientIp, hashIp, isDatacenterIp, isRateLimited, extractGeo } from '@/lib/clickIntegrity';
 import { verifyClickToken } from '@/lib/clickToken';
@@ -95,14 +95,20 @@ export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ username: string }> },
 ) {
-  const { username } = await params;
+  const { username: slug } = await params;
+  // Vanity aliases (GO_ALIASES in src/config/sponsors.ts): `/go/sierraskyprivate` resolves
+  // to rinayanami's linkOverride + clickTable and is logged as placement
+  // 'vanity:sierraskyprivate', so every shared link reports separately in the panel.
+  // Non-aliases resolve to themselves, so plain `/go/<username>` is unchanged.
+  const { username, isAlias } = resolveGoAlias(slug);
   const override = getSponsorOverride(username);
   const destination = override?.linkOverride ?? `https://onlyfans.com/${username}`;
   // Lets a specific widget (e.g. the search-history dropdown) self-identify its
   // placement instead of relying on derivePlacement()'s referrer-path guess,
   // which can't tell "clicked from a dropdown on this page" from "clicked the
-  // page's own grid card".
-  const placementOverride = req.nextUrl.searchParams.get('placement');
+  // page's own grid card". A vanity alias self-identifies the same way.
+  const placementOverride =
+    req.nextUrl.searchParams.get('placement') ?? (isAlias ? `vanity:${slug.trim().toLowerCase()}` : null);
 
   const ua = req.headers.get('user-agent') ?? '';
   if (override?.clickTable && !isBotUserAgent(ua)) {

@@ -266,12 +266,15 @@ Two more pieces work together with `featured.ts` to fully support a paid placeme
 - `imageOverride` — replaces the scraped avatar with a custom image (local `/public/uploads/...` path or absolute URL). Deliberately NOT written to the `onlyfans_profiles.avatar` column, so it survives future scraper refreshes and is trivial to remove when a campaign ends.
 - `clickTable` — see below.
 - Consumed in `CreatorCard.tsx` and `src/app/creator/[username]/page.tsx`.
+- `GO_ALIASES: Record<string, string>` — vanity slugs for the **redirect only**. `/go/<alias>` resolves (case-insensitively) to the target username's `linkOverride` + `clickTable`, and the click is logged with `placement: 'vanity:<alias>'` so each shared link reports separately in the panel. Use it for a sponsor's IG/TikTok persona names, typo variants, or per-campaign links (`sierraskyprivate → rinayanami`). Adding one is a single line + deploy — no DNS, no Vercel config, no migration. The module throws on load (so `next build` fails) if an alias collides with a real sponsor username or points at a username with no `SPONSOR_OVERRIDES` entry. Cards, profile pages and click-token minting never see aliases — they key on the real username.
 
 ### `/go/[username]` — click-tracking redirect
 `src/app/go/[username]/route.ts`. Any card/CTA for a creator with a `linkOverride` points here instead of linking straight out. On each request it:
 1. Looks up the destination (`linkOverride`, or the plain OF URL as a fallback for unknown/unconfigured usernames).
 2. If a `clickTable` is configured and the User-Agent doesn't match the bot filter (`BOT_UA_RE`), logs a row via `after()` — not a bare unawaited call, since that can get killed mid-flight on Vercel once the redirect response is sent.
 3. Issues a 302 redirect.
+
+Vanity aliases: if the path segment matches a `GO_ALIASES` key (see above), it's resolved to the real sponsor username first (`resolveGoAlias()`), and `placement` is forced to `vanity:<alias>` unless `?placement=` was given explicitly. Vanity links are shared off-site, so their rows have `link_verified = false` by design (no render token) and usually `referrer = null` or `external:<host>` — that's expected, not fraud.
 
 Logged columns: `user_agent`, `referrer` (raw `Referer` header), and `placement` — derived server-side from the referrer into `home` / `category:<slug>` / `country:<slug>` / `profile` / `search` / `wishlist` for our own pages, `external:<hostname>` for outside traffic, or `null` when no referrer was sent at all (pasted link, messaging-app share, in-app browser — a browser/platform limitation, not a bug; the click is still counted).
 

@@ -178,6 +178,49 @@ const NORMALIZED: Record<string, SponsorOverride> = Object.fromEntries(
   Object.entries(SPONSOR_OVERRIDES).map(([username, o]) => [username.toLowerCase(), o]),
 );
 
+/**
+ * Vanity slugs for the `/go/<slug>` redirect ONLY. Lets a sponsor share
+ * `fanspedia.net/go/<anything>` — their IG/TikTok persona name, a typo variant, a
+ * per-campaign name — instead of `/go/<of-username>`. The route resolves the alias to
+ * the target's `linkOverride` + `clickTable` and logs the click with
+ * `placement: 'vanity:<alias>'`, so each shared link reports separately in the panel.
+ *
+ * Alias → real OF username, both matched case-insensitively. Adding one is a single
+ * line + deploy: no DNS, no Vercel config, no migration (it reuses the target's table).
+ * Cards, profile pages and click-token minting never see aliases — they key on the
+ * real username via getSponsorOverride().
+ */
+export const GO_ALIASES: Record<string, string> = {
+  sierraskyprivate: 'rinayanami',
+  sierraskyeprivate: 'rinayanami',
+  hannahgoldy: 'rinayanami',
+};
+
+const NORMALIZED_ALIASES: Record<string, string> = Object.fromEntries(
+  Object.entries(GO_ALIASES).map(([alias, username]) => [alias.trim().toLowerCase(), username.trim().toLowerCase()]),
+);
+
+// Build-time guard (runs on module load, so `next build` fails loudly on a bad config):
+// an alias that shadows a real sponsor username would silently hijack that sponsor's
+// /go/ link, and an alias pointing at a non-sponsor would redirect but never log.
+for (const [alias, username] of Object.entries(NORMALIZED_ALIASES)) {
+  if (alias in NORMALIZED) {
+    throw new Error(`GO_ALIASES: "${alias}" collides with a SPONSOR_OVERRIDES username`);
+  }
+  if (!(username in NORMALIZED)) {
+    throw new Error(`GO_ALIASES: "${alias}" points at "${username}", which has no SPONSOR_OVERRIDES entry`);
+  }
+}
+
+/**
+ * Resolve a `/go/<slug>` path segment to the real sponsor username. Non-aliases resolve
+ * to themselves unchanged, so existing `/go/<username>` links behave exactly as before.
+ */
+export function resolveGoAlias(slug: string): { username: string; isAlias: boolean } {
+  const target = NORMALIZED_ALIASES[slug.trim().toLowerCase()];
+  return target ? { username: target, isAlias: true } : { username: slug, isAlias: false };
+}
+
 /** Case-insensitive lookup of a creator's sponsor override, if any. */
 export function getSponsorOverride(username: string): SponsorOverride | undefined {
   return NORMALIZED[username.trim().toLowerCase()];
