@@ -3,9 +3,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import type { Creator } from '@/types/creator';
 import { buildSrcset } from '@/lib/image';
 import { getSponsorOverride } from '@/config/sponsors';
+import { rotateGallery, sponsorImageOffset } from '@/lib/sponsorImageRotation';
 import { isWishlisted, toggleWishlist } from '@/lib/wishlist';
 
 interface Props {
@@ -15,12 +17,19 @@ interface Props {
 
 export default function CreatorCard({ creator, index }: Props) {
   const isEager = index < 4;
+  const pathname = usePathname();
   const override = getSponsorOverride(creator.username);
-  const galleryImages = Array.from(new Set([
+  const baseGallery = Array.from(new Set([
     override?.imageOverride ?? creator.avatar ?? creator.avatarC144,
     ...(override?.galleryImages ?? []),
     ...(!override?.imageOverride && creator.header ? [creator.header] : []),
   ].filter((url): url is string => Boolean(url))));
+  // Sponsors with a configured gallery lead with a different image on each page
+  // (home → country → category …) — see src/lib/sponsorImageRotation.ts. Natural
+  // creators keep avatar-first so the scraped header never becomes the card face.
+  const galleryImages = override?.galleryImages?.length
+    ? rotateGallery(baseGallery, sponsorImageOffset(pathname, creator.username, baseGallery.length))
+    : baseGallery;
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const activeImage = galleryImages[activeImageIndex] ?? '/no-image.png';
   const dotWindowSize = 7;
