@@ -139,6 +139,25 @@ const SPONSOR_OVERRIDES: Record<string, SponsorOverride> = {
       '/uploads/sponsors/cosplaytsumiko/tsumiko-29.jpg',
     ],
   },
+  rinayanami: {
+    linkOverride: 'https://onlyfans.com/rinayanami/c31',
+    clickTable: 'sponsor_clicks_rinayanami', // see scripts/migrations/010_*.sql
+    imageOverride: '/uploads/sponsors/rinayanami/rina-01.jpg',
+    tags: ['Petite', 'Asian', 'Nerdy', 'GFE'],
+    additionalTagCount: 5,
+    galleryImages: [
+      '/uploads/sponsors/rinayanami/rina-02.jpg',
+      '/uploads/sponsors/rinayanami/rina-03.jpg',
+      '/uploads/sponsors/rinayanami/rina-04.jpg',
+      '/uploads/sponsors/rinayanami/rina-05.jpg',
+      '/uploads/sponsors/rinayanami/rina-06.jpg',
+      '/uploads/sponsors/rinayanami/rina-07.jpg',
+      '/uploads/sponsors/rinayanami/rina-08.jpg',
+      '/uploads/sponsors/rinayanami/rina-09.jpg',
+      '/uploads/sponsors/rinayanami/rina-10.jpg',
+      '/uploads/sponsors/rinayanami/rina-11.jpg',
+    ],
+  },
   hannazuki: {
     linkOverride: 'https://onlyfans.com/hannazuki/trial/kqv4mhnqp9ifhpwin0vtfxnsscmlv9jy',
     clickTable: 'sponsor_clicks_hannazuki',

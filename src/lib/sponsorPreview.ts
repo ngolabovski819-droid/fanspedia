@@ -9,7 +9,7 @@ export function getSponsorPreviews(): Promise<Creator[]> {
     // Version the request when the configured sponsor list changes. The
     // endpoint previously returned one object, so keep normalizing old payloads
     // as a defensive fallback as well.
-    cached = fetch('/api/sponsor-preview?v=3')
+    cached = fetch('/api/sponsor-preview?v=4')
       .then((res) => (res.ok ? res.json() : []))
       .then((payload: Creator[] | Creator | null) => (
         Array.isArray(payload) ? payload : payload ? [payload] : []

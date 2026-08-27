@@ -7,4 +7,4 @@
  * /api/sponsor-preview; the outbound link/click-tracking come from the same
  * `SPONSOR_OVERRIDES` entry in src/config/sponsors.ts used everywhere else.
  */
-export const SEARCH_SPONSOR_USERNAMES = ['cosplaytsumiko', 'rocketreynaxo', 'hannazuki'];
+export const SEARCH_SPONSOR_USERNAMES = ['cosplaytsumiko', 'rocketreynaxo', 'rinayanami'];

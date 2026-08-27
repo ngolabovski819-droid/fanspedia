@@ -53,7 +53,8 @@ const sponsorPlacements = (): PinnedPlacement[] => [
   { username: 'cosplaytsumiko', position: 1 },
   { username: 'rocketreynaxo', position: 2 },
   { username: 'hannazuki', position: 3 },
-  { username: 'emilylopz', position: 4 },
+  { username: 'rinayanami', position: 4 },
+  { username: 'emilylopz', position: 8 },
 ];
 
 // Apply both sponsors to every country and category without hand-listing scopes.
