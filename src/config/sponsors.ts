@@ -190,10 +190,42 @@ const NORMALIZED: Record<string, SponsorOverride> = Object.fromEntries(
  * Cards, profile pages and click-token minting never see aliases — they key on the
  * real username via getSponsorOverride().
  */
+// 2026-08-28 batch: slugs below are the OF usernames of profiles listed in the owner's promo
+// sheet — each one's /go/ link routes to the sponsor that row promotes. Keep in sync with the
+// sheet when rows are added/retired.
 export const GO_ALIASES: Record<string, string> = {
+  // rinayanami (persona names + promo-sheet rows)
   sierraskyprivate: 'rinayanami',
   sierraskyeprivate: 'rinayanami',
   hannahgoldy: 'rinayanami',
+  sierraskye: 'rinayanami',
+  hoguesdirtylaundry: 'rinayanami',
+  // emilylopz
+  pauladeanda: 'emilylopz',
+  candicealice: 'emilylopz',
+  valkyrieuntamed: 'emilylopz',
+  anastasiaplays: 'emilylopz',
+  littlelanacat: 'emilylopz',
+  nudistza: 'emilylopz',
+  officialmiax: 'emilylopz',
+  juliatica: 'emilylopz',
+  polishloca: 'emilylopz',
+  mommysfuntime: 'emilylopz',
+  'cecilia.suarez': 'emilylopz',
+  priceless_love: 'emilylopz',
+  // cosplaytsumiko
+  reallilyhallxx: 'cosplaytsumiko',
+  babygirl213: 'cosplaytsumiko',
+  amberdeluca: 'cosplaytsumiko',
+  lanquie: 'cosplaytsumiko',
+  yummykimmy: 'cosplaytsumiko',
+  ness27: 'cosplaytsumiko',
+  // rocketreynaxo
+  alexapilling: 'rocketreynaxo',
+  curvy4urpleasure: 'rocketreynaxo',
+  sweetlexi86: 'rocketreynaxo',
+  daysiidukes: 'rocketreynaxo',
+  'bunny.zudeah': 'rocketreynaxo',
 };
 
 const NORMALIZED_ALIASES: Record<string, string> = Object.fromEntries(
