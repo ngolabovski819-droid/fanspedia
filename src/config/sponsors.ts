@@ -200,6 +200,7 @@ export const GO_ALIASES: Record<string, string> = {
   hannahgoldy: 'rinayanami',
   sierraskye: 'rinayanami',
   hoguesdirtylaundry: 'rinayanami',
+  mikaslowana: 'rinayanami',
   // emilylopz
   pauladeanda: 'emilylopz',
   candicealice: 'emilylopz',
@@ -226,6 +227,13 @@ export const GO_ALIASES: Record<string, string> = {
   sweetlexi86: 'rocketreynaxo',
   daysiidukes: 'rocketreynaxo',
   'bunny.zudeah': 'rocketreynaxo',
+  ashlikesramen: 'rocketreynaxo',
+  shelboooo: 'rocketreynaxo',
+  fansofmandimay: 'rocketreynaxo',
+  // hannazuki
+  lyssy3333: 'hannazuki',
+  xo_alvssa: 'hannazuki',
+  hallieheart: 'hannazuki',
 };
 
 const NORMALIZED_ALIASES: Record<string, string> = Object.fromEntries(
