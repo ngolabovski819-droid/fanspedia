@@ -218,7 +218,7 @@ export const GO_ALIASES: Record<string, string> = {
   reallilyhallxx: 'cosplaytsumiko',
   babygirl213: 'cosplaytsumiko',
   amberdeluca: 'cosplaytsumiko',
-  lanquie: 'cosplaytsumiko',
+  langiie: 'cosplaytsumiko',
   yummykimmy: 'cosplaytsumiko',
   ness27: 'cosplaytsumiko',
   // rocketreynaxo
