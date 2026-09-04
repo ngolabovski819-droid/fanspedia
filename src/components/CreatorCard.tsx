@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import type { Creator } from '@/types/creator';
-import { buildSrcset } from '@/lib/image';
+import { buildImageUrl } from '@/lib/image';
 import { getSponsorOverride } from '@/config/sponsors';
 import { rotateGallery, sponsorImageOffset } from '@/lib/sponsorImageRotation';
 import { isWishlisted, toggleWishlist } from '@/lib/wishlist';
@@ -41,9 +41,8 @@ export default function CreatorCard({ creator, index }: Props) {
     { length: Math.min(dotWindowSize, galleryImages.length) },
     (_, offset) => dotWindowStart + offset,
   );
-  const { src, srcSet, sizes } = activeImage.startsWith('/')
-    ? { src: activeImage, srcSet: '', sizes: '' }
-    : buildSrcset(activeImage);
+  const src = buildImageUrl(activeImage);
+  const sizes = '(max-width: 575px) calc(50vw - 24px), (max-width: 767px) calc(33vw - 20px), (max-width: 991px) calc(25vw - 20px), 220px';
   const [wishlisted, setWishlisted] = useState(false);
 
   useEffect(() => {
@@ -83,8 +82,6 @@ export default function CreatorCard({ creator, index }: Props) {
             loading={isEager ? 'eager' : 'lazy'}
             fetchPriority={isEager ? 'high' : 'auto'}
             style={{ objectFit: 'cover' }}
-            unoptimized
-            {...(srcSet ? { srcSet } : {})}
           />
           {galleryImages.length > 1 && (
             <>

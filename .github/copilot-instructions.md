@@ -54,7 +54,7 @@ src/
     sponsors.ts                # Per-creator tracking-link/image overrides
   lib/
     supabase.ts               # fetchCreators() - raw fetch, no supabase-js
-    image.ts                  # proxyImg(), buildSrcset() via images.weserv.nl
+    image.ts                  # Raw URLs for next/image; same-origin optimized plain-img URLs
   types/
     creator.ts                # Creator interface
 ```
@@ -117,7 +117,7 @@ const { creators, total, hasMore } = await fetchCreators({
 ## Components
 
 **`CreatorCard`** - renders a single creator:
-- Uses `next/image` with `fill` + `buildSrcset()` from `src/lib/image.ts`
+- Uses `next/image` with `fill` + the raw URL from `buildImageUrl()` in `src/lib/image.ts`
 - First 4 cards: `loading="eager" fetchPriority="high"`. Others: `loading="lazy"`
 - Card links to `https://onlyfans.com/{username}` by default, or `/go/{username}` if a sponsor `linkOverride` is configured (see "Sponsor Overrides & Click Tracking")
 - `.card-img-wrap` has `aspect-ratio: 3/4` in CSS - never use fixed height

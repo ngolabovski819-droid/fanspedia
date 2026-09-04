@@ -214,6 +214,7 @@ export const GO_ALIASES: Record<string, string> = {
   mommysfuntime: 'emilylopz',
   'cecilia.suarez': 'emilylopz',
   priceless_love: 'emilylopz',
+  miikkita: 'emilylopz',
   // cosplaytsumiko
   reallilyhallxx: 'cosplaytsumiko',
   babygirl213: 'cosplaytsumiko',
@@ -230,6 +231,9 @@ export const GO_ALIASES: Record<string, string> = {
   ashlikesramen: 'rocketreynaxo',
   shelboooo: 'rocketreynaxo',
   fansofmandimay: 'rocketreynaxo',
+  jennafoxxbbw: 'rocketreynaxo',
+  megandeluca: 'rocketreynaxo',
+  little_rr: 'rocketreynaxo',
   // hannazuki
   lyssy3333: 'hannazuki',
   xo_alvssa: 'hannazuki',

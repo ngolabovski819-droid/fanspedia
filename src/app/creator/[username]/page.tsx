@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { fetchCreatorProfile, fetchCreatorSnapshots, fetchCreators } from '@/lib/supabase';
-import { proxyImg } from '@/lib/image';
+import { buildImageUrl } from '@/lib/image';
 import { PUBLISHED_CREATORS, isPublishedCreator } from '@/config/creators';
 import { getSponsorOverride } from '@/config/sponsors';
 import CreatorCharts from '@/components/CreatorCharts';
@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title,
       description,
       url,
-      images: creator.avatar ? [{ url: proxyImg(creator.avatar, 480) }] : undefined,
+      images: creator.avatar ? [{ url: buildImageUrl(creator.avatar) }] : undefined,
     },
   };
 }
@@ -137,7 +137,7 @@ export default async function CreatorPage({ params }: Props) {
       name: display,
       alternateName: `@${creator.username}`,
       url: ofUrl,
-      image: avatarUrl ? proxyImg(avatarUrl, 480) : undefined,
+      image: avatarUrl ? buildImageUrl(avatarUrl) : undefined,
     },
   };
 
@@ -158,13 +158,12 @@ export default async function CreatorPage({ params }: Props) {
             <div className="cp-avatar">
               {avatarUrl ? (
                 <Image
-                  src={proxyImg(avatarUrl, 480)}
+                  src={buildImageUrl(avatarUrl)}
                   alt={display}
                   fill
                   sizes="(max-width: 768px) 100vw, 280px"
                   style={{ objectFit: 'cover' }}
                   priority
-                  unoptimized
                 />
               ) : (
                 <div className="cp-avatar-fallback">{display.charAt(0).toUpperCase()}</div>

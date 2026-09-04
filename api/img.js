@@ -8,7 +8,7 @@ export default async function handler(req, res) {
     }
 
     // SSRF protection — only allow known image CDN domains
-    const ALLOWED_DOMAINS = ['public.onlyfans.com', 'thumbs.onlyfans.com', 'images.weserv.nl'];
+    const ALLOWED_DOMAINS = ['public.onlyfans.com', 'thumbs.onlyfans.com'];
     try {
       const parsed = new URL(url);
       if (!ALLOWED_DOMAINS.includes(parsed.hostname)) {
