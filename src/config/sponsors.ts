@@ -215,6 +215,9 @@ export const GO_ALIASES: Record<string, string> = {
   'cecilia.suarez': 'emilylopz',
   priceless_love: 'emilylopz',
   miikkita: 'emilylopz',
+  paigenisbet: 'emilylopz',
+  martinadecaramelo: 'emilylopz',
+  lolareyxo: 'emilylopz',
   // cosplaytsumiko
   reallilyhallxx: 'cosplaytsumiko',
   babygirl213: 'cosplaytsumiko',
