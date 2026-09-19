@@ -50,12 +50,11 @@ export interface FeaturedRule {
 
 // Shared order for the active site-wide sponsored placements.
 const sponsorPlacements = (): PinnedPlacement[] => [
-  { username: 'cosplaytsumiko', position: 1 },
+  { username: 'emilylopz', position: 1 },
   { username: 'rocketreynaxo', position: 2 },
   { username: 'hannazuki', position: 3 },
   { username: 'rinayanami', position: 4 },
   { username: 'sophiescrts', position: 5 },
-  { username: 'emilylopz', position: 8 },
 ];
 
 // Apply both sponsors to every country and category without hand-listing scopes.

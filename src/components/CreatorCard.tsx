@@ -42,7 +42,7 @@ export default function CreatorCard({ creator, index }: Props) {
     (_, offset) => dotWindowStart + offset,
   );
   const src = buildImageUrl(activeImage);
-  const sizes = '(max-width: 575px) calc(50vw - 24px), (max-width: 767px) calc(33vw - 20px), (max-width: 991px) calc(25vw - 20px), 220px';
+  const sizes = '(max-width: 575px) 50vw, (max-width: 767px) 33vw, (max-width: 991px) 25vw, 220px';
   const [wishlisted, setWishlisted] = useState(false);
 
   useEffect(() => {

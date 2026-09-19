@@ -1,5 +1,13 @@
+// Must match `images.qualities` in next.config.ts. Changing it re-bills every cached photo.
 const IMAGE_QUALITY = 75;
-const SRCSET_WIDTHS = [240, 360, 480, 720] as const;
+
+// Vercel bills one transformation per unique (source image, width, quality, format), so every
+// width here is one more billed copy of every creator photo. 360 (1x) and 720 (2x / phones)
+// cover a card slot that never renders wider than 360 CSS px.
+const SRCSET_WIDTHS = [360, 720] as const;
+
+// Must be one of SRCSET_WIDTHS, or it becomes an extra billed width for browsers that use `src`.
+const DEFAULT_WIDTH = 360;
 
 /**
  * next/image must receive the original URL so it can validate and optimize it.
@@ -30,8 +38,8 @@ export function buildSrcset(url: string | null | undefined): {
     .join(', ');
 
   return {
-    src: proxyImg(url, 480),
+    src: proxyImg(url, DEFAULT_WIDTH),
     srcSet,
-    sizes: '(max-width: 575px) calc(50vw - 24px), (max-width: 767px) calc(33vw - 20px), (max-width: 991px) calc(25vw - 20px), 220px',
+    sizes: '(max-width: 575px) 50vw, (max-width: 767px) 33vw, (max-width: 991px) 25vw, 220px',
   };
 }
