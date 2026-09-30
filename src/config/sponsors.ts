@@ -223,6 +223,7 @@ export const GO_ALIASES: Record<string, string> = {
   hoguesdirtylaundry: 'rinayanami',
   mikaslowana: 'rinayanami',
   adventureswithdusty: 'rinayanami',
+  yourlittlesecretgf: 'rinayanami',
   // emilylopz
   pauladeanda: 'emilylopz',
   candicealice: 'emilylopz',
