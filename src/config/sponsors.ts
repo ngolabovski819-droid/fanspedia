@@ -222,8 +222,6 @@ export const GO_ALIASES: Record<string, string> = {
   sierraskye: 'rinayanami',
   hoguesdirtylaundry: 'rinayanami',
   mikaslowana: 'rinayanami',
-  adventureswithdusty: 'rinayanami',
-  yourlittlesecretgf: 'rinayanami',
   // emilylopz
   pauladeanda: 'emilylopz',
   candicealice: 'emilylopz',
@@ -244,6 +242,10 @@ export const GO_ALIASES: Record<string, string> = {
   a_v_a_james88: 'emilylopz',
   sisipesos: 'emilylopz',
   chantal_danielle: 'emilylopz',
+  // Retargeted 2026-10-08 from rinayanami (213 clicks logged under her table before the switch).
+  adventureswithdusty: 'emilylopz',
+  // sophiescrts
+  yourlittlesecretgf: 'sophiescrts', // retargeted 2026-10-08 from rinayanami (1 click under her table)
   // rocketreynaxo
   alexapilling: 'rocketreynaxo',
   curvy4urpleasure: 'rocketreynaxo',
