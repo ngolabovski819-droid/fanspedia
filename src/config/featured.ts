@@ -53,7 +53,6 @@ const sponsorPlacements = (): PinnedPlacement[] => [
   { username: 'emilylopz', position: 1 },
   { username: 'rocketreynaxo', position: 2 },
   { username: 'hannazuki', position: 3 },
-  { username: 'rinayanami', position: 4 },
   { username: 'sophiescrts', position: 5 },
 ];
 
